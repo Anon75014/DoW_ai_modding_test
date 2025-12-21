@@ -1,0 +1,39 @@
+----------------------------------------
+-- File: 'nightlordsapothecarytactic.ai'
+-- Edited by LarkinVB   @ 31.07.2005
+-- Edited by Thudmeizer   @ 06.01.2017
+
+class 'NightLordsApothecaryTactic' (NightLordsInfantryTactic)
+
+NightLordsApothecary = {}
+
+function NightLordsApothecaryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("NightLords Apothecary Tactic")
+end
+
+function NightLordsApothecaryTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function NightLordsApothecaryTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function NightLordsApothecaryTactic:Update()
+
+   if self:IsComplete() then
+      return
+   end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+   --attach to squad
+   self:TryAttachSquad( false, false, 1000, 200, nil )
+	
+end
+
+

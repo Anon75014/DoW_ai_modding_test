@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'tsspawntactic.ai'
+-- Created by Gambit @ 20.06.2014
+
+class 'TSSpawnTactic' (TSInfantryTactic)
+
+TSSpawn = {}
+
+function TSSpawnTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("TS Tzeentch Spawn Tactic")
+end
+
+function TSSpawnTactic:AlwaysAttack()
+	return true
+end

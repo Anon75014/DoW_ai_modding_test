@@ -1,0 +1,128 @@
+--------------------------------------------------
+-- File: 'salamanderforcecommandertermitactic.ai'
+-- Edited by Gambit @ 28.08.2019
+
+class 'SalamanderForceCommanderTermiTactic' (SalamanderInfantryTactic)
+
+SalamanderForceCommanderTermi = {}
+
+
+function SalamanderForceCommanderTermiTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Force Commander Termi Tactic")
+
+	self.TermiCommanderWGChoice1 = math.random( 1, 4 )
+	-- 1: Lighting Claws
+	-- 2: Thunder Hammer
+	self.TermiCommanderWGChoice2 = math.random( 1, 2 )
+	-- 1: Chainfist
+	-- 2: Relic Sword
+	self.TermiCommanderWGChoice3 = math.random( 1, 2 )
+	-- 1: Heavy Flamer
+	-- 2: Multi-melta
+end
+
+
+function SalamanderForceCommanderTermiTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if (buildChannel ~= nil) then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+
+-- Assassinate win condition -- never attack
+function SalamanderForceCommanderTermiTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+
+-- Assassinate win condition -- never defend
+function SalamanderForceCommanderTermiTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+
+function SalamanderForceCommanderTermiTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SalamanderForceCommanderTermi.orbital_b == nil) then
+		SalamanderForceCommanderTermi.orbital_b = cpu_manager.stats:GetAbilityID( "salamander_orbital_bombardment" )
+		SalamanderForceCommanderTermi.battlecry = cpu_manager.stats:GetAbilityID( "salamander_to_the_last_man" )
+	end
+end
+
+
+function SalamanderForceCommanderTermiTactic:DoAbilities()
+
+	-- Try to use battlecry
+	Ability.DoAbility( self.squad_ai, SalamanderForceCommanderTermi.battlecry, Ability.Filters.IsInCombat )
+	
+	-- Try to use orbital bombardement
+	Ability.DoAbilityPos(self.squad_ai, SalamanderForceCommanderTermi.orbital_b, Ability.Filters.CloseEnemy, 24)
+	Ability.DoAbilityPos(self.squad_ai, SalamanderForceCommanderTermi.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+end
+
+
+function SalamanderForceCommanderTermiTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+--[[ Special local method to build addons (Termi Force Commander's Wargear)
+		*********** WARGEAR ADDONS LIST ***********
+	SLOT	WARGEAR ADDON NAME								Entity Addon Line
+	  0		salamander_termi_lord_chainfist_addon			[addon_01]
+	  1		salamander_termi_lord_lightning_claws_addon		[addon_02]
+	  2		salamander_termi_lord_hammer_shield_addon		[addon_03]
+	  3		salamander_termi_lord_relic_sword_addon			[addon_04]
+	  4		salamander_termi_lord_heavy_flamer_addon		[addon_05]
+	  5		salamander_termi_lord_multi_melta_addon			[addon_06]
+	  6		salamander_termi_lord_missilepod_addon			[addon_07]
+
+	Note: Each slot (starting from 0) corresponds to a wargear
+	addon (starting from 01 on the entity's addon_ext list)]]
+
+	-- Check available resources and health, before performing the upgrades
+	local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	if iReq > 250 and iPow > 250 and self.squad_ai:GetHealthPercentage() > 0.35 then
+		if self.TermiCommanderWGChoice1 < 3 then
+			-- melee set
+			if TermiCommanderWGChoice1 == 1 then self:AutoBuildAddOn (1)
+			else self:AutoBuildAddOn (2) end
+		else
+			-- ranged set
+			if TermiCommanderWGChoice2 == 1 then self:AutoBuildAddOn (0)
+			else self:AutoBuildAddOn (3) end
+			-- RelicBlade set
+			if TermiCommanderWGChoice3 == 1 then self:AutoBuildAddOn (4)
+			else self:AutoBuildAddOn (5) end
+		end
+		self:AutoBuildAddOn(6)
+	end
+
+	-- Assassinate win condition -- never attach to a squad
+    if (not cpu_manager.assassinate and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                self:TryAttachSquadMelee()
+            end
+        end
+    end
+end

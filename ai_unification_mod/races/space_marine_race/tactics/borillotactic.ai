@@ -1,0 +1,41 @@
+-----------------------------------
+-- File: 'borillotactic.ai'
+-- Edited by Thudmeizer    @ 18.09.2023
+
+class 'BorilloTactic' (SpaceMarineVehicleTactic)
+
+Borillo = {}
+
+function BorilloTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Borillo Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+function BorilloTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Borillo.smoke_id == nil then
+		Borillo.smoke_id = cpu_manager.stats:GetAbilityID( "marines_smoke_launchers" )
+	end
+end
+
+function BorilloTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(Borillo.smoke_id)) then
+
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(Borillo.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(Borillo.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Do basic abilities
+	SpaceMarineVehicleTactic.DoAbilities(self)
+end

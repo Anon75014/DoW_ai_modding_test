@@ -1,0 +1,104 @@
+----------------------------------------
+-- File: 'ogrynktgmtactic.ai'
+-- Edited by Thudmeizer		@ 02.10.2023
+
+class 'OgrynKtgmTactic' (GuardInfantryTactic)
+
+OgrynKtgm = {}
+
+function OgrynKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Ogryn Ktgm Tactic")
+
+	-- Init execute delay time
+	OgrynKtgm.NextExecuteCheck = 0
+end
+
+function OgrynKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (OgrynKtgm.execute_id == nil) then
+		OgrynKtgm.execute_id = cpu_manager.stats:GetAbilityID( "guard_ls_general_castor_commissar_execute" )
+	end
+	if (OgrynKtgm.fanatical_id == nil) then
+		OgrynKtgm.fanatical_id = cpu_manager.stats:GetAbilityID( "guard_priest_fanatical_advance_sp" )
+	end
+end
+
+function OgrynKtgmTactic:DoAbilities()
+
+	if OgrynKtgm.NextExecuteCheck == nil then 
+		OgrynKtgm.NextExecuteCheck = 0
+	end
+
+	-- TargetSelf: When attached to squad, executes one of his own soldiers to increase their fighting potential
+	-- GAMBIT: Added one more function (IsNearbySquadsMoraleBelow), for more cases of nearby morale-broken troops
+	if g_iGMT > OgrynKtgm.NextExecuteCheck and (self.squad_ai:CanDoAbility(OgrynKtgm.execute_id))
+	and self.squad_ai:IsAttacking() and self.squad_ai:IsAttached() then
+		if self.squad_ai:GetNumTroopers() > 6
+		or self:IsNearbySquadsMoraleBelow( self.squad_ai:GetPosition(), 30, 0.3, false ) then
+			-- Use execute ability
+			if self.squad_ai:CanDoAbility(OgrynKtgm.execute_id) then
+				self.squad_ai:DoSpecialAbility(OgrynKtgm.execute_id) 
+				OgrynKtgm.NextExecuteCheck = g_iGMT + 20
+			end
+		end
+	end
+
+	-- No fanatism while retreating
+	if (not self:IsMoving() and self.squad_ai:IsInCombat()) then
+		if self.squad_ai:CanDoAbility(OgrynKtgm.fanatical_id) then
+			Ability.DoAbility( self.squad_ai, OgrynKtgm.fanatical_id, Ability.Filters.IsInCombat )
+		end
+	end	
+
+	-- Call basic DoAbilities methods
+	GuardInfantryTactic.DoAbilities(self)
+end
+
+function OgrynKtgmTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local CastorIndex = 0
+		local OgrynIndex = 1
+		local CommissarIndex = 2
+		local PriestIndex = 3
+
+		local numCastors = self.squad_ai:GetLeaderCount( CastorIndex )
+		local numOgryns = self.squad_ai:GetLeaderCount( OgrynIndex )	
+		local numCommissars = self.squad_ai:GetLeaderCount( CommissarIndex )	
+		local numPriests = self.squad_ai:GetLeaderCount( PriestIndex )	
+
+		-- Desired number of each leader type
+		local desiredCastors = math.random(0,1)
+		local desiredOgryns = math.random(0,1) 
+		local desiredCommissars = math.random(0,1) 
+		local desiredPriests = math.random(0,1) 
+
+		-- Desired order of reinforcing
+		if (numCastors < desiredCastors) then
+			if (self.squad_ai:CanReinforce( true, CastorIndex )) then
+				self.squad_ai:DoReinforce( true, CastorIndex )
+			end
+		elseif (numOgryns < desiredOgryns) then
+			if (self.squad_ai:CanReinforce( true, OgrynIndex )) then
+				self.squad_ai:DoReinforce( true, OgrynIndex )
+			end
+		elseif (numCommissars < desiredCommissars) then
+			if (self.squad_ai:CanReinforce( true, CommissarIndex )) then
+				self.squad_ai:DoReinforce( true, CommissarIndex )
+			end
+		elseif (numPriests < desiredPriests) then
+			if (self.squad_ai:CanReinforce( true, PriestIndex )) then
+				self.squad_ai:DoReinforce( true, PriestIndex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end

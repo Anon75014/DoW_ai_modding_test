@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'enclaveshonorguardtactic.ai'
+-- Edited by Thudmeizer @ 09.09.2022
+
+class 'EnclavesHonorGuardTactic' (EnclavesInfantryTactic)
+
+function EnclavesHonorGuardTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Honor Guard Tactic")
+end
+
+function EnclavesHonorGuardTactic:AlwaysAttack()
+	return true
+end

@@ -1,0 +1,634 @@
+----------------------------------------
+-- File: 'lotdmarineunitstats.ai'
+-- Edited by Thudmeizer @ 20.10.2025
+
+-- Skirmish
+UnitStrengths.lotd_space_marine_squad_servitor = 0
+UnitStrengths.lotd_space_marine_squad_bullet = 0
+UnitStrengths.lotd_space_marine_squad_bike = 100
+UnitStrengths.lotd_space_marine_squad_bike_bonus = 100
+UnitStrengths.lotd_space_marine_squad_lotd = 150
+UnitStrengths.lotd_space_marine_squad_lotd_bonus = 150
+UnitStrengths.lotd_space_marine_squad_terminator = 250
+UnitStrengths.lotd_space_marine_squad_terminator_assault = 250
+UnitStrengths.lotd_space_marine_squad_muerto = 450
+UnitStrengths.lotd_space_marine_squad_force_commander = 500
+UnitStrengths.lotd_space_marine_squad_hero = 500
+UnitStrengths.lotd_space_marine_squad_hunter_rhino = 145
+UnitStrengths.lotd_space_marine_squad_dreadnought = 400
+UnitStrengths.lotd_space_marine_squad_dreadnought_bonus = 400
+UnitStrengths.lotd_space_marine_squad_venerable_dreadnought = 500
+UnitStrengths.lotd_space_marine_squad_predator = 500
+UnitStrengths.lotd_space_marine_squad_predator_bonus = 500
+UnitStrengths.lotd_space_marine_squad_land_raider = 800
+UnitStrengths.lotd_space_marine_squad_land_raider_bonus = 800
+UnitStrengths.lotd_space_marine_squad_imperial_knight_titan = 1800
+
+LotDUnitStats =
+{
+	race = "lotd_race",
+	{
+		name = "Servitor",
+		sbp_name = "lotd_space_marine_squad_servitor",
+		ebp_name = "lotd_servitor",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Bullet",
+		sbp_name = "lotd_space_marine_squad_bullet",
+		ebp_name = "lotd_bullet",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Legionnaires Outrider Squad",
+		sbp_name = "lotd_space_marine_squad_bike",
+		ebp_name = "lotd_space_marine_bike",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 3,
+		potential =
+		{
+	
+			{
+				name = "lotd_bolter_bike_psybolt",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.1,4.1,5.0,4.7,2.1,1.9,0.0,5.7,3.0,3.0,3.0,3.0,1.0,1.0,1.0,1.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_heavy_bolter_bike",
+				effectiveness = GenerateUnitEffectiveness(5.7,5.6,5.8,5.4,5.5,0.4,0.4,0.0,6.6,5.0,5.3,6.6,4.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_chainsword_assault",
+				effectiveness = GenerateUnitEffectiveness(2.9,3.2,2.3,2.3,0.0,0.0,0.0,0.0,2.3,0.0,0.0,2.9,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Legionnaires Outrider Squad",
+		sbp_name = "lotd_space_marine_squad_bike_bonus",
+		ebp_name = "lotd_space_marine_bike",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 3,
+		potential =
+		{
+	
+			{
+				name = "lotd_bolter_bike_psybolt",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.1,4.1,5.0,4.7,2.1,1.9,0.0,5.7,3.0,3.0,3.0,3.0,1.0,1.0,1.0,1.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_heavy_bolter_bike",
+				effectiveness = GenerateUnitEffectiveness(5.7,5.6,5.8,5.4,5.5,0.4,0.4,0.0,6.6,5.0,5.3,6.6,4.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_chainsword_assault",
+				effectiveness = GenerateUnitEffectiveness(2.9,3.2,2.3,2.3,0.0,0.0,0.0,0.0,2.3,0.0,0.0,2.9,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Legionnaires Marine Squad",
+		sbp_name = "lotd_space_marine_squad_lotd",
+		ebp_name = "lotd_space_marine_tactical_lotd",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "lotd_bolter_tactical_psybolt",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.0,5.3,4.8,2.3,2.2,0.0,4.1,0.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_flamer_tactical",
+				effectiveness = GenerateUnitEffectiveness(4,5.2,3.9,4.6,3.4,0.9,0.8,0.3,4.1,2.4,2.3,2.1,1.7,0.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_heavy_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(5.5,5.4,5,4,3.8,1.4,1,0.6,3.3,0.6,1.9,2,1.1,0.8,0.0,2.3,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_plasma_gun",
+				effectiveness = GenerateUnitEffectiveness(3.8,4.3,4.3,5,5,2.2,1.8,1.5,5,2.8,3.4,2.5,1.9,1.7,0.0,2.2,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_multi_melta_tactical",
+				effectiveness = GenerateUnitEffectiveness(1.9,1.9,1.9,1.9,1.9,5.4,5.4,2.6,2.2,2.2,1.9,3.3,2.2,2.2,0.0,5.4,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.6,3.0,3.1,3.0,0.0,0.0,0.0,4.0,0.0,3.6,3.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Legionnaires Marine Squad",
+		sbp_name = "lotd_space_marine_squad_lotd_bonus",
+		ebp_name = "lotd_space_marine_tactical_lotd",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "lotd_bolter_tactical_psybolt",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.0,5.3,4.8,2.3,2.2,0.0,4.1,0.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_flamer_tactical",
+				effectiveness = GenerateUnitEffectiveness(4,5.2,3.9,4.6,3.4,0.9,0.8,0.3,4.1,2.4,2.3,2.1,1.7,0.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_heavy_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(5.5,5.4,5,4,3.8,1.4,1,0.6,3.3,0.6,1.9,2,1.1,0.8,0.0,2.3,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_plasma_gun",
+				effectiveness = GenerateUnitEffectiveness(3.8,4.3,4.3,5,5,2.2,1.8,1.5,5,2.8,3.4,2.5,1.9,1.7,0.0,2.2,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_multi_melta_tactical",
+				effectiveness = GenerateUnitEffectiveness(1.9,1.9,1.9,1.9,1.9,5.4,5.4,2.6,2.2,2.2,1.9,3.3,2.2,2.2,0.0,5.4,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.6,3.0,3.1,3.0,0.0,0.0,0.0,4.0,0.0,3.6,3.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Legionnaires Terminator Squad",
+		sbp_name = "lotd_space_marine_squad_terminator",
+		ebp_name = "lotd_terminator",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_storm_bolter",
+				effectiveness = GenerateUnitEffectiveness(7.1,7.2,7.0,7.2,7.1,7.3,7.2,7.0,7.1,6.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_heavy_flamer",
+				effectiveness = GenerateUnitEffectiveness(8.1,7.2,8.0,7.2,8.1,7.3,7.2,7.0,8.1,8.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_assault_cannon_terminator",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.2,7.0,8.2,7.1,8.3,8.2,8.0,7.1,0.0,8.1,8.4,8.6,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_power_fist_terminator",
+				effectiveness = GenerateUnitEffectiveness(1.2,1.8,0.3,1.9,1.6,0.7,0.5,0.2,1.9,0.5,1.2,1.3,0.5,0.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Legionnaires Terminator Assault Squad",
+		sbp_name = "lotd_space_marine_squad_terminator_assault",
+		ebp_name = "lotd_terminator_assault",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_thunder_hammer",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.3,6.9,7.3,7.0,7.4,7.1,7.1,7.0,6.1,4.0,4.5,3.5,1.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Muerto",
+		sbp_name = "lotd_space_marine_squad_muerto",
+		ebp_name = "lotd_muerto",
+		class = UnitStatsAI.UC_Commander,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_power_scythe_muerto",
+				effectiveness = GenerateUnitEffectiveness(7.7,7.7,7.9,7.7,7.9,7.2,7.2,7.9,7.9,7.7,7.2,6.2,5.6,4.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Attica Centurius",
+		sbp_name = "lotd_space_marine_squad_force_commander",
+		ebp_name = "lotd_sergeant",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "lotd_bolt_pistol_forcecommander",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.8,7.8,7.8,7.8,7.3,7.1,8.0,7.8,7.8,7.1,6.3,5.5,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_chainsword_force_commander",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.5,5.9,6.7,6.0,5.0,3.9,0.0,6.6,4.3,5.4,6.2,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Fire and Shadow",
+		sbp_name = "lotd_space_marine_squad_hero",
+		ebp_name = "lotd_force_commander",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "lotd_plasma_pistol_commander",
+				effectiveness = GenerateUnitEffectiveness(7.9,7.8,8.1,7.4,7.9,7.2,7.3,7.9,7.5,5.4,5.9,5.7,7.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_bolt_pistol_combi_chaingun_forcecommander",
+				effectiveness = GenerateUnitEffectiveness(7.7,7.6,7.9,7.3,8.0,7.3,7.5,8.0,7.6,5.6,6.1,6.3,4.4,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_manreaper",
+				effectiveness = GenerateUnitEffectiveness(7.1,7.1,7.1,7.8,7.1,6.2,5.1,3.0,7.1,5.4,6.2,6.2,4.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Rhino Primaris Transport",
+		sbp_name = "lotd_space_marine_squad_hunter_rhino",
+		ebp_name = "lotd_hunter_rhino",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 1,
+		potential =
+		{
+			{
+				name = "lotd_missile_launcher_hunter",
+				effectiveness = GenerateUnitEffectiveness(2.4,2.1,2.1,2.0,2.7,2.1,1.9,0.0,2.7,2.0,2.0,2.0,2.0,1.0,1.0,1.0,1.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_storm_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(1.0,1.5,1.9,1.7,1.0,1.0,1.9,0.0,1.6,1.3,1.4,1.2,1.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Rhino Hunter",
+		sbp_name = "lotd_space_marine_squad_hunter_rhino",
+		ebp_name = "lotd_hunter_rhino",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 1,
+		potential =
+		{
+			{
+				name = "lotd_missile_launcher_hunter",
+				effectiveness = GenerateUnitEffectiveness(2.4,2.1,2.1,2.0,2.7,2.1,1.9,0.0,2.7,2.0,2.0,2.0,2.0,1.0,1.0,1.0,1.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+
+		}
+	},
+	{
+		name = "Dreadnought",
+		sbp_name = "lotd_space_marine_squad_dreadnought",
+		ebp_name = "lotd_dreadnought",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.2,7.1,7.4,7.1,6.3,6.1,6.9,7.5,5.4,5.9,5.7,4.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_assault_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.7,7.5,7.9,6.7,6.7,5.5,0.0,7.8,7.0,4.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.2,6.1,5.5,4.3,8.5,8.3,8.2,5.9,4.2,7.1,7.5,7.7,7.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_dreadnought_fist_twin",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.2,7.1,7.4,7.1,6.3,6.1,6.9,7.5,5.4,5.9,5.7,4.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_flamer_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.2,7.1,7.4,7.1,6.3,6.1,6.9,7.5,5.4,5.9,5.7,4.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Dreadnought",
+		sbp_name = "lotd_space_marine_squad_dreadnought_bonus",
+		ebp_name = "lotd_dreadnought",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.2,7.1,7.4,7.1,6.3,6.1,6.9,7.5,5.4,5.9,5.7,4.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_assault_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.7,7.5,7.9,6.7,6.7,5.5,0.0,7.8,7.0,4.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.2,6.1,5.5,4.3,8.5,8.3,8.2,5.9,4.2,7.1,7.5,7.7,7.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_dreadnought_fist_twin",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.2,7.1,7.4,7.1,6.3,6.1,6.9,7.5,5.4,5.9,5.7,4.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_flamer_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.2,7.1,7.4,7.1,6.3,6.1,6.9,7.5,5.4,5.9,5.7,4.5,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Venerable Dreadnought",
+		sbp_name = "lotd_space_marine_squad_venerable_dreadnought",
+		ebp_name = "lotd_venerable_dreadnought",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_assault_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.0,5.7,5.3,4.9,4.5,3.8,0.0,5.3,0.0,5.3,4.7,4.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_inferno_cannon_veny",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.4,7.2,7.4,3.9,6.2,6.6,6.0,7.4,7.0,3.8,4.5,2.9,3.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_multimelta_2",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,7.0,8.9,4.0,5.0,6.0,5.8,7.6,5.9,5.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_dreadnought_veny",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,4.9,8.0,8.0,6.0,5.8,1.6,8.9,8.3,4.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_fist_dreadnought_twin",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_flamer_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_storm_bolter",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Predator",
+		sbp_name = "lotd_space_marine_squad_predator",
+		ebp_name = "lotd_predator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_autocannon",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.0,5.7,5.3,4.9,4.5,3.8,0.0,5.3,0.0,5.3,4.7,4.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_predator",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.0,7.0,6.0,5.8,1.6,8.9,8.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_tank_right",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.0,7.0,6.0,5.8,1.6,8.9,8.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,	
+ 			},
+			{
+				name = "lotd_lascannon_tank_left",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.0,7.0,6.0,5.8,1.6,8.9,8.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_storm_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Predator",
+		sbp_name = "lotd_space_marine_squad_predator_bonus",
+		ebp_name = "lotd_predator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "lotd_autocannon",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.0,5.7,5.3,4.9,4.5,3.8,0.0,5.3,0.0,5.3,4.7,4.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_predator",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.0,7.0,6.0,5.8,1.6,8.9,8.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_tank_right",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.0,7.0,6.0,5.8,1.6,8.9,8.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,	
+ 			},
+			{
+				name = "lotd_lascannon_tank_left",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.0,7.0,6.0,5.8,1.6,8.9,8.3,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_storm_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Land Raider",
+		sbp_name = "lotd_space_marine_squad_land_raider",
+		ebp_name = "lotd_land_raider",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "lotd_heavy_bolter_twin",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_tank_right",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,7.6,6.9,7.6,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_tank_left",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_storm_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Land Raider",
+		sbp_name = "lotd_space_marine_squad_land_raider_bonus",
+		ebp_name = "lotd_land_raider",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "lotd_heavy_bolter_twin",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_tank_right",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,7.6,6.9,7.6,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_lascannon_twin_tank_left",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_storm_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Hell Knight",
+		sbp_name = "lotd_space_marine_squad_imperial_knight_titan",
+		ebp_name = "lotd_imperial_knight_titan",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "lotd_knight_autocannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_knight_lightning_cannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_knight_thermal_cannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_knight_plasma_cannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_knight_inferno_cannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "lotd_knight_chainsword_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_knight_chainsword_l",
+				effectiveness = GenerateUnitEffectiveness(7.7,7.4,7.4,6.9,8.8,6.2,5.9,7.3,6.7,6.0,6.4,6.1,5.7,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "lotd_knight_chaingun_l",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "lotd_knight_melta_gun",
+				effectiveness = GenerateUnitEffectiveness(6.7,6.4,6.4,5.9,6.8,5.2,4.9,6.3,5.7,5.0,5.4,5.1,4.7,3.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+
+}

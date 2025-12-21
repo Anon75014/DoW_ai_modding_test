@@ -1,0 +1,57 @@
+----------------------------------------
+-- File: 'harlequinhqtactic.ai'
+-- Edited by Thudmeizer		@ 30.11.2006
+-- Edited by Gambit			@ 04.01.2015
+
+class 'HarlequinHQTactic' (BaseTactic)
+
+HarlequinHQ = {}
+
+function HarlequinHQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Harlequin HQ Tactic")
+	
+	-- Init abilities
+	-- table.insert(BaseTactic.SpecialAbilities, { nil, "harlequin_shroud_hq", Ability.PredicateFilters.IsNotInfiltrating, nil })
+	-- self:InitAbilities()
+	if HarlLPTMR_HQ == nil then
+		HarlLPTMR_HQ = g_iGMT
+	end
+end
+
+
+function HarlequinHQTactic:InitAbilities()
+
+	if HarlequinHQ.warpharvester == nil then
+		HarlequinHQ.warpharvester = cpu_manager.stats:GetAbilityID( "harlequin_hq_warpharvester" )
+	end
+end
+
+
+function HarlequinHQTactic:DoAbilities()
+
+	if self.base_ai:CanDoAbility(HarlequinHQ.warpharvester) then
+		-- Produce the power resource on condition.
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		local iReqRate = resource_manager:GetResourceRate( ResourceAmount.RT_Requisition )
+		local iPowRate = resource_manager:GetResourceRate( ResourceAmount.RT_Power )
+
+		if iPowRate < 16 and iReq > 160 and self.base_ai:CanDoAbility(HarlequinHQ.warpharvester) then
+			if g_iGMT - HarlLPTMR_HQ > 1 then
+				self.base_ai:DoSpecialAbility(HarlequinHQ.warpharvester)
+				HarlLPTMR_HQ = g_iGMT
+				return
+			end
+		end
+		if (iReqRate > 2.5*iPowRate and iReq > 2*iPow) or (iReqRate > 1.5*iPowRate and iReq > 2.5*iPow and iReq > 900) then
+			if iReq > 240 and self.base_ai:CanDoAbility(HarlequinHQ.warpharvester) then
+				if g_iGMT - HarlLPTMR_HQ > 1.5 then
+					self.base_ai:DoSpecialAbility(HarlequinHQ.warpharvester)
+					HarlLPTMR_HQ = g_iGMT
+				end
+			end
+		end
+	end
+end
+

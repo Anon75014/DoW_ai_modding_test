@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'kterminatortactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 13.10.2023
+
+class 'kTerminatorTactic' (kInfantryTactic)
+
+kTerminator = {}
+
+function kTerminatorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("kTerminator Tactic")
+end
+
+function kTerminatorTactic:InitAbilities()
+
+	if (kTerminator.rage_id == nil) then
+		kTerminator.rage_id = cpu_manager.stats:GetAbilityID( "khm_furious_rage" )	
+	end
+end
+
+function kTerminatorTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+		if (not self:IsMoving()) then
+			if (self.squad_ai:CanDoAbility( kTerminator.rage_id )) then
+				self.squad_ai:DoSpecialAbility( kTerminator.rage_id )
+			end
+		end		
+	end
+	kInfantryTactic.DoAbilities(self)
+end
+
+function kTerminatorTactic:CanOnlyDecap()
+	return true
+end

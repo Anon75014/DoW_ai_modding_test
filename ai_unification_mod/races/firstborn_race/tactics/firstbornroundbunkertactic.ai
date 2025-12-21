@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'firstbornroundbunkertactic.ai'
+-- Edited by Thudmeizer		@ 12.06.2008
+
+class 'FirstbornRoundBunkerTactic' (BaseTactic)
+
+function FirstbornRoundBunkerTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Firstborn Round Bunker Tactic")
+	
+	-- Init abilities
+	table.insert(BaseTactic.TargetAbilities, { nil, "firstborn_round_bunker", Ability.Filters.CloseEnemy, 5 })
+	self:InitAbilities()
+end

@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'battlewagontactic.ai'
+-- Edited by Thudmeizer		@ 22.09.2023
+
+class 'BattleWagonTactic' (OrkVehicleTactic)
+
+function BattleWagonTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("BattleWagon Tactic")
+	
+	-- Vehicle is a medium transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end

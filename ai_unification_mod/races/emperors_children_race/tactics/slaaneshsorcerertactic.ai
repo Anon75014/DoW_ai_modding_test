@@ -1,0 +1,158 @@
+----------------------------------------
+-- File: 'slaaneshsorcerertactic.ai'
+-- Edited by Thudmeizer @ 24.07.2018
+-- Edited by Gambit     @ 13.23.2021
+
+class 'SlaaneshSorcererTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshSorcerer = {}
+
+function SlaaneshSorcererTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Sorcerer Tactic")
+	self.dance_time = 0
+end
+
+function SlaaneshSorcererTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+
+function SlaaneshSorcererTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+
+function SlaaneshSorcererTactic:InitAbilities()
+	-- Init ability ID's
+	if SlaaneshSorcerer.beam_id == nil then
+		SlaaneshSorcerer.beam_id = cpu_manager.stats:GetAbilityID( "emperors_children_beam_of_slaanesh" )
+		SlaaneshSorcerer.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_siren" )
+		SlaaneshSorcerer.fulgrim_id = cpu_manager.stats:GetAbilityID( "emperors_children_summon_fulgrim_ability" )
+		SlaaneshSorcerer.oblit_id = cpu_manager.stats:GetAbilityID( "emperors_children_summon_oblits_ability" )
+		SlaaneshSorcerer.touch_id = cpu_manager.stats:GetAbilityID( "emperors_children_touch_of_slaanesh" )
+		SlaaneshSorcerer.hell_id = cpu_manager.stats:GetAbilityID( "emperors_children_airstrike_helldrake" )
+	end
+end
+
+
+function SlaaneshSorcererTactic:DoAbilities()
+
+	if self.lastused_ability_fulgrim == nil then
+		self.lastused_ability_fulgrim = g_iGMT
+	end
+	
+	-- Make sure you do not interrupt a summoning attempt
+	if g_iGMT < self.lastused_ability_fulgrim + 16 then return end
+
+	-- Summon Fulgim whenever possible
+	if self.squad_ai:CanDoAbility( SlaaneshSorcerer.fulgrim_id ) and not self.squad_ai:IsAttached() then
+		local req = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+		local pow = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+		if req > 600 and pow > 600 then
+			self.squad_ai:DoSpecialAbilityPos(SlaaneshSorcerer.fulgrim_id, self.squad_ai:GetPosition())
+			self.lastused_ability_fulgrim = g_iGMT
+			return
+		end
+	end
+
+	-- Summon Noise Obliterators whenever possible
+	if self.squad_ai:CanDoAbility( SlaaneshSorcerer.oblit_id ) then
+		local req = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+		local pow = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+		if req > 600 and pow > 300 then
+			self.squad_ai:DoSpecialAbilityPos(SlaaneshSorcerer.oblit_id, self.squad_ai:GetPosition())
+			return
+		end
+	end
+
+	-- (Priestess) Call the helldrake air strike
+	if self.squad_ai:CanDoAbility( SlaaneshSorcerer.hell_id ) then
+		local req = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+		local pow = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+		if req > 350 and pow > 350 then
+			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshSorcerer.hell_id, Ability.Filters.CloseEnemy, 8 ) then
+				return
+			end
+		end
+	end
+
+	-- We are dying, lower requisites for attacks
+	if self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt() then
+		if self.squad_ai:GetHealthPercentage() < 0.4 then
+			Ability.DoAbilityTarget( self.squad_ai, SlaaneshSorcerer.beam_id, Ability.Filters.CloseEnemy, 4 ) 
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshSorcerer.siren_id, Ability.Filters.CloseEnemy, 10, 4 ) 
+			Ability.DoAbilityTarget( self.squad_ai, SlaaneshSorcerer.touch_id, Ability.Filters.CloseSquadEnemy, 1 )
+		else
+			Ability.DoAbilityTarget( self.squad_ai, SlaaneshSorcerer.beam_id, Ability.Filters.CloseEnemy, 8 )
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshSorcerer.siren_id, Ability.Filters.CloseEnemy, 10, 8 )
+			Ability.DoAbilityTarget( self.squad_ai, SlaaneshSorcerer.touch_id, Ability.Filters.CloseSquadEnemy, 2 )
+		end
+	end
+end
+
+
+function SlaaneshSorcererTactic:Update()
+
+	if self.lastused_ability_fulgrim == nil then
+		self.lastused_ability_fulgrim = g_iGMT
+	end
+
+	if g_iGMT < self.lastused_ability_fulgrim + 16 then return true end
+
+	if (self:IsComplete()) then
+		return
+	end
+    
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Check for close commander
+	local bSetRanged = false
+	local bSetMelee = false
+	local vSquadPos = self.squad_ai:GetPosition()
+	local eStance = self.squad_ai:GetMeleeStance()
+	local oEnemyCommander = Ability.Filters.CloseCommanderEnemy(vSquadPos, 20, 1)
+
+	if oEnemyCommander ~= nil then
+		-- Check health
+		if (self.squad_ai:GetHealthPercentage() > 0.8 and oEnemyCommander:GetHealthPercentage() < 0.3) then
+			bSetMelee = (eStance == SquadAI.MSTANCE_Ranged)
+			self.dance_time = 0
+		else
+			bSetRanged = (eStance == SquadAI.MSTANCE_Assault)
+		end
+	else
+    
+	-- Check for close attached commander
+		local oSquad = Ability.Filters.CloseInfantryEnemy(vSquadPos, 20, 4)
+		if (oSquad ~= nil and oSquad:IsAttached()) then
+			bSetRanged = (eStance == SquadAI.MSTANCE_Assault)
+		else
+			bSetMelee = (eStance == SquadAI.MSTANCE_Ranged)
+		end
+	end
+
+	-- At leat 10 secs ranged stance/dancing
+	if (bSetRanged) then
+		self.squad_ai:DoSetMeleeStance( SquadAI.MSTANCE_Ranged )
+		self.dance_time = g_iGMT
+	elseif (bSetMelee and self.stateID ~= Tactic.StateID.DoDance and g_iGMT > self.dance_time + 10) then
+		self.squad_ai:DoSetDefaultMeleeStance()
+		self.dance_time = 0
+	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+    
+	-- Attach to melee
+	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+		if (self:TryAttachSquad(true, true, 50, 100, nil) == nil) then
+			if (self:TryAttachSquad(false, false, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+				self:TryAttachSquadMelee()
+			end
+		end
+	end
+end

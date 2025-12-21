@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'LOTDBikeTactic.ai'
+-- Edited by Arkhan	@ 10.01.2007
+-- Edited by Gambit 	@ 25.05.2016
+-- Edited by Thudmeizer	@ 06.02.2025
+
+class 'LOTDBikeTactic' (LOTDVehicleTactic)
+
+LOTDBike = {}
+
+function LOTDBikeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Bike Tactic")
+end
+
+function LOTDBikeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (LOTDBike.burnout_id == nil) then
+		LOTDBike.burnout_id = cpu_manager.stats:GetAbilityID( "lotd_burnout" )
+	end
+
+	if LOTDBike.sabotage_id == nil then
+		--LOTDBike.sabotage_id = cpu_manager.stats:GetAbilityID( "lotd_sabotage" )	
+     	end
+end
+
+function LOTDBikeTactic:DoAbilities()
+
+	Ability.DoAbilityArea( self.squad_ai, LOTDBike.burnout_id, Ability.Filters.CloseEnemy, 10, 6 )
+--[[
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, LOTDBike.sabotage_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, LOTDBike.sabotage_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, LOTDBike.sabotage_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, LOTDBike.sabotage_id, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityTarget( self.squad_ai, LOTDBike.sabotage_id, Ability.Filters.CloseMonsterEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, LOTDBike.sabotage_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+]]
+end
+
+function LOTDBikeTactic:Upgrade()
+
+	-- Figure out my enemy's favourite class
+	local enemy = cpu_manager:FindClosestEnemyPlayer()
+	if (enemy == nil) then
+		return
+	end
+
+	-- Do best upgrade
+	local class_type = enemy:GetMajorityClassType()
+	self.squad_ai:DoBestUpgrade(class_type)
+end

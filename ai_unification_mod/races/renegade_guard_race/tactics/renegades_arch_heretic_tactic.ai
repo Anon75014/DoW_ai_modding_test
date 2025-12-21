@@ -1,0 +1,83 @@
+----------------------------------------
+-- File: 'renegades_arch_heretic_tactic.ai'
+-- Edited by Gambit 	@ 26.11.2014
+-- Edited by Thudmeizer @ 05.05.2023
+
+class 'Renegades_Arch_Heretic_Tactic' (Renegades_Infantry_Tactic)
+
+Arch_Heretic = {}
+
+function Renegades_Arch_Heretic_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Arch_Heretic Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Arch_Heretic_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Arch_Heretic_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Arch_Heretic_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Arch_Heretic.torch_id == nil) then
+		Arch_Heretic.torch_id = cpu_manager.stats:GetAbilityID( "renegade_guard_carry_the_torch" )
+		Arch_Heretic.trial_id = cpu_manager.stats:GetAbilityID( "renegade_guard_great_trial_xaphan" )
+		Arch_Heretic.turncoat_id = cpu_manager.stats:GetAbilityID( "renegade_guard_turncoat" )
+	end
+end
+
+function Renegades_Arch_Heretic_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Try to use torch
+		if self.squad_ai:CanDoAbility(Arch_Heretic.torch_id) then
+			if Ability.DoAbilityArea(self.squad_ai, Arch_Heretic.torch_id, Ability.Filters.CloseEnemy, 10, 2) then
+				return
+			end
+		end
+		-- Try to use orbital bombardement
+		if self.squad_ai:CanDoAbility(Arch_Heretic.trial_id) then
+			if Ability.DoAbilityPos(self.squad_ai, Arch_Heretic.trial_id, Ability.Filters.CloseEnemy, 24)
+			or Ability.DoAbilityPos(self.squad_ai, Arch_Heretic.trial_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+		-- Try to use turncoat
+		if self.squad_ai:CanDoAbility(Arch_Heretic.turncoat_id) then
+			if Ability.DoAbilityTarget(self.squad_ai, Arch_Heretic.turncoat_id, Ability.Filters.CloseInfantryEnemy, 4) then
+				return
+			end
+		end
+	end
+end
+
+function Renegades_Arch_Heretic_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

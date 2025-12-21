@@ -1,0 +1,214 @@
+----------------------------------------
+-- File: 'emperorschildreninfantrytactic.ai'
+-- Edited by Thudmeizer		@ 10.03.2024
+
+class 'EmperorsChildrenInfantryTactic' (InfantryTactic)
+
+EmperorsChildrenInfantryAbility =
+{
+    FragBombID = cpu_manager.stats:GetAbilityID("emperors_children_frag_grenades")
+    ,FragBombAID = cpu_manager.stats:GetAbilityID("emperors_children_frag_grenades_nun")
+    ,KrakBombID = cpu_manager.stats:GetAbilityID("emperors_children_krak_grenades")
+}
+
+function EmperorsChildrenInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Emperors Children Infantry Tactic")
+	
+	-- Basic slaanesh infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "emperors_children_squad_noise_marine" or
+		sSquadName == "emperors_children_squad_noise_marine_chosen" or
+		sSquadName == "emperors_children_squad_noise_marine_chosen_advance_sp" or
+		sSquadName == "emperors_children_squad_noise_primaris" or
+		sSquadName == "emperors_children_squad_havoc" or
+		sSquadName == "emperors_children_squad_apothecary" or
+		sSquadName == "emperors_children_squad_fallen_hospitaller" or
+		sSquadName == "emperors_children_squad_fallen_hospitaller_advance_sp" or
+		sSquadName == "emperors_children_squad_kakophoni" or
+		sSquadName == "emperors_children_squad_lord" or
+		sSquadName == "emperors_children_squad_lord_advance_sp_wg" or
+		sSquadName == "emperors_children_squad_lucius" or
+		sSquadName == "emperors_children_squad_noise_bezerker" or
+		sSquadName == "emperors_children_squad_sorcerer") then
+		self.m_iTransportable = 1	-- Rhino
+
+	elseif (sSquadName == "emperors_children_squad_daemonette" or
+		sSquadName == "emperors_children_squad_daemonette_alpha" or
+		sSquadName == "emperors_children_squad_daemonette_advance_sp" or
+		sSquadName == "emperors_children_squad_hate_angel" or
+		sSquadName == "emperors_children_squad_fiend_slaaneshi" or
+		sSquadName == "emperors_children_squad_seeker" or
+		sSquadName == "emperors_children_squad_masque" or
+		sSquadName == "emperors_children_squad_masque_advance_sp" or
+		sSquadName == "emperors_children_squad_possessed_marine" or
+		sSquadName == "emperors_children_squad_slaanesh_herald" or
+		sSquadName == "emperors_children_squad_spawn" or
+		sSquadName == "emperors_children_squad_keeper_of_secrets") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_sacrificial_circle")
+
+	elseif (sSquadName == "emperors_children_squad_fallen_sister" or
+		sSquadName == "emperors_children_squad_fallen_retributor" or
+		sSquadName == "emperors_children_squad_fallen_retributor_advance_sp" or
+		sSquadName == "emperors_children_squad_nun" or
+		sSquadName == "emperors_children_squad_2b" or
+		sSquadName == "emperors_children_squad_miriel") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_fallen_pristine_sanctuary")
+		self.m_iTransportable = 1	-- Rhino
+
+	elseif (sSquadName == "emperors_children_squad_terminator" or
+		sSquadName == "emperors_children_squad_doomrider") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_greater_sacrificial_circle")
+		self.m_iTransportable = 2	-- Land Raider
+
+	elseif (sSquadName == "emperors_children_squad_raptor" or
+		sSquadName == "emperors_children_squad_noise_primaris_suppressor" or
+		sSquadName == "emperors_children_squad_warp_talon") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_temple")
+
+--[[
+	elseif (sSquadName == "emperors_children_squad_cultist") then
+		-- Cultists can garrison into generator buildings to supplement additional power
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_plasma_generator")
+
+	end
+
+	if (cpu_manager.stats:GetBuildingID("emperors_children_thermo_plasma_generator") >= 1) and (cpu_manager:GetTierLevel() >= 3) then
+
+		if (sSquadName == "emperors_children_squad_cultist") then
+			-- Cultists can garrison into large generator buildings to supplement additional power
+			self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_thermo_plasma_generator")
+		end
+]]
+	end
+
+    self.FragBombLastUse = g_iGMT
+    self.FragBombALastUse = g_iGMT
+    self.KrakBombLastUse = g_iGMT
+end
+
+function EmperorsChildrenInfantryTactic:AddTargetAbilities()
+end
+
+function EmperorsChildrenInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "emperors_children_squad_lord", true })
+	table.insert(self.commander, { "emperors_children_squad_lord_advance_sp_wg", true })
+	table.insert(self.commander, { "emperors_children_squad_sorcerer", false })
+	table.insert(self.commander, { "emperors_children_squad_priestress", false })
+	table.insert(self.commander, { "emperors_children_squad_princess_slaanesh_advance_sp", false })
+	table.insert(self.commander, { "emperors_children_squad_princess_slaanesh_ktgm", false })
+	table.insert(self.commander, { "emperors_children_squad_lucius", false })
+	table.insert(self.commander, { "emperors_children_squad_miriel", false })
+	table.insert(self.commander, { "emperors_children_squad_miriel_advance_sp", false })
+	table.insert(self.commander, { "emperors_children_squad_miriel_ktgm", false })
+	table.insert(self.commander, { "emperors_children_squad_intoner_miriael", false })
+	table.insert(self.commander, { "emperors_children_squad_intoner_miriael_advance_sp", false })
+	table.insert(self.commander, { "emperors_children_squad_masque", false })
+	table.insert(self.commander, { "emperors_children_squad_masque_advance_sp", false })
+	table.insert(self.commander, { "emperors_children_squad_slaanesh_herald", false })
+	table.insert(self.commander, { "emperors_children_squad_2b", false })
+	table.insert(self.commander, { "emperors_children_squad_fallen_hospitaller", false })
+	table.insert(self.commander, { "emperors_children_squad_fallen_hospitaller_advance_sp", false })
+end
+
+function EmperorsChildrenInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("emperors_children_squad_lord") or self.squad_ai:HasSquadAttached("emperors_children_squad_lord_advance_sp_wg")) then
+			SlaaneshLordTactic.InitAbilities( self )
+			SlaaneshLordTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_lord_terminator") or self.squad_ai:HasSquadAttached("emperors_children_squad_lord_terminator_wg")) then
+			SlaaneshLordTermi.InitAbilities( self )
+			SlaaneshLordTermi.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_sorcerer") or self.squad_ai:HasSquadAttached("emperors_children_squad_priestress")) then
+			SlaaneshSorcererTactic.InitAbilities( self )
+			SlaaneshSorcererTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_lucius")) then
+			SlaaneshLuciusTactic.InitAbilities( self )
+			SlaaneshLuciusTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_masque")) or (self.squad_ai:HasSquadAttached("emperors_children_squad_masque_advance_sp")) then
+			SlaaneshMasqueTactic.InitAbilities( self )
+			SlaaneshMasqueTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_fallen_hospitaller")) or (self.squad_ai:HasSquadAttached("emperors_children_squad_fallen_hospitaller_advance_sp")) then
+			SlaaneshHospitallerTactic.InitAbilities( self )
+			SlaaneshHospitallerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_intoner_miriael")) or (self.squad_ai:HasSquadAttached("emperors_children_squad_intoner_miriael_advance_sp")) then
+			SlaaneshIntonerMiriTactic.InitAbilities( self )
+			SlaaneshIntonerMiriTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_miriel_ktgm")) then
+			SlaaneshMiriael_ktgmTactic.InitAbilities( self )
+			SlaaneshMiriael_ktgmTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_slaanesh_herald")) then
+			SlaaneshHeraldTactic.InitAbilities( self )
+			SlaaneshHeraldTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_icon_bearer")) then
+			SlaaneshIconBearerTactic.InitAbilities( self )
+			SlaaneshIconBearerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_flag_bearer")) then
+			SlaaneshIconBearerTactic.InitAbilities( self )
+			SlaaneshIconBearerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("emperors_children_squad_apothecary")) then
+			SlaaneshApothecaryTactic.InitAbilities( self )
+			SlaaneshApothecaryTactic.DoAbilities( self )
+		end
+	end
+
+    self:DoThrowGrenades()
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function EmperorsChildrenInfantryTactic:DoThrowGrenades()
+
+    if self.squad_ai:IsInCombat() then
+        
+        if ( g_iGMT > self.FragBombLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.FragBombID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.FragBombID, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.FragBombID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.FragBombLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.FragBombALastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.FragBombAID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.FragBombAID, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.FragBombAID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.FragBombALastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.KrakBombLastUse + 65 ) then        
+            if Ability.DoAbilityTarget( self.squad_ai, EmperorsChildrenInfantryAbility.KrakBombID, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTargetEntity( self.squad_ai, EmperorsChildrenInfantryAbility.KrakBombID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            then
+                self.KrakBombLastUse = g_iGMT
+            end
+        end    
+    end
+end
+
+function EmperorsChildrenInfantryTactic:CheckDance(oSquad)
+
+	-- Check opponent
+	if (oSquad == nil) then
+		return false
+	end
+	
+	-- Compare opponents
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "emperors_children_squad_noise_marine" or sSquadName == "emperors_children_squad_terminator") then
+		
+		-- Check opponent
+		if (oSquad:GetSquadName() == "chaos_squad_cultist") then
+			return false
+		end
+	end
+	return true
+end
+

@@ -1,0 +1,88 @@
+----------------------------------------
+-- File: 'RavenGuardLibrarianTactic.ai'
+-- Edited by LarkinVB   @ 15.08.2005
+-- Edited by Thudmeizer @ 21.03.2023
+
+class 'RavenGuardLibrarianTactic' (RavenGuardSpaceMarineInfantryTactic)
+
+RavenGuardLibrarian = {}
+
+function RavenGuardLibrarianTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Librarian Tactic")
+end
+
+function RavenGuardLibrarianTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function RavenGuardLibrarianTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function RavenGuardLibrarianTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function RavenGuardLibrarianTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function RavenGuardLibrarianTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RavenGuardLibrarian.abyss == nil) then
+		RavenGuardLibrarian.abyss = cpu_manager.stats:GetAbilityID( "raven_guard_abyss" )
+	end
+	if (RavenGuardLibrarian.darkness_within == nil) then
+		RavenGuardLibrarian.darkness_within = cpu_manager.stats:GetAbilityID( "raven_guard_darkness_within" )
+	end
+	if (RavenGuardLibrarian.enveloping_darkness == nil) then
+		RavenGuardLibrarian.enveloping_darkness = cpu_manager.stats:GetAbilityID( "raven_guard_enveloping_darkness" )
+	end
+end
+
+function RavenGuardLibrarianTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos( self.squad_ai, RavenGuardLibrarian.abyss, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityPos( self.squad_ai, RavenGuardLibrarian.darkness_within, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityPos( self.squad_ai, RavenGuardLibrarian.enveloping_darkness, Ability.Filters.CloseInfantryEnemy, 4 )
+	else
+		Ability.DoAbilityPos( self.squad_ai, RavenGuardLibrarian.abyss, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityPos( self.squad_ai, RavenGuardLibrarian.darkness_within, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityPos( self.squad_ai, RavenGuardLibrarian.enveloping_darkness, Ability.Filters.CloseInfantryEnemy, 8 )
+	end
+end
+
+function RavenGuardLibrarianTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier3+
+    	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+    	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

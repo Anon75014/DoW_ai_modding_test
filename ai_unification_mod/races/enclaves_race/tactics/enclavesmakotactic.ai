@@ -1,0 +1,30 @@
+----------------------------------------
+-- File: 'enclavesmakotactic.ai'
+-- Edited by CaptJoJo (meatshi3ld)		@ 2.09.2021
+-- Edited by Thudmeizer				@ 09.09.2022
+
+class 'EnclavesMakoTactic' (EnclavesVehicleTactic)
+
+EnclavesMako = {}
+
+function EnclavesMakoTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Mako Tactic")
+end
+
+function EnclavesMakoTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesMako.Seekerbarrage_id == nil) then
+		EnclavesMako.Seekerbarrage_id = cpu_manager.stats:GetAbilityID( "enclaves_mako_seeker_missile" )	
+	end
+end
+
+function EnclavesMakoTactic:DoAbilities()
+
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+ 		Ability.DoAbilityPos( self.squad_ai, EnclavesMako.Seekerbarrage_id, Ability.Filters.CloseEnemy, 4 ) 
+	else
+ 		Ability.DoAbilityPos( self.squad_ai, EnclavesMako.Seekerbarrage_id, Ability.Filters.CloseEnemy, 8 ) 
+	end
+end

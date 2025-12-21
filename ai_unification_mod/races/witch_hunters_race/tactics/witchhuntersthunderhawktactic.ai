@@ -1,0 +1,21 @@
+----------------------------------------
+-- File: 'witchhuntersthunderhawktactic.ai'
+-- Edited by Thudmeizer		@ 09.10.2022
+
+class 'WitchhuntersThunderhawkTactic' (WitchHuntersVehicleTactic)
+
+WitchhuntersThunderhawk = {}
+
+function WitchhuntersThunderhawkTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Witchhunters Thunderhawk Tactic")
+end
+
+function WitchhuntersThunderhawkTactic:InitAbilities()
+
+end
+
+function WitchhuntersThunderhawkTactic:DoAbilities()
+
+	self:DoThunderhawkTargetWeapon()
+end

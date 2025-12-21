@@ -1,0 +1,28 @@
+----------------------------------------
+-- File: 'ynnaribuildertactic.ai'
+-- Edited by Thudmeizer @ 24.07.2022
+
+class 'YnnariBuilderTactic' (EngineerTactic)
+
+YnnariBuilder = {}
+
+function YnnariBuilderTactic:__init( squad_ai ) super( squad_ai )
+
+        self:SetName("Ynnari Builder Tactic")
+end
+
+function YnnariBuilderTactic:IsAffectedByMorale()
+       return false
+end
+
+function YnnariBuilderTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not EngineerTactic.Update(self)) then
+		return
+	end
+end

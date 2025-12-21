@@ -1,0 +1,54 @@
+----------------------------------------
+-- File: 'guardairtowertactic.ai'
+-- Edited by Gambit		@ 19.04.2021
+-- Edited by Thudmrizer		@ 09.11.2023
+
+class 'GuardAirTowerTactic' (BaseTactic)
+
+GuardAirTower = {}
+
+function GuardAirTowerTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Guard Air Tower Tactic")
+end
+
+function GuardAirTowerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if GuardAirTower.thunderbolt_strike_id == nil then
+		GuardAirTower.thunderbolt_strike_id = cpu_manager.stats:GetAbilityID("guard_thunderbolt_strike")
+	end
+
+	if (GuardAirTower.dangerclose_id == nil) then
+		GuardAirTower.dangerclose_id = cpu_manager.stats:GetAbilityID("guard_buildings_dangerclose_air_tower")
+	end
+end
+
+function GuardAirTowerTactic:DoAbilities()
+
+	-- Try to activate defensive measures (Listening Posts and Infantry)
+	if (self.base_ai:CanDoAbility(GuardAirTower.dangerclose_id)) then
+
+		-- Enable Danger Close Protocols to increase defensive capabilities when enemies are near
+		Ability.DoAbilityArea( self.base_ai, GuardAirTower.dangerclose_id, Ability.Filters.CloseEnemy, 20, 1)
+	end
+
+	-- Try to perform a Thunderbolt Strike
+	if self.base_ai:CanDoAbility(GuardAirTower.thunderbolt_strike_id) then
+		if  resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) > 350
+		and resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 350 then
+			local iRange = self.base_ai:GetAbilityRange(GuardAirTower.thunderbolt_strike_id)
+			local iPos = self.base_ai:GetPosition()
+			local oSquad = Ability.Filters.CloseInfantryEnemy( iPos , iRange, 6 )
+			if oSquad == nil then
+				oSquad = Ability.Filters.CloseMonsterEnemy( iPos , iRange, 6 )
+				if oSquad == nil then
+					oSquad = Ability.Filters.CloseCommanderEnemy( iPos , iRange, 1 )
+				end
+			end
+			if oSquad ~= nil and oSquad:IsValid() then
+				self.base_ai:DoSpecialAbilitySquad(GuardAirTower.thunderbolt_strike_id, oSquad:GetSquad())
+			end
+		end
+	end
+end

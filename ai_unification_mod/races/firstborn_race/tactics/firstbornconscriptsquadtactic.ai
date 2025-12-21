@@ -1,0 +1,46 @@
+----------------------------------------
+-- File: 'firstbornconscriptsquadtactic.ai'
+-- Edited by Thudmeizer	@ 25.09.2025
+
+class 'FirstbornConscriptSquadTactic' (FirstbornInfantryTactic)
+
+ConscriptSquad = {}
+
+function FirstbornConscriptSquadTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Conscript Squad Tactic")
+end
+
+function FirstbornConscriptSquadTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (ConscriptSquad.krak_id == nil) then
+		ConscriptSquad.krak_id = cpu_manager.stats:GetAbilityID( "firstborn_conscript_krak_grenade" )	
+	end
+
+	if (ConscriptSquad.fucked_id == nil) then
+		ConscriptSquad.fucked_id = cpu_manager.stats:GetAbilityID( "firstborn_fucked" )	
+	end
+end
+
+function FirstbornConscriptSquadTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos( self.squad_ai, ConscriptSquad.krak_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityPos( self.squad_ai, ConscriptSquad.krak_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+		Ability.DoAbilityPos( self.squad_ai, ConscriptSquad.krak_id, Ability.Filters.CloseInfantryEnemy, 4 )
+	else
+		Ability.DoAbilityPos( self.squad_ai, ConscriptSquad.krak_id, Ability.Filters.CloseVehicleEnemy, 2 )
+		Ability.DoAbilityPos( self.squad_ai, ConscriptSquad.krak_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+		Ability.DoAbilityPos( self.squad_ai, ConscriptSquad.krak_id, Ability.Filters.CloseInfantryEnemy, 8 )
+	end
+
+	-- Check if I can stop morale damage if broken
+	if self.squad_ai:IsBroken() then
+
+		if (self.squad_ai:CanDoAbility( ConscriptSquad.fucked_id )) then
+			self.squad_ai:DoSpecialAbility( ConscriptSquad.fucked_id )
+		end
+	end
+end

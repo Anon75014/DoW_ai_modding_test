@@ -1,0 +1,47 @@
+----------------------------------------
+-- File: 'templarassaulttactic.ai'
+-- Edited by JONES   @ 27.02.2023
+
+class 'TemplarAssaultTactic' (TemplarInfantryTactic)
+
+TemplarAssault = {}
+
+function TemplarAssaultTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("Templar Assault Tactic")
+end
+
+function TemplarAssaultTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TemplarAssault.melta_id == nil) then
+		TemplarAssault.melta_id = cpu_manager.stats:GetAbilityID( "templar_melta_bombs" )
+	end
+end
+
+function TemplarAssaultTactic:DoAbilities()
+
+	Ability.DoAbilityTarget( self.squad_ai, TemplarAssault.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+  	Ability.DoAbilityTargetEntity( self.squad_ai, TemplarAssault.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+	
+	-- Call basic DoAbilities methods
+	TemplarInfantryTactic.DoAbilities(self)
+end
+
+
+function TemplarAssaultTactic:IsAffectedByMorale()
+	return (self.squad_ai:GetHealthPercentage() < 0.5)
+end
+
+function TemplarAssaultTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not TemplarInfantryTactic.Update( self )) then
+		return
+	end
+	
+	self:EmergencyRetreat()
+end

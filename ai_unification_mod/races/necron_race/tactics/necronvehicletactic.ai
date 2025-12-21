@@ -1,0 +1,39 @@
+----------------------------------------
+-- File: 'necronvehicletactic.ai'
+-- Created by Thudmeizer  @ 26.09.2023
+
+
+class 'NecronVehicleTactic' (VehicleTactic)
+
+function NecronVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Necron Vehicle Tactic")
+end
+
+-- Check if the vehicle should dance away in melee
+function NecronVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "necron_destroyer_squad" or
+		sName == "necron_heavy_destroyer_squad" or
+		sName == "necron_tomb_stalker_squad" or
+		sName == "necron_ghost_ark_squad" or
+		sName == "necron_tomb_blade_squad" or
+		sName == "necron_tomb_spyder_squad" or
+		sName == "necron_canoptek_spyder_squad" or
+		sName == "necron_doomsday_ark_squad" or
+		sName == "necron_annihilation_barge_squad" or
+		sName == "necron_lord_sylphek_squad" or
+		sName == "necron_restored_obelisk_squad" or
+		sName == "necron_aeonic_orb_squad" or
+		sName == "necron_seraptek_titan_squad") then
+		return true
+	end
+	return false
+end
+
+function NecronVehicleTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

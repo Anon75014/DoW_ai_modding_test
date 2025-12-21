@@ -1,0 +1,21 @@
+----------------------------------------
+-- File: 'darkangelsimperialknighttactic.ai'
+-- Edited by Gambit         @ 30.04.2020
+
+class 'DarkAngelsImperialKnightTactic' (DarkAngelsVehicleTactic)
+
+DarkAngelsImperialKnight = {}
+
+
+function DarkAngelsImperialKnightTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("Dark Angels Imperial Knight Tactic")
+end
+
+
+function DarkAngelsImperialKnightTactic:InitAbilities()
+end
+
+
+function DarkAngelsImperialKnightTactic:DoAbilities()
+	DarkAngelsVehicleTactic.DoAbilities(self)
+end

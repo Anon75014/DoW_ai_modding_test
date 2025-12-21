@@ -1,0 +1,102 @@
+----------------------------------------
+-- File: 'chaosmarineinfantrytactic.ai'
+-- Created by Arkhan		@ 12.01.2006
+-- Edited by Thudmeizer         @ 01.10.2023
+
+class 'ChaosMarineInfantryTactic' (InfantryTactic)
+
+function ChaosMarineInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chaos Marine Infantry Tactic")
+	
+	-- Basic chaos infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "chaos_squad_cultist" or
+			sSquadName == "chaos_squad_renegade" or
+			sSquadName == "chaos_marine_squad" or
+			sSquadName == "chaos_squad_chosen" or
+			sSquadName == "chaos_squad_khorne_berserker" or
+			sSquadName == "chaos_squad_fallen_sister" or
+			sSquadName == "chaos_squad_havoc" or
+			sSquadName == "chaos_squad_possessed_marine" or
+			sSquadName == "chaos_squad_icon_bearer_khorne" or
+			sSquadName == "chaos_squad_icon_bearer_nurgle" or
+			sSquadName == "chaos_squad_icon_bearer_slaanesh" or
+			sSquadName == "chaos_squad_icon_bearer_tzeentch" or
+			sSquadName == "chaos_squad_icon_bearer_undivided" or
+			sSquadName == "chaos_squad_iskandar_khayon" or
+			sSquadName == "chaos_squad_warpsmith" or
+			sSquadName == "chaos_squad_yor_forger" or
+			sSquadName == "chaos_squad_sorcerer" or
+			sSquadName == "chaos_squad_lord" or
+			sSquadName == "chaos_squad_lord_advance_sp" or
+			sSquadName == "chaos_squad_lord_advance_sp_wg" or
+			sSquadName == "chaos_squad_lord_ktgm") then
+
+		self.m_iTransportable = 1	-- Rhino
+	
+	elseif (sSquadName == "chaos_squad_horror") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("chaos_sacrificial_circle")
+
+	elseif (sSquadName == "chaos_squad_obliterator" or 
+			sSquadName == "chaos_squad_mutilator" or 
+			sSquadName == "chaos_squad_terminator" or
+			sSquadName == "chaos_squad_primarch_alpharius") then
+		self.m_iTransportable = 2	-- Land Raider Hades	
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("chaos_greater_sacrificial_circle")
+	end
+end
+
+function ChaosMarineInfantryTactic:AddTargetAbilities()
+	table.insert(InfantryTactic.TargetAbilities, { nil, "chaos_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
+end
+
+function ChaosMarineInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "chaos_squad_lord", true })
+	table.insert(self.commander, { "chaos_squad_lord_advance_sp", true })
+	table.insert(self.commander, { "chaos_squad_lord_advance_sp_wg", true })
+	table.insert(self.commander, { "chaos_squad_lord_ktgm", true })
+	table.insert(self.commander, { "chaos_squad_sorcerer", false })
+	table.insert(self.commander, { "chaos_squad_yor_forger", false })
+	table.insert(self.commander, { "chaos_squad_warpsmith", false })
+	table.insert(self.commander, { "chaos_squad_iskandar_khayon", false })
+	table.insert(self.commander, { "chaos_squad_primarch_alpharius", false })
+end
+
+function ChaosMarineInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("chaos_squad_lord") or self.squad_ai:HasSquadAttached("chaos_squad_lord_advance_sp"))
+		or (self.squad_ai:HasSquadAttached("chaos_squad_lord_advance_sp_wg") or self.squad_ai:HasSquadAttached("chaos_squad_lord_ktgm")) then
+			ChaosLordTactic.InitAbilities( self )
+			ChaosLordTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("chaos_squad_sorcerer")) then
+			SorcererTactic.InitAbilities( self )
+			SorcererTactic.DoAbilities( self )
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function ChaosMarineInfantryTactic:CheckDance(oSquad)
+
+	-- Check opponent
+	if (oSquad == nil) then
+		return false
+	end
+	
+	-- Compare opponents
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "chaos_marine_squad" or sSquadName == "chaos_squad_obliterator") then
+		
+		-- Check opponent
+		if (oSquad:GetSquadName() == "chaos_squad_cultist") then
+			return false
+		end
+	end
+	return true
+end

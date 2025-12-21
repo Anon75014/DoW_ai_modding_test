@@ -1,0 +1,281 @@
+----------------------------------------
+-- File: 'tslordtactic.ai'
+-- Edited by Thudmeizer @ 10.08.2011
+-- Edited by Gambit 26.03.2014
+
+class 'TSLordTactic' (TSInfantryTactic)
+
+TSLord = {}
+
+function TSLordTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("TS Lord Tactic")
+
+end
+
+-- Assassinate win condition -- never attack
+function TSLordTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function TSLordTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function TSLordTactic:InitAbilities()
+
+	if (TSLord.doombolt1_id == nil) then
+	   	TSLord.doombolt1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_doombolt_lord_lvl1" )
+	end
+	if (TSLord.doombolt2a_id == nil) then
+	   	TSLord.doombolt2a_id = cpu_manager.stats:GetAbilityID( "thousand_sons_doombolt_lord_lvl2a" )
+	end
+	if (TSLord.doombolt2b_id == nil) then
+	   	TSLord.doombolt2b_id = cpu_manager.stats:GetAbilityID( "thousand_sons_doombolt_lord_lvl2b" )
+	end
+	if (TSLord.doombolt2c_id == nil) then
+	   	TSLord.doombolt2c_id = cpu_manager.stats:GetAbilityID( "thousand_sons_doombolt_lord_lvl2c" )
+	end
+
+	if (TSLord.tainting1_id == nil) then
+	   	TSLord.tainting1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_tainting_bolt_lvl1" )
+	end
+	if (TSLord.tainting2_id == nil) then
+	   	TSLord.tainting2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_tainting_bolt_lvl2" )
+	end
+	if (TSLord.tainting3_id == nil) then
+	   	TSLord.tainting3_id = cpu_manager.stats:GetAbilityID( "thousand_sons_tainting_bolt_lvl3" )
+	end
+
+	if (TSLord.skull1_id == nil) then
+	   	TSLord.skull1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_seeing_skull_lvl1" )
+	end
+	if (TSLord.skull2_id == nil) then
+	   	TSLord.skull2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_seeing_skull_lvl2" )
+	end
+
+	if (TSLord.tutelary1_id == nil) then
+	   	TSLord.tutelary1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_spiteful_tutelary_lvl1" )
+	end
+	if (TSLord.tutelary2_id == nil) then
+	   	TSLord.tutelary2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_spiteful_tutelary_lvl2" )
+	end
+	if (TSLord.tutelary3_id == nil) then
+	   	TSLord.tutelary3_id = cpu_manager.stats:GetAbilityID( "thousand_sons_spiteful_tutelary_lvl3" )
+	end
+
+	if (TSLord.invisibility1_id == nil) then
+	   	TSLord.invisibility1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_invisibility_lvl1" )
+	end
+	if (TSLord.invisibility2_id == nil) then
+	   	TSLord.invisibility2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_invisibility_lvl2" )
+	end
+	if (TSLord.invisibility3_id == nil) then
+	   	TSLord.invisibility3_id = cpu_manager.stats:GetAbilityID( "thousand_sons_invisibility_lvl3" )
+	end
+
+	if (TSLord.shield1_id == nil) then
+	   	TSLord.shield1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_fire_shield_lvl1" )
+	end
+	if (TSLord.shield2_id == nil) then
+	   	TSLord.shield2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_fire_shield_lvl2" )
+	end
+	if (TSLord.shield3_id == nil) then
+	   	TSLord.shield3_id = cpu_manager.stats:GetAbilityID( "thousand_sons_fire_shield_lvl3" )
+	end
+
+	if (TSLord.spawn1_id == nil) then
+	   	TSLord.spawn1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_summon_spawn_lvl1" )
+	end
+	if (TSLord.spawn2_id == nil) then
+	   	TSLord.spawn2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_summon_spawn_lvl2" )
+	end
+	if (TSLord.spawn3_id == nil) then
+	   	TSLord.spawn3_id = cpu_manager.stats:GetAbilityID( "thousand_sons_summon_spawn_lvl3" )
+	end
+
+	if (TSLord.pavoni1_id == nil) then
+	   	TSLord.pavoni1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_malficio_pavoni_lvl1" )
+	end
+	if (TSLord.pavoni2_id == nil) then
+	   	TSLord.pavoni2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_malficio_pavoni_lvl2" )
+	end
+	if (TSLord.clone1_id == nil) then
+	   	TSLord.clone1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_clone_lvl1" )
+	end
+	if (TSLord.clone2_id == nil) then
+	   	TSLord.clone2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_clone_lvl2" )
+	end
+	if (TSLord.clone3_id == nil) then
+	   	TSLord.clone3_id = cpu_manager.stats:GetAbilityID( "thousand_sons_clone_lvl3" )
+	end
+
+	if (TSLord.confusion1_id == nil) then
+	   	TSLord.confusion1_id = cpu_manager.stats:GetAbilityID( "thousand_sons_confusion_lvl1" )
+	end
+
+	if (TSLord.confusion2_id == nil) then
+	   	TSLord.confusion2_id = cpu_manager.stats:GetAbilityID( "thousand_sons_confusion_lvl2" )
+	end
+
+    self.taintingLastUse = g_iGMT
+    self.pavoniLastUse = g_iGMT
+    self.skullLastUse = g_iGMT
+    self.tutelaryLastUse = g_iGMT
+
+end
+
+function TSLordTactic:DoAbilities()
+    --self:DoLordTargetWeapon()
+
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.doombolt1_id, Ability.Filters.CloseSquadEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.doombolt2a_id, Ability.Filters.CloseSquadEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.doombolt2b_id, Ability.Filters.CloseSquadEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.doombolt2c_id, Ability.Filters.CloseSquadEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting1_id, Ability.Filters.CloseCommanderEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting1_id, Ability.Filters.CloseMonsterHighEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting2_id, Ability.Filters.CloseCommanderEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting2_id, Ability.Filters.CloseMonsterHighEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting3_id, Ability.Filters.CloseCommanderEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting3_id, Ability.Filters.CloseMonsterHighEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.pavoni1_id, Ability.Filters.CloseInfantryEnemy, 8 )
+	Ability.DoAbilityTarget( self.squad_ai, TSLord.pavoni2_id, Ability.Filters.CloseInfantryEnemy, 8 )
+	Ability.DoAbility( self.squad_ai, TSLord.shield1_id, Ability.Filters.IsInCombat )
+	Ability.DoAbility( self.squad_ai, TSLord.shield2_id, Ability.Filters.IsInCombat )
+	Ability.DoAbility( self.squad_ai, TSLord.shield3_id, Ability.Filters.IsInCombat )
+	Ability.DoAbilityArea( self.squad_ai, TSLord.tutelary1_id, Ability.Filters.CloseEnemy, 5 )
+	Ability.DoAbilityArea( self.squad_ai, TSLord.tutelary2_id, Ability.Filters.CloseEnemy, 5 )
+	Ability.DoAbilityArea( self.squad_ai, TSLord.tutelary3_id, Ability.Filters.CloseEnemy, 5 )
+	Ability.DoAbilityArea( self.squad_ai, TSLord.spawn1_id, Ability.Filters.CloseEnemy, 15,1 )
+	Ability.DoAbilityArea( self.squad_ai, TSLord.spawn2_id, Ability.Filters.CloseEnemy, 15,1 )
+	Ability.DoAbilityArea( self.squad_ai, TSLord.spawn3_id, Ability.Filters.CloseEnemy, 15,1 )
+	Ability.DoAbility( self.squad_ai, TSLord.clone1_id, Ability.Filters.IsInCombat )
+	Ability.DoAbility( self.squad_ai, TSLord.clone2_id, Ability.Filters.IsInCombat )
+	Ability.DoAbility( self.squad_ai, TSLord.clone3_id, Ability.Filters.IsInCombat )
+	Ability.DoAbilityPos( self.squad_ai, TSLord.confusion1_id, Ability.Filters.CloseInfantryEnemy, 8 )
+	Ability.DoAbilityPos( self.squad_ai, TSLord.confusion2_id, Ability.Filters.CloseInfantryEnemy, 8 )
+
+	Ability.DoAbility( self.squad_ai, TSLord.invisibility1_id, Ability.Filters.IsInCombat )
+	-- Check if we can cast Invisibility 2 and 3
+	if (self.squad_ai:CanDoAbility(TSLord.invisibility2_id)) then
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(TSLord.invisibility2_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(TSLord.invisibility2_id, oUnit:GetSquad())
+		end
+	end
+	if (self.squad_ai:CanDoAbility(TSLord.invisibility3_id)) then
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(TSLord.invisibility3_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 200) then
+			self.squad_ai:DoSpecialAbilitySquad(TSLord.invisibility3_id, oUnit:GetSquad())
+		end
+	end --
+
+	Ability.DoAbilityArea( self.squad_ai, TSLord.skull1_id, Ability.Filters.CloseEnemy, 10 )
+	-- Check if we can cast Seeing Skull 2
+    if self.squad_ai:CanDoAbility(TSLord.skull2_id) then
+    	-- Check for infiltrated enemy
+        local oEnemy = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), 256, 1)
+		if (oEnemy ~= nil) then
+			local vEnemyPos = Vector3f(oEnemy:GetPosition())
+			self.squad_ai:DoSpecialAbilityPos(TSLord.skull2_id, vEnemyPos)
+		end
+	end
+
+
+	InfantryTactic.DoAbilities(self)
+end
+
+function TSLordTactic:DoLordTargetWeapon()
+
+    if self.squad_ai:IsInCombat() then
+        
+        if ( g_iGMT > self.taintingLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting1_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            then
+                self.taintingLastUse = g_iGMT 
+            end
+        end
+        if ( g_iGMT > self.taintingLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting2_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            then
+                self.taintingLastUse = g_iGMT 
+            end
+        end
+        if ( g_iGMT > self.taintingLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, TSLord.tainting3_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            then
+                self.taintingLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.pavoniLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, TSLord.pavoni1_id, Ability.Filters.CloseInfantryEnemy, 5 ) 
+	    or Ability.DoAbilityTarget( self.squad_ai, TSLord.pavoni1_id, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.pavoniLastUse = g_iGMT 
+            end
+        end
+        if ( g_iGMT > self.pavoniLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, TSLord.pavoni2_id, Ability.Filters.CloseInfantryEnemy, 5 ) 
+	    or Ability.DoAbilityTarget( self.squad_ai, TSLord.pavoni3_id, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.pavoniLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.skullLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLord.skull1_id, Ability.Filters.CloseInfiltrator, 1 )
+            then
+                self.skullLastUse = g_iGMT 
+            end
+        end
+        if ( g_iGMT > self.skullLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLord.skull2_id, Ability.Filters.CloseInfiltrator, 1 )
+            then
+                self.skullLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.tutelaryLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLord.tutelary1_id, Ability.Filters.CloseEnemy, 5 )
+           then
+                self.tutelaryLastUse = g_iGMT 
+            end
+        end
+        if ( g_iGMT > self.tutelaryLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLord.tutelary2_id, Ability.Filters.CloseEnemy, 5 )
+           then
+                self.tutelaryLastUse = g_iGMT 
+            end
+        end
+    end
+end
+
+
+function TSLordTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Assassinate win condition -- never attach to a squad
+   	if (not cpu_manager.assassinate and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+   	end
+end

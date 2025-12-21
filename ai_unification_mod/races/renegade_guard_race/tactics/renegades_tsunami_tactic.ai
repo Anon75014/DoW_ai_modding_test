@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'renegades_tsunami_tactic.ai'
+-- Edited by Thudmeizer		@ 09.10.2023
+
+class 'Renegades_Tsunami_Tactic' (Renegades_Vehicle_Tactic)
+
+Renegades_Tsunami = {}
+
+function Renegades_Tsunami_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Tsunami Tactic")
+end
+
+function Renegades_Tsunami_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Renegades_Tsunami.repair_id == nil) then
+		Renegades_Tsunami.repair_id = cpu_manager.stats:GetAbilityID("renegade_guard_tsunami_self_repair")
+	end
+end
+
+function Renegades_Tsunami_Tactic:DoAbilities()
+
+	-- Tsunami Repair!
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		if (self.squad_ai:CanDoAbility( Renegades_Tsunami.repair_id )) then
+			self.squad_ai:DoSpecialAbility( Renegades_Tsunami.repair_id )
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+
+	-- Call standard method
+	Renegades_Vehicle_Tactic.DoAbilities(self)
+end

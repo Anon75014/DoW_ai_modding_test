@@ -1,0 +1,162 @@
+------------------------------------
+-- File: 'LOTDHQTactic.ai'
+-- Created by Gambit	@ 18.05.2016
+-- Edited by Thudmeizer	@ 03.12.2023
+
+class 'LOTDHQTactic' (BaseTactic)
+
+LOTDHQ = {}
+
+function LOTDHQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("HQ Tactic")
+
+	--self.m_bCanDeepStrikeTroops = true
+	self.revealMapAbilityUsed = g_iGMT
+
+	-- Re-calculate starting position or race's AI re-initiation
+	local oStats = cpu_manager.stats:GetPlayerStatsFromID(cpu_manager.player_id)
+	for oBase in oStats:GetBases() do
+		if oBase:IsValid() then
+			if oBase:GetBaseName() == "lotd_space_marine_hq" then
+				cpu_manager.start_pos = oBase:GetEntity():GetPosition()
+				break
+			end
+		end
+	end
+end
+
+function LOTDHQTactic:InitAbilities()
+--[[
+	-- Init ability ID's
+	if (LOTDHQ.teleport == nil) then
+		LOTDHQ.teleport = cpu_manager.stats:GetAbilityID( "lotd_hq_teleport" )
+	end
+]]
+end
+
+function LOTDHQTactic:DoAbilities()
+	-- We want squads to be DSed immediately, but if a battle occurs, try to avoid it.
+	local oUnit = Ability.Filters.CloseHurt(self.base_ai:GetPosition(), 512, 1)
+	if (oUnit ~= nil and oUnit:IsInCombat()) then
+		self:HQDeepStrikeImmediately(oUnit:GetPosition())
+	else
+		self:HQDeepStrikeImmediately(self.base_ai:GetEntity():GetPosition())
+	end
+--[[	
+	if self.base_ai:CanDoAbility(LOTDHQ.teleport) then
+		if self.base_ai:GetHealthPercentage() < 0.3 then
+			-- Attempt an emergency escape teleport to a friendly base
+			if self.base_ai:IsUnderAttack() then
+				local iPosition = self:GetFriendlySafeHQ(2056)
+				if iPosition ~= nil then
+					self.base_ai:DoSpecialAbilityPos(LOTDHQ.teleport, iPosition)
+					cpu_manager.start_pos = iPosition
+				-- Attempt a teleport to a safe LP
+				else
+					iPosition = self:GetSafeLPWithin(2056)
+					if iPosition ~= nil then
+						self.base_ai:DoSpecialAbilityPos(LOTDHQ.teleport, iPosition)
+						cpu_manager.start_pos = iPosition
+					end
+				end
+			-- We are of low hps, because of few captured LPs, attempt a downgrading teleport
+			elseif not self.base_ai:WasRecentlyHurt() then
+				-- Attempt a teleport near an uncaptured LP, to start capturing!
+				local iPosition = self:GetSafeUncapturedSPWithin(2056)
+				if iPosition ~= nil then
+					self.base_ai:DoSpecialAbilityPos(LOTDHQ.teleport, iPosition)
+					cpu_manager.start_pos = iPosition
+				-- Attempt a teleport to a friendly base
+				else
+					iPosition = self:GetFriendlySafeHQ(2056)
+					if iPosition ~= nil then
+						self.base_ai:DoSpecialAbilityPos(LOTDHQ.teleport, iPosition)
+						cpu_manager.start_pos = iPosition
+					-- Teleport at the SAME spot, in order to simply downgrade
+					else
+						self.base_ai:DoSpecialAbilityPos(LOTDHQ.teleport, self.base_ai:GetEntity():GetPosition())
+					end
+				end
+			end
+		end
+	end
+]]
+end
+
+function LOTDHQTactic:HQDeepStrikeImmediately(pos)
+	local buildChannelHQ = build_manager:GetBuildChannelFromID(self.base_ai:GetEntity():GetID())
+	local id = buildChannelHQ:GetBlueprintID()
+	if buildChannelHQ ~= nil then
+		if buildChannelHQ:CanDeepStrike() then
+			buildChannelHQ:DoDeepStrikeToPos(pos)
+		end
+	end
+end
+
+function LOTDHQTactic:GetFriendlySafeHQ(iRange)
+	local hqPosition = self.base_ai:GetPosition()
+	local iRangeSqr = iRange * iRange
+	for oPlayer in cpu_manager.stats:GetPlayerStats() do
+		if not oPlayer:IsPlayerDead() then
+			-- Return ally base, BUT NOT your own!
+			if not cpu_manager.player_stats:IsEnemy(oPlayer) and oPlayer:GetPlayerID() ~= cpu_manager.player_id then
+				for oBuilding in oPlayer:GetBases() do
+					if oBuilding:IsValid() then
+						local oName = oBuilding:GetBaseName()
+						-- Only by name (xxxx_hq), it is possible to find HQ type. Necrons is the only race excluded...
+						if oName == "monolith" or string.sub(oName,-3) == "_hq" then
+							local oPosition = oBuilding:GetPosition()
+							if distance_sqr(oPosition,hqPosition) < iRangeSqr then
+								if not cpu_manager.terrain_analyzer:HasThreat(oPosition, 70) then
+									return oPosition
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return nil
+end
+
+function LOTDHQTactic:GetSafeLPWithin(iRange)
+	local hqPosition = self.base_ai:GetPosition()
+	local iRangeSqr = iRange * iRange
+	for oStrategicPoint in resource_manager:GetStrategicPointAIs() do
+		local oPosition = oStrategicPoint:GetEntity():GetPosition()
+		if distance_sqr(oPosition,hqPosition) < iRangeSqr then
+			if not cpu_manager.terrain_analyzer:HasThreat(oPosition, 80) then
+				return oPosition
+			end
+		end
+	end
+	return nil
+end
+
+
+function LOTDHQTactic:GetSafeUncapturedSPWithin(iRange)
+	local hqPosition = self.base_ai:GetPosition()
+	local iRangeSqr = iRange * iRange
+	for oStrategicPoint in resource_manager:GetStrategicPointAIs() do
+		if not (oStrategicPoint:IsStrategicObjective() or oStrategicPoint:IsBeingCaptured())
+		and oStrategicPoint:Owner() == 0 then
+			local oPosition = oStrategicPoint:GetEntity():GetPosition()
+			if distance_sqr(oPosition,hqPosition) < iRangeSqr then
+				if not cpu_manager.terrain_analyzer:HasThreat(oPosition, 60) then
+					return oPosition
+				end
+			end
+		end
+	end
+	return nil
+end
+
+
+function LOTDHQTactic:CanDeepStrikeTroops()
+
+	if (cpu_manager:GetTierLevel() > 2) then
+		return true
+	end
+end

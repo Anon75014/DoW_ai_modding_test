@@ -1,0 +1,134 @@
+----------------------------------------
+-- File: 'commandertychodctactic.ai'
+-- Edited by Fuggles @ 02/05/15
+
+class 'BloodAngelCommanderTychoDCTactic' (BloodAngelsInfantryTactic)
+
+BloodAngelCommanderTychoDC = {}
+
+function BloodAngelCommanderTychoDCTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angel Commander Tycho DC Tactic")
+end
+
+-- Assassinate win condition -- never attack
+function BloodAngelCommanderTychoDCTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function BloodAngelCommanderTychoDCTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function BloodAngelCommanderTychoDCTactic:InitAbilities()
+
+	if BloodAngelCommanderTychoDC.battlecry_id == nil then
+		BloodAngelCommanderTychoDC.battlecry_id = cpu_manager.stats:GetAbilityID( "blood_angel_battlecry" )	
+		BloodAngelCommanderTychoDC.bombardment_id = cpu_manager.stats:GetAbilityID( "blood_angel_orbital_bombardment" )
+		BloodAngelCommanderTychoDC.rage_id = cpu_manager.stats:GetAbilityID( "blood_angel_empowering_rage" )	
+	end
+end
+
+function BloodAngelCommanderTychoDCTactic:DoAbilities()
+
+	-- Try to use orbital strike
+	Ability.DoAbilityPos(self.squad_ai, BloodAngelCommanderTychoDC.bombardment_id, Ability.Filters.CloseEnemy, 24)
+	Ability.DoAbilityPos(self.squad_ai, BloodAngelCommanderTychoDC.bombardment_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+
+	Ability.DoAbilityArea( self.squad_ai, BloodAngelCommanderTychoDC.battlecry_id, Ability.Filters.CloseInCombat, 10 )
+
+	-- In melee, enable the rage ability
+	if self.squad_ai:IsInCombat() then
+		local squad_pos = self.squad_ai:GetPosition()
+		if Ability.Filters.CloseInfantryEnemy( squad_pos, 8, 1 ) ~= nil
+		or Ability.Filters.CloseVehicleEnemy( squad_pos, 8, 1 ) ~= nil
+		or Ability.Filters.CloseCommanderEnemy( squad_pos, 8, 1 ) ~= nil then
+			self.squad_ai:DoSpecialAbility(BloodAngelCommanderTychoDC.rage_id)
+		end
+	end
+end
+
+--[[function BloodAngelCommanderTychoDCTactic:Reinforce()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- If there are no ressources available, don't upgrade!
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if (iRequisition < 800 and (not Tactic.Options.can_reinforce)) then
+		return
+	end
+
+	--always try for the actual leader first
+	if (not self.squad_ai:IsReinforcing()) then
+		if (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local plasmaIndex = 0
+		local meltaIndex = 1
+	
+		local numPlasma = self.squad_ai:GetLeaderCount( plasmaIndex )
+		local numMelta = self.squad_ai:GetLeaderCount( meltaIndex )
+
+		-- Desired number of each leader type
+		local desiredPlasma = 2 
+		local desiredMelta = 2
+
+		-- Desired order of reinforcing
+		if (numPlasma < desiredPlasma) then
+		
+			if (self.squad_ai:CanReinforce( true, plasmaIndex )) then
+				self.squad_ai:DoReinforce( true, plasmaIndex )
+			end
+		elseif (numMelta < desiredMelta) then
+		
+			if (self.squad_ai:CanReinforce( true, meltaIndex )) then
+				self.squad_ai:DoReinforce( true, meltaIndex )
+			end
+		end
+	end
+end]]
+
+function BloodAngelCommanderTychoDCTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Assassinate win condition -- never attach to a squad
+    if (not cpu_manager.assassinate and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                self:TryAttachSquadMelee()
+            end
+        end
+    end
+end
+
+--[[function BloodAngelCommanderTychoDCTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end]]
+

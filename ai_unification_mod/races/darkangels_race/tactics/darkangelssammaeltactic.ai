@@ -1,0 +1,42 @@
+----------------------------------------
+-- File: 'darkangelssammaeltactic.ai'
+-- Edited by Thudmeizer @ 22.12.2011
+
+class 'DarkAngelsSammaelTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsSammael = {}
+
+function DarkAngelsSammaelTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Sammael Tactic")
+end
+
+function DarkAngelsSammaelTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkAngelsSammaelTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkAngelsSammaelTactic:InitAbilities()
+
+end
+
+function DarkAngelsSammaelTactic:DoAbilities()
+
+    self:DoHuntTheFallen()
+end
+
+function DarkAngelsSammaelTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+end
+

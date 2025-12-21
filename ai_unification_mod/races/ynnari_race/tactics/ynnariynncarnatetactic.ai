@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'ynnariynncarnatetactic.ai'
+-- Edited by Thudmeizer @ 13.03.2025
+
+class 'YnnariYnncarnateTactic' (YnnariInfantryTactic)
+
+YnnariYnncarnate = {}
+
+function YnnariYnncarnateTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Ynnari Ynncarnate Tactic")
+end
+
+function YnnariYnncarnateTactic:AlwaysAttack()
+	return true
+end
+
+function YnnariYnncarnateTactic:Upgrade()
+
+	local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+	self.squad_ai:DoBestUpgrade( class_type )
+end

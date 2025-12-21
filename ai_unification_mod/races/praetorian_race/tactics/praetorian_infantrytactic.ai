@@ -1,0 +1,108 @@
+----------------------------------------
+-- File: 'Praetorian_InfantryTactic.ai'
+-- Edited by Thudmeizer		@ 26.03.2023
+
+class 'Praetorian_InfantryTactic' (InfantryTactic)
+
+function Praetorian_InfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorian Infantry Tactic")
+
+	-- All squads are able to enter/use an LP as a bunker
+	self.m_bBunkerSquad = true
+
+	-- All squads are transportable
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "praetorian_squad_praetorian_guardsmen" or
+		sSquadName == "praetorian_squad_praetorian_conscript" or
+		sSquadName == "praetorian_squad_specialist_weapons" or
+		sSquadName == "praetorian_squad_team" or
+		sSquadName == "praetorian_squad_infantry_missile" or
+		sSquadName == "praetorian_squad_infantry_mortar" or
+		sSquadName == "praetorian_squad_banner" or
+		sSquadName == "praetorian_squad_medic" or
+		sSquadName == "praetorian_squad_commissar" or
+		sSquadName == "praetorian_squad_bugler" or
+		sSquadName == "praetorian_squad_inquisitor" or
+		sSquadName == "praetorian_squad_lieutenant" or
+		sSquadName == "praetorian_squad_major") then
+
+		-- Squads able to enter transport vehicles
+		self.m_iTransportable = 1	-- Chimera / Tardis
+
+	elseif (sSquadName == "praetorian_squad_ork_bombsquigs" or
+		sSquadName == "praetorian_squad_blood_axe" or
+		sSquadName == "praetorian_squad_orka_kommando") then 
+
+		-- Squads able to enter transport vehicles
+		self.m_iTransportable = 2	-- Stompa
+	end
+end
+
+function Praetorian_InfantryTactic:AddTargetAbilities()
+	table.insert(InfantryTactic.TargetAbilities, { nil, "praetorian_kasrkin_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
+	table.insert(InfantryTactic.TargetAbilities, { nil, "praetorian_kasrkin_frag_grenades2", Ability.Filters.CloseSquadEnemy, 1, 0 })
+	table.insert(InfantryTactic.TargetAbilities, { nil, "praetorian_demo_charge", Ability.Filters.CloseVehicleEnemy, 1, 0 })
+end
+
+function Praetorian_InfantryTactic:AddCommanders()
+	table.insert(self.commander, { "praetorian_squad_lieutenant", true })
+end
+
+function Praetorian_InfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("praetorian_squad_bugler")) then
+			Praetorian_BuglerTactic.InitAbilities( self )
+			Praetorian_BuglerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("praetorian_squad_banner")) then
+			Praetorian_BannerTactic.InitAbilities( self )
+			Praetorian_BannerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("praetorian_squad_commissar")) then
+			Praetorian_CommissarTactic.InitAbilities( self )
+			Praetorian_CommissarTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("praetorian_squad_lieutenant")) then
+			Praetorian_LieutenantTactic.InitAbilities( self )
+			Praetorian_LieutenantTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("praetorian_squad_inquisitor")) then
+			Praetorian_InquisitorTactic.InitAbilities( self )
+			Praetorian_InquisitorTactic.DoAbilities( self )
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function Praetorian_InfantryTactic:CheckForDetach()
+
+	-- Detach commander from broken/capturing. guards stay attached
+	if (self.squad_ai:IsBroken() or self.squad_ai:IsCapturing()) and
+		(self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) and
+		not self.squad_ai:HasSquadAttached( "praetorian_squad_bugler" ) and
+		not self.squad_ai:HasSquadAttached( "praetorian_squad_banner" ) then
+		
+		self.squad_ai:DoDetachSquad()
+		self.squad_ai:DoSetDefaultMeleeStance()
+	end
+
+	-- Call basic detach method
+	InfantryTactic.CheckForDetach(self)
+end
+
+function Praetorian_InfantryTactic:CheckForBroken()
+
+	if (self.squad_ai:IsBroken()) then
+	
+		-- Check if I can repair my morale
+		local rally_id = cpu_manager.stats:GetAbilityID( "praetorian_ork_rally" )
+		if (self.squad_ai:CanDoAbility( rally_id )) then
+			self.squad_ai:DoSpecialAbility( rally_id )
+		end
+	end
+
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end

@@ -1,0 +1,20 @@
+----------------------------------------
+-- File: 'darkangelsveteranstactic.ai'
+-- Edited by Thudmeizer		@ 17.04.2023
+
+class 'DarkAngelsVeteransTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsVeterans = {}
+
+function DarkAngelsVeteransTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Veterans Tactic")
+end
+
+function DarkAngelsVeteransTactic:DoAbilities()
+
+    self:DoThrowGrenades()
+	
+end
+
+

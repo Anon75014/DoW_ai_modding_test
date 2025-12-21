@@ -1,0 +1,76 @@
+----------------------------------------
+-- File: 'fallenangelsterminatorassaulttactic.ai'
+-- Edited by Thudmeizer @ 10.10.2022
+
+class 'FallenAngelsTerminatorAssaultTactic' (FallenAngelsInfantryTactic)
+
+FallenAngelsTerminatorAssault = {}
+
+function FallenAngelsTerminatorAssaultTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Terminator Assault Tactic")
+end
+
+function FallenAngelsTerminatorAssaultTactic:Reinforce()
+
+  --always try for the actual leader first
+	if not self.squad_ai:IsReinforcing() then
+		if self.squad_ai:CanReinforce( false, 0 ) then
+		   self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local hammerIndex = 0
+		local fistIndex = 1
+		local chainIndex = 2
+		local reaperIndex = 3
+	
+		local numHammers = self.squad_ai:GetLeaderCount( hammerIndex )
+		local numFists = self.squad_ai:GetLeaderCount( fistIndex )
+		local numChains = self.squad_ai:GetLeaderCount( chainIndex )
+		local numReapers = self.squad_ai:GetLeaderCount( reaperIndex )
+
+		-- Desired number of each leader type
+		local desiredHammers = 1
+		local desiredFists = 1 
+		local desiredChains = 1
+		local desiredReapers = 1
+
+		-- Desired order of reinforcing
+		if numHammers < desiredHammers then
+			if self.squad_ai:CanReinforce( true, hammerIndex ) then
+				self.squad_ai:DoReinforce( true, hammerIndex )
+			end
+
+		elseif numFists < desiredFists then
+			if self.squad_ai:CanReinforce( true, fistIndex ) then
+				self.squad_ai:DoReinforce( true, fistIndex )
+			end
+
+		elseif numChains < desiredChains then
+			if self.squad_ai:CanReinforce( true, chainIndex ) then
+				self.squad_ai:DoReinforce( true, chainIndex )
+			end
+
+		elseif numReapers < desiredReapers then
+			if self.squad_ai:CanReinforce( true, reaperIndex ) then
+				self.squad_ai:DoReinforce( true, reaperIndex )
+			end
+		end
+	end
+end
+
+function FallenAngelsTerminatorAssaultTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end

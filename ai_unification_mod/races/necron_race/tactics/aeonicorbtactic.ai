@@ -1,0 +1,121 @@
+----------------------------------------
+-- File: 'aeonicorbtactic.ai'
+-- Created by Gambit @ 26.08.2021
+
+class 'AeonicOrbTactic' (NecronVehicleTactic)
+
+function AeonicOrbTactic:__init( squad_ai ) super( squad_ai )
+	
+	self:SetName("Aeonic Orb Tactic")
+end
+
+AeonicOrb = {}
+
+function AeonicOrbTactic:InitAbilities()
+
+	-- Timed: Necron units advance normally while their opponents move in slow motion.
+	if AeonicOrb.solar_flare_id == nil then
+		AeonicOrb.solar_flare_id = cpu_manager.stats:GetAbilityID( "necron_aeonic_orb_solar_flare" )
+	end
+end
+
+
+function AeonicOrbTactic:DoAbilities()
+
+	-- Initiate Solar Flare, if NO enemy closer than 42m, but there ARE enemies beyond that, up to 80m
+	if self.squad_ai:CanDoAbility(AeonicOrb.solar_flare_id) and not self.squad_ai:WasRecentlyHurt() then
+		local iPos = self.squad_ai:GetPosition()
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(iPos, 42, 1)
+		if oSquad == nil then
+			oSquad = cpu_manager.cpu_player:FindFirstEnemy(iPos, 80, 1)
+			if oSquad ~= nil then
+				self.squad_ai:DoSpecialAbility(AeonicOrb.solar_flare_id)
+			end
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end
+
+
+function AeonicOrbTactic:JumpAttackRanged()
+
+	-- Call standard method
+	if (Tactic.JumpAttackRanged(self)) then
+		return true
+	end
+	
+	-- Get position and jump range
+	local vOrbPosition = self.squad_ai:GetPosition()
+	local iJumpRange = sqr(self.squad_ai:GetJumpDistance())
+	
+	-- Check if we can jump directly to the target
+	local iClosestDistance = distance_sqr(vOrbPosition, self.target)
+	local vTargetPos = nil
+	if (iClosestDistance < iJumpRange) then
+		vTargetPos = self.target
+	else
+	
+		-- Get closest squad to target position
+		for oSquad in military_manager:GetSquads() do
+	
+			-- Check if squad is valid
+			if (oSquad:IsValid()) then
+			
+				-- Check distance
+				local vPosition = oSquad:GetPosition()
+				local iDistanceToOrb = distance_sqr(vPosition, vOrbPosition)
+				local iDistanceToTarget = distance_sqr(vPosition, self.target)
+				if (iDistanceToOrb < iJumpRange and iDistanceToTarget < iClosestDistance) then
+					iClosestDistance = iDistanceToTarget
+					vTargetPos = vPosition
+				end
+			end
+		end
+		
+		-- Get closest building to target position
+		for oBuilding in military_manager:GetBases() do
+		
+			-- Check if building is valid
+			if (oBuilding:IsValid()) then
+			
+				-- Check distance
+				local vPosition = oBuilding:GetPosition()
+				local iDistanceToOrb = distance_sqr(vPosition, vOrbPosition)
+				local iDistanceToTarget = distance_sqr(vPosition, self.target)
+				if (iDistanceToOrb < iJumpRange and iDistanceToTarget < iClosestDistance) then
+					iClosestDistance = iDistanceToTarget
+					vTargetPos = vPosition
+				end
+			end
+		end
+	end
+	
+	-- Don't jump if we didn't find a target
+	if (vTargetPos == nil or distance_sqr(vOrbPosition, vTargetPos) < sqr(50)) then
+		return false
+	end
+	
+	-- Try to jump to target
+	for iLoop1 = 1, 5 do
+	
+		-- Create a jump position
+		local vJumpPosition = vTargetPos
+		vJumpPosition.x = vJumpPosition.x + math.random(-15, 15)
+		vJumpPosition.z = vJumpPosition.z + math.random(-15, 15)
+			
+		-- Check if target position is in range and if unit is able to jump to target position
+		local iDistance = distance_sqr(vJumpPosition, vOrbPosition)
+		if (iDistance <= iJumpRange and self.squad_ai:CanJumpToPosition(vJumpPosition)) then
+							
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			self.m_iLastGatherMove = self.last_jump - 10
+			return true
+		end
+	end
+	return false
+end

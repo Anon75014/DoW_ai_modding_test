@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'landraiderhadestactic.ai'
+-- Edited by Thudmeizer	@ 19.09.2023
+
+class 'LandRaiderHadesTactic' (ChaosMarineVehicleTactic)
+
+LandRaiderHades = {}
+
+function LandRaiderHadesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chaos Land Raider Hades Tactic")
+	
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function LandRaiderHadesTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (LandRaiderHades.infernal_id == nil) then
+		LandRaiderHades.infernal_id = cpu_manager.stats:GetAbilityID( "chaos_machine_spirit" )
+	end
+end
+
+function LandRaiderHadesTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(LandRaiderHades.infernal_id)) then
+			self.squad_ai:DoSpecialAbility(LandRaiderHades.infernal_id)
+		end	  
+	end
+	
+	-- Do basic abilities
+	ChaosMarineVehicleTactic.DoAbilities(self)
+end

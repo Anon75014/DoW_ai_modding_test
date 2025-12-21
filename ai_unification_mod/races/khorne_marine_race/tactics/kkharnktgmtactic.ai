@@ -1,0 +1,214 @@
+----------------------------------------
+-- File: 'kkharnktgmtactic.ai'
+-- Edited by Thudmeizer @ 01.11.2023
+
+class 'kKharnktgmTactic' (kInfantryTactic)
+
+kKharnktgm = {}
+
+function kKharnktgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Kharn KTGM Tactic")
+end
+
+function kKharnktgmTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function kKharnktgmTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function kKharnktgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (kKharnktgm.krak_id == nil) then
+		kKharnktgm.krak_id = cpu_manager.stats:GetAbilityID( "khm_ls_hero_kharn_krak_grenades" )
+		kKharnktgm.melta_id = cpu_manager.stats:GetAbilityID( "khm_ls_hero_kharn_melta_bombs" )
+		kKharnktgm.meltachild_id = cpu_manager.stats:GetAbilityID( "khm_ls_hero_kharn_melta_bombs_nochild" )
+		kKharnktgm.battlecry_id = cpu_manager.stats:GetAbilityID( "khm_ls_kharn_battlecry" )
+		kKharnktgm.bfbg_id = cpu_manager.stats:GetAbilityID( "khm_ls_kharn_bfbg" )
+		kKharnktgm.rage_id = cpu_manager.stats:GetAbilityID( "khm_ls_kharn_furious_rage" )
+		kKharnktgm.regeneration_id = cpu_manager.stats:GetAbilityID( "khm_ls_kharn_regeneration" )
+	end
+end
+
+function kKharnktgmTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		-- First, try to direct spawn the Bloodletters squad
+		if (self.squad_ai:CanDirectSpawn()) then 
+			self.squad_ai:DoDirectSpawn()
+			return
+		end
+
+		-- Check if I can use in-combat abilities 
+		if self.squad_ai:IsInCombat() then
+
+--[[
+			if self.squad_ai:CanDoAbility(kKharnktgm.krak_id) then
+            			if Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.krak_id, Ability.Filters.CloseInfantryEnemy, 3 )
+            			or Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.krak_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            			or Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.krak_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+					return
+				end
+			end
+			if self.squad_ai:CanDoAbility(kKharnktgm.melta_id) then
+				if Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+				or Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.melta_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+				or Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.melta_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+					return
+				end
+			end
+			if self.squad_ai:CanDoAbility(kKharnktgm.meltachild_id) then
+				if Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.meltachild_id, Ability.Filters.CloseVehicleEnemy, 1 )
+				or Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.meltachild_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+				or Ability.DoAbilityTarget( self.squad_ai, kKharnktgm.meltachild_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+					return
+				end
+			end
+]]
+			if self.squad_ai:CanDoAbility(kKharnktgm.battlecry_id) then
+				Ability.DoAbilityArea(self.squad_ai, kKharnktgm.battlecry_id, Ability.Filters.CloseInCombat, 10, 1)
+			end
+			if self.squad_ai:CanDoAbility(kKharnktgm.bfbg_id) then
+				Ability.DoAbility(self.squad_ai, kKharnktgm.bfbg_id, Ability.Filters.IsInCombat )
+				return
+			end
+			if self.squad_ai:CanDoAbility(kKharnktgm.rage_id) then
+				if (not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+	  
+					-- Check if I can go berserk while stationary
+					if (not self:IsMoving()) then
+						self.squad_ai:DoSpecialAbility(kKharnktgm.rage_id)
+						return
+					end
+				end
+			end
+		end
+	end
+
+	-- Use Krak Grenade against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(kKharnktgm.krak_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(kKharnktgm.krak_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Krak Grenade against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.krak_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Krak Grenade against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.krak_id, oUnitB:GetSquad())
+			return
+		elseif (oUnitC ~= nil) then
+			-- Get stats
+			local oStats = oUnitC:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					--print("Using Krak Grenade against monster enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.krak_id, oUnitC:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	-- Use Melta Grenade against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(kKharnktgm.melta_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(kKharnktgm.melta_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Melta Grenade against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.melta_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Melta Grenade against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.melta_id, oUnitB:GetSquad())
+			return
+		elseif (oUnitC ~= nil) then
+			-- Get stats
+			local oStats = oUnitC:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					--print("Using Melta Grenade against monster enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.melta_id, oUnitC:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	-- Use Melta Child Grenade against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(kKharnktgm.meltachild_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(kKharnktgm.meltachild_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Melta Child Grenade against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.meltachild_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Melta Child Grenade against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.meltachild_id, oUnitB:GetSquad())
+			return
+		elseif (oUnitC ~= nil) then
+			-- Get stats
+			local oStats = oUnitC:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					--print("Using Melta Child Grenade against monster enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(kKharnktgm.meltachild_id, oUnitC:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(kKharnktgm.regeneration_id) and self.squad_ai:WasRecentlyHurt()
+	and self.squad_ai:GetHealthPercentage() < 0.45 then
+		self.squad_ai:DoSpecialAbility(kKharnktgm.regeneration_id)
+		return
+	end
+end
+
+function kKharnktgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Attach to melee
+	if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+		return
+	end
+
+	if (self:TryAttachSquad(false, true, 50, nil, nil) == nil) then
+		self:TryAttachSquadMelee()
+	end
+
+	self:EmergencyRetreat()
+end
+

@@ -1,0 +1,21 @@
+----------------------------------------
+-- File: 'deathguardmortariontactic.ai'
+-- Edited by Thudmeizer	@ 11.05.2022
+
+class 'DeathGuardMortarionTactic' (DeathGuardInfantryTactic)
+
+DeathGuardMortarion = {}
+
+function DeathGuardMortarionTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Mortarion Tactic")
+end
+
+function DeathGuardMortarionTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DeathGuardMortarionTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+

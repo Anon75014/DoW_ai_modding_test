@@ -1,0 +1,82 @@
+----------------------------------------
+-- File: 'RunePriesttactic.ai'
+-- Edited by Thudmeizer @ 19.05.2022
+
+class 'RunePriestTactic' (ThirteenthcomInfantryTactic)
+
+RunePriest = {}
+
+function RunePriestTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Rune Priest Tactic")
+end
+
+function RunePriestTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function RunePriestTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function RunePriestTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RunePriest.mist == nil) then
+		RunePriest.mist = cpu_manager.stats:GetAbilityID( "thirteenthcom_inquisition_fx" )
+	end
+
+	if (RunePriest.storm == nil) then
+		RunePriest.storm = cpu_manager.stats:GetAbilityID( "thirteenthcom_snare_trap" )
+	end
+
+	if (RunePriest.snow == nil) then
+		RunePriest.snow = cpu_manager.stats:GetAbilityID( "thirteenthcom_snowball" )
+	end
+end
+
+function RunePriestTactic:DoAbilities()
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea( self.squad_ai, RunePriest.mist, Ability.Filters.CloseEnemy, 2 )
+		Ability.DoAbilityArea( self.squad_ai, RunePriest.storm, Ability.Filters.CloseEnemy, 4 )
+		Ability.DoAbilityPos( self.squad_ai, RunePriest.snow, Ability.Filters.CloseInfantryEnemy, 4 )
+	else
+		Ability.DoAbilityArea( self.squad_ai, RunePriest.mist, Ability.Filters.CloseEnemy, 4 )
+		Ability.DoAbilityArea( self.squad_ai, RunePriest.storm, Ability.Filters.CloseEnemy, 8 )
+		Ability.DoAbilityPos( self.squad_ai, RunePriest.snow, Ability.Filters.CloseInfantryEnemy, 6 )
+	end
+end
+
+function RunePriestTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+
+	-- Try to attach to melee in tier 2+
+	if (cpu_manager:GetTierLevel() >= 2 or self.squad_ai:WasRecentlyHurt()) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+		
+		if (self:TryAttachSquad(false, true, 50, 100, nil) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+end
+
+-- Arkhan 03.2006: Inherited method used by commanders which are able to jump with an attached squad
+function RunePriestTactic:CanJumpAttached()
+	return true
+end

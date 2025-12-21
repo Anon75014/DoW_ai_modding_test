@@ -1,0 +1,176 @@
+--------------------------------------
+-- File: 'templarmarshallktgmtactic.ai'
+-- Edited by Thudmeizer @ 06.08.2024
+
+class 'TemplarMarshallKtgmTactic' (TemplarInfantryTactic)
+
+TemplarMarshallKtgm = {}
+
+function TemplarMarshallKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar Marshall Tactic")
+end
+
+function TemplarMarshallKtgmTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function TemplarMarshallKtgmTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function TemplarMarshallKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if TemplarMarshallKtgm.frag_id == nil then
+		TemplarMarshallKtgm.frag_id = cpu_manager.stats:GetAbilityID( "templar_ls_frag_grenades_blessed" )
+		TemplarMarshallKtgm.krak_id = cpu_manager.stats:GetAbilityID( "templar_ls_krak_grenades_blessed" )
+		TemplarMarshallKtgm.orbital_b = cpu_manager.stats:GetAbilityID( "templar_ls_orbital_bombardment" )
+		TemplarMarshallKtgm.holyorb_id = cpu_manager.stats:GetAbilityID( "templar_ls_holy_orb" )
+	end
+end
+
+function TemplarMarshallKtgmTactic:DoAbilities()
+
+	-- Use Frag Grenade against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(TemplarMarshallKtgm.frag_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TemplarMarshallKtgm.frag_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 2)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Frag Grenade against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.frag_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Frag Grenade against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.frag_id, oUnitB:GetSquad())
+			return
+		elseif (oUnitC ~= nil) then
+			-- Get stats
+			local oStats = oUnitC:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					--print("Using Frag Grenade against monster enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.frag_id, oUnitC:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	-- Use Krak Grenade against vehicle enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(TemplarMarshallKtgm.krak_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TemplarMarshallKtgm.krak_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Krak Grenade against vehicle enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.krak_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	if self.squad_ai:IsInCombat() then
+	
+		-- Try to use orbital bombardment at close enemy (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(TemplarMarshallKtgm.orbital_b)) then 
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(TemplarMarshallKtgm.orbital_b)
+				local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 8)
+				if (oUnit ~= nil) then
+					--print("Using Orbital Bombardment with low health for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.orbital_b, oUnit:GetSquad())
+					return
+				end
+			else
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(TemplarMarshallKtgm.orbital_b)
+				local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 12)
+				if (oUnit ~= nil) then
+					--print("Using Orbital Bombardment with good health for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.orbital_b, oUnit:GetSquad())
+					return
+				end
+			end
+		end
+
+		-- Try to use holy orb at close vehicle or monster enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(TemplarMarshallKtgm.holyorb_id)) then 
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(TemplarMarshallKtgm.holyorb_id)
+				local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+				local oUnitB = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+				if (oUnit ~= nil) then
+					--print("Using Holy Orb with low health against vehicle enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.holyorb_id, oUnit:GetSquad())
+					return
+				elseif (oUnitB ~= nil) then
+					-- Get stats
+					local oStats = oUnitB:GetStats()
+					if (oStats ~= nil) then
+						-- Check unit type
+						local eClass = oStats:GetClass()
+						if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+							--print("Using Holy Orb with low health against monster enemies for player "..tostring(cpu_manager.player_id).."")
+							self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.frag_id, oUnitB:GetSquad())
+							return
+						end
+					end
+				end
+			else
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(TemplarMarshallKtgm.holyorb_id)
+				local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+				local oUnitB = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 3)
+				if (oUnit ~= nil) then
+					--print("Using Holy Orb with good health against vehicle enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.holyorb_id, oUnit:GetSquad())
+					return
+				elseif (oUnitB ~= nil) then
+					-- Get stats
+					local oStats = oUnitB:GetStats()
+					if (oStats ~= nil) then
+						-- Check unit type
+						local eClass = oStats:GetClass()
+						if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+							--print("Using Holy Orb with good health against monster enemies for player "..tostring(cpu_manager.player_id).."")
+							self.squad_ai:DoSpecialAbilitySquad(TemplarMarshallKtgm.frag_id, oUnitB:GetSquad())
+							return
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+
+function TemplarMarshallKtgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+			
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

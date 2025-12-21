@@ -1,0 +1,32 @@
+----------------------------------------
+-- File: 'stormserpenttactic.ai'
+-- Created by Arkhan		@ 23.11.2007
+-- Edited by Thudmeizer		@ 05.12.2023
+
+class 'StormSerpentTactic' (EldarVehicleTactic)
+
+function StormSerpentTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Storm Serpent Tactic")
+
+	-- Vehicle is a super heavy transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 6
+end
+
+function StormSerpentTactic:DoAbilities()
+
+	-- Storm Serpent - Spawn Vypers in combat
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDirectSpawn() then
+		-- Do not spawn if more than 3 vypers are in play
+		local vypers = BuildBaseStrategy:CountSquads("eldar_squad_vypers_serpent")
+		if not (vypers > 3) then
+			self.squad_ai:DoDirectSpawn()
+			return
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

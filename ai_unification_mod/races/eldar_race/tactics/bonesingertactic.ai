@@ -1,0 +1,33 @@
+----------------------------------------
+-- File: 'bonesingertactic.ai'
+-- Edited by Thudmeizer		@ 26.10.2008
+-- Edited by Gambit   @ 16.07.2017
+
+class 'BonesingerTactic' (EngineerTactic)
+
+BoneSinger = {}
+
+function BonesingerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Bonesinger Tactic")
+end
+
+function BonesingerTactic:IsAffectedByMorale()
+	return false
+end
+
+function BonesingerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (BoneSinger.wraith_id == nil) then
+		BoneSinger.wraith_id = cpu_manager.stats:GetAbilityID( "eldar_wraithtomb" )
+	end
+end
+
+function BonesingerTactic:DoAbilities()
+
+	-- Cast wraithtomb against a nearby building
+	if self.squad_ai:CanDoAbility(BoneSinger.wraith_id) then
+		Ability.DoAbilityTargetEntity( self.squad_ai, BoneSinger.wraith_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+	end
+end

@@ -1,0 +1,97 @@
+----------------------------------------
+-- File: 'krieginfantrytactic.ai'
+-- Edited by fuggles		@ 04.04.2022
+-- Edited by Thudmeizer		@ 31.08.2025
+
+class 'KriegInfantryTactic' (InfantryTactic)
+
+function KriegInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Infantry Tactic")
+	
+	-- Krieg infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "krieg_squad_recruits" or
+		sSquadName == "krieg_squad_soldiers" or
+		sSquadName == "krieg_squad_pdf" or
+		sSquadName == "krieg_squad_heavy_weapon" or
+		sSquadName == "krieg_squad_heavy_weapon_mortars" or
+		sSquadName == "krieg_squad_blaze_trooper" or
+		sSquadName == "krieg_squad_commissar" or
+		sSquadName == "krieg_squad_quartermaster" or
+		sSquadName == "krieg_squad_sniper_team" or
+		sSquadName == "krieg_squad_gun_sirin" or
+		sSquadName == "krieg_squad_deadpool_and_wolverine" or
+		sSquadName == "krieg_squad_inquisitor" or
+		sSquadName == "krieg_squad_command_squad") then
+			self.m_iTransportable = 1	-- Chimera / Vulture / Baihu
+
+	elseif (sSquadName == "krieg_squad_grenadiers" or 
+		sSquadName == "krieg_squad_trench_raiders" or
+		sSquadName == "krieg_squad_ogryns") then
+			self.m_iTransportable = 2	-- Centaur
+	end
+end
+
+function KriegInfantryTactic:AddTargetAbilities()
+	table.insert(InfantryTactic.TargetAbilities, { nil, "krieg_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
+	table.insert(InfantryTactic.TargetAbilities, { nil, "krieg_melta_bombs", Ability.Filters.CloseVehicleEnemy, 1, 0 })
+end
+
+function KriegInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "krieg_squad_command_squad", true })
+	table.insert(self.commander, { "krieg_squad_command_squad_ktgm", true })
+	table.insert(self.commander, { "krieg_squad_inquisitor", false })
+	table.insert(self.commander, { "krieg_squad_inquisitor_ktgm", false })
+	table.insert(self.commander, { "krieg_squad_quartermaster", false })
+	table.insert(self.commander, { "krieg_squad_quartermaster_ktgm", false })
+	table.insert(self.commander, { "krieg_squad_sniper_team", false })
+	table.insert(self.commander, { "krieg_squad_deadpool_and_wolverine", false })
+	table.insert(self.commander, { "krieg_squad_gun_sirin", false })
+end
+
+function KriegInfantryTactic:DoAbilities()
+
+	-- Run while moving
+	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
+
+		local runability_id = cpu_manager.stats:GetAbilityID( "krieg_run!" )
+		if (self.squad_ai:CanDoAbility(runability_id)) then
+			self.squad_ai:DoSpecialAbility(runability_id)
+		end
+	end
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("krieg_squad_commissar")) then
+			KriegCommissarTactic.InitAbilities( self )
+			KriegCommissarTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("krieg_squad_inquisitor")) or (self.squad_ai:HasSquadAttached("krieg_squad_inquisitor_ktgm")) then
+			KriegInquisitorTactic.InitAbilities( self )
+			KriegInquisitorTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("krieg_squad_gun_sirin")) then
+			KriegCelineTactic.InitAbilities( self )
+			KriegCelineTactic.DoAbilities( self )
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+--[[function KriegInfantryTactic:CheckForDetach()
+
+	-- Detach commander from broken/capturing. Kriegs stay attached
+	if ((self.squad_ai:IsBroken() or self.squad_ai:IsCapturing()) and
+		(self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) and
+		not self.squad_ai:HasSquadAttached( "krieg_squad_commissar" ) and
+		not self.squad_ai:HasSquadAttached( "krieg_squad_inquisitor" )) then 
+		
+		self.squad_ai:DoDetachSquad()
+		self.squad_ai:DoSetDefaultMeleeStance()
+	end
+
+	-- Call basic detach method
+	InfantryTactic.CheckForDetach(self)
+end]]

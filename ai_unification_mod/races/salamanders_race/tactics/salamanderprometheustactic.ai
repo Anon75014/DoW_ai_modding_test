@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'salamanderprometheustactic.ai'
+-- Edited by Gambit		 	@ 05.09.2019
+
+class 'SalamanderPrometheusTactic' (SalamanderVehicleTactic)
+
+SalamanderPrometheus = {}
+
+function SalamanderPrometheusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Prometheus Tactic")
+	
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function SalamanderPrometheusTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SalamanderPrometheus.spirit_id == nil) then
+		SalamanderPrometheus.spirit_id = cpu_manager.stats:GetAbilityID( "salamander_machine_spirit" )
+		SalamanderPrometheus.last_man_id = cpu_manager.stats:GetAbilityID( "salamander_to_the_last_man" )
+		SalamanderPrometheus.orbital_id = cpu_manager.stats:GetAbilityID( "salamander_orbital_bombardment" )
+		SalamanderPrometheus.sight_id = cpu_manager.stats:GetAbilityID( "salamander_ecm_sight" )
+	end
+end
+
+function SalamanderPrometheusTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(SalamanderPrometheus.spirit_id)) then
+			self.squad_ai:DoSpecialAbility(SalamanderPrometheus.spirit_id)
+		end	  
+	end
+
+	-- Check if we can the Orbital Bombardment
+	if (self.squad_ai:CanDoAbility(SalamanderPrometheus.orbital_id)) then
+		if Ability.DoAbilityPos(self.squad_ai, SalamanderPrometheus.orbital_id, Ability.Filters.CloseEnemy, 24)
+		or Ability.DoAbilityPos(self.squad_ai, SalamanderPrometheus.orbital_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+		then return end
+	end
+
+	if (self.squad_ai:CanDoAbility(SalamanderPrometheus.orbital_id) and self.squad_ai:GetHealthPercentage() > 0.4) then
+		Ability.DoAbility( self.squad_ai, SalamanderPrometheus.last_man_id, Ability.Filters.IsInCombat )
+	end
+
+	if self.squad_ai:CanDoAbility(SalamanderPrometheus.sight_id) and self.squad_ai:WasRecentlyHurt() then
+		self.squad_ai:DoSpecialAbility( SalamanderPrometheus.sight_id )
+	end
+
+	-- Do basic abilities
+	SalamanderVehicleTactic.DoAbilities(self)
+end

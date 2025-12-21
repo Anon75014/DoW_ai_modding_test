@@ -1,0 +1,18 @@
+----------------------------------------
+-- File: 'venomtactic.ai'
+-- Edited by Thudmeizer		@ 07.01.2008
+
+class 'VenomTactic' (HarlequinVehicleTactic)
+
+function VenomTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Venom Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+--[[function VenomTactic:NeedRepair()
+	return false
+end]]

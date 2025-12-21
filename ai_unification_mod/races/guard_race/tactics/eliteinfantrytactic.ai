@@ -1,0 +1,134 @@
+----------------------------------------
+-- File: 'kasrkintactic.ai'
+-- Edited by Thudmeizer @ 27.08.2025
+
+class 'EliteInfantryTactic' (GuardInfantryTactic)
+
+EliteInfantryTactic.SpecialAbilities = 
+{
+	{ nil, "guard_tactical_genius_shadow",          Ability.Filters.IsInCombat },
+}
+
+EliteInfantryTactic.PosAbilities = 
+{
+	{ nil, "guard_kasrkin_raider_vision_round",	Ability.Filters.CloseEnemy, 6 },
+	{ nil, "guard_shadow_air_strike_passive",	Ability.Filters.CloseEnemy, 8 },
+}
+
+EliteInfantryTactic.TargetAbilities = 
+{
+	{ nil, "guard_shadow_frag_grenades", 		Ability.Filters.CloseSquadEnemy, 1 },
+	{ nil, "guard_enforcer_grenade_shot", 		Ability.Filters.CloseInfantryEnemy, 4 },
+}
+
+function EliteInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Elite Infantry Tactic")
+end
+
+function EliteInfantryTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EliteInfantryTactic.SpecialAbilities[1][1] == nil) then
+		for i in EliteInfantryTactic.SpecialAbilities do
+			local ability_id = cpu_manager.stats:GetAbilityID( EliteInfantryTactic.SpecialAbilities[i][2] )
+			EliteInfantryTactic.SpecialAbilities[i][1] = ability_id
+		end
+	end
+
+	if (EliteInfantryTactic.PosAbilities[1][1] == nil) then
+		for i in EliteInfantryTactic.PosAbilities do
+			local ability_id = cpu_manager.stats:GetAbilityID( EliteInfantryTactic.PosAbilities[i][2] )
+			EliteInfantryTactic.PosAbilities[i][1] = ability_id
+		end
+	end
+	
+	if (EliteInfantryTactic.TargetAbilities[1][1] == nil) then
+		for i in EliteInfantryTactic.TargetAbilities do
+			local ability_id = cpu_manager.stats:GetAbilityID( EliteInfantryTactic.TargetAbilities[i][2] )
+			EliteInfantryTactic.TargetAbilities[i][1] = ability_id
+		end
+	end
+end
+
+function EliteInfantryTactic:DoAbilities()
+
+	for i in EliteInfantryTactic.SpecialAbilities do
+		local ability_id = EliteInfantryTactic.SpecialAbilities[i][1]
+		if ability_id ~= nil then
+
+		local filter = EliteInfantryTactic.SpecialAbilities[i][3]
+			Ability.DoAbility( self.squad_ai, ability_id, filter ) 
+		end
+	end
+
+	for i in EliteInfantryTactic.PosAbilities do
+		local ability_id = EliteInfantryTactic.PosAbilities[i][1]
+		if ability_id ~= nil then
+
+			local filter =EliteInfantryTactic.PosAbilities[i][3]
+			local squad_count = EliteInfantryTactic.PosAbilities[i][4]
+			Ability.DoAbilityPos( self.squad_ai, ability_id, filter, squad_count ) 
+		end
+	end
+
+	for i in EliteInfantryTactic.TargetAbilities do
+		local ability_id = EliteInfantryTactic.TargetAbilities[i][1]
+		if ability_id ~= nil then
+
+			local filter = EliteInfantryTactic.TargetAbilities[i][3]
+			local squad_count = EliteInfantryTactic.TargetAbilities[i][4]
+			Ability.DoAbilityTarget( self.squad_ai, ability_id, filter, squad_count ) 
+		end
+	end
+end
+
+function EliteInfantryTactic:Reinforce()
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local iSniperIndex = 0
+        	local iSergeantIndex = 1
+		
+		local iNumSniper = self.squad_ai:GetLeaderCount( iSniperIndex )
+		local iNumSergeant = self.squad_ai:GetLeaderCount( iSergeantIndex )
+
+		-- Desired number of each leader type
+		local iDesiredSniper = 1
+		local iDesiredSergeant = 1
+		
+		-- Desired order of reinforcing
+		if iNumSniper < iDesiredSniper then
+			if self.squad_ai:CanReinforce( true, iSniperIndex ) then
+				self.squad_ai:DoReinforce( true, iSniperIndex )
+			end
+		elseif iNumSergeant < iDesiredSergeant then 
+			if self.squad_ai:CanReinforce( true, iSergeantIndex ) then
+				self.squad_ai:DoReinforce( true, iSergeantIndex )
+			end
+        else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end
+
+function EliteInfantryTactic:Upgrade()
+
+	-- Check if I can upgrade
+	if (self.squad_ai:IsReinforcing() or not self.squad_ai:HasUpgradableTrooper()) then
+		return
+	end
+	
+	-- Only upgrade if not reinforcing
+	if (not self.squad_ai:IsUnderAttack() and self.squad_ai:GetNumTroopers() >= 3) then
+	
+		-- Figure out my enemy's favourite class
+		local oEnemy = cpu_manager:FindClosestEnemyPlayer()
+		if (oEnemy ~= nil) then
+			self.squad_ai:DoBestUpgrade(oEnemy:GetMajorityClassType())
+		end
+	end
+end

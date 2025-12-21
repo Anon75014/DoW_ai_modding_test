@@ -1,0 +1,626 @@
+----------------------------------------
+-- File: 'MechBuildBaseStrategy.ai'
+-- Created by Warboss-rus	@ 05.12.2010
+-- Edited by Karandras		@ 18.03.2012
+-- Edited by fuggles		@ 07.01.2014
+-- Edited by I_Chample		@ 23.06.2014
+-- Edited by Gambit		@ 11.10.2015
+-- Edited by Thudmezier		@ 23.04.2025
+
+class 'MechBuildBaseStrategy' (BuildBaseStrategy)
+
+function MechBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+
+	--self.m_iNumHQAtStartPos = 2
+	self:AddDetectorUnit("mechanicus_squad_skull_probes")
+	self:AddDetectorUnit("mechanicus_squad_skull_probes_2")
+	self:AddDetectorUnit("mechanicus_squad_skull_probes_3")
+	self:AddDetectorUnit("mechanicus_squad_magos_explorator")
+	self:AddDetectorUnit("mechanicus_squad_arhimagos")
+	self:AddDetectorUnit("mechanicus_squad_arhimagos_prime")
+
+	-- dark40k - set items that need bypass for CpuPrerequisites
+	CpuPrerequisites2.AddSpecialItem("mechanicus_fabricator_squad_aetos_surveyor", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_fabricator_squad_cataphractus_olympia_assault_tanks", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_fabricator_squad_cybernetica_storm_hawk", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_fabricator_squad_myrmidae_engine_centurius", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_arhimagos", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_arhimagos_prime", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_arhimagos_sp", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_future_transport", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_heavy_melee_servitor", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_hell_stalker", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_king_russ", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_knight", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_living_base", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_magos_explorator", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_orbital_stalker", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_praetorian", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_servitor_melee", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_skitarii", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_skitarii_hover", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_skull_probes", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_skull_probes_2", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_skull_probes_3", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_visitor", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("mechanicus_squad_warrior", CpuPrerequisites.BT_Squad)
+
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_gun_post_1", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_gun_post_2", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_hq", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_hq_mobile", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_rech_post_1", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_rech_post_2", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_turret", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_turret_heavy_flamer", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_mechanicus_turret_cryogun", CpuPrerequisites.BT_AddOn)
+
+	CpuPrerequisites2.AddSpecialItem("am_asault_skitarii_weapon_melee_1", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_asault_skitarii_weapon_melee_2", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_cap_research_1", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_cap_research_2", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_cap_research_3", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_commander_health_research_1", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_commander_health_research_2", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_heavy_melee_servitor_speed", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_king_electro_armour", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_king_heavy_stabber", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_king_hunter_killer", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_living_base_upgrade", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_living_base_upgrade_2", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_living_base_upgrade_3", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_missle_launcher_knight", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_omnissiah_grenades", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_servitors_armor_plates", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_skitarii_armor", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_skitarii_weapon_range", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_skitarii_weapon_range_2", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_skull_probe_upgrade", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_skull_probe_upgrade_2", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_stalker_extra_armour", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_stalker_orbital_strike", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_warrior_extra_armour", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_warrior_morale", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_cognis_weaponry", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_requisition_research_1", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("am_requisition_research_2", CpuPrerequisites.BT_Research)
+end
+
+
+function MechBuildBaseStrategy:ChooseBuildProgram()
+	if (table.getn(self.info.BuildPrograms) ~= 4) then
+		return BuildBaseStrategy.ChooseBuildProgram(self)
+	end
+	local sMapSize, iClosestEnemyDistance = self:GetMapSize()
+	local iBuildProgram1	-- Basic strategy
+	local iBuildProgram2	-- Skitarii rush
+	local iBuildProgram3	-- Warrior rush
+	local iBuildProgram4	-- Hell Stalker rush
+	if (sMapSize == "small" or iClosestEnemyDistance <= 70 or cpu_manager.iPlayerCount == 2) then
+		iBuildProgram1 = 40
+		iBuildProgram2 = 30
+		iBuildProgram3 = 30
+		iBuildProgram4 = 0
+	elseif (sMapSize == "large" and cpu_manager.iPlayerCount >= 6) then
+		iBuildProgram1 = 40
+		iBuildProgram2 = 20
+		iBuildProgram3 = 20
+		iBuildProgram4 = 20
+	else
+		iBuildProgram1 = 40
+		iBuildProgram2 = 30
+		iBuildProgram3 = 30
+		iBuildProgram4 = 0
+	end
+	local oEnemy = cpu_manager:FindClosestEnemyPlayer(false)
+	local sEnemy = oEnemy:GetPlayerRaceName()		
+	if (sEnemy == "ork_race") then
+		iBuildProgram2 = iBuildProgram2 + 10
+		iBuildProgram3 = iBuildProgram3 - 10
+	elseif (sEnemy == "tau_race") then
+		iBuildProgram1 = iBuildProgram1 - 10
+		iBuildProgram2 = iBuildProgram2 - 10
+		iBuildProgram3 = iBuildProgram3 + 20	
+	end
+	iBuildProgram2 = iBuildProgram1 + iBuildProgram2
+	iBuildProgram3 = iBuildProgram2 + iBuildProgram3
+	iBuildProgram4 = iBuildProgram3 + iBuildProgram4
+	local iRandom = math.random(1, 100)
+	if (iRandom <= iBuildProgram1) then
+		return 1
+	elseif (iRandom <= iBuildProgram2) then
+		return 2
+	elseif (iRandom <= iBuildProgram3) then
+		return 3
+	elseif (iRandom <= iBuildProgram4) then
+		return 4
+	end
+	return 1
+end
+
+
+function MechBuildBaseStrategy:EvaluateSquadCap()
+	if (self:CheckSquadCap(300, 0)) then
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		if (not cpu_manager.cpu_player:IsResearchComplete( "am_cap_research_1" )) then
+			tBuildType.name = "am_cap_research_1"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "am_cap_research_2" ) then
+			tBuildType.name = "am_cap_research_2"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "am_cap_research_3" ) then
+			tBuildType.name = "am_cap_research_3"
+		else
+			return
+		end
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+	if (self:CheckSupportCap(150, 300)) then
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		if (not cpu_manager.cpu_player:IsResearchComplete( "am_cap_research_1" )) then
+			tBuildType.name = "am_cap_research_1"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "am_cap_research_2" ) then
+			tBuildType.name = "am_cap_research_2"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "am_cap_research_3" ) then
+			tBuildType.name = "am_cap_research_3"
+		else
+			return
+		end
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+end
+
+
+function MechBuildBaseStrategy:GetBuildingName( sType )
+	if (sType == "HQ") then
+		return "mechanicus_hq"
+	elseif (sType == "BiggerGenerator") then
+		return "mechanicus_thermo_plasma"
+	elseif (sType == "ListeningPost") then
+		return "mechanicus_listening_post"
+	elseif (sType == "Generator") then
+		return "mechanicus_listening_post"
+	elseif (sType == "VehicleBuilding") then
+		return "mechanicus_hq"
+	elseif (sType == "Turret") then
+		return nil
+	elseif (sType == "Mine") then
+		return nil
+	end
+	return nil
+end
+
+
+function MechBuildBaseStrategy:GetAddonBuilding( sType )
+	if (sType == "addon_mechanicus_hq") then
+		return "mechanicus_hq"
+	elseif (sType == "addon_mechanicus_gun_post_1") then
+		return "mechanicus_listening_post"
+	elseif (sType == "addon_mechanicus_gun_post_2") then
+		return "mechanicus_listening_post"
+	elseif (sType == "addon_mechanicus_rech_post_1") then
+		return "mechanicus_listening_post"
+	elseif (sType == "addon_mechanicus_rech_post_2") then
+		return "mechanicus_listening_post"
+	elseif (sType == "addon_mechanicus_turret") then
+		return "mechanicus_turret"
+	elseif (sType == "addon_mechanicus_turret_heavy_flamer") then
+		return "mechanicus_turret"
+	elseif (sType == "addon_mechanicus_turret_cryogun") then
+		return "mechanicus_turret"
+	end	
+	return nil
+end
+
+
+function MechBuildBaseStrategy:GetUnitStats(sSquadName)
+	if (sSquadName == "mechanicus_squad_skitarii") then
+		return 2, 0
+	elseif (sSquadName == "mechanicus_squad_skitarii_hover") then
+		return 3, 0
+	elseif (sSquadName == "mechanicus_squad_praetorian") then
+		return 3, 0
+	elseif (sSquadName == "mechanicus_squad_visitor") then
+		return 4, 0
+	elseif (sSquadName == "mechanicus_fabricator_squad_aetos_surveyor") then
+		return 0, 2
+	elseif (sSquadName == "mechanicus_squad_warrior") then
+		return 0, 2
+	elseif (sSquadName == "mechanicus_squad_hell_stalker") then
+		return 0, 3
+	elseif (sSquadName == "mechanicus_squad_orbital_stalker") then
+		return 0, 4
+	elseif (sSquadName == "mechanicus_squad_king_russ") then
+		return 0, 5
+	elseif (sSquadName == "mechanicus_squad_knight") then
+		return 0, 6
+	end
+	return 0, 0
+end
+
+
+function MechBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+	if (sName == "addon_mechanicus_hq" and iTargetTier == 2) then
+		return true
+	end
+	return false
+end
+
+
+function MechBuildBaseStrategy:UpdateTierLevel()
+
+	self.tierLevel = 1
+
+	if cpu_manager.cpu_player:IsResearchComplete("am_living_base_upgrade_2") then
+		self.tierLevel = 4
+		return
+	elseif cpu_manager.cpu_player:IsResearchComplete("am_living_base_upgrade") then
+		self.tierLevel = 3
+		return
+	else
+		local iHQAddon1ID = cpu_manager.stats:GetAddOnID("addon_mechanicus_hq")
+		local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+		for oBase in oStats:GetBases() do
+			if oBase:IsValid() and not oBase:IsListeningPost() then
+				if oBase:HasAddOn(iHQAddon1ID) then
+					self.tierLevel = 2
+					return
+				end
+			end
+		end
+	end
+end
+
+
+function MechBuildBaseStrategy:ForceTech()
+	if (g_iGMT < 60 * CpuManager.ForceTech.StartTier1) then
+		return false
+	end
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	local iTierLevel = self:GetTierLevel()
+	if (iTierLevel == 1) then
+		if (iRequisition > 450 and iPower > 175) then
+			return false
+		end
+		return not self.m_bHQAddon1
+	elseif (iTierLevel == 2) then
+		if (self:GetBuildingCountByName("mechanicus_hq", false) < 1) then
+			return true
+		end
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier2 and (iRequisition < 250 or iPower < 250)) then
+			return true
+		end
+	elseif (iTierLevel == 3) then	
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 350 or iPower < 350)) then
+			return true
+		end
+	elseif (iTierLevel == 4) then	
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 400 or iPower < 400)) then
+			return true
+		end
+	end
+	return false
+end
+
+
+function MechBuildBaseStrategy:BuildFlexible()
+
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	self:BuildFirstBuilder("mechanicus_squad_servitor_melee")
+
+	-- Dynamic research item syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+	local iBasicInfantrySquads = self:CountSquads("mechanicus_squad_skitarii") + self:CountSquads("mechanicus_squad_skitarii_hover") + self:CountSquads("mechanicus_squad_praetorian")
+	local iCommanders = self:CountSquads("mechanicus_squad_magos_explorator") + self:CountSquads("mechanicus_squad_arhimagos") + self:CountSquads("mechanicus_squad_arhimagos_prime")
+	local iStalkerSquads = self:CountSquads("mechanicus_squad_hell_stalker")
+	local iKingRussSquads = self:CountSquads("mechanicus_squad_king_russ")
+
+	if (self.tierLevel >= 2) then
+		-- Compute basic infantry researches
+		if (iBasicInfantrySquads >= 1) then
+			self:DynamicResearch("am_skitarii_armor", 2, 200, 200, 0, 0, nil, 0)
+			self:DynamicResearch("am_omnissiah_grenades", 2, 100, 50, 0, 0, nil, 0)
+			self:DynamicResearch("am_living_base_upgrade", 2, 250, 250, 0, 0, nil, 0)
+		end
+
+		-- Compute grenade infantry researches
+		-- Compute skull probes researches
+		self:DynamicResearch("am_skull_probe_upgrade", 2, 50, 50, 0, 0, "mechanicus_squad_skull_probes", 1)
+		self:DynamicResearch("am_skull_probe_upgrade", 2, 50, 50, 0, 0, "mechanicus_squad_skull_probes_2", 1)
+		self:DynamicResearch("am_skull_probe_upgrade", 2, 50, 50, 0, 0, "mechanicus_squad_skull_probes_3", 1)
+		-- Compute warrior researches
+		self:DynamicResearch("am_warrior_extra_armour", 2, 150, 100, 0, 0, "mechanicus_squad_warrior", 1)
+		-- Compute servitor researches
+		self:DynamicResearch("am_servitors_armor_plates", 2, 100, 50, 0, 0, "mechanicus_squad_servitor_melee", 1)
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("mechanicus_turret_no_limit", 2, 2, 200, 100, 0, 0)
+	end
+	if (self.tierLevel >= 3) then
+		if (iBasicInfantrySquads >= 1) then
+			self:DynamicResearch("am_skitarii_weapon_range", 3, 250, 100, 0, 0, nil, 0)
+			self:DynamicResearch("am_living_base_upgrade_2", 3, 350, 350, 0, 0, nil, 0)
+		end
+
+		-- Compute warrior researches
+		self:DynamicResearch("am_warrior_morale", 3, 200, 200, 0, 0, "mechanicus_squad_warrior", 1)
+		-- Compute skull probes researches
+		self:DynamicResearch("am_skull_probe_upgrade_2", 3, 100, 100, 0, 0, "mechanicus_squad_skull_probes",1)
+		self:DynamicResearch("am_skull_probe_upgrade_2", 3, 100, 100, 0, 0, "mechanicus_squad_skull_probes_2",1)
+		self:DynamicResearch("am_skull_probe_upgrade_2", 3, 100, 100, 0, 0, "mechanicus_squad_skull_probes_3",1)
+		-- Compute Commander researches
+		if (iCommanders >= 1) then
+			self:DynamicResearch("am_commander_health_research_1", 3, 100, 150, 0, 0, nil, 1)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("mechanicus_turret_no_limit", 4, 3, 300, 200, 0, 0)
+	end
+	if (self.tierLevel >= 4) then
+		-- Compute Commander researches
+		if (iCommanders >= 1) then
+			self:DynamicResearch("am_commander_health_research_2", 4, 250, 250, 0, 0, nil, 1)
+		end
+		if (iBasicInfantrySquads >= 1) then
+			self:DynamicResearch("am_skitarii_weapon_range_2", 4, 250, 200, 0, 0, nil, 0)
+		end
+
+		-- Compute King researches
+		if (iKingRussSquads >= 1) then
+			self:DynamicResearch("am_king_hunter_killer", 4, 100, 100, 0, 0, "mechanicus_squad_king_russ", 1)
+			self:DynamicResearch("am_king_electro_armour", 4, 200, 200, 0, 0, "mechanicus_squad_king_russ", 1)
+			self:DynamicResearch("am_king_heavy_stabber", 4, 100, 100, 0, 0, "mechanicus_squad_king_russ", 1)
+		end
+		-- Compute Stalker armour researches
+		if (iStalkerSquads >= 1) then
+			self:DynamicResearch("am_stalker_extra_armour", 4, 250, 150, 0, 0, "mechanicus_squad_hell_stalker", 1)
+			self:DynamicResearch("am_stalker_orbital_strike", 4, 250, 150, 0, 0, "mechanicus_squad_hell_stalker", 1)
+		end
+		-- Compute Knight researches
+		self:DynamicResearch("am_missle_launcher_knight", 4, 100, 100, 0, 0, "mechanicus_squad_knight", 1)
+
+		self:DynamicResearch("am_cognis_weaponry", 4, 250, 150, 0, 0, nil, 0)
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("mechanicus_turret_no_limit", 10, 4, 400, 300, 0, 0)		
+	end
+--[[
+	local iTierLevel = self:GetTierLevel()
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	if (iPower <= 500) then
+
+		 if (iRequisition >= 250 and iTierLevel >= 1) then
+
+			-- Build big generator
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Building
+			tBuildType.name = "mechanicus_thermo_plasma"
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+	end
+]]
+	if (CpuManager.AISettings.bMultiBuildings) then
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinPower, MinSquadCap, MinSupportCap
+		self:DynamicBuild("mechanicus_hq", 2, 3, 500, 350, 0, 0)
+		self:DynamicBuild("mechanicus_hq", 3, 4, 800, 450, 0, 0)
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function MechBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function MechBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+function MechBuildBaseStrategy:GetPlacementType(iBuildingID)
+
+	-- Check building
+	if (iBuildingID == cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))) then
+        	local count = self:GetBuildingCountByName(self:GetBuildingName("HQ"), false)
+		local friend = cpu_manager:FindClosestFriendPlayer()
+		if friend == nil then
+			-- Lone Player
+                	if count == 0 and not cpu_manager:HQThreat() then
+                    		return "HQ"
+                	else
+                    		return "Safeplace"
+                	end
+        	else
+        		-- Has allies
+                	if count > 0 or cpu_manager:HQThreat() then
+ 				return "HQ"
+                	else
+				return "Safeplace"
+                	end
+		end
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("mechanicus_turret_no_limit")) then
+		return "Front2"
+	end
+	return "Basic"
+end
+
+
+function MechBuildBaseStrategy:ModifySquadDemand(iUnitID)
+  return BuildBaseStrategy.ModifySquadDemand(self, iUnitID)
+end
+
+
+-- Arkhan 11.2006: Check if we have enough resources for a bigger generator
+function MechBuildBaseStrategy:HasResourcesForBiggerGenerator(iRequisition, iPower)
+
+	-- Check requisition
+	if (iRequisition < 250) then
+		return false
+	end
+	return true
+end
+
+function MechBuildBaseStrategy:HQEmergency()
+	local iBaseCount = self:GetBuildingCountByName("mechanicus_hq")
+	if (iBaseCount >= 2) then
+		return false
+	end
+	local bBaseDamaged = false
+	for oBuilding in military_manager:GetBases() do
+		if (oBuilding:IsValid() and not oBuilding:IsListeningPost() and oBuilding:GetBaseName() == "mechanicus_hq") then
+			if (oBuilding:GetHealthPercentage() < 0.6) then
+				for iLoop1 = 1, table.getn(self.info.BuildPrograms[self.m_iCurrentBuildProgram]) do
+					if (self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][7] == "mechanicus_hq") then
+						self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][5] = 2
+						return true
+					end
+				end
+			end
+		end
+	end
+	return false
+end
+
+
+function MechBuildBaseStrategy:RelicRequired(sName)
+	if (sName == "mechanicus_squad_knight") then
+		return true
+	end
+	return false
+end
+
+
+-- Gambit 08.2016: Modified for races that do NOT have small Gens, but DO have Big Gens
+function MechBuildBaseStrategy:DoBuildGenerators()
+
+	aitrace("BuildController: Check generators...")
+
+	-- Check requisition
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	if iRequisition < 300 and self.info.req_reserve > 0 then
+		return
+	end
+
+	-- Check power
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	if iPower < 200 and self.info.req_reserve <= 0 then
+		return
+	end	
+
+	-- Build if we are below min power per tier or if we have Requisition excess
+	if ((self.tierLevel == 1 and iPower > 100 and self.info.req_reserve > 0) or
+		(self.tierLevel == 1 and iPower > 400 and self.info.req_reserve <= 0) or
+		(self.tierLevel == 2 and iPower > 600) or
+		(self.tierLevel >= 3 and iPower > 1600)) and iRequisition < 3000 then
+		return
+	end
+
+	-- Check build plans for Big Generators
+	local iBiggerGeneratorID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("BiggerGenerator"))
+	if self:PlanExists("Build Building Plan", iBiggerGeneratorID) then
+		return
+	end
+
+	-- Try to build a bigger generator
+	aitrace("BuildController: Trying to build bigger generator")
+
+	-- Update where the free slag heaps are
+	resource_manager:UpdateFreeSlagHeaps(iBiggerGeneratorID)
+	
+	-- Look for the closest generator
+	local base_pos = cpu_manager.start_pos 
+	local slag_table = {}
+	
+	for slag_heap in resource_manager:GetSlagHeaps() do
+		local slag_pos = slag_heap:GetPosition()					
+		if not cpu_manager.terrain_analyzer:HasThreat( slag_pos, 35 ) then
+			-- Find available engineer
+			local functor = function( squad_ai )
+				local squad_pos = squad_ai:GetPosition()
+				return (squad_ai:IsEngineer() and squad_ai:CanBuild(iBiggerGeneratorID) == SquadAI.CANBUILD_Ok and
+						not cpu_manager:HasThreatOnPath( squad_pos, slag_pos, 40 ))
+			end
+			local engineer = cpu_manager:GetClosestUnlockedSquad( slag_pos, 500, functor )
+			if engineer ~= nil then
+				aitrace("BuildController: Build bigger generator pathing check...")
+				local dist = cpu_manager:GetShortestPathingDistance( base_pos, slag_pos, true )
+				local max_dist = 90 + self.tierLevel * 60
+				--only close slag heaps at low tier levels
+				if dist > 0 and dist <= max_dist then
+					local can_build = engineer:CanBuildAt(iBiggerGeneratorID, slag_pos )
+					table.insert( slag_table, {slag_pos, engineer, dist, can_build} ) 
+				end
+			end
+		end
+	end
+
+	local num_items = table.getn ( slag_table )
+
+	-- Multiple entries, we have to sort by distance
+	if num_items > 1 then
+		sortfunc = function( item1, item2 )					
+			return item1[3] < item2[3]
+		end
+		table.sort( slag_table, sortfunc )
+	end
+
+	-- If we do have an available free Slag, proceed
+	if num_items > 0 then	 
+		if slag_table[1][4] then
+			-- Add the plan to build, can_build is true
+			aitrace("BuildManager: Dynamic build of bigger generator at "..tostring(slag_table[1][1].x)..", "..tostring(slag_table[1][1].z))
+			self:AddPlan( BuildBuildingPlan(iBiggerGeneratorID, slag_table[1][1]) )
+		else
+			-- Send engineer to slag position
+			if not cpu_manager:JumpBuilder( slag_table[1][2], slag_table[1][1] ) then
+				cpu_manager:DoMove( slag_table[1][2], slag_table[1][1], false, "Go to bigger generator")
+			end
+		end
+	end
+end

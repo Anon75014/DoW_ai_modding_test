@@ -1,0 +1,17 @@
+----------------------------------------
+-- File: 'kbloodthirstertactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 23.05.2020
+
+class 'kBloodThirsterTactic' (kInfantryTactic)
+
+function kBloodThirsterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("BloodThirster Tactic")
+end
+
+function kBloodThirsterTactic:AlwaysAttack()
+	return true
+end
+
+

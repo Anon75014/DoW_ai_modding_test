@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'Enclavesdiamondbacktactic.ai'
+-- Edited by Thudmeizer			@ 01.04.2025
+
+class 'EnclavesDiamondbackTactic' (EnclavesVehicleTactic)
+
+function EnclavesDiamondbackTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Diamondback Tactic")
+end
+
+function EnclavesDiamondbackTactic:DoAbilities()
+
+	-- Spawn Explosive Drones
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'SistersFaithBladetactic.ai'
+-- Edited by Thudmeizer @ 09.11.2023
+
+class 'SistersFaithBladeTactic' (SistersVehicleTactic)
+
+SistersFaithBlade = {}
+
+function SistersFaithBladeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Sisters Faith Blade Tactic")
+end
+
+function SistersFaithBladeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SistersFaithBlade.smoke_id == nil) then
+		SistersFaithBlade.smoke_id = cpu_manager.stats:GetAbilityID( "sisters_smoke_launchers_faithblade" )	
+	end
+end
+
+function SistersFaithBladeTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(SistersFaithBlade.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(SistersFaithBlade.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(SistersFaithBlade.smoke_id, oUnit:GetSquad())
+		end
+	end
+end
+
+

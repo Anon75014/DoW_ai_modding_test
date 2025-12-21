@@ -1,0 +1,42 @@
+----------------------------------------
+-- File: 'RenegadeGuardEarthshakertactic.ai'
+-- Edited by Thudmeizer	@ 03.04.2024
+
+class 'Renegades_Earthshaker_Tactic' (BaseTactic)
+
+RenegadeGuardEarthshaker = {}
+
+function Renegades_Earthshaker_Tactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Renegades Earthshaker Tactic")
+	self.Upgrade = 0
+end
+
+function Renegades_Earthshaker_Tactic:AutoBuildTurretAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+		end
+	end
+end
+
+function Renegades_Earthshaker_Tactic:InitAbilities()
+
+end
+
+function Renegades_Earthshaker_Tactic:DoAbilities()
+
+	-- Build Basilisk Gas Addon if the Mark of Nurgle research is built
+	if (cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_mark_of_nurgle")) then
+
+		if (cpu_manager:GetTierLevel() >= 3) then 
+			local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+			local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+			if (iRequisition >= 100 and iPower >= 100) then
+				self:AutoBuildTurretAddOn(self.Upgrade, self.base_ai:GetEntity():GetID())	-- Build the gas addon if Nurgle research is built
+			end
+		end
+	end
+end

@@ -1,0 +1,87 @@
+----------------------------------------
+-- File: 'Enclavesinfantrytactic.ai'
+-- Edited by Capt JoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer			@ 27.10.2023
+
+class 'EnclavesInfantryTactic' (InfantryTactic)
+
+function EnclavesInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Infantry Tactic")
+	
+	-- Basic Enclaves infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "enclaves_squad_patrol_team" or
+		sSquadName == "enclaves_squad_guevesa" or
+		sSquadName == "enclaves_squad_breacher_team" or
+		sSquadName == "enclaves_squad_strike_team" or
+		sSquadName == "enclaves_squad_kokomi") then
+
+		-- Squads are transportable
+		self.m_iTransportable = 1	-- Devilfish
+
+	elseif (sSquadName == "enclaves_squad_arrakon" or
+		sSquadName == "enclaves_squad_arrakon1_ktgm" or
+		sSquadName == "enclaves_squad_arrakon_ktgm" or
+		sSquadName == "enclaves_squad_bravestorm" or
+		sSquadName == "enclaves_squad_bravestorm1_ktgm" or
+		sSquadName == "enclaves_squad_bravestorm_ktgm" or
+		sSquadName == "enclaves_squad_brightsword" or
+		sSquadName == "enclaves_squad_brightsword1_ktgm" or
+		sSquadName == "enclaves_squad_brightsword_ktgm" or
+		sSquadName == "enclaves_squad_farsight" or
+		sSquadName == "enclaves_squad_farsight1_ktgm" or
+		sSquadName == "enclaves_squad_farsight_ktgm" or
+		sSquadName == "enclaves_squad_oblotai" or
+		sSquadName == "enclaves_squad_oblotai1_ktgm" or
+		sSquadName == "enclaves_squad_oblotai_ktgm" or
+		sSquadName == "enclaves_squad_ovesa" or
+		sSquadName == "enclaves_squad_ovesa1_ktgm" or
+		sSquadName == "enclaves_squad_ovesa_ktgm" or
+		sSquadName == "enclaves_squad_shavastos" or
+		sSquadName == "enclaves_squad_shavastos1_ktgm" or
+		sSquadName == "enclaves_squad_shavastos_ktgm" or
+		sSquadName == "enclaves_squad_torchstar" or
+		sSquadName == "enclaves_squad_torchstar1_ktgm" or
+		sSquadName == "enclaves_squad_torchstar_ktgm") then 
+
+		-- Squads are able to deepstrike	
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("enclaves_herobarracks")
+	end
+end
+
+function EnclavesInfantryTactic:AddTargetAbilities()
+	table.insert(InfantryTactic.TargetAbilities, { nil, "enclaves_emp_grenade", Ability.Filters.CloseVehicleEnemy, 1, 0 })
+	table.insert(InfantryTactic.TargetAbilities, { nil, "enclaves_photon_grenade", Ability.Filters.CloseSquadEnemy, 1, 0 })
+end
+
+function EnclavesInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+
+		if (self.squad_ai:HasSquadAttached("enclaves_squad_kokomi")) then
+			EnclavesKokomiTactic.InitAbilities( self )
+			EnclavesKokomiTactic.DoAbilities( self )
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function EnclavesInfantryTactic:UpdateStance()
+
+	-- Check if I have setup time
+	if self.squad_ai:IsRanged() then
+		if self.squad_ai:GetStance() ~= SquadAI.STANCE_StandGround then
+			self.squad_ai:DoSetStance( SquadAI.STANCE_StandGround )
+		end
+	elseif self.squad_ai:GetStance() ~= SquadAI.STANCE_Hold then
+		self.squad_ai:DoSetStance( SquadAI.STANCE_Hold )
+	end
+end
+
+
+
+

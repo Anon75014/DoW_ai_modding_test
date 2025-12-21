@@ -1,0 +1,120 @@
+----------------------------------------
+-- File: 'autarchkaylethtactic.ai'
+-- Edited by Thudmeizer	@ 28.10.2023
+
+class 'AutarchKaylethTactic' (EldarInfantryTactic)
+
+AutarchKayleth = {}
+
+function AutarchKaylethTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Autarch Kayleth Tactic")
+end
+
+function AutarchKaylethTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function AutarchKaylethTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function AutarchKaylethTactic:InitAbilities()
+
+	-- Init ability ID's
+	if AutarchKayleth.grenades_id == nil then
+		AutarchKayleth.grenades_id = cpu_manager.stats:GetAbilityID( "eldar_ls_kayleth_plasma_grenades" )
+		AutarchKayleth.haywire_id = cpu_manager.stats:GetAbilityID( "eldar_ls_kayleth_haywire_bombs" )
+		AutarchKayleth.strike_id = cpu_manager.stats:GetAbilityID( "eldar_ls_kayleth_nightwing_strike" )
+		AutarchKayleth.fleetoffoot_id = cpu_manager.stats:GetAbilityID( "eldar_ls_kayleth_fleetoffoot" )
+	end
+end
+
+function AutarchKaylethTactic:DoAbilities()
+
+	-- Try to throw Plasma Grenade (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(AutarchKayleth.grenades_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(AutarchKayleth.grenades_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+		if (oUnit ~= nil) then
+			--print("Using Plasma Grenade Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(AutarchKayleth.grenades_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Try to throw Haywire Grenade (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(AutarchKayleth.haywire_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(AutarchKayleth.haywire_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Haywire Grenade Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(AutarchKayleth.haywire_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Try to call in a Nightwing Strike (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(AutarchKayleth.strike_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(AutarchKayleth.strike_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		if (oUnit ~= nil) then
+			--print("Using Nightwing Strike Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(AutarchKayleth.strike_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+--[[
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(AutarchKayleth.grenades_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, AutarchKayleth.grenades_id, Ability.Filters.CloseSquadEnemy, 1 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(AutarchKayleth.haywire_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, AutarchKayleth.haywire_id, Ability.Filters.CloseVehicleEnemy, 1 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(AutarchKayleth.strike_id) then
+			if Ability.DoAbilityPos( self.squad_ai, AutarchKayleth.strike_id, Ability.Filters.CloseEnemy, 5 ) then
+				return
+			end
+		end
+	end
+]]
+	-- Check if I should enable/disable fleet of foot
+	if (not self.squad_ai:IsAttached()) then
+		self:DoAbilityFoF()
+	end
+end
+
+function AutarchKaylethTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+    	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+   	end
+end

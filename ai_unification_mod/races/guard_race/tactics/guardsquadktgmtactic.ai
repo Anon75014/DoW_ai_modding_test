@@ -1,0 +1,52 @@
+----------------------------------------
+-- File: 'guardsquadktgmtactic.ai'
+-- Edited by Thudmeizer	@ 02.10.2023
+
+class 'GuardSquadKtgmTactic' (GuardInfantryTactic)
+
+GuardSquadKtgm = {}
+
+function GuardSquadKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Guardsmen Squad Kill Team Tactic")
+end
+
+function GuardSquadKtgmTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local CastorIndex = 0
+		local BannerIndex = 1
+		local MedicIndex = 2
+	
+		local numCastors = self.squad_ai:GetLeaderCount( CastorIndex )
+		local numBanners = self.squad_ai:GetLeaderCount( BannerIndex )
+		local numMedics = self.squad_ai:GetLeaderCount( MedicIndex )
+
+		-- Desired number of each leader type
+		local desiredCastors = math.random(0,1)
+		local desiredBanners = math.random(0,1)
+		local desiredMedics = math.random(0,1)
+
+		-- Desired order of reinforcing
+		if (numCastors < desiredCastors) then
+			if (self.squad_ai:CanReinforce( true, CastorIndex )) then
+				self.squad_ai:DoReinforce( true, CastorIndex )
+			end
+		elseif (numBanners < desiredBanners) then
+			if (self.squad_ai:CanReinforce( true, BannerIndex )) then
+				self.squad_ai:DoReinforce( true, BannerIndex )
+			end
+		elseif (numMedics < desiredMedics) then
+			if (self.squad_ai:CanReinforce( true, MedicIndex )) then
+				self.squad_ai:DoReinforce( true, MedicIndex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end

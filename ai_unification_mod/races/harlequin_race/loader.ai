@@ -1,0 +1,199 @@
+----------------------------------------
+-- File: 'harloader.ai'
+-- Edited by Thudmeizer @ 27.01.2025
+
+class 'harlequin_race'
+
+-- Constructor
+function harlequin_race:__init()
+
+end
+
+-- Returns the name of the race
+function harlequin_race:GetRaceName()
+	return "harlequin_race"
+end
+
+-- This function is called if harlequins are the race being played
+function harlequin_race:LoadRace( eDifficulty )
+
+	-- Import strategies
+	import( 'Races/harlequin_race/Strategies/HarBuildBaseStrategy.ai' )
+	
+	-- Import strategy info
+	import( "Races/harlequin_race/Strategies/HarStrategyInfo.ai" )
+		
+	-- Import tactics
+	import( 'Races/harlequin_race/Tactics/HarlequinInfantryTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/HarlequinVehicleTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/ChorusTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/MimeTactic.ai' )
+    	import( 'Races/harlequin_race/Tactics/TroupeTactic.ai' )
+    	import( 'Races/harlequin_race/Tactics/TroubadourTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/DeathJesterTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/LibraryGuardianTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/WhiteSeerTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/GreatHarlequinTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/ShadowSeerTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/SolitaireTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/VenomTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/JetbikeTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/VampireRaiderTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/VeilWalkerTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/SpiritWalkerTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/HarlequinHQTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/HarlequinLPTactic.ai' )
+	import( 'Races/harlequin_race/Tactics/HarlequinDarkVeilTactic.ai' )
+
+ 	-- GAMBIT: New Method of returning a squad or base Tactic (from the CreateTactic function). Indexes.
+	-- Here follows a Global List with all the squad names as indexes, and their Tactics as values
+	-- The name of the Global List must be unique for each race.
+    	HA_Race_Squad_Tactic =
+    	{
+        -- Insert here SQUAD_NAME or BASE_NAME and the TACTIC NAME (with the comma at the end!)
+        -- If a squad must NOT have a Tactic attached to it AT ALL, use "NONE" (with quotes, case sensitive).
+        -- Suggestion: Better put all in alphabetical order (sorted by squad names) for easier reference
+
+        harlequin_squad_chorus = ChorusTactic,
+        harlequin_squad_mime = MimeTactic,
+        harlequin_squad_troupe = TroupeTactic,
+        harlequin_squad_troubadur = TroubadourTactic,
+        harlequin_squad_death_jesters = DeathJesterTactic,
+        harlequin_squad_library_guardians = LibraryGuardianTactic,
+        harlequin_squad_white_seers = WhiteSeerTactic,
+        harlequin_squad_great_harlequin = GreatHarlequinTactic,
+        harlequin_squad_shadowseer = ShadowSeerTactic,
+        harlequin_squad_solitaire = SolitaireTactic,
+        harlequin_squad_spirit_walker = SpiritWalkerTactic,
+        harlequin_squad_sylandri_veilwalker = VeilWalkerTactic,
+        harlequin_squad_venom = VenomTactic,
+        harlequin_squad_jetbikes = JetbikeTactic,
+        harlequin_squad_vampire_raider = VampireRaiderTactic,
+        harlequin_squad_vampire_raider_landed = VampireRaiderTactic,
+	}
+
+    	HA_Race_Base_Tactic =
+	{
+        harlequin_hq = HarlequinHQTactic,
+        harlequin_listening_post = HarlequinLPTactic,
+        harlequin_dark_veil = HarlequinDarkVeilTactic,
+	}
+	return true
+end
+
+-- This function is called even if harlequins are not the race being played
+function harlequin_race:LoadGlobalInfo()
+
+	-- Import info files
+	import( 'Races/harlequin_race/Info/harunitstats.ai' )
+	
+	-- Add harlequin unit stats
+	table.insert(UnitStats, HarlequinUnitStats)
+	return true
+end
+
+-- Creates build base strategy
+function harlequin_race:CreateBuildBaseStrategy()
+	return HarlequinBuildBaseStrategy(BuildBaseStrategyInfo)
+end
+
+-- Creates a special tactic for units
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function harlequin_race:CreateTactic(oSquadAI)
+
+    	-- Get unit name, and see if there is an attached tactic to it
+    	local sUnitName = oSquadAI:GetSquadName()    
+	if sUnitName ~= nil and HA_Race_Squad_Tactic[sUnitName] ~= nil then
+		if HA_Race_Squad_Tactic[sUnitName] == "NONE" then
+            		-- The squad must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return HA_Race_Squad_Tactic[sUnitName](oSquadAI)
+        	end
+    	end
+
+	-- Get class
+	local eClass = oSquadAI:GetStats():GetClass()
+
+	-- Check if there is a special tactic for the unit available
+	local bVehicle = (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or eClass == UnitStatsAI.UC_VehicleHigh)
+	local bAirPlane = (eClass == UnitStatsAI.UC_AirLow or eClass == UnitStatsAI.UC_AirMed or eClass == UnitStatsAI.UC_AirHigh)
+
+	if (bVehicle or bAirPlane) then
+		return HarlequinVehicleTactic(oSquadAI)
+	end
+	return HarlequinInfantryTactic(oSquadAI)
+end
+
+-- Creates a special tactic for buildings
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function harlequin_race:CreateBaseTactic(oBuilding)
+
+	-- Get building name
+	local sBuildingName = oBuilding:GetBaseName()
+	if sBuildingName ~= nil and HA_Race_Base_Tactic[sBuildingName] ~= nil then
+		if HA_Race_Base_Tactic[sBuildingName] == "NONE" then
+            		-- The building must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return HA_Race_Base_Tactic[sBuildingName](oBuilding)
+        	end
+    	end
+	return nil
+end
+
+-- Returns a specific information
+function harlequin_race:GetInfo(sType)
+
+	-- Check info type
+	if (sType == "TurretPower") then
+		return 300
+	elseif (sType == "SupportAllyFactor") then
+		return 10 / 4
+	elseif (sType == "AttackModifier") then
+		return -10
+	elseif (sType == "CriticalRangeIncreasePerTier") then
+		return 10
+	elseif (sType == "MinArmyStrengthPerTier") then
+		return 750
+	elseif (sType == "AttackRatio") then
+		return 1
+	elseif (sType == "RetreatRatio") then
+		return 3 / 4
+	elseif (sType == "InvisibleBuildings") then
+		return true
+	elseif (sType == "HarassingLeader") then
+		return "harlequin_squad_great_harlequin"
+	elseif (sType == "AutoConstructBuildings") then
+		return false
+	end
+	return nil
+end
+
+-- Returns the building type and threat
+function harlequin_race:GetBuildingType(sBuildingName)
+
+	-- Return race specific object string
+	if (sBuildingName == "harlequin_hq") then
+		return "HQ", 0
+
+	elseif (sBuildingName == "harlequin_warp_generator") then
+		return "BiggerGenerator", 0
+
+	elseif (sBuildingName == "harlequin_support_portal") then
+		return "VehicleBuilding", 0
+
+	elseif (sBuildingName == "harlequin_armoury") then
+		return "Armoury", 0
+		
+	elseif (sBuildingName == "harlequin_listening_post") then
+		return "ListeningPost", 0
+
+	elseif (sBuildingName == "harlequin_support_platform_scatterlaser") then
+		return "Turret", 300
+
+	elseif (sBuildingName == "harlequin_mine") then
+		return "Mine", 100
+	end
+	return nil, 0
+end

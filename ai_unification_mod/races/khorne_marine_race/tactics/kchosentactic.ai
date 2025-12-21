@@ -1,0 +1,75 @@
+----------------------------------------
+-- File: 'kinfantrytactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kChosenTactic' (kInfantryTactic)
+
+Chosen = {}
+
+function kChosenTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("k Chosen Tactic")
+end
+
+function kChosenTactic:InitAbilities()
+
+	if (Chosen.rage_id == nil) then
+		Chosen.rage_id = cpu_manager.stats:GetAbilityID( "khm_furious_rage" )	
+	end
+end
+
+function kChosenTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+		if (not self:IsMoving()) then
+			if (self.squad_ai:CanDoAbility( Chosen.rage_id )) then
+				self.squad_ai:DoSpecialAbility( Chosen.rage_id )
+			end
+		end		
+	end
+	kInfantryTactic.DoAbilities(self)
+end
+
+function kChosenTactic:Reinforce()
+
+	if (not self.squad_ai:IsReinforcing()) then
+		local ChampionIndex = 0
+		local IconIndex = 1
+		local numChampions = self.squad_ai:GetLeaderCount( ChampionIndex )
+		local numIcons = self.squad_ai:GetLeaderCount( IconIndex )
+		local desiredChampions = 1
+		local desiredIcons = 1 
+		if (numChampions < desiredChampions) then
+			if (self.squad_ai:CanReinforce( true, ChampionIndex )) then
+				self.squad_ai:DoReinforce( true, ChampionIndex )
+			end
+		elseif (numIcons < desiredIcons) then
+			if (self.squad_ai:CanReinforce( true, IconIndex )) then
+				self.squad_ai:DoReinforce( true, IconIndex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end
+
+function kChosenTactic:Upgrade()
+
+	if (self.squad_ai:IsReinforcing() or not self.squad_ai:HasUpgradableTrooper()) then
+		return
+	end
+
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+
+	if (not self.squad_ai:IsUnderAttack() and self.squad_ai:GetNumTroopers() >= 3) then
+		local oEnemy = cpu_manager:FindClosestEnemyPlayer()
+		if (oEnemy ~= nil) then
+			self.squad_ai:DoBestUpgrade(oEnemy:GetMajorityClassType())
+		end
+	end
+end

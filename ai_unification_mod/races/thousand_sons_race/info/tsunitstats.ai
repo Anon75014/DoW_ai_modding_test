@@ -1,0 +1,1706 @@
+----------------------------------------
+-- File: 'tsunitstats.ai'
+-- Edited by Thudmeizer @ 11.09.2025
+
+UnitStrengths.thousand_sons_squad_thrall = 35
+UnitStrengths.thousand_sons_squad_tzeentch_cultist = 45
+UnitStrengths.thousand_sons_squad_marine = 100
+UnitStrengths.thousand_sons_squad_marine_favoured = 130
+UnitStrengths.thousand_sons_squad_marine_damned = 45
+UnitStrengths.thousand_sons_squad_daemon = 40
+UnitStrengths.thousand_sons_squad_daemon_lvl2 = 50
+UnitStrengths.thousand_sons_squad_chosen = 150
+UnitStrengths.thousand_sons_squad_screamer = 65
+UnitStrengths.thousand_sons_squad_horror = 70
+UnitStrengths.thousand_sons_squad_horror_blue = 10
+UnitStrengths.thousand_sons_squad_flamers_of_tzeentch = 80
+UnitStrengths.thousand_sons_squad_burning_chariot = 150
+UnitStrengths.thousand_sons_squad_spawn_1 = 50
+UnitStrengths.thousand_sons_squad_spawn_2 = 50
+UnitStrengths.thousand_sons_squad_spawn_3 = 50
+UnitStrengths.thousand_sons_squad_spawn_4 = 50
+UnitStrengths.thousand_sons_squad_spawn_5 = 50
+UnitStrengths.thousand_sons_squad_spawn_1_lvl2 = 60
+UnitStrengths.thousand_sons_squad_spawn_2_lvl2 = 60
+UnitStrengths.thousand_sons_squad_spawn_3_lvl2 = 60
+UnitStrengths.thousand_sons_squad_spawn_4_lvl2 = 60
+UnitStrengths.thousand_sons_squad_spawn_5_lvl2 = 60
+UnitStrengths.thousand_sons_squad_spawn_1_lvl3 = 70
+UnitStrengths.thousand_sons_squad_spawn_2_lvl3 = 70
+UnitStrengths.thousand_sons_squad_spawn_3_lvl3 = 70
+UnitStrengths.thousand_sons_squad_spawn_4_lvl3 = 70
+UnitStrengths.thousand_sons_squad_spawn_5_lvl3 = 70
+UnitStrengths.thousand_sons_squad_disc_sorcerer = 110
+UnitStrengths.thousand_sons_squad_terminator = 250
+UnitStrengths.thousand_sons_squad_terminator_veteran = 250
+UnitStrengths.thousand_sons_squad_mutated_marine = 250
+UnitStrengths.thousand_sons_squad_mutated_sorcerer = 150
+UnitStrengths.thousand_sons_squad_icon_bearer = 150
+UnitStrengths.thousand_sons_squad_numerologist = 250
+UnitStrengths.thousand_sons_squad_tzeentch_herald = 280
+UnitStrengths.thousand_sons_squad_blue_scribes = 300
+UnitStrengths.thousand_sons_squad_lord = 310
+UnitStrengths.thousand_sons_squad_lord_clone = 20
+UnitStrengths.thousand_sons_squad_lord_clone_lvl3 = 25
+UnitStrengths.thousand_sons_squad_ahriman = 410
+UnitStrengths.thousand_sons_squad_rhino = 125
+UnitStrengths.thousand_sons_squad_hell_blade = 250
+UnitStrengths.thousand_sons_squad_dreadnought = 300
+UnitStrengths.thousand_sons_squad_sekhetar_robots = 350
+UnitStrengths.thousand_sons_squad_dreadnought_sorc = 370
+UnitStrengths.thousand_sons_squad_rubric_dreadnought = 430
+UnitStrengths.thousand_sons_squad_deceiver = 390
+UnitStrengths.thousand_sons_squad_predator = 465
+UnitStrengths.thousand_sons_squad_whirlwind = 490
+UnitStrengths.thousand_sons_squad_daemon_prince_tzeentch = 800
+UnitStrengths.thousand_sons_squad_grav_raider = 900
+UnitStrengths.thousand_sons_squad_loc = 1000
+UnitStrengths.thousand_sons_squad_hoverblade = 1800
+UnitStrengths.thousand_sons_squad_silver_tower = 20800
+
+-- Dummy Squads
+UnitStrengths.thousand_sons_squad_armn01 = 0
+UnitStrengths.thousand_sons_squad_armn02 = 0
+UnitStrengths.thousand_sons_squad_armn03 = 0
+UnitStrengths.thousand_sons_squad_armn04 = 0
+UnitStrengths.thousand_sons_squad_armn05 = 0
+UnitStrengths.thousand_sons_squad_armn06 = 0
+UnitStrengths.thousand_sons_squad_armn07 = 0
+UnitStrengths.thousand_sons_squad_armn08 = 0
+UnitStrengths.thousand_sons_squad_armn09 = 0
+UnitStrengths.thousand_sons_squad_armn10 = 0
+UnitStrengths.thousand_sons_squad_armn11 = 0
+UnitStrengths.thousand_sons_squad_armn01p = 0
+UnitStrengths.thousand_sons_squad_armn02p = 0
+UnitStrengths.thousand_sons_squad_armn03p = 0
+UnitStrengths.thousand_sons_squad_armn04p = 0
+UnitStrengths.thousand_sons_squad_armn05p = 0
+UnitStrengths.thousand_sons_squad_armn06p = 0
+UnitStrengths.thousand_sons_squad_armn07p = 0
+UnitStrengths.thousand_sons_squad_armn08p = 0
+UnitStrengths.thousand_sons_squad_armn09p = 0
+UnitStrengths.thousand_sons_squad_armn10p = 0
+UnitStrengths.thousand_sons_squad_armn11p = 0
+
+-- Kill-Team
+UnitStrengths.thousand_sons_squad_ahriman_ktgm = 1000
+
+LeaderStrengths.thousand_sons_squad_thrall = 0
+LeaderStrengths.thousand_sons_squad_tzeentch_cultist = 25
+LeaderStrengths.thousand_sons_squad_marine = 75
+LeaderStrengths.thousand_sons_squad_marine_favoured = 75
+LeaderStrengths.thousand_sons_squad_terminator = 75
+LeaderStrengths.thousand_sons_squad_terminator_veteran = 75
+LeaderStrengths.thousand_sons_squad_mutated_sorcerer =75
+LeaderStrengths.thousand_sons_squad_disc_sorcerer = 75
+LeaderStrengths.thousand_sons_squad_blue_scribes = 75
+
+Attachments.thousand_sons_squad_tzeentch_cultist = { "thousand_sons_squad_lord", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_tzeentch_herald", "thousand_sons_squad_numerologist" }
+Attachments.thousand_sons_squad_marine = { "thousand_sons_squad_lord", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_tzeentch_herald", "thousand_sons_squad_numerologist" }
+Attachments.thousand_sons_squad_marine_favoured = { "thousand_sons_squad_lord", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_tzeentch_herald", "thousand_sons_squad_numerologist" }
+Attachments.thousand_sons_squad_chosen = { "thousand_sons_squad_lord", "thousand_sons_squad_tzeentch_herald", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_numerologist" }
+Attachments.thousand_sons_squad_terminator = { "thousand_sons_squad_lord", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_numerologist" }
+Attachments.thousand_sons_squad_terminator_veteran = { "thousand_sons_squad_lord", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_numerologist" }
+Attachments.thousand_sons_squad_mutated_marine = { "thousand_sons_squad_mutated_sorcerer", "thousand_sons_squad_tzeentch_herald", "thousand_sons_squad_lord", "thousand_sons_squad_icon_bearer", "thousand_sons_squad_numerologist" }
+
+
+TSUnitStats =
+{
+	race = "thousand_sons_race",
+		{
+			name = "Thousand Sons Thrall",
+			sbp_name = "thousand_sons_squad_thrall",
+			ebp_name = "thousand_sons_thrall",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 1,
+			potential =
+			{
+				{
+					name = "thousand_sons_laspistol_thrall",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,0,0,0,1,1,1,0,0,0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_knife_thrall",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Tzeentch Cultist",
+			sbp_name = "thousand_sons_squad_tzeentch_cultist",
+			ebp_name = "thousand_sons_tzeentch_cultist",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 1,
+			potential =
+			{
+				{
+					name = "thousand_sons_knife_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.2,4.3,3.3,3,0.0,0.0,0.0,0.0,1,0.0,1,2.1,0.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_autogun_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,2.7,1.7,1.1,0.0,1.9,1.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_flamer_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.2,4.0,4.2,4.5,4.1,1.6,0.0,0.0,4.1,0.0,3.3,2.9,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_grenade_launcher",
+					effectiveness = GenerateUnitEffectiveness(4.0,4.0,4.0,4.0,2.6,0.9,0.7,0.0,2.8,0.0,0.6,2.1,0.8,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Rubric Marine",
+			sbp_name = "thousand_sons_squad_marine",
+			ebp_name = "thousand_sons_marine",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 2,
+			potential =
+			{
+				{
+					name = "thousand_sons_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(2,3,2,3,4,3,2,4,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_warp_bolt_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(2,2,2,2,2,5,5,5,2,2,2,4,4,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,3,3,3,3,3,3,3,3,3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_knife_rubic",
+					effectiveness = GenerateUnitEffectiveness(2,2,2,3,3,3,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_knife_rubic2",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,8,8,8,6,6,5,5,5,4,4,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Favoured Rubric Marine",
+			sbp_name = "thousand_sons_squad_marine_favoured",
+			ebp_name = "thousand_sons_marine_favoured",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 2.5,
+			potential =
+			{
+				{
+					name = "thousand_sons_bolter_favoured",
+					effectiveness = GenerateUnitEffectiveness(2,3,2,3,4,3,2,4,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_flamer_favoured",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,3,3,3,3,3,3,3,3,3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_knife_rubic",
+					effectiveness = GenerateUnitEffectiveness(2,2,2,3,3,3,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_knife_rubic2",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,8,8,8,6,6,5,5,5,4,4,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Rubric Marine Damned",
+			sbp_name = "thousand_sons_squad_marine_damned",
+			ebp_name = "thousand_sons_marine_damned",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 2,
+			potential =
+			{
+				{
+					name = "thousand_sons_knife_damned",
+					effectiveness = GenerateUnitEffectiveness(2,3,2,3,4,3,2,4,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Chosen",
+			sbp_name = "thousand_sons_squad_chosen",
+			ebp_name = "thousand_sons_chosen",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_pistol_champion",
+					effectiveness = GenerateUnitEffectiveness(3,2,3,2,5,2,1,5,1,2,1,2,1,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_power_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Discs of Tzeentch",
+			sbp_name = "thousand_sons_squad_disc_sorcerer",
+			ebp_name = "thousand_sons_disc_sorcerer",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_plasma_pistol",
+					effectiveness = GenerateUnitEffectiveness(3,2,3,2,4,3,1,5,2,2,1,2,1,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_power_weapon_disc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Mutated Sorcerer",
+			sbp_name = "thousand_sons_squad_mutated_sorcerer",
+			ebp_name = "thousand_sons_mutated_sorcerer",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_staff_mutated_sorcerer",
+					effectiveness = GenerateUnitEffectiveness(3,4,3,2,2,3,2,2,4,2,2,4,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Daemon",
+			sbp_name = "thousand_sons_squad_daemon",
+			ebp_name = "thousand_sons_daemon",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_lightning_daemon",
+					effectiveness = GenerateUnitEffectiveness(3,4,3,2,2,3,2,2,4,2,2,4,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Daemon, Improved",
+			sbp_name = "thousand_sons_squad_daemon_lvl2",
+			ebp_name = "thousand_sons_daemon_lvl2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_lightning_daemon2",
+					effectiveness = GenerateUnitEffectiveness(3,4,3,2,2,3,2,2,4,2,2,4,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Screamer",
+			sbp_name = "thousand_sons_squad_screamer",
+			ebp_name = "thousand_sons_screamer",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_screamer_melee",
+					effectiveness = GenerateUnitEffectiveness(3,4,3,2,2,3,2,2,4,2,2,4,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Horror",
+			sbp_name = "thousand_sons_squad_horror",
+			ebp_name = "thousand_sons_horror",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_daemon_fire",
+					effectiveness = GenerateUnitEffectiveness(3,4,4,4,4,4,4,5,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_horror_melee",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Blue Horror",
+			sbp_name = "thousand_sons_squad_horror_blue",
+			ebp_name = "thousand_sons_horror_blue",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 1,
+			potential =
+			{
+				{
+					name = "thousand_sons_daemon_fire_blue",
+					effectiveness = GenerateUnitEffectiveness(3,4,4,4,4,4,4,5,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_horror_blue_melee",
+					effectiveness = GenerateUnitEffectiveness(2,2,2,3,3,2,2,1,1,1,1,1,1,1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Normal lvl1",
+			sbp_name = "thousand_sons_squad_spawn_1",
+			ebp_name = "thousand_sons_spawn_1",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Normal lvl2",
+			sbp_name = "thousand_sons_squad_spawn_1_lvl2",
+			ebp_name = "thousand_sons_spawn_1_lvl2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee2",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Normal lvl3",
+			sbp_name = "thousand_sons_squad_spawn_1_lvl3",
+			ebp_name = "thousand_sons_spawn_1_lvl3",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee3",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Blue lvl1",
+			sbp_name = "thousand_sons_squad_spawn_2",
+			ebp_name = "thousand_sons_spawn_2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Blue lvl2",
+			sbp_name = "thousand_sons_squad_spawn_2_lvl2",
+			ebp_name = "thousand_sons_spawn_2_lvl2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee2",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Blue lvl3",
+			sbp_name = "thousand_sons_squad_spawn_2_lvl3",
+			ebp_name = "thousand_sons_spawn_2_lvl3",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee3",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Dark lvl1",
+			sbp_name = "thousand_sons_squad_spawn_3",
+			ebp_name = "thousand_sons_spawn_3",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee_dark",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Dark lvl2",
+			sbp_name = "thousand_sons_squad_spawn_3_lvl2",
+			ebp_name = "thousand_sons_spawn_3_lvl2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee2_dark",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Dark lvl3",
+			sbp_name = "thousand_sons_squad_spawn_3_lvl3",
+			ebp_name = "thousand_sons_spawn_3_lvl3",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee3_dark",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Green lvl1",
+			sbp_name = "thousand_sons_squad_spawn_4",
+			ebp_name = "thousand_sons_spawn_4",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Green lvl2",
+			sbp_name = "thousand_sons_squad_spawn_4_lvl2",
+			ebp_name = "thousand_sons_spawn_4_lvl2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee2",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Green lvl3",
+			sbp_name = "thousand_sons_squad_spawn_4_lvl3",
+			ebp_name = "thousand_sons_spawn_4_lvl3",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated_sorc",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee3",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Red lvl1",
+			sbp_name = "thousand_sons_squad_spawn_5",
+			ebp_name = "thousand_sons_spawn_5",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "thousand_sons_flamer_spawn",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Red lvl2",
+			sbp_name = "thousand_sons_squad_spawn_5_lvl2",
+			ebp_name = "thousand_sons_spawn_5_lvl2",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_flamer_spawn2",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee2",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Random Spawn Red lvl3",
+			sbp_name = "thousand_sons_squad_spawn_5_lvl3",
+			ebp_name = "thousand_sons_spawn_5_lvl3",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_flamer_spawn3",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_spawn_melee3",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,2,2,2,2,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Flamers Of Tzeentch",
+			sbp_name = "thousand_sons_squad_flamers_of_tzeentch",
+			ebp_name = "thousand_sons_flamers_of_tzeentch",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "thousand_sons_flamer_possessed",
+					effectiveness = GenerateUnitEffectiveness(2,4,2,3,5,3,5,1,3,1,3,1,3,1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_possessed_melee",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Burning Chariot Of Tzeentch",
+			sbp_name = "thousand_sons_squad_burning_chariot",
+			ebp_name = "thousand_sons_burning_chariot",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_flamer_possessed",
+					effectiveness = GenerateUnitEffectiveness(5,4,6,3,6,1,5,1,7,1,4,1,6,1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_possessed_melee",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Terminators",
+			sbp_name = "thousand_sons_squad_terminator",
+			ebp_name = "thousand_sons_terminator",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_storm_bolter",
+					effectiveness = GenerateUnitEffectiveness(4,6,5,6,5,2,2,1,6,1,2,3,3,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_warp_bolt_storm_bolter",
+					effectiveness = GenerateUnitEffectiveness(3,5,4,3,4,6,6,6,4,1,1,5,5,5,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_storm_bolter",
+					effectiveness = GenerateUnitEffectiveness(5,7,6,7,6,3,3,2,7,3,4,2,2,3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Terminator Veterans",
+			sbp_name = "thousand_sons_squad_terminator_veteran",
+			ebp_name = "thousand_sons_terminator_veteran",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_inferno_bolt_storm_bolter_veteran",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.0,5.8,6.2,5.7,4.6,4.1,2.8,6.1,2.8,4.3,5.0,2.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_heavy_warpflamer",
+					effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,5.9,5.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "thousand_sons_soulreaper_cannon",
+					effectiveness = GenerateUnitEffectiveness(5.3,5.1,5.6,7.6,7.3,4.0,4.6,4.1,7.6,4.1,5.7,4.0,5.6,5.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_cyclone_launcher",
+					effectiveness = GenerateUnitEffectiveness(5.3,5.1,5.6,3.6,3.3,6.0,6.6,6.1,3.6,3.1,4.7,6.0,6.6,6.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Sekhetar Robot",
+			sbp_name = "thousand_sons_squad_sekhetar_robots",
+			ebp_name = "thousand_sons_sekhetar_robot",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "thousand_sons_heavy_warpflamer",
+					effectiveness = GenerateUnitEffectiveness(5,7,5,7,5,7,5,7,5,7,5,7,5,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_knife_rubic",
+					effectiveness = GenerateUnitEffectiveness(0.9,1.0,0.2,0.9,0.8,0.0,0.0,0.0,0.8,0.2,0.7,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_plower_fist_sekhetar",
+					effectiveness = GenerateUnitEffectiveness(2.9,3.6,2.0,2.1,2.1,4.6,5.0,5.4,1.4,1.4,2.7,4.6,3.8,3.0,0.0,2.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_melta_gun_sekhetar",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,4,8,8,8,8,5,5,8,8,8,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "thousand_sons_cyclone_launcher",
+					effectiveness = GenerateUnitEffectiveness(3.9,4.6,1.0,3.1,3.1,5.6,7.0,6.4,2.4,2.4,1.7,5.6,4.8,4.0,0.0,8.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Mutated Squad",
+			sbp_name = "thousand_sons_squad_mutated_marine",
+			ebp_name = "thousand_sons_mutated_marine",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_dummy_weapon_mutated",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,4,4,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_mutated_melee",
+					effectiveness = GenerateUnitEffectiveness(6.1,6.4,6.4,6.4,6.4,5.6,5.4,3.6,5.5,3.6,5.4,5.6,5.0,4.7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_mutated_melee_asn",
+					effectiveness = GenerateUnitEffectiveness(6.1,6.4,6.4,6.4,6.4,5.6,5.4,3.6,5.5,3.6,5.4,5.6,5.0,4.7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Icon Bearer",
+			sbp_name = "thousand_sons_squad_icon_bearer",
+			ebp_name = "thousand_sons_icon_bearer",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "thousand_sons_pistol_icon_bearer",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,6,5,5,4,5,5,8,8,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_pistol_icon_bearer",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_icon_bearer_melee",
+					effectiveness = GenerateUnitEffectiveness(4,6,5,6,5,2,2,1,6,1,2,3,3,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Numerologist",
+			sbp_name = "thousand_sons_squad_numerologist",
+			ebp_name = "thousand_sons_numerologist",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "thousand_sons_volkite_serpenta_numerologist",
+					effectiveness = GenerateUnitEffectiveness(8,6,8,6,5,5,4,8,8,5,5,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_power_axe_numerologist",
+					effectiveness = GenerateUnitEffectiveness(3.5,6.9,0.6,7.5,6.3,2.6,1.9,0.6,8.1,8.1,4.6,2.6,1.3,1.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Herald of Tzeentch",
+			sbp_name = "thousand_sons_squad_tzeentch_herald",
+			ebp_name = "thousand_sons_tzeentch_herald",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "thousand_sons_daemon_fire_herald",
+					effectiveness = GenerateUnitEffectiveness(3,4,4,4,4,4,4,5,2,2,2,2,2,2,0.0,5.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_daemon_fire_tzeentch_bolt",
+					effectiveness = GenerateUnitEffectiveness(4,5,5,5,5,5,5,6,2,2,2,2,2,2,0.0,5.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_horror_melee",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,5,5,4,4,2,2,2,2,2,2,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Sorcerer Lord",
+			sbp_name = "thousand_sons_squad_lord",
+			ebp_name = "thousand_sons_lord",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "thousand_sons_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lord_weapon",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Sorcerer Lord Clone",
+			sbp_name = "thousand_sons_squad_lord_clone",
+			ebp_name = "thousand_sons_lord_clone",
+			class = UnitStatsAI.UC_Commander,
+			rating = 2,
+			potential =
+			{
+				{
+					name = "thousand_sons_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lord_weapon_clone",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Sorcerer Lord Improved Clone",
+			sbp_name = "thousand_sons_squad_lord_clone_lvl3",
+			ebp_name = "thousand_sons_lord_clone_lvl3",
+			class = UnitStatsAI.UC_Commander,
+			rating = 2,
+			potential =
+			{
+				{
+					name = "thousand_sons_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lord_weapon_clone_lvl3",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Blue Scribes",
+			sbp_name = "thousand_sons_squad_blue_scribes",
+			ebp_name = "thousand_sons_blue_scribes",
+			class = UnitStatsAI.UC_Commander,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_daemon_fire_tzeentch_bolt",
+					effectiveness = GenerateUnitEffectiveness(8,8,8,6,6,7,7,9,8,8,8,7,7,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_daemon_fire_herald",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_horror_melee",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Ahriman",
+			sbp_name = "thousand_sons_squad_ahriman",
+			ebp_name = "thousand_sons_ahriman",
+			class = UnitStatsAI.UC_Commander,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_bolts_ahriman",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_pistol_ahriman",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_pistol_ahriman",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_black_staff",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Ahriman (Kill Team)",
+			sbp_name = "thousand_sons_squad_ahriman_ktgm",
+			ebp_name = "thousand_sons_ahriman_ktgm",
+			class = UnitStatsAI.UC_Commander,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_bolts_ahriman_ktgm",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_pistol_ahriman",
+					effectiveness = GenerateUnitEffectiveness(5,6,6,6,5,5,5,5,6,1,2,5,5,4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_inferno_bolt_pistol_ahriman",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_black_staff",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Rhino",
+			sbp_name = "thousand_sons_squad_rhino",
+			ebp_name = "thousand_sons_rhino",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "thousand_sons_storm_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(4,6,5,6,5,2,2,1,6,1,2,3,3,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Hell Blade",
+			sbp_name = "thousand_sons_squad_hell_blade",
+			ebp_name = "thousand_sons_hell_blade",
+			class = UnitStatsAI.UC_AirMed,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "thousand_sons_autocannon_hellblade",
+					effectiveness = GenerateUnitEffectiveness(6,7,6,8,6,8,5,7,6,7,6,7,5,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Dreadnought",
+			sbp_name = "thousand_sons_squad_dreadnought",
+			ebp_name = "thousand_sons_dreadnought",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_heavy_bolter_twin_linked_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,6,6,6,7,7,7,6,6,6,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_autocannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_missile_pod_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,7,7,7,6,6,6,7,7,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lascannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Dreadnought Sorc",
+			sbp_name = "thousand_sons_squad_dreadnought_sorc",
+			ebp_name = "thousand_sons_dreadnought_sorc",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_fist_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,6,6,6,6,6,6,6,6,6,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_fist_twin_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(5,7,5,7,5,8,6,7,5,8,6,8,6,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_melta_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,8,8,8,6,6,6,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Venerable Dreadnought",
+			sbp_name = "thousand_sons_squad_rubric_dreadnought",
+			ebp_name = "thousand_sons_rubric_dreadnought",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 7.5,
+			potential =
+			{
+				{
+					name = "thousand_sons_fist_dreadnought_ven",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,6,6,6,6,6,6,6,6,6,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "thousand_sons_heavy_bolter_twin_ven_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_autocannon_ven_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lascannon_ven_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_plasmacannon_ven_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_melta_ven_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Deceiver",
+			sbp_name = "thousand_sons_squad_deceiver",
+			ebp_name = "thousand_sons_deceiver",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_heavy_flamer_defiler_rubric",
+					effectiveness = GenerateUnitEffectiveness(7,5,7,5,7,5,7,5,7,5,6,6,6,6,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "thousand_sons_defiler_melee",
+					effectiveness = GenerateUnitEffectiveness(5,7,5,7,5,8,6,7,5,8,6,8,6,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Predator",
+			sbp_name = "thousand_sons_squad_predator",
+			ebp_name = "thousand_sons_predator",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "thousand_sons_autocannon_predator",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,7,7,7,7,7,7,7,7,7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lascannon_twin_predator",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,8,8,8,7,7,7,8,8,8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Whirlwind",
+			sbp_name = "thousand_sons_squad_whirlwind",
+			ebp_name = "thousand_sons_whirlwind",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "thousand_sons_missile_battery",
+					effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_storm_bolter_whirlwind",
+					effectiveness = GenerateUnitEffectiveness(4,6,5,6,5,2,2,1,6,1,2,3,3,2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Tzeentch Daemon Prince",
+			sbp_name = "thousand_sons_squad_daemon_prince_tzeentch",
+			ebp_name = "thousand_sons_daemon_prince_tzeentch",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "thousand_sons_daemon_prince_sword_tzeentch",
+					effectiveness = GenerateUnitEffectiveness(8.6,9.7,9.8,9.8,9.8,9.4,9.5,9.0,9.8,9.0,6.7,9.3,8.3,9.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Grav Raider",
+			sbp_name = "thousand_sons_squad_grav_raider",
+			ebp_name = "thousand_sons_grav_raider",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "thousand_sons_storm_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(8.4,9.8,9.9,9.4,9.9,9.2,9.6,8.0,9.9,8.0,6.8,9.4,8.2,9.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_plasmacannon_raider_l",
+					effectiveness = GenerateUnitEffectiveness(4.1,4.9,0.3,7.7,7.7,5.5,2.5,1.0,6.1,4.3,3.3,2.5,1.3,1.0,0.0,3.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_plasmacannon_raider_r",
+					effectiveness = GenerateUnitEffectiveness(4.1,4.9,0.3,7.7,7.7,5.5,2.5,1.0,6.1,4.3,3.3,2.5,1.3,1.0,0.0,3.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_heavy_bolter_twin_linked_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Prosperator Hoverblade",
+			sbp_name = "thousand_sons_squad_hoverblade",
+			ebp_name = "thousand_sons_hoverblade",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "thousand_sons_warpcannon",
+					effectiveness = GenerateUnitEffectiveness(8.4,9.8,9.9,9.4,9.9,9.2,9.6,8.0,9.9,8.0,6.8,9.4,8.2,9.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_warp_bolter_hoverblade_1",
+					effectiveness = GenerateUnitEffectiveness(6.0,5.8,5.7,5.5,5.3,3.1,0.0,0.0,5.5,3.7,3.1,4.4,2.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_warp_bolter_hoverblade_3",
+					effectiveness = GenerateUnitEffectiveness(6.0,5.8,5.7,5.5,5.3,4.5,3.4,0.0,5.5,3.7,3.1,4.4,2.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lascannon_hoverblade_1",
+					effectiveness = GenerateUnitEffectiveness(6.2,6.2,6.2,7.2,7.1,7.3,7.1,6.9,7.0,6.6,4.0,6.4,5.1,4.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_lascannon_hoverblade_2",
+					effectiveness = GenerateUnitEffectiveness(5.1,5.1,5.1,5.1,5.1,7.3,7.1,6.9,5.1,6.6,5.1,7.4,6.9,6.7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_warp_bolter_hoverblade_2",
+					effectiveness = GenerateUnitEffectiveness(7.1,7.0,6.8,6.7,6.3,5.7,4.3,5.4,6.5,6.9,4.9,5.7,4.2,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_demolisher_cannon_hoverblade",
+					effectiveness = GenerateUnitEffectiveness(7.3,7.2,7.0,6.8,6.6,6.8,6.4,5.5,6.8,7.0,5.9,7.0,5.8,4.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Silver Tower",
+			sbp_name = "thousand_sons_squad_silver_tower",
+			ebp_name = "thousand_sons_silver_tower",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "thousand_sons_silver_tower_blast",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,10,10,10,10,10,10,10,10,10,10,10,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "thousand_sons_silver_tower_melee",
+					effectiveness = GenerateUnitEffectiveness(7.3,7.2,7.0,6.8,6.6,6.8,6.4,5.5,6.8,7.0,5.9,7.0,5.8,4.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Thousand Sons Lord Of Change",
+			sbp_name = "thousand_sons_squad_loc",
+			ebp_name = "thousand_sons_loc",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "thousand_sons_melee_loc",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,10,10,10,10,10,10,10,10,10,10,10,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee
+				},
+			}
+		},
+		-- Dummy squads
+		{
+			name = "Dummy1",
+			sbp_name = "thousand_sons_squad_armn01",
+			ebp_name = "thousand_sons_armn_01",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy2",
+			sbp_name = "thousand_sons_squad_armn02",
+			ebp_name = "thousand_sons_armn_02",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy3",
+			sbp_name = "thousand_sons_squad_armn03",
+			ebp_name = "thousand_sons_armn_03",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy4",
+			sbp_name = "thousand_sons_squad_armn04",
+			ebp_name = "thousand_sons_armn_04",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy5",
+			sbp_name = "thousand_sons_squad_armn05",
+			ebp_name = "thousand_sons_armn_05",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy6",
+			sbp_name = "thousand_sons_squad_armn06",
+			ebp_name = "thousand_sons_armn_06",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy7",
+			sbp_name = "thousand_sons_squad_armn07",
+			ebp_name = "thousand_sons_armn_07",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy8",
+			sbp_name = "thousand_sons_squad_armn08",
+			ebp_name = "thousand_sons_armn_08",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy9",
+			sbp_name = "thousand_sons_squad_armn09",
+			ebp_name = "thousand_sons_armn_09",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy10",
+			sbp_name = "thousand_sons_squad_armn10",
+			ebp_name = "thousand_sons_armn_10",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy11",
+			sbp_name = "thousand_sons_squad_armn11",
+			ebp_name = "thousand_sons_armn_11",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy1p",
+			sbp_name = "thousand_sons_squad_armn01p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy2p",
+			sbp_name = "thousand_sons_squad_armn02p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy3p",
+			sbp_name = "thousand_sons_squad_armn03p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy4p",
+			sbp_name = "thousand_sons_squad_armn04p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy5p",
+			sbp_name = "thousand_sons_squad_armn05p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy6p",
+			sbp_name = "thousand_sons_squad_armn06p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy7p",
+			sbp_name = "thousand_sons_squad_armn07p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy8p",
+			sbp_name = "thousand_sons_squad_armn08p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy9p",
+			sbp_name = "thousand_sons_squad_armn09p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy10p",
+			sbp_name = "thousand_sons_squad_armn10p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Dummy11p",
+			sbp_name = "thousand_sons_squad_armn11p",
+			ebp_name = "thousand_sons_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0.0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		}
+}

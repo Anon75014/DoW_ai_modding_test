@@ -1,0 +1,62 @@
+----------------------------------------
+-- File: 'eaerthshakertactic.ai'
+-- Edited by Thudm2izer		@ 31.07.2024
+
+class 'GuardEarthshakerTactic' (BaseTactic)
+
+GuardEarthshaker = {}
+
+function GuardEarthshakerTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Guard Earthshaker Tactic")
+	self.Upgrade = 0
+end
+
+function GuardEarthshakerTactic:AutoBuildTurretAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+		end
+	end
+end
+
+function GuardEarthshakerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (GuardEarthshaker.dangerclose_id == nil) then
+		GuardEarthshaker.dangerclose_id = cpu_manager.stats:GetAbilityID("guard_buildings_dangerclose")
+	end
+
+	if (GuardEarthshaker.firestorm_id == nil) then
+		GuardEarthshaker.firestorm_id = cpu_manager.stats:GetAbilityID("guard_earthshaker_firestorm")
+	end
+end
+
+function GuardEarthshakerTactic:DoAbilities()
+
+	-- Build Firestorm Addon if possible
+	if (cpu_manager:GetTierLevel() >= 3) then 
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if (iRequisition >= 200 and iPower >= 200) then
+			self:AutoBuildTurretAddOn(self.Upgrade, self.base_ai:GetEntity():GetID())	-- Build the inferno addon if possible
+		end
+	end
+
+	-- Try to activate defensive measures
+	if (self.base_ai:CanDoAbility(GuardEarthshaker.dangerclose_id)) then
+
+		-- Enable Danger Close Protocols to increase defensive capabilities when enemies are near
+		Ability.DoAbilityArea( self.base_ai, GuardEarthshaker.dangerclose_id, Ability.Filters.CloseEnemy, 20, 1)
+	end
+
+	-- Check if I can launch Inferno Round
+	if self.base_ai:CanDoAbility(GuardEarthshaker.firestorm_id) then
+		if Ability.DoAbilityPos(self.base_ai, GuardEarthshaker.firestorm_id, Ability.Filters.CloseEnemy, 8)
+		or Ability.DoAbilityPos(self.base_ai, GuardEarthshaker.firestorm_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+			return
+		end
+	end
+end

@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'sisterofslaughtertactic.ai'
+-- Edited by Gambit	@ 24.06.2022
+
+class 'SisterOfSlaughterTactic' (ChaosMarineInfantryTactic)
+
+SisterOfSlaughter = {}
+
+function SisterOfSlaughterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Sister Of Slaughter Tactic")
+end
+
+function SisterOfSlaughterTactic:CanOnlyDecap()
+	return true
+end
+
+function SisterOfSlaughterTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SisterOfSlaughter.fanatism_id == nil) then
+		SisterOfSlaughter.fanatism_id = cpu_manager.stats:GetAbilityID( "chaos_sisters_fanatism" )	
+	end
+end
+
+function SisterOfSlaughterTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat() and self.squad_ai:GetHealthPercentage() > 0.4 and not self.squad_ai:IsCapturing()) then
+		if self.squad_ai:CanDoAbility( SisterOfSlaughter.fanatism_id ) then
+			self.squad_ai:DoSpecialAbility(SisterOfSlaughter.fanatism_id)
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	ChaosMarineInfantryTactic.DoAbilities(self)
+end

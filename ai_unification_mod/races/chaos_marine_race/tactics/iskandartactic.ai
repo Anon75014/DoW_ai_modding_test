@@ -1,0 +1,150 @@
+----------------------------------------
+-- File: 'iskandartactic.ai'
+-- Edited by LarkinVB   @ 16.08.2005
+-- Edited by Thudmeizer @ 19.09.2023
+
+class 'IskandarTactic' (ChaosMarineInfantryTactic)
+
+Iskandar = {}
+
+function IskandarTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Iskandar Tactic")
+	self.dance_time = 0
+end
+
+function IskandarTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function IskandarTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function IskandarTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Iskandar.kingbreaker == nil then
+		Iskandar.kingbreaker = cpu_manager.stats:GetAbilityID( "chaos_kingbreaker" )
+	end
+
+	if Iskandar.doombolt == nil then
+		Iskandar.doombolt = cpu_manager.stats:GetAbilityID( "chaos_iskandor_doombolt" )
+	end
+
+	if Iskandar.knight_id == nil then
+		Iskandar.knight_id = cpu_manager.stats:GetAbilityID( "chaos_ragged_knight" )	
+	end
+end
+
+function IskandarTactic:DoAbilities()
+
+	-- Check if we can use mark squad ability
+	if (self.squad_ai:CanDoAbility(Iskandar.kingbreaker) and self.squad_ai:IsInCombat()) then
+	
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(Iskandar.kingbreaker)
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_Commander) then
+					
+					-- Use kingbreaker ability on squad
+					self.squad_ai:DoSpecialAbilitySquad(Iskandar.kingbreaker, oSquad:GetSquad())
+				end
+			end	
+		end
+	end
+
+	if (self.squad_ai:CanDoAbility(Iskandar.knight_id) and self.squad_ai:IsInCombat()) then
+		Ability.DoAbilityArea(self.squad_ai, Iskandar.knight_id, Ability.Filters.CloseEnemy, 10, 4)
+	end
+	
+	if (self.squad_ai:CanDoAbility(Iskandar.doombolt) and self.squad_ai:IsInCombat()) then
+	
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(Iskandar.doombolt)
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_Commander or
+					eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+					-- Use doombolt ability on squad
+					self.squad_ai:DoSpecialAbilitySquad(Iskandar.doombolt, oSquad:GetSquad())
+				end
+			end	
+		end
+	end
+end
+
+function IskandarTactic:DoTimedSpecialAbilities()
+
+	-- Try to use detection ability
+   	if (self.squad_ai:CanDoAbility(Iskandar.knight_id)) then
+    
+    		-- Check for infiltrated enemy
+        	local oEnemy = Ability.Filters.CloseSquadEnemy(self.squad_ai:GetPosition(), 35, 1)
+        	if (oEnemy ~= nil) then
+
+        		-- Get distance to enemy unit
+           		local vSquadPos = self.squad_ai:GetPosition()
+            		local vEnemyPos = oEnemy:GetPosition()
+            		local iDistance = distance(vSquadPos, vEnemyPos)
+            
+            		-- If target is too far away launch auspex in range
+            		local vTargetPos = Vector3f(vSquadPos)
+            		local iRange = self.squad_ai:GetAbilityRange(Iskandar.knight_id)
+            		if (iDistance > iRange) then
+                		local fThrowFactor = iRange / iDistance
+                		vTargetPos.x = vTargetPos.x + (vEnemyPos.x - vSquadPos.x) * fThrowFactor
+                		vTargetPos.z = vTargetPos.z + (vEnemyPos.z - vSquadPos.z) * fThrowFactor
+            		else
+                		vTargetPos = Vector3f(vEnemyPos)
+            		end
+
+			self.squad_ai:DoSpecialAbilityPos(Iskandar.knight_id, vTargetPos)
+        	end
+	end
+end
+
+function IskandarTactic:Reinforce()
+
+	-- If there are no resources available, don't upgrade!
+	if not Tactic.Options.can_reinforce then
+		return
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- Always try for the actual leader first
+		if self.squad_ai:CanReinforce(false, 0) then
+			self.squad_ai:DoReinforce( false, 0 )
+			return
+		end
+
+		-- Desired order of reinforcing
+		if self.squad_ai:GetLeaderCount(0) < 1 then
+			if self.squad_ai:CanReinforce(true, 0) then
+				self.squad_ai:DoReinforce( true, 0 )
+			end
+		elseif self.squad_ai:GetLeaderCount(1) < 1 then
+			if self.squad_ai:CanReinforce(true, 1) then
+				self.squad_ai:DoReinforce( true, 1 )
+			end
+		end
+	end
+end
+

@@ -1,0 +1,15 @@
+----------------------------------------
+-- File: 'earthcastebuildertactic.ai'
+-- Edited by Thudmeizer   @ 27.09.2023
+
+class 'EarthCasteBuilderTactic' (EngineerTactic)
+
+function EarthCasteBuilderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Earth Caste Builder Tactic")
+end
+
+function EarthCasteBuilderTactic:IsAffectedByMorale()
+	return false
+end
+

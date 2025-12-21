@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'kriegbasilisktactic.ai'
+-- Edited by fuggles	@ 04.04.2022
+-- Edited by Thudmeizer	@ 25.04.2022
+-- Edited by Shepherd	@ 10.11.2025
+
+class 'KriegBasiliskTactic' (KriegVehicleTactic)
+
+KriegBasilisk = {}
+
+function KriegBasiliskTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Basilisk Tactic")
+end
+
+function KriegBasiliskTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegBasilisk.gas_id == nil) then
+		KriegBasilisk.shaker_id = cpu_manager.stats:GetAbilityID( "krieg_basilisk_gas_round" )
+	end
+
+	if (KriegBasilisk.shaker_id == nil) then
+		KriegBasilisk.shaker_id = cpu_manager.stats:GetAbilityID( "krieg_basilisk_thermobaric_round" )
+	end
+end
+
+function KriegBasiliskTactic:DoAbilities()
+
+	-- Check if I can launch Gas Round
+	if self.squad_ai:CanDoAbility(KriegBasilisk.gas_id) then
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if (Tactic.Options.can_reinforce and iRequisition > 500 and iPower > 500) then
+			if Ability.DoAbilityPos(self.squad_ai, KriegBasilisk.gas_id, Ability.Filters.CloseEnemy, 16)
+			or Ability.DoAbilityPos(self.squad_ai, KriegBasilisk.gas_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+	end
+
+	-- Check if I can launch Thermobaric Round
+	if self.squad_ai:CanDoAbility(KriegBasilisk.shaker_id) then
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if (Tactic.Options.can_reinforce and iRequisition > 500 and iPower > 500) then
+			if Ability.DoAbilityPos(self.squad_ai, KriegBasilisk.shaker_id, Ability.Filters.CloseEnemy, 16)
+			or Ability.DoAbilityPos(self.squad_ai, KriegBasilisk.shaker_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+	end
+
+	-- Call standard method
+	KriegVehicleTactic.DoAbilities(self)
+end

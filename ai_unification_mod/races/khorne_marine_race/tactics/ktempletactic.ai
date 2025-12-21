@@ -1,0 +1,64 @@
+----------------------------------------
+-- File: 'khTempletactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'khTempleTactic' (BaseTactic)
+
+khTemple = {}
+
+function khTempleTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Kh Temple Tactic")
+
+	self.m_bCanDeepStrikeTroops = true
+
+	self.Upgrade = math.random( 0, 1 )	  -- Choose either Storm (Raptors and Warp Talon squads) or Devastation Chambers (Teeth of Khorne and Khornate Havoc squads) addons
+end
+
+function khTempleTactic:AutoBuildTurretAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+		end
+	end
+end
+
+function khTempleTactic:InitAbilities()
+
+	if (khTemple.oblitMercenaries == nil) then
+		khTemple.oblitMercenaries = cpu_manager.stats:GetAddOnID( "khm_obliterator_mercer_addon" )
+	end
+end
+
+function khTempleTactic:DoAbilities()
+
+	-- We want builders to be DSed immediately, but obliterators hopefully, only in battle...
+	if BuildBaseStrategy:CountSquads("khm_squad_slave") < 2 then 
+		self:HQDeepStrikeImmediately()
+	elseif not self.base_ai:HasAddOn(khTemple.oblitMercenaries) then
+		self:HQDeepStrikeImmediately()
+	end
+
+	local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	-- Check resources before building addons
+    	if (iReq > 300 and iPow > 200) then
+		self:AutoBuildTurretAddOn(self.Upgrade, self.base_ai:GetEntity():GetID())	-- Build either Storm (Raptors and Warp Talon squads) or Devastation Chambers (Teeth of Khorne and Khornate Havoc squads) addons
+	end
+end
+
+function khTempleTactic:HQDeepStrikeImmediately()
+
+	local buildChannelHQ = build_manager:GetBuildChannelFromID(self.base_ai:GetEntity():GetID())
+	local id = buildChannelHQ:GetBlueprintID()
+	if buildChannelHQ ~= nil then
+		if (buildChannelHQ:CanDeepStrike() and cpu_manager:MilitaryDeepStrike(id)) then
+			buildChannelHQ:DoDeepStrikeToPos(self.base_ai:GetPosition())
+		end
+	end
+end
+

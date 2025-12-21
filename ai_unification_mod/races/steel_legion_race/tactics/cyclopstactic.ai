@@ -1,0 +1,49 @@
+----------------------------------------
+-- File: 'cyclopstactic.ai'
+-- Edited by Thudmeizer @ 04.10.2023
+
+class 'CyclopsTactic' (SteelLegionVehicleTactic)
+
+Cyclops = {}
+
+function CyclopsTactic:__init( squad_ai ) super( squad_ai )
+
+	   self:SetName("Cyclops Tactic")
+end
+
+function CyclopsTactic:AlwaysAttack()
+	return true
+end
+
+function CyclopsTactic:InitAbilities()
+
+	if (Cyclops.detonate_id == nil) then
+		Cyclops.detonate_id = cpu_manager.stats:GetAbilityID( "steel_legion_cyclops_detonation" )
+	end
+end
+
+function CyclopsTactic:DoAbilities()
+
+        --SelfUse: Explodes in Area causing massive damage
+ 	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea( self.squad_ai, Cyclops.detonate_id, Ability.Filters.CloseSquadEnemy, 10, 2 ) 
+		Ability.DoAbilityArea( self.squad_ai, Cyclops.detonate_id, Ability.Filters.CloseVehicleEnemy, 10, 1 )
+		Ability.DoAbilityArea( self.squad_ai, Cyclops.detonate_id, Ability.Filters.CloseMonsterEnemy, 10, 1 ) 
+	else
+		Ability.DoAbilityArea( self.squad_ai, Cyclops.detonate_id, Ability.Filters.CloseSquadEnemy, 10, 5 ) 
+		Ability.DoAbilityArea( self.squad_ai, Cyclops.detonate_id, Ability.Filters.CloseVehicleEnemy, 10, 2 )
+		Ability.DoAbilityArea( self.squad_ai, Cyclops.detonate_id, Ability.Filters.CloseMonsterEnemy, 10, 5 ) 
+	end
+end
+
+function CyclopsTactic:Update()
+
+	if self:IsComplete() then
+      		return
+   	end
+
+   	--state machine
+   	if not VehicleTactic.Update( self ) then
+	  	return
+   	end
+end

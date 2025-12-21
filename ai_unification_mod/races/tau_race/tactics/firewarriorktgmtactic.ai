@@ -1,0 +1,155 @@
+----------------------------------------
+-- File: 'firewarriorktgmtactic.ai'
+-- Edited by Thudmeizer @ 28.10.2023
+
+class 'FirewarriorKtgmTactic' (TauInfantryTactic)
+
+FirewarriorKtgm = {}
+
+function FirewarriorKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firewarrior Squad Kill Team Tactic")
+end
+
+function FirewarriorKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (FirewarriorKtgm.photon == nil) then
+		FirewarriorKtgm.photon = cpu_manager.stats:GetAbilityID( "tau_photon_grenade" )
+	end
+	if (FirewarriorKtgm.emp == nil) then
+		FirewarriorKtgm.emp = cpu_manager.stats:GetAbilityID( "tau_emp_grenade" )	
+	end
+	if (FirewarriorKtgm.shield == nil) then
+		FirewarriorKtgm.shield = cpu_manager.stats:GetAbilityID( "tau_personal_shield" )
+	end
+	if (FirewarriorKtgm.mark == nil) then
+		FirewarriorKtgm.mark = cpu_manager.stats:GetAbilityID( "tau_mark_squad" )
+	end
+	if (FirewarriorKtgm.run == nil) then
+		FirewarriorKtgm.run = cpu_manager.stats:GetAbilityID( "tau_all_run_ktgm" )
+	end
+end
+
+function FirewarriorKtgmTactic:DoAbilities()
+
+	-- Check if we can use Photon grenade
+	--Ability.DoAbilityTarget(self.squad_ai, FirewarriorKtgm.photon, Ability.Filters.CloseSquadEnemy, 1)
+
+	-- Check if we can use EMP grenade
+	--Ability.DoAbilityTarget(self.squad_ai, FirewarriorKtgm.emp, Ability.Filters.CloseVehicleEnemy, 1)
+
+	-- Check if we can use Personal shields if health is low
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.8) then
+		Ability.DoAbility( self.squad_ai, FirewarriorKtgm.shield, Ability.PredicateFilters.IsInCombat ) 
+	end
+
+	-- Check if we can use mark squad ability
+	if self.squad_ai:CanDoAbility(FirewarriorKtgm.mark) and self.squad_ai:IsInCombat() then
+	
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(FirewarriorKtgm.mark)
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+					eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+					eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+					-- Use mark ability on squad
+					self.squad_ai:DoSpecialAbilitySquad(FirewarriorKtgm.mark, oSquad:GetSquad())
+				end
+			end	
+		end
+	end
+	
+	-- Check if we can run but only out of combat
+	if (not self.squad_ai:IsInCombat()) then
+
+		if (self.squad_ai:CanDoAbility(FirewarriorKtgm.run)) then
+			self.squad_ai:DoSpecialAbility(FirewarriorKtgm.run)
+		end
+	end
+
+	-- Try to throw Photon Grenade (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(FirewarriorKtgm.photon)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(FirewarriorKtgm.photon)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+		if (oUnit ~= nil) then
+			--print("Using Photon Grenade Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(FirewarriorKtgm.photon, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Check if we can use EMP grenade (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(FirewarriorKtgm.emp)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(FirewarriorKtgm.emp)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using EMP Grenade Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(FirewarriorKtgm.emp, oUnit:GetSquad())
+			return
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function FirewarriorKtgmTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local ShasuiIndex = 0
+		local PathfinderIndex = 1
+		local BreacherIndex = 2
+		local ShieldIndex = 3
+
+		local numShasuis = self.squad_ai:GetLeaderCount( ShasuiIndex )
+		local numPathfinders = self.squad_ai:GetLeaderCount( PathfinderIndex )	
+		local numBreachers = self.squad_ai:GetLeaderCount( BreacherIndex )	
+		local numShields = self.squad_ai:GetLeaderCount( ShieldIndex )	
+
+		-- Desired number of each leader type
+		local desiredShasuis = math.random(0,2)
+		local desiredPathfinders = math.random(0,2) 
+		local desiredBreachers = math.random(0,2) 
+		local desiredShields = math.random(0,2) 
+
+		-- Desired order of reinforcing
+		if (numShasuis < desiredShasuis) then
+			if (self.squad_ai:CanReinforce( true, ShasuiIndex )) then
+				self.squad_ai:DoReinforce( true, ShasuiIndex )
+			end
+		elseif (numPathfinders < desiredPathfinders) then
+			if (self.squad_ai:CanReinforce( true, PathfinderIndex )) then
+				self.squad_ai:DoReinforce( true, PathfinderIndex )
+			end
+		elseif (numBreachers < desiredBreachers) then
+			if (self.squad_ai:CanReinforce( true, BreacherIndex )) then
+				self.squad_ai:DoReinforce( true, BreacherIndex )
+			end
+		elseif (numShields < desiredShields) then
+			if (self.squad_ai:CanReinforce( true, ShieldIndex )) then
+				self.squad_ai:DoReinforce( true, ShieldIndex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end

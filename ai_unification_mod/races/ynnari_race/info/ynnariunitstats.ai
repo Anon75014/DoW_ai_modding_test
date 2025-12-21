@@ -1,0 +1,1280 @@
+----------------------------------------
+-- File: 'ynnariunitstats.ai'
+-- Edited by fuggles	@ 20.06.2022
+-- Edited by thudmeizer @ 13.03.2025
+
+-- Skirmish
+UnitStrengths.ynnari_squad_bonesinger = 0
+UnitStrengths.ynnari_squad_chorus = 0
+UnitStrengths.ynnari_squad_guardian = 30
+UnitStrengths.ynnari_squad_mime = 30
+UnitStrengths.ynnari_squad_mime_hg = 45
+UnitStrengths.ynnari_squad_troupe = 45
+UnitStrengths.ynnari_squad_girax = 50
+UnitStrengths.ynnari_squad_warrior = 50
+UnitStrengths.ynnari_squad_rangers = 50
+UnitStrengths.ynnari_squad_scorpions = 55
+UnitStrengths.ynnari_squad_scorpions_hg = 55
+UnitStrengths.ynnari_squad_trueborn = 55
+UnitStrengths.ynnari_squad_aspect_hawk = 60
+UnitStrengths.ynnari_squad_dire_avengers = 60
+UnitStrengths.ynnari_squad_dire_avengers_bonus = 60
+UnitStrengths.ynnari_squad_dire_avengers_hg = 60
+UnitStrengths.ynnari_squad_hellion = 65
+UnitStrengths.ynnari_squad_library_guardians = 90
+UnitStrengths.ynnari_squad_harlequin_jetbikes = 90
+UnitStrengths.ynnari_squad_wraithblade = 100
+UnitStrengths.ynnari_squad_wraithguard = 100
+UnitStrengths.ynnari_squad_wraithseer = 200
+UnitStrengths.ynnari_squad_wych = 120
+UnitStrengths.ynnari_squad_wych_hg = 120
+UnitStrengths.ynnari_squad_death_jesters_hg = 145
+UnitStrengths.ynnari_squad_death_jesters = 145
+UnitStrengths.ynnari_squad_corsairs_heavy_weapons = 145
+UnitStrengths.ynnari_squad_yvainne = 200
+UnitStrengths.ynnari_squad_visarch = 300
+UnitStrengths.ynnari_squad_ynncarnate = 400
+UnitStrengths.ynnari_squad_vehicle_war_walker = 160
+UnitStrengths.ynnari_squad_venom = 200
+UnitStrengths.ynnari_squad_raider = 200
+UnitStrengths.ynnari_squad_talos = 260
+UnitStrengths.ynnari_squad_wave_serpent = 310
+UnitStrengths.ynnari_squad_raven = 350
+UnitStrengths.ynnari_squad_firestorm_bonus = 400
+UnitStrengths.ynnari_squad_vehicle_hornet = 450
+UnitStrengths.ynnari_squad_vehicle_lynx = 650
+UnitStrengths.ynnari_squad_vehicle_night_spinner = 400
+UnitStrengths.ynnari_squad_ravager = 465
+UnitStrengths.ynnari_squad_razorwing = 500
+UnitStrengths.ynnari_squad_mocking_bird = 500
+UnitStrengths.ynnari_squad_harlequin_wraith_lord = 500
+UnitStrengths.ynnari_squad_spirit_walker = 800
+UnitStrengths.ynnari_squad_girax_giant = 1500
+UnitStrengths.ynnari_squad_void_dragon_phoenix_titan = 1800
+UnitStrengths.ynnari_squad_phantom_titan = 2400 
+
+LeaderStrengths.ynnari_guardian_squad = 75
+LeaderStrengths.ynnari_squad_scorpions = 75
+LeaderStrengths.ynnari_squad_aspect_hawk = 75
+LeaderStrengths.ynnari_squad_warrior = 75
+LeaderStrengths.ynnari_squad_hellion = 75
+LeaderStrengths.ynnari_squad_wych = 75
+LeaderStrengths.ynnari_squad_mime = 75
+LeaderStrengths.ynnari_squad_troupe = 75
+LeaderStrengths.ynnari_squad_trueborn = 75
+LeaderStrengths.ynnari_squad_wraithblade = 75
+LeaderStrengths.ynnari_squad_wraithguard = 75
+
+Attachments.ynnari_squad_yvainne = { "ynnari_squad_girax", "ynnari_squad_visarch" }
+
+YnnariUnitStats =
+{
+	race = "ynnari_race",
+	{
+		name = "Bonesinger",
+		sbp_name = "ynnari_squad_bonesinger",
+		ebp_name = "ynnari_bonesinger",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0,
+		potential =
+		{
+			{
+				name = "ynnari_sword_bonesinger",
+				effectiveness = GenerateUnitEffectiveness(3.4,3.9,3.1,2.4,0.0,0.0,0.0,0.0,2.2,0.0,1.1,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Guardian",
+		sbp_name = "ynnari_squad_guardian",
+		ebp_name = "ynnari_guardian",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_pistol",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_flamer_guardian",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,3.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_fusion_gun_guardian",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_chainsword_guardian",
+				effectiveness = GenerateUnitEffectiveness(2.2,2.5,2.5,1.7,0.0,0.0,0.0,0.0,1.7,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Ranger",
+		sbp_name = "ynnari_squad_rangers",
+		ebp_name = "ynnari_rangers",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "ynnari_long_rifle",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_long_rifle_tier_2",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,3.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_long_rifle_tier_3",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,3.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_knife_ranger",
+				effectiveness = GenerateUnitEffectiveness(2.8,3.1,2.0,2.2,0.0,0.0,0.0,0.0,2.2,0.0,1.4,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Mimes",
+		sbp_name = "ynnari_squad_mime",
+		ebp_name = "ynnari_mime",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 3,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_pistol_mime",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,math.random(4*10,5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_neuro_disruptor_mime",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,3.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_fusion_gun_mime",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_chainsword_mime",
+				effectiveness = GenerateUnitEffectiveness(3,3,3,3,3,3,3,2,2,2,2.5,2,2,2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_harlequin_kiss_mime",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,math.random(2.5*10,4*10)/10,3.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Master Mime",
+		sbp_name = "ynnari_squad_mime_hg",
+		ebp_name = "ynnari_master_mime_hg",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 4,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_pistol_leader",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_harlequin_power_blade_leader",
+				effectiveness = GenerateUnitEffectiveness(2.0,2.0,3.0,3.0,3.0,1.0,2.0,1.0,1.0,3.0,1.0,1.0,1.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+        	}
+	},
+	{
+		name = "Warrior",
+		sbp_name = "ynnari_squad_warrior",
+		ebp_name = "ynnari_infantry_warrior",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "ynnari_splinter_rifle_warrior",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_shredder_rifle_warrior",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dark_matter_blaster_warrior",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_poisoned_blade_warrior",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_knife_warrior",
+				effectiveness = GenerateUnitEffectiveness(3.4,3.4,3.4,2.8,2.0,0.7,0.3,0.2,1.4,0.8,2.0,1.6,0.7,0.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Swooping Hawk",
+		sbp_name = "ynnari_squad_aspect_hawk",
+		ebp_name = "ynnari_aspect_hawk",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_lasblaster_hawk",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_knife_aspect_warrior",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.5,2.8,3.0,0.0,0.0,0.0,0.0,3.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Dire Avengers",
+		sbp_name = "ynnari_squad_dire_avengers",
+		ebp_name = "ynnari_aspect_avenger",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_catapult_dire_avenger",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_knife_aspect_warrior",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.5,2.8,3.0,0.0,0.0,0.0,0.0,3.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Dire Avengers Exarch",
+		sbp_name = "ynnari_squad_dire_avengers_hg",
+		ebp_name = "ynnari_exarch_avenger_hg",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_catapult_dire_avenger_exarch",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_knife_aspect_warrior",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.5,2.8,3.0,0.0,0.0,0.0,0.0,3.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Dire Avengers",
+		sbp_name = "ynnari_squad_dire_avengers_bonus",
+		ebp_name = "ynnari_aspect_avenger",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_catapult_dire_avenger",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_knife_aspect_warrior",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.5,2.8,3.0,0.0,0.0,0.0,0.0,3.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Striking Scorpion",
+		sbp_name = "ynnari_squad_scorpions",
+		ebp_name = "ynnari_aspect_scorpion",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_pistol_aspect_warrior",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_chainsword_scorpion",
+				effectiveness = GenerateUnitEffectiveness(5.3,5.3,5.1,5.1,5.0,4.3,3.4,0.0,4.6,2.3,2.9,3.4,3.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Striking Scorpion Exarch",
+		sbp_name = "ynnari_squad_scorpions_hg",
+		ebp_name = "ynnari_exarch_scorpion_hg",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_pistol_aspect_warrior",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_power_claw",
+				effectiveness = GenerateUnitEffectiveness(7.3,5.3,5.1,5.1,5.0,4.3,3.4,0.0,4.6,2.3,2.9,3.4,3.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_biting_blade",
+				effectiveness = GenerateUnitEffectiveness(6.3,6.3,5.1,5.1,5.0,4.3,3.4,0.0,4.6,2.3,2.9,3.4,3.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Troupe",
+		sbp_name = "ynnari_squad_troupe",
+		ebp_name = "ynnari_troupe",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_harlequin_shuriken_pistol_troupe",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_harlequin_chainsword_troupe",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.1,2.1,2.1,2.1,5.0,5.0,5.0,0.5,0.5,3.1,5.0,5.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_harlequin_kiss_troupe",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Jetbikes",
+		sbp_name = "ynnari_squad_harlequin_jetbikes",
+		ebp_name = "ynnari_harlequin_jetbikes",
+		class = UnitStatsAI.UC_HeavyInfantryMed, 
+		rating = 5,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_catapult_jetbike_l",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_shuriken_catapult_jetbike_r",
+				effectiveness = GenerateUnitEffectiveness(4,4,4,4,4,4,4,4,4,4,4,4,4,4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_power_blade_jetbike",
+				effectiveness = GenerateUnitEffectiveness(0,8,0,8,0,8,0,8,0,8,0,8,0,0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Trueborn",
+		sbp_name = "ynnari_squad_trueborn",
+		ebp_name = "ynnari_infantry_trueborn",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_splinter_rifle_trueborn",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_splinter_cannon_trueborn",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dark_lance_trueborn",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_shredder_rifle_trueborn",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dark_matter_blaster_trueborn",
+				effectiveness = GenerateUnitEffectiveness(5.7,5.2,5.1,5.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_poisoned_blade_scourge",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_knife_scourge",
+				effectiveness = GenerateUnitEffectiveness(3.4,3.4,3.4,2.8,2.0,0.7,0.3,0.2,1.4,0.8,2.0,1.6,0.7,0.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Hellions",
+		sbp_name = "ynnari_squad_hellion",
+		ebp_name = "ynnari_infantry_hellion",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "ynnari_hellglaive_shooter_hellion",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_hellglaive_hellion",
+				effectiveness = GenerateUnitEffectiveness(3.8,3.8,3.8,4.9,3.6,1.0,0.3,0.3,2.8,1.9,3.6,1.7,0.8,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_poisoned_blade_hellion",
+				effectiveness = GenerateUnitEffectiveness(8.2,8.9,8.2,8.0,8.5,8.9,8.0,8.3,8.5,8.3,8.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Death Jester",
+		sbp_name = "ynnari_squad_death_jesters",
+		ebp_name = "ynnari_death_jesters",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 6,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_cannon_death_jester",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_brightlance_death_jester",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_power_blade_death_jester",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.1,5.1,3.3,2.1,6.6,7.0,7.9,3.3,3.3,2.1,5.0,5.0,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Death Jester Mortis",
+		sbp_name = "ynnari_squad_death_jesters_hg",
+		ebp_name = "ynnari_death_jesters_hg",
+		class = UnitStatsAI.UC_Commander,
+		rating = 6,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_cannon_death_jester",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_brightlance_death_jester",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.1,5.1,3.3,2.1,6.6,7.0,7.9,3.3,3.3,2.1,5.0,5.0,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Infantry Wych",
+		sbp_name = "ynnari_squad_wych",
+		ebp_name = "ynnari_infantry_wych",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "ynnari_splinter_pistol_wych",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_impaler_wych",
+				effectiveness = GenerateUnitEffectiveness(4.3,4.3,4.3,4.3,4.3,0.6,0.3,0.2,5.4,5.1,9.5,4.5,0.6,0.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_poisoned_blade_wych",
+				effectiveness = GenerateUnitEffectiveness(8.2,8.9,8.2,8.0,8.5,8.9,8.0,8.3,8.5,8.3,8.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Wych Succubus",
+		sbp_name = "ynnari_squad_wych_hg",
+		ebp_name = "ynnari_infantry_wych_leader_hg",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "ynnari_splinter_pistol_wych_succubus",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_destructor_wych_leader",
+				effectiveness = GenerateUnitEffectiveness(3.9,3.9,3.9,3.9,3.4,0.4,0.2,0.5,0.9,0.5,5.2,3.0,0.4,0.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_hydraknife_wych_succubus",
+				effectiveness = GenerateUnitEffectiveness(4.3,4.3,4.3,4.3,4.3,0.6,0.3,0.2,5.4,5.1,9.5,4.5,0.6,0.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_power_scythe_wych_leader",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Heavy Corsairs",
+		sbp_name = "ynnari_squad_corsairs_heavy_weapons",
+		ebp_name = "ynnari_corsairs_heavy_weapons",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_catapult_corsairs",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_starcannon_corsairs",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_corsairs",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_corsairs",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_knife_corsairs",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Shadow Dancers",
+		sbp_name = "ynnari_squad_library_guardians",
+		ebp_name = "ynnari_library_guardians",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_harlequin_shuriken_pistol_guardian",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_fusion_pistol_guardian",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_power_blade_guardian",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_harlequin_kiss_guardian",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Wraithguard",
+		sbp_name = "ynnari_squad_wraithguard",
+		ebp_name = "ynnari_wraithguard",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_wraithguard_melee",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_brightlance_wraithguard",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_starcannon_wraithguard",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_shadow_weaver_wraithguard",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_vibrocannon_wraithguard",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_wraithguard_melee",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Wraithblade",
+		sbp_name = "ynnari_squad_wraithblade",
+		ebp_name = "ynnari_wraithblade",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_wraithblade_sword",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_wraithblade_sword_dual",
+				effectiveness = GenerateUnitEffectiveness(8.2,8.9,8.2,8.0,8.5,8.9,8.0,8.3,8.5,8.3,8.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Yvainne",
+		sbp_name = "ynnari_squad_yvainne",
+		ebp_name = "ynnari_yvraine",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_pistol_farseer",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_witchblade_farseer",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.9,6.2,7.0,6.5,4.9,5.0,7.3,6.5,7.3,7.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Visarch",
+		sbp_name = "ynnari_squad_visarch",
+		ebp_name = "ynnari_leader_visarch",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_splinter_rifle_archon",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "ynnari_destructor_archon",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.6,3.4,3.7,3.7,3.9,2.9,0.0,3.6,2.2,3.6,3.4,2.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_sword_archon",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.2,7.0,7.5,5.9,6.0,8.3,7.5,8.3,8.0,6.6,4.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_power_scythe_archon",
+				effectiveness = GenerateUnitEffectiveness(8.2,8.9,8.2,8.0,8.5,6.9,7.0,9.3,8.5,9.3,9.0,7.6,5.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_agonizer_archon",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.9,6.2,7.0,6.5,4.9,5.0,7.3,6.5,7.3,7.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_poisoned_blade_archon",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.9,6.2,7.0,6.5,4.9,5.0,7.3,6.5,7.3,7.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Gyrinx",
+		sbp_name = "ynnari_squad_girax",
+		ebp_name = "ynnari_leader_gyrinx",
+		class = UnitStatsAI.UC_MonsterHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Titanic Gyrinx",
+		sbp_name = "ynnari_squad_girax_giant",
+		ebp_name = "ynnari_leader_giant_gyrinx",
+		class = UnitStatsAI.UC_MonsterHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "ynnari_giant_gyrnix_melee",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Yncarnate",
+		sbp_name = "ynnari_squad_ynncarnate",
+		ebp_name = "ynnari_yncarnate",
+		class = UnitStatsAI.UC_MonsterHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "ynnari_wailing_doom",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "ynnari_chrone_sword",
+				effectiveness = GenerateUnitEffectiveness(9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5,9.5),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Venom",
+		sbp_name = "ynnari_squad_venom",
+		ebp_name = "ynnari_venom",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_cannon_main_venom",
+				effectiveness = GenerateUnitEffectiveness(5,6,5,6,5,6,5,6,5,6,5,6,5,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Talos",
+		sbp_name = "ynnari_squad_talos",
+		ebp_name = "ynnari_vehicle_talos",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_talos_sting",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.8,5.7,5.9,3.7,1.0,0.6,0.3,2.9,1.9,3.7,1.7,0.8,0.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_talos_claws",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,6.0,6.0,8.1,6.0,8.9,6.0,6.0,6.0,8.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Raven",
+		sbp_name = "ynnari_squad_raven",
+		ebp_name = "ynnari_vehicle_raven",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_splinter_cannon_raven",
+				effectiveness = GenerateUnitEffectiveness(5.8,5.7,5.8,6.1,3.6,1.1,0.5,0.4,2.8,2.0,3.6,1.7,0.8,0.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dark_lance_raven",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,6.0,6.0,8.1,6.0,8.9,6.0,6.0,6.0,8.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dark_lance_raven_2",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,6.0,6.0,8.1,6.0,8.9,6.0,6.0,6.0,8.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Razorwing",
+		sbp_name = "ynnari_squad_razorwing",
+		ebp_name = "ynnari_vehicle_razorwing",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_dark_lance_dual_razorwing",
+				effectiveness = GenerateUnitEffectiveness(5.8,5.7,5.8,6.1,3.6,1.1,0.5,0.4,2.8,2.0,3.6,1.7,0.8,0.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_splinter_cannon_razorwing",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,6.0,6.0,8.1,6.0,8.9,6.0,6.0,6.0,8.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "War Walker",
+		sbp_name = "ynnari_squad_vehicle_war_walker",
+		ebp_name = "ynnari_vehicle_war_walker",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_cannon_walker",
+				effectiveness = GenerateUnitEffectiveness(6,5,6,5,6,5,6,5,6,5,6,5,6,5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_scatter_laser_walker_left",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_starcannon_walker_left",
+				effectiveness = GenerateUnitEffectiveness(10.0,10.0,10.0,10.0,10.0,1.6,0.8,0.0,10.0,9.7,10.0,0.1,0.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_walker_left",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_walker_left",
+				effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,9.0,9.0,9.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_scatter_laser_walker_right",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_starcannon_walker_right",
+				effectiveness = GenerateUnitEffectiveness(10.0,10.0,10.0,10.0,10.0,1.6,0.8,0.0,10.0,9.7,10.0,0.1,0.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_walker_right",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_walker_right",
+				effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,9.0,9.0,9.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Hornet",
+		sbp_name = "ynnari_squad_vehicle_hornet",
+		ebp_name = "ynnari_vehicle_hornet",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_catapult_hornet_tank",
+				effectiveness = GenerateUnitEffectiveness(6,5,6,5,6,5,6,5,6,5,6,5,6,5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_scatter_laser_hornet_grav_tank",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_scatter_laser_hornet_left",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_starcannon_hornet_left",
+				effectiveness = GenerateUnitEffectiveness(10.0,10.0,10.0,10.0,10.0,1.6,0.8,0.0,10.0,9.7,10.0,0.1,0.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_hornet_left",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_hornet_left",
+				effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,9.0,9.0,9.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_scatter_laser_hornet_right",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_starcannon_hornet_right",
+				effectiveness = GenerateUnitEffectiveness(10.0,10.0,10.0,10.0,10.0,1.6,0.8,0.0,10.0,9.7,10.0,0.1,0.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_hornet_right",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_hornet_right",
+				effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,9.0,9.0,9.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_hornet_right",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_pulse_laser_hornet_right",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_pulse_laser_hornet_left",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(6*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Lynx",
+		sbp_name = "ynnari_squad_vehicle_lynx",
+		ebp_name = "ynnari_vehicle_lynx",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "ynnari_sonic_lance_lynx",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_shuriken_cannon_lynx",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.5,2.8,3.0,0.0,0.0,0.0,0.0,3.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+
+		}
+	},
+	{
+		name = "Night Spinner",
+		sbp_name = "ynnari_squad_vehicle_night_spinner",
+		ebp_name = "ynnari_vehicle_night_spinner",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_nightspinner",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_shuriken_cannon_grav_tank",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.5,2.8,3.0,0.0,0.0,0.0,0.0,3.0,0.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_shuriken_catapult_grav_tank",
+				effectiveness = GenerateUnitEffectiveness(4.1,5.2,5.0,5.3,4.5,8.5,9.6,7.6,6.1,6.5,4.4,6.2,4.5,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Firestorm",
+		sbp_name = "ynnari_squad_firestorm_bonus",
+		ebp_name = "ynnari_firestorm",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_shuriken_cannon_firestorm",
+				effectiveness = GenerateUnitEffectiveness(7.2,7.9,7.7,7.5,7.3,6.2,6.1,4.8,7.4,4.4,4.0,7.7,5.9,5.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_scatter_laser_firestorm",
+				effectiveness = GenerateUnitEffectiveness(4.1,5.2,5.0,5.3,4.5,8.5,9.6,7.6,6.1,6.5,4.4,6.2,4.5,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Ravager",
+		sbp_name = "ynnari_squad_ravager",
+		ebp_name = "ynnari_vehicle_ravager",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_dark_lance_ravager",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.1,6.1,6.2,5.2,8.0,8.0,8.4,7.4,5.2,4.1,7.2,4.8,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_disintegrator_ravager",
+				effectiveness = GenerateUnitEffectiveness(8.0,8.0,8.0,8.0,8.0,4.2,2.1,1.7,8.0,8.9,7.0,5.2,2.1,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_disintegrator_ravager_2",
+				effectiveness = GenerateUnitEffectiveness(8.0,8.0,8.0,8.0,8.0,4.2,2.1,1.7,8.0,8.9,7.0,5.2,2.1,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_disintegrator_ravager_3",
+				effectiveness = GenerateUnitEffectiveness(8.0,8.0,8.0,8.0,8.0,4.2,2.1,1.7,8.0,8.9,7.0,5.2,2.1,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Wraithseer",
+		sbp_name = "ynnari_squad_wraithseer",
+		ebp_name = "ynnari_wraithseer",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_dcannon_wraithguard",
+				effectiveness = GenerateUnitEffectiveness(1.2,1.2,1.2,1.2,1.2,9.6,8.9,4.4,1.2,2.0,1.2,6.0,3.4,2.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_witchblade_farseer",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.9,6.2,7.0,6.5,4.9,5.0,7.3,6.5,7.3,7.0,5.6,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+
+		}
+	},
+	{
+		name = "Harlequin Wraith Walker",
+		sbp_name = "ynnari_squad_harlequin_wraith_lord",
+		ebp_name = "ynnari_harlequin_wraith_lord",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "ynnari_dummy_weapon",
+				effectiveness = GenerateUnitEffectiveness(6,5,6,5,6,5,6,5,6,5,6,5,6,5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_autocannon_wraithlord",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,6,6,6,9,9,9,6,6,6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_brightlance_wraithlord",
+				effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,9.0,9.0,9.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_wraithlord_close_combat",
+				effectiveness = GenerateUnitEffectiveness(4,4,4,4,4,5,5,5,4,4,4,5,5,5,5.0,5.0,5.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Mocking Bird",
+		sbp_name = "ynnari_squad_mocking_bird",
+		ebp_name = "ynnari_mocking_bird",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 9,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_shuriken_cannon_mocking_bird",
+				effectiveness = GenerateUnitEffectiveness(7,8,7,8,7,8,7,8,7,8,7,8,7,8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_vibro_cannon_mocking_bird",
+				effectiveness = GenerateUnitEffectiveness(8,9,8,9,8,9,8,9,8,9,8,9,8,9,8.9,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_missile_launcher_mocking_bird",
+				effectiveness = GenerateUnitEffectiveness(6,6,6,6,6,9,9,9,6,6,6,9,9,9,9.0,9.0,9.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Spirit Walker",
+		sbp_name = "ynnari_squad_spirit_walker",
+		ebp_name = "ynnari_spirit_walker",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential = 
+		{
+			{
+				name = "ynnari_harlequin_missile_launcher_mocking_bird",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_harlequin_rapier",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,9,9,9,9,9,9,9,9,9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Phantom Titan",
+		sbp_name = "ynnari_squad_phantom_titan",
+		ebp_name = "ynnari_phantom_titan",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "ynnari_dcannon_phantom_left",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dcannon_phantom_right",
+				effectiveness = GenerateUnitEffectiveness(7,7,6,6,8,6,5,6,7,4.0,5.3,4.7,4.2,0.0,0.0,5.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_phantom_left",
+				effectiveness = GenerateUnitEffectiveness(7,7,6,6,8,6,5,6,7,4.0,5.3,4.7,4.2,0.0,0.0,5.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_missile_launcher_phantom_right",
+				effectiveness = GenerateUnitEffectiveness(7,7,6,6,8,6,5,6,7,4.0,5.3,4.7,4.2,0.0,0.0,5.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Void Dragon Phoenix",
+		sbp_name = "ynnari_squad_void_dragon_phoenix_titan",
+		ebp_name = "ynnari_vehicle_void_dragon_phoenix_titan",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "ynnari_dark_lance_void_dragon",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_thermal_lance_void_dragon_left",
+				effectiveness = GenerateUnitEffectiveness(7,7,6,6,8,6,5,6,7,4.0,5.3,4.7,4.2,0.0,0.0,5.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_thermal_lance_void_dragon_right",
+				effectiveness = GenerateUnitEffectiveness(7,7,6,6,8,6,5,6,7,4.0,5.3,4.7,4.2,0.0,0.0,5.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "ynnari_dark_matter_blaster_void_dragon",
+				effectiveness = GenerateUnitEffectiveness(7,7,6,6,8,6,5,6,7,4.0,5.3,4.7,4.2,0.0,0.0,5.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+}

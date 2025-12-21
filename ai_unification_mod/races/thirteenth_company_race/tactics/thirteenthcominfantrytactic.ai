@@ -1,0 +1,190 @@
+----------------------------------------
+-- File: '13thcominfantrytactic.ai'
+-- Edited by Thudmeizer		@ 21.06.2023
+
+class 'ThirteenthcomInfantryTactic' (InfantryTactic)
+
+ThirteenthcomInfantryAbility =
+{
+    FragBombID = cpu_manager.stats:GetAbilityID("thirteenthcom_frag_grenades")
+    ,MeltaBombID = cpu_manager.stats:GetAbilityID("thirteenthcom_melta_bombs")
+}
+
+function ThirteenthcomInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thirteenthcom Infantry Tactic")
+
+	-- Set infantry options
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "thirteenthcom_squad_grey_slayer" or
+		sSquadName == "thirteenthcom_squad_storm_claws" or
+		sSquadName == "thirteenthcom_squad_long_fangs" or
+		sSquadName == "thirteenthcom_squad_rune_priest" or
+		sSquadName == "thirteenthcom_squad_wolf_lord" or
+		sSquadName == "thirteenthcom_squad_wolf_priest" or
+		sSquadName == "thirteenthcom_squad_terminator_lord" or
+		sSquadName == "thirteenthcom_squad_wulfen_lord" or
+		sSquadName == "thirteenthcom_squad_veteraners" or
+		sSquadName == "thirteenthcom_squad_deathsworn" or
+		sSquadName == "thirteenthcom_squad_wulfen_marine") then
+		
+		-- Squads are able to deepstrike and are transportable
+		self.m_iTransportable = 1	-- Rhino
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("thirteenthcom_hq")
+
+	 elseif (sSquadName == "thirteenthcom_squad_leman_russ") then
+
+		-- Squads are able to deepstrike
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("thirteenthcom_hq")
+
+	 elseif (sSquadName == "thirteenthcom_squad_terminator" or
+		sSquadName == "thirteenthcom_squad_terminator_storm_claws") then
+		
+		-- Squads are able to deepstrike	
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("thirteenthcom_barracks")
+		self.m_iTransportable = 2	-- Land Raider
+	end
+
+    self.fragBombLastUse = g_iGMT
+    self.meltaBombLastUse = g_iGMT
+end
+
+function ThirteenthcomInfantryTactic:AddTargetAbilities()
+	--table.insert(InfantryTactic.TargetAbilities, { nil, "thirteenthcom_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
+	--table.insert(InfantryTactic.TargetAbilities, { nil, "thirteenthcom_melta_bombs", Ability.Filters.CloseVehicleEnemy, 1, 0 })
+	table.insert(InfantryTactic.TargetAbilities, { nil, "thirteenthcom_stasis_bombs", Ability.Filters.CloseSquadEnemy, 1, 0 })
+end
+
+function ThirteenthcomInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "thirteenthcom_squad_wolf_lord", true })
+	table.insert(self.commander, { "thirteenthcom_squad_rune_priest", false })
+	table.insert(self.commander, { "thirteenthcom_squad_wolf_priest", false })
+	table.insert(self.commander, { "thirteenthcom_squad_wulfen_lord", false })
+	table.insert(self.commander, { "thirteenthcom_squad_terminator_lord", false })
+end
+
+function ThirteenthcomInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+
+		if (self.squad_ai:HasSquadAttached("thirteenthcom_squad_wolf_lord")) then
+			WolfLordTactic.InitAbilities( self )
+			WolfLordTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thirteenthcom_squad_wulfen_lord")) then
+			WulfenLordTactic.InitAbilities( self )
+			WulfenLordTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thirteenthcom_squad_rune_priest")) then
+			RunePriestTactic.InitAbilities( self )
+			RunePriestTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thirteenthcom_squad_wolf_priest")) then
+			WolfPriestTactic.InitAbilities( self )
+			WolfPriestTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thirteenthcom_squad_terminator_lord")) then
+			TerminatorLordTactic.InitAbilities( self )
+			TerminatorLordTactic.DoAbilities( self )
+		end
+	end
+
+    self:DoThrowGrenades()
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function ThirteenthcomInfantryTactic:CheckForDetach()
+
+	if (not self.squad_ai:IsInCombat() and not self.squad_ai:WasRecentlyHurt()) then
+	  
+		-- Detach hero from weak squad, perhaps we can find a better one 
+		if (self.squad_ai:HasSquadAttached( "thirteenthcom_squad_wolf_lord" ) or
+                    self.squad_ai:HasSquadAttached( "thirteenthcom_squad_rune_priest" ) or
+                    self.squad_ai:HasSquadAttached( "thirteenthcom_squad_wolf_priest" ) or
+                    self.squad_ai:HasSquadAttached( "thirteenthcom_squad_wulfen_lord" ) or
+                    self.squad_ai:HasSquadAttached( "thirteenthcom_squad_terminator_lord" )) then	
+		 
+			if (self.squad_ai:GetTactic():GetUnitStrength() < 200) then
+				self.squad_ai:DoDetachSquad()
+				self.squad_ai:DoSetDefaultMeleeStance()
+			end
+		end
+	end
+	
+	-- Call basic detach method
+	InfantryTactic.CheckForDetach(self)
+end
+
+function ThirteenthcomInfantryTactic:DoThrowGrenades()
+
+    if self.squad_ai:IsInCombat() then
+        
+        if ( g_iGMT > self.fragBombLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, ThirteenthcomInfantryAbility.FragBombID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, ThirteenthcomInfantryAbility.FragBombID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, ThirteenthcomInfantryAbility.FragBombID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.fragBombLastUse = g_iGMT 
+            end
+        end
+    
+        if ( g_iGMT > self.meltaBombLastUse + 65 ) then        
+            if Ability.DoAbilityTarget( self.squad_ai, ThirteenthcomInfantryAbility.MeltaBombID, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTargetEntity( self.squad_ai, ThirteenthcomInfantryAbility.MeltaBombID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            then
+                self.meltaBombLastUse = g_iGMT
+            end
+        end    
+    end
+end
+
+function ThirteenthcomInfantryTactic:CheckForBroken()
+
+	if (self.squad_ai:IsBroken()) then
+	
+		-- Check if I can repair my morale
+		local thirteenthrally_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_rally" )
+		if (self.squad_ai:CanDoAbility( thirteenthrally_id )) then
+			self.squad_ai:DoSpecialAbility( thirteenthrally_id )
+		end
+	end
+	
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end
+
+
+function ThirteenthcomInfantryTactic:Upgrade()
+
+	-- Check if we have free resources
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Check if we should upgrade
+	if (not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 3) then
+		
+		-- Figure out my enemy's favourite class
+		local enemy = cpu_manager:FindClosestEnemyPlayer()
+		if (enemy == nil) then
+			return
+		end
+		local class_type = enemy:GetMajorityClassType()
+		
+		-- Larkins hard counter upgrade for HeavyInfantryMed 
+		if (class_type < UnitStatsAI.UC_HeavyInfantryMed) then	  
+		  
+			local enemy_race = enemy:GetPlayerRaceName()
+			if (enemy_race == "space_marine_race" or enemy_race == "chaos_marine_race") then
+		    	class_type = UnitStatsAI.UC_HeavyInfantryMed
+		  	end
+		end
+		
+		-- Do best upgrade
+		self.squad_ai:DoBestUpgrade(class_type)
+	end
+end

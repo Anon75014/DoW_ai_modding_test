@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'slaaneshfulgrimtactic.ai'
+-- Edited by Thudmeizer @ 24.07.2018
+
+class 'SlaaneshFulgrimTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshFulgrim = {}
+
+function SlaaneshFulgrimTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Fulgrim Tactic")
+end
+
+function SlaaneshFulgrimTactic:AlwaysAttack()
+	return true
+end
+
+function SlaaneshFulgrimTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshFulgrim.sword_id == nil) then
+		SlaaneshFulgrim.sword_id = cpu_manager.stats:GetAbilityID( "emperors_children_fub_sword" )
+		SlaaneshFulgrim.bombardment_id = cpu_manager.stats:GetAbilityID( "emperors_children_bombardment" )
+	end
+end
+
+function SlaaneshFulgrimTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SlaaneshFulgrim.sword_id) then
+			Ability.DoAbilityPos( self.squad_ai, SlaaneshFulgrim.sword_id, Ability.Filters.CloseEnemy, 10 ) 
+			-- We are dying, lower requisites for attacks
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				Ability.DoAbilityPos( self.squad_ai, SlaaneshFulgrim.sword_id, Ability.Filters.CloseEnemy, 6 ) 
+			end
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshFulgrim.bombardment_id) then
+			Ability.DoAbilityPos(self.squad_ai, SlaaneshFulgrim.bombardment_id, Ability.Filters.CloseEnemy, 24)
+			Ability.DoAbilityPos(self.squad_ai, SlaaneshFulgrim.bombardment_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+		end
+	end
+end
+

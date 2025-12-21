@@ -1,0 +1,101 @@
+----------------------------------------
+-- File: 'DaemonsLocTactic.ai'
+-- Edited by Cylarne_04 2011
+-- Edited by CornCobMan 30/05/2013
+-- Edited by Gambit 16/04/2018
+
+class 'DaemonsLocTactic' (DaemonsInfantryTactic)
+
+DaemonsLoc = {}
+
+function DaemonsLocTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemons Loc Tactic")
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+	--self.checkTime = g_iGMT
+	self.isStuck = false
+end
+
+function DaemonsLocTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DaemonsLoc.change_id == nil) then
+		DaemonsLoc.change_id = cpu_manager.stats:GetAbilityID( "daemons_bolt_of_change_loc" )
+	end
+	if (DaemonsLoc.invulnerability_id == nil) then
+		DaemonsLoc.invulnerability_id = cpu_manager.stats:GetAbilityID( "daemons_invulnerability" )
+	end
+	if (DaemonsLoc.winds_id == nil) then
+		DaemonsLoc.winds_id = cpu_manager.stats:GetAbilityID( "daemons_winds_of_chaos" )
+	end
+	if (DaemonsLoc.warptime_id == nil) then
+		DaemonsLoc.warptime_id = cpu_manager.stats:GetAbilityID( "daemons_warp_time_loc" )
+	end
+end
+
+function DaemonsLocTactic:DoAbilities()
+	
+	if (self.squad_ai:CanDoAbility(DaemonsLoc.invulnerability_id)) then
+		local range = self.squad_ai:GetAbilityRange( DaemonsLoc.invulnerability_id )	
+		local squad_filter = function( squad_ai )		
+			return squad_ai:IsInCombat() and squad_ai:GetHealthPercentage() < 0.5 or squad_ai:IsBroken()
+		end	
+   		local target_squad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), range, squad_filter )
+		if (target_squad ~= nil) then
+			self.squad_ai:DoSpecialAbilitySquad( DaemonsLoc.invulnerability_id, target_squad:GetSquad() )
+ 		end
+	end
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbility( self.squad_ai, DaemonsLoc.winds_id, Ability.Filters.IsInCombat )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsLoc.change_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbility( self.squad_ai, DaemonsLoc.warptime_id, Ability.Filters.IsInCombat )
+	else
+		Ability.DoAbility( self.squad_ai, DaemonsLoc.winds_id, Ability.Filters.IsInCombat )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsLoc.change_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbility( self.squad_ai, DaemonsLoc.warptime_id, Ability.Filters.IsInCombat )
+	end
+
+    -- Jump squads' unstuck code call. Put ANYWHERE in the DoAbilities() function
+    -- Checks jump-able stuck squads, and force them to jump nearby
+	if self.squad_ai:CanJump() then
+		self:SolveStuckCase()
+	end
+end
+
+-- Unstuck Code
+function DaemonsLocTactic:SolveStuckCase()
+	local iPosition = self.squad_ai:GetPosition()
+	if iPosition.x ~= self.initialPosition.x or iPosition.z ~= self.initialPosition.z then
+		self.isStuck = false
+	elseif (self.squad_ai:IsInStateMove() or self.squad_ai:IsInStateAttackMove()) and not self.squad_ai:IsInCombat()
+	and iPosition.x == self.initialPosition.x and iPosition.z == self.initialPosition.z then
+		self.isStuck = true
+	end
+	if self.isStuck then
+		self:ForceSquadJumpNear(iPosition)
+	end
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function DaemonsLocTactic:ForceSquadJumpNear(pos)
+	-- Try to jump somewhere near, perform 16 checks for a viable position
+	local jumpDisSqr = sqr(self.squad_ai:GetJumpDistance())
+	for iLoop1 = 1, 16 do
+		-- Create a jump position
+		local vJumpPosition = pos
+		local vDir = cpu_manager:GetDirectionToEnemy(pos)
+		vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(-20, 50)
+		vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(-20, 50)
+		-- Check if target position is in range and if unit is able to jump to target position
+		local iDistance = distance_sqr(vJumpPosition, pos)
+		if iDistance < jumpDisSqr and self.squad_ai:CanJumpToPosition(vJumpPosition) then
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			self.m_iLastGatherMove = self.last_jump - 10
+			return
+		end
+	end
+end

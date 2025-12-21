@@ -1,0 +1,102 @@
+----------------------------------------
+-- File: 'HQTactic.ai'
+-- Edited by Warboss-rus		@ 11.08.2011
+
+class 'HQTactic' (BaseTactic)
+
+AM_BaseHQ = {}
+
+function HQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Mehanicus HQ Tactic")
+	
+	-- Building can deepstrike troops
+	self.m_bCanDeepStrikeTroops = true
+	
+	AM_HQ_MBL_TMR = g_iGMT
+	AM_HQ_MBL_DONE_TMR = g_iGMT
+end
+
+
+function HQTactic:AutoBuildHQAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+			-- Reset addon timer so that we do not re-build very soon
+			AM_HQ_MBL_DONE_TMR = g_iGMT
+		end
+	end
+end
+
+
+function HQTactic:InitAbilities()
+
+	-- Init Addon's ID
+	if (AM_BaseHQ.addon_1ID == nil) then
+		AM_BaseHQ.addon_1ID = cpu_manager.stats:GetAddOnID( "addon_mechanicus_hq" )
+	end
+end
+
+
+function HQTactic:Update()
+	
+	local continue = true 
+	if self:GetState() == Tactic.States.Disabled then
+		continue = false
+	end
+	
+	if continue and self:IsComplete() then
+		continue = false
+	end
+	
+	if continue then
+		self.state_function( self )
+	end
+	
+	if (not continue) then
+		return false
+	end
+	
+	self:InitAbilities()
+
+	--self:DoAbilities()
+	
+	self:BunkerCheck()
+
+	-- Mobile base building code:
+	-- Check every 8 secs, so that not to do all addons immediately (resource checking problem)
+	--  and every 70 secs, after a mobile base is already built (the addon requires 60)
+	--  Note: The +8/+10 secs are used to limit number of checks for better performance
+	if (g_iGMT > AM_HQ_MBL_TMR + 8) and (g_iGMT > AM_HQ_MBL_DONE_TMR + 70) then
+		if self.base_ai:HasAddOn(AM_BaseHQ.addon_1ID) then
+			AM_HQ_MBL_TMR = g_iGMT
+			local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+			local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+			if (iRequisition > 350 and iPower > 350) then
+				if cpu_manager.cpu_player:IsResearchComplete("am_living_base_upgrade_3") then
+				-- Proceed in trying to build a mobile base. First, check for number of valid HQ buildings
+				local numHQs = 0
+				local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+					for oBase in oStats:GetBases() do
+						if oBase:IsValid() then
+							if oBase:GetBaseName() == "mechanicus_hq" then
+								if oBase:IsConstructionDone() then
+									numHQs = numHQs + 1
+								end
+							end
+						end
+					end
+				-- Try to build a mobile base (the addon), only if we have at least a 2nd one
+					if numHQs > 1 then
+						self:AutoBuildHQAddOn(1, self.base_ai:GetEntity():GetID())
+					end
+				end
+			end
+		end
+	end
+
+	return true
+end

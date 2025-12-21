@@ -1,0 +1,49 @@
+----------------------------------------
+-- File: 'LOTDVehicleTactic.ai'
+-- Edited by Thudmeizer	@ 19.07.2016
+-- Edited by Gambit 	@ 25.05.2016
+
+class 'LOTDVehicleTactic' (VehicleTactic)
+
+function LOTDVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Legion of the Damned Vehicle Tactic")
+	
+	-- Dreadnoughts can re-enter the HQ for deepstriking
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "lotd_space_marine_squad_dreadnought" or
+		sSquadName == "lotd_space_marine_squad_venerable_dreadnought") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID( "lotd_space_marine_hq" )
+	end
+end
+
+-- Check if the vehicle should dance away in melee
+function LOTDVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "lotd_space_marine_squad_rhino" or
+		-- sName == "lotd_space_marine_squad_dreadnought" or
+		-- sName == "lotd_space_marine_squad_venerable_dreadnought" or
+		sName == "lotd_space_marine_squad_predator" or
+		sName == "lotd_space_marine_squad_land_raider") then
+		return true
+	end
+	return false
+end
+
+function LOTDVehicleTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	local smoke_id = cpu_manager.stats:GetAbilityID( "lotd_smoke_launchers" )
+
+	-- Search a squad
+	local iRange = self.squad_ai:GetAbilityRange(smoke_id)
+	local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+	if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+		if self.squad_ai:CanDoAbility(smoke_id) then
+			self.squad_ai:DoSpecialAbilitySquad(smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	VehicleTactic.DoAbilities(self)
+end

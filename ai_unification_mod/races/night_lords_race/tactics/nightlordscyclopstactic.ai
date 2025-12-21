@@ -1,0 +1,49 @@
+----------------------------------------
+-- File: 'nightlordscyclopstactic.ai'
+-- Edited by Thudmeizer @ 20.01.2023
+
+class 'NightLordsCyclopsTactic' (NightLordsVehicleTactic)
+
+NightLordsCyclops = {}
+
+function NightLordsCyclopsTactic:__init( squad_ai ) super( squad_ai )
+
+	   self:SetName("Night Lords Cyclops Tactic")
+end
+
+function NightLordsCyclopsTactic:InitAbilities()
+
+	if (NightLordsCyclops.detonate_id == nil) then
+	    NightLordsCyclops.detonate_id = cpu_manager.stats:GetAbilityID( "night_lords_cyclops_detonation" )
+	end
+end
+
+function NightLordsCyclopsTactic:DoAbilities()
+
+        --SelfUse: Explodes in Area causing massive damage
+ 	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea( self.squad_ai, NightLordsCyclops.detonate_id, Ability.Filters.CloseSquadEnemy, 10, 2 ) 
+		Ability.DoAbilityArea( self.squad_ai, NightLordsCyclops.detonate_id, Ability.Filters.CloseVehicleEnemy, 10, 1 )
+		Ability.DoAbilityArea( self.squad_ai, NightLordsCyclops.detonate_id, Ability.Filters.CloseMonsterEnemy, 10, 1 ) 
+	else
+		Ability.DoAbilityArea( self.squad_ai, NightLordsCyclops.detonate_id, Ability.Filters.CloseSquadEnemy, 10, 5 ) 
+		Ability.DoAbilityArea( self.squad_ai, NightLordsCyclops.detonate_id, Ability.Filters.CloseVehicleEnemy, 10, 2 )
+		Ability.DoAbilityArea( self.squad_ai, NightLordsCyclops.detonate_id, Ability.Filters.CloseMonsterEnemy, 10, 5 ) 
+	end
+end
+
+function NightLordsCyclopsTactic:AlwaysAttack()
+	return true
+end
+
+function NightLordsCyclopsTactic:Update()
+
+	if self:IsComplete() then
+      		return
+   	end
+
+   	--state machine
+   	if not VehicleTactic.Update( self ) then
+		return
+   	end
+end

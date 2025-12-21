@@ -1,0 +1,50 @@
+----------------------------------------
+-- File: 'hellhoundtactic.ai'
+-- Edited by Arkhan		@ 09.11.2006
+
+class 'HellhoundTactic' (GuardVehicleTactic)
+
+Hellhound = {}
+
+function HellhoundTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Hellhound Tactic")
+	self.lastAddonTry = g_iGMT
+end
+
+function HellhoundTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Hellhound.burn_id == nil) then
+		Hellhound.burn_id = cpu_manager.stats:GetAbilityID("guard_let_it_burn")
+	end
+end
+
+function HellhoundTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+function HellhoundTactic:DoAbilities()
+
+	-- Try to use 'Let it Burn' (Hellhound)
+	Ability.DoAbilityTarget(self.squad_ai, Hellhound.burn_id, Ability.Filters.CloseEnemy, 6)
+	
+	-- Call standard method
+	GuardVehicleTactic.DoAbilities(self)
+
+	-- Check to build an addon every 10+ secs
+	if g_iGMT > self.lastAddonTry + 10 then
+		self.lastAddonTry = g_iGMT
+		self:AutoBuildAddOn(0)
+	end
+end

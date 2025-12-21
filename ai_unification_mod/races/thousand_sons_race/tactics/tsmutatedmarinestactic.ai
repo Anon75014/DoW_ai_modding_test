@@ -1,0 +1,45 @@
+----------------------------------------
+-- File: 'tsmutatedmarinestactic.ai'
+-- Edited by Gambit @ 20.06.2014
+
+class 'TSMutatedMarinesTactic' (TSInfantryTactic)
+
+TSMutatedMarines = {}
+
+function TSMutatedMarinesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("TS Mutated Marines Tactic")
+
+	self.intimidateLastUse = 0
+	self.stealthLastUse = 0
+	self.abilitySumUse = 0
+end
+
+
+function TSMutatedMarinesTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TSMutatedMarines.intimidate_id == nil) then
+		TSMutatedMarines.intimidate_id = cpu_manager.stats:GetAbilityID( "thousand_sons_intimidate" )	
+		TSMutatedMarines.stealth_id = cpu_manager.stats:GetAbilityID( "thousand_sons_stealthy_assassins" )	
+	end
+end
+
+function TSMutatedMarinesTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(TSMutatedMarines.intimidate_id) then
+		if Ability.DoAbilityArea( self.squad_ai, TSMutatedMarines.intimidate_id, Ability.Filters.CloseInfantryEnemy, 14, 2) then
+			self.intimidateLastUse = g_iGMT
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(TSMutatedMarines.stealth_id) then
+		if Ability.DoAbility( self.squad_ai, TSMutatedMarines.stealth_id, Ability.Filters.IsInCombat) then
+			self.stealthLastUse = g_iGMT
+		end
+	end
+
+	self.abilitySumUse = self.intimidateLastUse + self.stealthLastUse
+
+	TSInfantryTactic.DoAbilities(self)
+end

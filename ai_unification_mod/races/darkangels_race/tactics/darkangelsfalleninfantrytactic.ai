@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'darkangelsfalleninfantrytactic.ai'
+-- Edited by Thudmeizer		@ 06.06.2018
+
+class 'DarkAngelsFallenInfantryTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsFallenInfantry = {}
+
+function DarkAngelsFallenInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Fallen Infantry Tactic")
+end
+
+function DarkAngelsFallenInfantryTactic:InitAbilities()
+
+end
+
+function DarkAngelsFallenInfantryTactic:DoAbilities()
+
+    self:DoHuntTheFallen()
+end
+

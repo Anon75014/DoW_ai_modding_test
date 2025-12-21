@@ -1,0 +1,52 @@
+----------------------------------------
+-- File: 'guardhqtactic.ai'
+-- Edited by Arkhan		@ 24.10.2006
+-- Edited by Thudmrizer		@ 09.11.2023
+
+class 'GuardHQTactic' (BaseTactic)
+
+GuardHQ = {}
+
+function GuardHQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Guard HQ Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
+
+function GuardHQTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (GuardHQ.detection_id == nil) then
+		GuardHQ.detection_id = cpu_manager.stats:GetAbilityID("guard_detection_field")
+	end
+
+	if (GuardHQ.dangerclose_id == nil) then
+		GuardHQ.dangerclose_id = cpu_manager.stats:GetAbilityID("guard_buildings_dangerclose_hq")
+	end
+end
+
+function GuardHQTactic:DoAbilities()
+
+	-- Try to activate defensive measures
+	if (self.base_ai:CanDoAbility(GuardHQ.dangerclose_id)) then
+
+		-- Enable Danger Close Protocols to increase defensive capabilities when enemies are near
+		Ability.DoAbilityArea( self.base_ai, GuardHQ.dangerclose_id, Ability.Filters.CloseEnemy, 20, 1)
+	end
+
+	-- Try to activate detection field
+	if (self.base_ai:CanDoAbility(GuardHQ.detection_id)) then
+	
+		local iRange = self.base_ai:GetAbilityRange(GuardHQ.detection_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.base_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.base_ai:DoSpecialAbilitySquad(GuardHQ.detection_id, oSquad:GetSquad())
+			end
+		end
+	end
+end

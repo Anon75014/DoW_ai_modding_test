@@ -1,0 +1,63 @@
+----------------------------------------
+-- File: 'LOTDMuertoTactic.ai'
+-- Edited by Thudmeizer	@ 06.02.2025
+
+class 'LOTDMuertoTactic' (LOTDInfantryTactic)
+
+LOTDMuerto = {}
+
+function LOTDMuertoTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("LOTD Muerto Tactic")
+end
+
+function LOTDMuertoTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function LOTDMuertoTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function LOTDMuertoTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (LOTDMuerto.damned_id == nil) then
+		LOTDMuerto.damned_id = cpu_manager.stats:GetAbilityID( "lotd_day_of_the_damned" )
+	end
+
+	if (LOTDMuerto.death_id == nil) then
+		LOTDMuerto.death_id = cpu_manager.stats:GetAbilityID( "lotd_death_apporaches" )
+	end
+end
+
+function LOTDMuertoTactic:DoAbilities()
+
+	-- Activate Day on the Damned against enemy commanders
+	if (self.squad_ai:CanDoAbility(LOTDMuerto.damned_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, LOTDMuerto.damned_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+
+	-- Use Death Approaches to heal self but cannot attack
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then 
+		
+		if (self.squad_ai:CanDoAbility(LOTDMuerto.death_id)) then
+			self.squad_ai:DoSpecialAbility(LOTDMuerto.death_id)
+		end	  
+	end
+end
+
+function LOTDMuertoTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

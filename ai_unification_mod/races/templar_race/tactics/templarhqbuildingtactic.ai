@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'templarhqbuildingtactic.ai'
+-- Edited by Thudmeizer		@ 15.04.2008
+
+class 'TemplarHQBuildingTactic' (BaseTactic)
+
+function TemplarHQBuildingTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Templar HQ Building Tactic")
+end
+
+function TemplarHQBuildingTactic:CanDeepStrikeTroops()
+	return true
+end

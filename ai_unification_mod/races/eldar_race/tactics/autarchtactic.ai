@@ -1,0 +1,109 @@
+----------------------------------------
+-- File: 'autarchtactic.ai'
+-- Edited by Thudmeizer	@ 05.12.2023
+
+class 'AutarchTactic' (EldarInfantryTactic)
+
+Autarch = {}
+
+function AutarchTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Autarch Tactic")
+end
+
+function AutarchTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function AutarchTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function AutarchTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+function AutarchTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Autarch.grenades_id == nil then
+		Autarch.grenades_id = cpu_manager.stats:GetAbilityID( "eldar_plasma_grenades" )
+		Autarch.haywire_id = cpu_manager.stats:GetAbilityID( "eldar_haywire_bombs" )
+		Autarch.strike_id = cpu_manager.stats:GetAbilityID( "eldar_nightwing_strike" )
+		Autarch.fleetoffoot_id = cpu_manager.stats:GetAbilityID( "eldar_fleetoffoot" )
+	end
+end
+
+function AutarchTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(Autarch.grenades_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, Autarch.grenades_id, Ability.Filters.CloseSquadEnemy, 1 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(Autarch.haywire_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, Autarch.haywire_id, Ability.Filters.CloseVehicleEnemy, 1 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(Autarch.strike_id) then
+			if Ability.DoAbilityPos( self.squad_ai, Autarch.strike_id, Ability.Filters.CloseEnemy, 5 ) then
+				return
+			end
+		end
+	end
+
+	-- Check if I should enable/disable fleet of foot
+	if (not self.squad_ai:IsAttached()) then
+		self:DoAbilityFoF()
+	end
+end
+
+function AutarchTactic:Upgrade()
+
+--	[addon_01] = eldar_autarch_banshee_helmet
+--	[addon_02] = eldar_autarch_chainsword
+--	[addon_03] = eldar_autarch_deathspinners
+--	[addon_04] = eldar_autarch_executioner
+--	[addon_05] = eldar_autarch_fusion_gun
+--	[addon_06] = eldar_autarch_reaper_launcher
+--	[addon_07] = eldar_autarch_rune_aura
+--	[addon_08] = eldar_autarch_shuriken_catapult
+
+	local autarch_wargear_addon = math.random( 0, 7 ) 	-- Choose from 7 possible addons
+	self:AutoBuildAddOn(autarch_wargear_addon)		-- Build all these addons if possible
+end
+
+function AutarchTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+    	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+   	end
+end

@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'MechVehicleTactic.ai'
+-- Edited by Karandras  	@ 17.03.2012
+-- Edited by Thudmeizer		@ 29.10.2025
+
+class 'MechVehicleTactic' (VehicleTactic)
+
+function MechVehicleTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("Mech Vehicle Tactic")
+end
+
+-- Check if the vehicle should dance away in melee
+function MechVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "mechanicus_squad_orbital_stalker" or
+		sName == "mechanicus_squad_king_russ" or
+		sName == "mechanicus_squad_living_base" or
+		sName == "mechanicus_squad_warrior") then
+		return true
+	end
+	return false
+end
+
+function MechVehicleTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump
+    	-- Can also be used for flying squads with map stuck issues
+    	-- Call it with [true], only for multi-membered squads
+    	local sSquadName = self.squad_ai:GetSquadName()
+    	if (sSquadName == "mechanicus_fabricator_squad_aetos_surveyor" or
+		sSquadName == "mechanicus_squad_hell_stalker" or
+		sSquadName == "mechanicus_squad_living_base") then
+        	self:SolveStuckCase(false)
+    	end
+
+	-- Call standard method
+	VehicleTactic.DoAbilities(self)
+end

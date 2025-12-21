@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'renegade_psyker_tower_tactic.ai'
+-- Edited by Thudmeizer	@ 08.07.2024
+
+class 'Renegades_Psyker_Tower_Tactic' (BaseTactic)
+
+RenegadeGuardPsykerTower = {}
+
+function Renegades_Psyker_Tower_Tactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Renegades Psyker Tower Tactic")
+end
+
+function Renegades_Psyker_Tower_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RenegadeGuardPsykerTower.rage_id == nil) then
+		RenegadeGuardPsykerTower.rage_id = cpu_manager.stats:GetAbilityID("renegade_guard_rage_inductor")
+	end
+end
+
+function Renegades_Psyker_Tower_Tactic:DoAbilities()
+
+	-- Try to use induce rage ability if available
+	if self.base_ai:CanDoAbility(RenegadeGuardPsykerTower.rage_id) then
+		Ability.DoAbilityPos(self.base_ai, RenegadeGuardPsykerTower.rage_id, Ability.Filters.CloseInfantryEnemy, 3)
+		Ability.DoAbilityPos(self.base_ai, RenegadeGuardPsykerTower.rage_id, Ability.Filters.CloseMonsterEnemy, 3)
+	end
+end

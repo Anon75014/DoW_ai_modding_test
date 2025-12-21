@@ -1,0 +1,281 @@
+----------------------------------------
+-- File: 'enclavesoblotaitactic.ai'
+-- Edited by CaptJoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer 		@ 21.02.2024
+
+class 'EnclavesOblotaiTactic' (EnclavesInfantryTactic)
+
+EnclavesOblotai = {}
+
+function EnclavesOblotaiTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Oblotai Tactic")
+
+	self:InitAbilities()
+end
+
+-- Enclaves Oblotai is allowed to retreat even directly after a jump
+function EnclavesOblotaiTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function EnclavesOblotaiTactic:IsAttacker()	
+	return self:IsCommanderAttacker()
+end
+
+function EnclavesOblotaiTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function EnclavesOblotaiTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function EnclavesOblotaiTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesOblotai.summon_id == nil) then
+		EnclavesOblotai.summon_id = cpu_manager.stats:GetAbilityID( "enclaves_beacon_summon" )	
+	end
+
+	if (EnclavesOblotai.summon_ktgm == nil) then
+		EnclavesOblotai.summon_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon" )	
+	end
+
+	if (EnclavesOblotai.summon1_ktgm == nil) then
+		EnclavesOblotai.summon1_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon1" )	
+	end
+
+	if (EnclavesOblotai.summon2_ktgm == nil) then
+		EnclavesOblotai.summon2_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon2" )	
+	end
+
+	if (EnclavesOblotai.summon3_ktgm == nil) then
+		EnclavesOblotai.summon3_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon3" )	
+	end
+
+	if (EnclavesOblotai.barrage_id == nil) then
+		EnclavesOblotai.barrage_id = cpu_manager.stats:GetAbilityID( "enclaves_oblotai_missile_barrage" )	
+	end
+
+	if (EnclavesOblotai.barrage_ktgm == nil) then
+		EnclavesOblotai.barrage_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_oblotai_missile_barrage" )	
+	end
+end
+
+function EnclavesOblotaiTactic:DoAbilities()
+
+	-- Activate missile barrage based on health level
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if (self.squad_ai:CanDoAbility(EnclavesOblotai.barrage_id)) then
+ 			Ability.DoAbilityPos( self.squad_ai, EnclavesOblotai.barrage_id, Ability.Filters.CloseEnemy, 4 ) 
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesOblotai.barrage_ktgm)) then 
+
+			-- Search for a nearby enemy
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.barrage_ktgm)
+			local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			if (oUnit ~= nil) then
+				--print("Using Missile Barrage Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.barrage_ktgm, oUnit:GetSquad())
+			end
+		end
+	else
+		if (self.squad_ai:CanDoAbility(EnclavesOblotai.barrage_id)) then
+ 			Ability.DoAbilityPos( self.squad_ai, EnclavesOblotai.barrage_id, Ability.Filters.CloseEnemy, 8 ) 
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesOblotai.barrage_ktgm)) then 
+
+			-- Search for a nearby enemy
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.barrage_ktgm)
+			local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 8)
+			if (oUnit ~= nil) then
+				--print("Using Missile Barrage Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.barrage_ktgm, oUnit:GetSquad())
+			end
+		end
+	end
+
+	-- Try to summon an Orca if we have the needed resources 
+	if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 400 then
+
+		-- Try to summon an Orca
+    		if self.squad_ai:CanDoAbility(EnclavesOblotai.summon_id) then
+
+			-- Condition 1: Search for a nearby hurt squad
+        		local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.summon_id)
+        		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+        		if (oUnit ~= nil) then
+				--print("Using Oblotai Close Hurt Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.summon_id, oUnit:GetSquad()) then
+                			return
+            			end
+        		end
+
+        		-- Condition 2: Check for low Power (lower than 250, for example)
+        		if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) < 250 then
+				--print("Using Oblotai Low Power Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+       			end
+
+        		-- Condition 3: Random calling, just for the sake of creating new squads
+        		if math.random(1,30) == 1 then
+				--print("Using Oblotai Random Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+        		end
+		end
+    	end
+
+	-- Try to summon an Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesOblotai.summon_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.summon_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Oblotai Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.summon_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Oblotai Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Oblotai Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 2nd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesOblotai.summon1_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.summon1_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Oblotai Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.summon1_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Oblotai Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon1_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Oblotai Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon1_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 3rd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesOblotai.summon2_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.summon2_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Oblotai Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.summon2_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Oblotai Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon2_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Oblotai Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon2_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 4th stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesOblotai.summon3_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesOblotai.summon3_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Oblotai Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesOblotai.summon3_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Oblotai Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon3_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Oblotai Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesOblotai.summon3_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+end
+
+function EnclavesOblotaiTactic:Upgrade()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+end
+
+function EnclavesOblotaiTactic:Update()
+
+    	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

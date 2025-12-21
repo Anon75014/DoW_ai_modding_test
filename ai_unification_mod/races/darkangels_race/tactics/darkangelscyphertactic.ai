@@ -1,0 +1,82 @@
+----------------------------------------
+-- File: 'darkangelscyphertactic.ai'
+-- Edited by Gambit @ 21.08.2018
+
+class 'DarkAngelsCypherTactic' (InfantryTactic)
+
+DarkAngelsCypher = {}
+
+function DarkAngelsCypherTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Cypher Tactic")
+
+    self.fragLastUse = g_iGMT
+    self.krakLastUse = g_iGMT
+end
+
+function DarkAngelsCypherTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkAngelsCypherTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkAngelsCypherTactic:InitAbilities()
+	if DarkAngelsCypher.frag_id == nil then
+		DarkAngelsCypher.frag_id = cpu_manager.stats:GetAbilityID( "darkangels_frag_grenades_cypher" )
+		DarkAngelsCypher.krak_id = cpu_manager.stats:GetAbilityID( "darkangels_krak_grenades_cypher" )
+		DarkAngelsCypher.stealth_id = cpu_manager.stats:GetAbilityID( "darkangels_infiltrate_cypher" )
+		DarkAngelsCypher.plasma_id = cpu_manager.stats:GetAbilityID( "darkangels_charged_plasma_shot_cypher" )
+	end
+end
+
+function DarkAngelsCypherTactic:DoAbilities()
+
+    if self.squad_ai:IsInCombat() then
+
+        if g_iGMT > self.fragLastUse + 30 and self.squad_ai:CanDoAbility(DarkAngelsCypher.frag_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, DarkAngelsCypher.frag_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, DarkAngelsCypher.frag_id, Ability.Filters.CloseSquadEnemy, 4 )
+            then
+                self.fragLastUse = g_iGMT 
+            end
+        end
+    
+        if g_iGMT > self.krakLastUse + 30 and self.squad_ai:CanDoAbility(DarkAngelsCypher.krak_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, DarkAngelsCypher.krak_id, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTargetEntity( self.squad_ai, DarkAngelsCypher.krak_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            then
+                self.krakLastUse = g_iGMT             
+            end
+        end
+    end
+
+	if self.squad_ai:CanDoAbility(DarkAngelsCypher.plasma_id) then
+		Ability.DoAbilityTarget( self.squad_ai, DarkAngelsCypher.plasma_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+		Ability.DoAbilityTarget( self.squad_ai, DarkAngelsCypher.plasma_id, Ability.Filters.CloseMonsterEnemy, 1 )
+	end
+
+	local healthPercent = self.squad_ai:GetHealthPercentage()
+	local recentlyHurt = self.squad_ai:WasRecentlyHurt() or self.squad_ai:IsUnderAttack()
+	if self.squad_ai:IsUsingAbility(DarkAngelsCypher.stealth_id) then
+		if healthPercent > 0.4 or not recentlyHurt then
+			self.squad_ai:DoSpecialAbility(DarkAngelsCypher.stealth_id)
+		end
+	elseif healthPercent < 0.35 and recentlyHurt then
+		self.squad_ai:DoSpecialAbility(DarkAngelsCypher.stealth_id)
+	end
+end
+
+
+function DarkAngelsCypherTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+end

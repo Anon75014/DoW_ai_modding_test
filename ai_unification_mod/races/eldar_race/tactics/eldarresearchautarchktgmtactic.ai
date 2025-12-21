@@ -1,0 +1,103 @@
+----------------------------------------
+-- File: 'eldaresearchautarchktgmtactic.ai'
+-- Edited by Thudmeizer		@ 27.10.2023
+
+class 'EldarResearchAutarchKtgmTactic' (BaseTactic)
+
+EldarResearchAutarchKtgm = {}
+
+function EldarResearchAutarchKtgmTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Eldar Research Autarch Kill Team Tactic")
+
+	-- The name of the squad to target
+	self.squad1_name = "eldar_squad_autarch_kayleth_ktgm"
+end
+
+function EldarResearchAutarchKtgmTactic:AutoBuildTurretAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+		end
+	end
+end
+
+function EldarResearchAutarchKtgmTactic:InitAbilities()
+	
+	-- Init abilities
+	if (EldarResearchAutarchKtgm.StronghealAutarch_id == nil) then
+		EldarResearchAutarchKtgm.StronghealAutarch_id = cpu_manager.stats:GetAbilityID( "eldar_ls_kayleth_healing_1000" )
+	end
+
+	if (EldarResearchAutarchKtgm.LighthealAutarch_id == nil) then
+		EldarResearchAutarchKtgm.LighthealAutarch_id = cpu_manager.stats:GetAbilityID( "eldar_ls_kayleth_healing_500" )
+	end
+end
+
+function EldarResearchAutarchKtgmTactic:DoAbilities()
+
+--	[addon_01] = eldar_ls_autarch_banshee_helmet
+--	[addon_02] = eldar_ls_autarch_chainsword
+--	[addon_03] = eldar_ls_autarch_deathspinners
+--	[addon_04] = eldar_ls_autarch_executioner
+--	[addon_05] = eldar_ls_autarch_fusion_gun
+--	[addon_06] = eldar_ls_autarch_rune_aura
+--	[addon_07] = eldar_ls_autarch_shuriken_catapult
+--	[addon_08] = eldar_ls_autarch_reaper_launcher
+
+	-- Always try to build these addons
+	local random_autarch_research_addon = math.random( 0,7 )
+	self:AutoBuildTurretAddOn(random_autarch_research_addon, self.base_ai:GetEntity():GetID())	-- Build all these addons if possible
+	
+	aitrace("EldarResearchAutarchKtgmTactic: Do abilities...")
+
+	-- Check if squad is valid
+    	for oSquad in military_manager:GetSquads() do
+        	if oSquad:IsValid() then
+            		if oSquad:GetSquadName() == self.squad1_name then
+
+				-- Try to use Strong Heal ability on squad (restores target's health by 1000 HP)
+				if (self.base_ai:CanDoAbility(EldarResearchAutarchKtgm.StronghealAutarch_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() < 0.3) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 100 and iPower >= 100 then		
+		
+							-- Use strong heal ability on commander
+							self.base_ai:DoSpecialAbility(EldarResearchAutarchKtgm.StronghealAutarch_id)
+							--print("Using Autarch Heavy Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+-- Disabled light health to save on resources
+--[[
+				-- Try to use Light Heal ability on commander1 (restores target's health by 500 HP)
+				if (self.base_ai:CanDoAbility(EldarResearchAutarchKtgm.LighthealAutarch_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() > 0.7) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 50 and iPower >= 50 then	
+				
+							-- Use light heal ability on commander
+							self.base_ai:DoSpecialAbility(EldarResearchAutarchKtgm.LighthealAutarch_id)
+							--print("Using Autarch Light Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+]]
+			end
+		end
+	end
+end
+
+

@@ -1,0 +1,14 @@
+-----------------------------------
+-- File: 'eldradastraltactic.ai'
+-- Edited by Gambit	@ 10.03.2022
+
+class 'EldradAstralTactic' (EldarInfantryTactic)
+
+function EldradAstralTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Eldrad Astral Form Tactic")
+end
+
+function EldradAstralTactic:AlwaysAttack()
+	return true
+end

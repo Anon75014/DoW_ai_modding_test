@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'HellStalkerTactic.ai'
+-- Created by Warboss-rus	@ 11.08.2011
+-- Edited by Thudmeizer		@ 29.10.2025
+
+class 'HellStalkerTactic' (MechVehicleTactic)
+
+HellStalker = {}
+
+function HellStalkerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Hell Stalker Tactic")
+	self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("mechanicus_hq")
+	self.possessChance = math.random(1, 100)
+end
+
+
+function HellStalkerTactic:InitAbilities()
+	if (HellStalker.iRestoreID == nil) then
+		HellStalker.iRestoreID = cpu_manager.stats:GetAbilityID( "mechanicus_reload" )
+	end
+end
+
+
+function HellStalkerTactic:DoAbilities()
+	-- Check if we can possess
+	if (self.squad_ai:CanPossess()) then
+		if self.possessChance < 65 then
+			self.squad_ai:DoPossess()
+		end
+	end
+
+	if (self.squad_ai:CanDoAbility(HellStalker.iRestoreID) and self.squad_ai:IsBroken()) then
+		self.squad_ai:DoSpecialAbility(HellStalker.iRestoreID)
+	end
+
+	MechVehicleTactic.DoAbilities( self )
+end

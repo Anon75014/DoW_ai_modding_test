@@ -1,0 +1,91 @@
+----------------------------------------
+-- File: 'slaaneshglawagentstactic.ai'
+-- Edited by Gambit	@ 27.09.2019
+
+class 'SlaaneshGlawAgentsTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshGlawAgents = {}
+
+function SlaaneshGlawAgentsTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Glaw Agents Tactic")
+	self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("emperors_children_hq")
+end
+
+
+function SlaaneshGlawAgentsTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshGlawAgents.rally_id == nil then
+		SlaaneshGlawAgents.rally_id = cpu_manager.stats:GetAbilityID( "emperors_children_glaw_operator_rally" )
+		SlaaneshGlawAgents.quick_id = cpu_manager.stats:GetAbilityID( "emperors_children_glaw_operator_quickening" )
+	end
+end
+
+function SlaaneshGlawAgentsTactic:DoAbilities()
+
+	if self:IsMoving() and self.squad_ai:WasRecentlyHurt() then
+		self.squad_ai:DoSpecialAbility( SlaaneshGlawAgents.quick_id )
+	end
+
+	if self.squad_ai:IsBroken() then
+		self.squad_ai:DoSpecialAbility( SlaaneshGlawAgents.rally_id )
+	end
+end
+
+function SlaaneshGlawAgentsTactic:Upgrade()
+
+ 	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- If there are no resources available, don't upgrade!
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+   
+	if (not self.squad_ai:IsReinforcing() and cpu_manager:GetTierLevel() >= 2) then
+	  
+		-- Try for upgrade if we've a leader and more than 3 troopers
+		if (self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 2 and self.squad_ai:HasLeader()) then
+			local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+			self.squad_ai:DoBestUpgrade( class_type )
+		end
+	end
+end
+
+function SlaaneshGlawAgentsTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (self.squad_ai:IsReinforcing()) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Don't reinforce squads in critical condition
+	if (self.squad_ai:GetNumTroopers() <= self.squad_ai:GetMaxTroopers() / 3 and self.squad_ai:IsUnderAttack()) then
+		return
+	end
+
+	-- Always try to get the leader first
+	if (self.squad_ai:CanReinforce(true, 0)) then
+		self.squad_ai:DoReinforce(true, 0)
+		return
+	end
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if ((iRequisition < 800 or self.m_bPowerCost) and not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- Always try to reinforce, as long as I have money
+	if (self.squad_ai:CanReinforce( false, 0 ) and self.squad_ai:HasLeader() and cpu_manager:GetTierLevel() >= 2) then
+		self.squad_ai:DoReinforce( false, 0 )
+	end
+end

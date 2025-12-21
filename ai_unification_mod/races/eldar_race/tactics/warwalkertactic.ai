@@ -1,0 +1,16 @@
+----------------------------------
+-- File: 'warwalkertactic.ai'
+-- Edited by Gambit 	@ 31.03.2022
+-- Edited by Thudmeizer @ 20.09.2023
+
+class 'WarWalkerTactic' (EldarVehicleTactic)
+
+function WarWalkerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("War Walker Tactic")
+end
+
+function WarWalkerTactic:CanOnlyDecap()
+	return true
+end
+

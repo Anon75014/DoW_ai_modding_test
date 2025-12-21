@@ -1,0 +1,73 @@
+----------------------------------------
+-- File: 'harlequinlptactic.ai'
+-- Edited by Thudmeizer		@ 18.06.2010
+-- Edited by Gambit			@ 04.01.2015
+
+class 'HarlequinLPTactic' (BaseTactic)
+
+HarlequinLP = {}
+
+function HarlequinLPTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Harlequin LP Tactic")
+	if HarlLPTMR == nil then
+		HarlLPTMR = g_iGMT
+	end
+end
+
+
+function HarlequinLPTactic:InitAbilities()
+
+	if (HarlequinLP.warpharvester1 == nil) then
+		HarlequinLP.warpharvester1 = cpu_manager.stats:GetAbilityID( "harlequin_lp_warpharvester" )
+	end
+	if (HarlequinLP.warpharvester2 == nil) then
+		HarlequinLP.warpharvester2 = cpu_manager.stats:GetAbilityID( "harlequin_lp_warpharvester_2" )
+	end
+	if (HarlequinLP.shroud == nil) then
+		HarlequinLP.shroud = cpu_manager.stats:GetAbilityID( "harlequin_shroud" )
+	end
+end
+
+
+function HarlequinLPTactic:DoAbilities()
+
+	-- Produce the power resource on condition.
+	local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	local iReqRate = resource_manager:GetResourceRate( ResourceAmount.RT_Requisition )
+	local iPowRate = resource_manager:GetResourceRate( ResourceAmount.RT_Power )
+
+	if iPowRate < 15 and iReq > 130 and self.base_ai:CanDoAbility(HarlequinLP.warpharvester1) then
+		if g_iGMT - HarlLPTMR > 1 then
+			self.base_ai:DoSpecialAbility(HarlequinLP.warpharvester1)
+			HarlLPTMR = g_iGMT
+		end
+	end
+	if (iReqRate > 2.5*iPowRate and iReq > 2*iPow) or (iReqRate > 1.5*iPowRate and iReq > 2.5*iPow and iReq > 900) then
+		if iReq > 240 and self.base_ai:CanDoAbility(HarlequinLP.warpharvester1) then
+			if g_iGMT - HarlLPTMR > 1.5 then
+				self.base_ai:DoSpecialAbility(HarlequinLP.warpharvester1)
+				HarlLPTMR = g_iGMT
+			end
+		elseif iReq > 360 and self.base_ai:CanDoAbility(HarlequinLP.warpharvester2) then
+			if g_iGMT - HarlLPTMR > 4 then
+				self.base_ai:DoSpecialAbility(HarlequinLP.warpharvester2)
+				HarlLPTMR = g_iGMT
+				self.warpVitaeIILastUse = g_iGMT
+			end
+		end
+	end
+
+	-- Initiate Shroud on condition, and try to defensively create a WVH2 as well
+	if self.base_ai:IsUsingAbility(HarlequinLP.shroud) then
+		if Ability.Filters.CloseEnemy(self.base_ai:GetPosition(), 45, 1) == nil then
+			self.base_ai:DoSpecialAbility(HarlequinLP.shroud)
+		end
+	elseif Ability.Filters.CloseEnemy(self.base_ai:GetPosition(), 45, 1) ~= nil then
+		if iPow > 200 and self.base_ai:CanDoAbility(HarlequinLP.warpharvester2) then
+			self.base_ai:DoSpecialAbility(HarlequinLP.warpharvester2)
+		end
+		self.base_ai:DoSpecialAbility(HarlequinLP.shroud)
+	end
+end

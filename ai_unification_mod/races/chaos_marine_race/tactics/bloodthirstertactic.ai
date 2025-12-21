@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'bloodthirstertactic.ai'
+-- Edited by Thudmeizer	@ 26.10.2008
+
+class 'BloodThirsterTactic' (ChaosMarineInfantryTactic)
+
+function BloodThirsterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("BloodThirster Tactic")
+end
+
+function BloodThirsterTactic:AlwaysAttack()
+	return true
+end
+
+
+function BloodThirsterTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

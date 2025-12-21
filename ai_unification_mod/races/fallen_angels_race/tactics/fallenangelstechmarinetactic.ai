@@ -1,0 +1,174 @@
+----------------------------------------
+-- File: 'FallenAngelsTechmarineTactic.ai'
+-- Edited by Thudmeizer	@ 19.12.2022
+
+class 'FallenAngelsTechmarineTactic' (EngineerTactic)
+
+function FallenAngelsTechmarineTactic:__init( squad_ai ) super( squad_ai )
+	
+	self:SetName("Fallen Angels Techmarine Tactic")
+
+	self.falpID = cpu_manager.stats:GetBuildingID("fa_listening_post")
+	self.fabgID = cpu_manager.stats:GetBuildingID("fa_thermo_generator")
+
+	-- Global, used to DISALLOW the 3rd (last produced) Builder, to be capper (we need one at the base!)
+	FallenAngelsBuilderID = self.squad_ai:GetID()
+end
+
+function FallenAngelsTechmarineTactic:CanRepair()
+	return true
+end
+
+function FallenAngelsTechmarineTactic:Update()
+
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return false
+	end
+	
+	-- Arkhan 01.2006: Check state
+	local vSquadPos = self.squad_ai:GetPosition()
+	if (self.squad_ai:IsLocked()) then
+	
+		-- Arkhan 01.2006: Reset destination if squad is locked
+   		self.m_vDestination = nil
+   		self.m_bBusy = false
+   		
+		-- Release the flag
+		if (self.tagged_flag ~= nil) then
+			self.tagged_flag:TagFlagForEngineer( false )
+			self.tagged_flag = nil
+		end
+		return true
+   	
+   	elseif (self.m_vDestination ~= nil and not self.m_bBusy) then
+   	
+   		-- Arkhan 01.2006: Make sure that the squad moves to the target position
+   		if (self.squad_ai:IsInStateMove()) then
+   		
+   			if (distance_sqr(cpu_manager.start_pos, vSquadPos) > self.m_iValidRange) then
+   			
+   				if (cpu_manager.terrain_analyzer:HasThreat(self.m_vDestination, 35)) then
+   					self:GoToNextPost()
+   				else
+   					self.squad_ai:DoMove(self.m_vDestination)
+   				end
+   				return true
+   			end
+   		end
+   	
+   	elseif (distance_sqr(cpu_manager.start_pos, vSquadPos) > self.m_iValidRange and not self.m_bBusy) then
+   	
+   		-- Arkhan 01.2006: The move command seems invalid and the engineer should therefore return to a safe place
+		self:GoToNextPost()
+		return true
+	end
+   	
+   	if (self.tagged_flag == nil and not self.squad_ai:IsInStateMove()) then
+   	
+   		-- Arkhan 01.2006: Get new job
+		self:GoToNextPost()
+	end
+
+	-- Gambit: Additional code to force the 3rd builder to remain at base for repairs / building race structures
+	if BuildBaseStrategy:CountSquads("fa_squad_warpsmith") == 3 then
+		if FallenAngelsBuilderID == self.squad_ai:GetID() then
+			return true
+		end
+	end
+
+	-- Gambit: Additional code to FORCE-build LPs and BugGens
+	if self.squad_ai:CanBuild(self.falpID) == SquadAI.CANBUILD_Ok then
+		self:ForceBuildRemoteLP()
+	end
+	if self.squad_ai:CanBuild(self.fabgID) == SquadAI.CANBUILD_Ok then
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		if (iReq > 500 and iReq > iPow) or iReq > 2500 then
+			self:ForceBuildRemoteBG()
+		end
+	end
+	return true
+end
+
+function FallenAngelsTechmarineTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (self.squad_ai:IsReinforcing()) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (not self.squad_ai:CanReinforce(true, 0) and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Don't reinforce squads in critical condition
+	if (self.squad_ai:GetNumTroopers() <= self.squad_ai:GetMaxTroopers() / 3 and self.squad_ai:IsUnderAttack()) then
+		return
+	end
+
+	-- Always try to get the leader first
+	if (self.squad_ai:CanReinforce(true, 0)) then
+		self.squad_ai:DoReinforce(true, 0)
+		return
+	end
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if ((iRequisition < 800 or self.m_bPowerCost) and not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- Always try to reinforce, as long as I have money
+	if (self.squad_ai:CanReinforce( false, 0 )) then
+		self.squad_ai:DoReinforce( false, 0 )
+	end
+end
+
+function FallenAngelsTechmarineTactic:ForceBuildRemoteLP()
+	for oStrategicPoint in resource_manager:GetStrategicPointAIs() do
+		if not (oStrategicPoint:IsStrategicObjective() or oStrategicPoint:HasListeningPost()) then
+			if oStrategicPoint:Owner() == cpu_manager.player_id then
+				local oPosition = oStrategicPoint:GetEntity():GetPosition()
+				if not (cpu_manager.terrain_analyzer:HasThreat(oPosition, 25)
+				     or cpu_manager:HasThreatOnPath(self.squad_ai:GetPosition(), oPosition, 35)) then
+					self.m_bBusy = true
+					self.squad_ai:DoBuildBuilding( self.falpID, oPosition )
+					self.squad_ai:DoMove(oPosition)
+				end
+			end
+		end
+	end
+end
+
+function FallenAngelsTechmarineTactic:ForceBuildRemoteBG()
+	resource_manager:UpdateFreeSlagHeaps(self.fabgID)
+	local slag_table = {}
+	for slag_heap in resource_manager:GetSlagHeaps() do
+		local slag_pos = slag_heap:GetPosition()					
+		if not cpu_manager.terrain_analyzer:HasThreat( slag_pos, 35 ) then
+			local dist = cpu_manager:GetShortestPathingDistance( cpu_manager.start_pos, slag_pos, true )
+			if dist > 0 then
+				if self.squad_ai:CanBuildAt(self.fabgID, slag_pos) then
+					if not cpu_manager:HasThreatOnPath(self.squad_ai:GetPosition(), slag_pos, 35) then
+						table.insert( slag_table, {slag_pos, dist} )
+					end
+				end
+			end
+		end
+	end
+	local num_items = table.getn ( slag_table )
+	-- Multiple entries, we have to sort by distance
+	if num_items > 1 then
+		sortfunc = function( item1, item2 )					
+			return item1[2] < item2[2]
+		end
+		table.sort( slag_table, sortfunc )
+	end
+	if num_items > 0 then
+		self.m_bBusy = true
+		self.squad_ai:DoBuildBuilding( self.fabgID, slag_table[1][1] )
+		self.squad_ai:DoMove(slag_table[1][1])
+	end
+end

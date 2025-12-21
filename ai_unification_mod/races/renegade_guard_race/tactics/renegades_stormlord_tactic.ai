@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'renegades_stormlord_tactic.ai'
+-- Edited by Thudmeizer 	@ 03.05.2023
+
+class 'Renegades_Stormlord_Tactic' (Renegades_Vehicle_Tactic)
+
+function Renegades_Stormlord_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Stormlord Tactic")
+
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 4
+end

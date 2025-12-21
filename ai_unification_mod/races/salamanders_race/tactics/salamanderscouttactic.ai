@@ -1,0 +1,54 @@
+----------------------------------------
+-- File: 'salamanderscouttactic.ai'
+-- Edited by Arkhan		@ 12.01.2006
+-- Edited by Thudmeizer		@ 01.10.2019
+
+class 'SalamanderScoutTactic' (SalamanderInfantryTactic)
+
+function SalamanderScoutTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Scout Tactic")
+end
+
+function SalamanderScoutTactic:IsAttacker()
+	return (cpu_manager:GetTierLevel() >= 2)
+end
+
+function SalamanderScoutTactic:Upgrade()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+
+	-- Check if sniper was researched
+	if (not cpu_manager.cpu_player:IsResearchComplete("salamander_advanced_scout_weapons_1")) then
+		return
+	end
+
+	local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+	self.squad_ai:DoBestUpgrade( class_type )
+end
+
+function SalamanderScoutTactic:Reinforce()
+
+	-- If I am broken, don't upgrade/reinforce!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+
+	-- Check if sniper was researched
+	if (not cpu_manager.cpu_player:IsResearchComplete("salamander_advanced_scout_weapons_1")) then
+		return
+	end
+
+	-- Reinforce scout squad
+	if (not self.squad_ai:IsReinforcing() and cpu_manager:GetTierLevel() >= 2 and self.squad_ai:CanReinforce(false, 0)) then
+		self.squad_ai:DoReinforce(false, 0)
+	end
+end
+

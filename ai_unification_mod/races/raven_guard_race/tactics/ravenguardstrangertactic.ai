@@ -1,0 +1,59 @@
+----------------------------------------
+-- File: 'ravenguardstrangertactic.ai'
+-- Edited by Thudmeizer @ 21.08.2023
+
+class 'RavenGuardStrangerTactic' (RavenGuardSpaceMarineInfantryTactic)
+
+RavenGuardStranger = {}
+
+function RavenGuardStrangerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Stranger Tactic")
+end
+
+function RavenGuardStrangerTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function RavenGuardStrangerTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function RavenGuardStrangerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RavenGuardStranger.flower == nil) then
+		RavenGuardStranger.flower = cpu_manager.stats:GetAbilityID( "raven_guard_the_flower" )
+	end
+end
+
+function RavenGuardStrangerTactic:DoAbilities()
+	
+	-- Fix our broken morale or health when low and while not in combat
+	if not (self.squad_ai:IsInCombat()) and not (self.squad_ai:IsUnderAttack()) then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) or (self.squad_ai:IsBroken()) then
+			if (self.squad_ai:CanDoAbility( RavenGuardStranger.flower )) then
+				self.squad_ai:DoSpecialAbility( RavenGuardStranger.flower)
+			end
+		end
+	end
+
+	-- Call standard method
+	RavenGuardSpaceMarineInfantryTactic.DoAbilities(self)
+end
+
+function RavenGuardStrangerTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+

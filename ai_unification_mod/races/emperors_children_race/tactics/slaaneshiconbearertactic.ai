@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'slaaneshiconbearertactic.ai'
+-- Edited by Thudmeizer   @ 23.07.2018
+
+class 'SlaaneshIconBearerTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshIconBearer = {}
+
+function SlaaneshIconBearerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Icon Bearer Tactic")
+end
+
+function SlaaneshIconBearerTactic:IsAttacker()
+	return false
+end
+
+function SlaaneshIconBearerTactic:IsDefender()
+	return false
+end
+
+function SlaaneshIconBearerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshIconBearer.icon_id == nil) then
+		SlaaneshIconBearer.icon_id = cpu_manager.stats:GetAbilityID( "emperors_children_icon_slaaneeshi_standard" )	
+	end
+end
+
+function SlaaneshIconBearerTactic:DoAbilities()
+
+	if self.squad_ai:IsAttached() then
+		if (self.squad_ai:IsInCombat() and self.squad_ai:WasRecentlyHurt())
+		or self.squad_ai:GetHealthPercentage() < 0.4 then
+			self.squad_ai:DoSpecialAbility(SlaaneshIconBearer.icon_id)
+		end
+	elseif self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4 then
+		self.squad_ai:DoSpecialAbility(SlaaneshIconBearer.icon_id)
+	end
+end
+
+function SlaaneshIconBearerTactic:Update()
+
+	if self:IsComplete() then
+      		return
+   	end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+	--attach to squad
+	self:TryAttachSquad( false, false, 1000, 200, nil )
+end

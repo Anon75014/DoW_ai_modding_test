@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'jetbiketactic.ai'
+-- Edited by Thudmeizer		@ 20.04.2010
+
+class 'JetbikeTactic' (HarlequinInfantryTactic)
+
+Jetbike = {}
+
+function JetbikeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Jetbike Tactic")
+end
+
+function JetbikeTactic:NeedRepair()
+	return true
+end
+
+--[[function JetbikeTactic:InitAbilities()
+
+	if (Jetbike.haywire_id == nil) then
+	        Jetbike.haywire_id = cpu_manager.stats:GetAbilityID( "harlequin_haywire_grenade" )
+	end
+end
+
+function JetbikeTactic:DoAbilities()
+	
+	--Target: Use against Vehicles and Buildings
+	Ability.DoAbilityTarget( self.squad_ai, Jetbike.haywire_id, Ability.Filters.CloseVehicleEnemy, 1 ) 
+	Ability.DoAbilityTargetEntity(self.squad_ai, Jetbike.haywire_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+end
+
+function JetbikeTactic:CanOnlyDecap()
+	return true
+end]]

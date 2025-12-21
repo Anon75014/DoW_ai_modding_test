@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'deathstriketactic.ai'
+-- Edited by Thudmeizer @ 17.08.2023
+
+class 'DeathstrikeTactic' (GuardVehicleTactic)
+
+Deathstrike = {}
+
+function DeathstrikeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Deathstrike Squad Tactic")
+end
+
+function DeathstrikeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Deathstrike.nuke_id == nil) then
+		Deathstrike.nuke_id = cpu_manager.stats:GetAbilityID( "guard_deathstrike_nuke" )	
+	end
+end
+
+function DeathstrikeTactic:DoAbilities()
+
+	-- Try to use abilities
+	if self.squad_ai:IsInCombat() then
+
+		-- Try to detonate a nuke if very low on health
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			if (self.squad_ai:CanDoAbility( Deathstrike.nuke_id )) then
+				self.squad_ai:DoSpecialAbility( Deathstrike.nuke_id )
+			end
+		end
+	end
+end

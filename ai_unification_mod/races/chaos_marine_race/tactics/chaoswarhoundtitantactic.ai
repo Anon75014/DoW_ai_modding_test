@@ -1,0 +1,45 @@
+----------------------------------------
+-- File: 'chaoswarhoundtitantactic.ai'
+-- Edited by Gambit         @ 08.08.2020
+
+class 'ChaosWarHoundTitanTactic' (ChaosMarineVehicleTactic)
+
+ChaosWarHoundTitan = {}
+
+function ChaosWarHoundTitanTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chaos Warhound Titan Tactic")
+end
+
+
+function ChaosWarHoundTitanTactic:InitAbilities()
+	
+	-- Init ability ID's
+	if ChaosWarHoundTitan.stomp_id == nil then
+		ChaosWarHoundTitan.stomp_id = cpu_manager.stats:GetAbilityID( "chaos_wh_titan_trample" )
+		ChaosWarHoundTitan.push_id = cpu_manager.stats:GetAbilityID( "chaos_wh_titan_charge" )
+	end
+end
+
+function ChaosWarHoundTitanTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(ChaosWarHoundTitan.stomp_id) and self.squad_ai:IsAttacking() then
+			if Ability.DoAbilityTarget(self.squad_ai, ChaosWarHoundTitan.stomp_id, Ability.Filters.CloseSquadEnemy, 5) then
+				return
+			end
+		end
+
+		if self.squad_ai:CanDoAbility(ChaosWarHoundTitan.push_id) and self.squad_ai:IsInStateMove() then
+			if Ability.DoAbilityArea(self.squad_ai, ChaosWarHoundTitan.push_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+			or Ability.DoAbilityArea(self.squad_ai, ChaosWarHoundTitan.push_id, Ability.Filters.CloseMonsterEnemy, 10, 4) then
+				return
+			end
+		end
+	end
+
+	-- Do basic abilities
+	ChaosMarineVehicleTactic.DoAbilities(self)
+end
+

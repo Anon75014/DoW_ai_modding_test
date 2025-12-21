@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'fallenangelslandraidertactic.ai'
+-- Edited by Thudmeizer		@ 10.10.2022
+
+class 'FallenAngelsLandRaiderTactic' (FallenAngelsVehicleTactic)
+
+FallenAngelsLandRaider = {}
+
+function FallenAngelsLandRaiderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Land Raider Tactic")
+	
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end

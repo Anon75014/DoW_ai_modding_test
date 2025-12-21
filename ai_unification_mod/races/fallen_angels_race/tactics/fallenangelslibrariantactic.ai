@@ -1,0 +1,122 @@
+----------------------------------------
+-- File: 'darkangelslibrariantactic.ai'
+-- Edited by Thudmeizer @ 06.02.2025
+
+class 'FallenAngelsLibrarianTactic' (FallenAngelsInfantryTactic)
+
+FalllenAngelsLibrarian = {}
+
+function FallenAngelsLibrarianTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Librarian Tactic")
+
+	self.dance_time = 0
+end
+
+function FallenAngelsLibrarianTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FallenAngelsLibrarianTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function FallenAngelsLibrarianTactic:InitAbilities()
+
+	if (FalllenAngelsLibrarian.resentment_id == nil) then
+		FalllenAngelsLibrarian.resentment_id = cpu_manager.stats:GetAbilityID( "fallen_book_of_resentment" )
+	end
+	if (FalllenAngelsLibrarian.soulfire_id == nil) then
+		FalllenAngelsLibrarian.soulfire_id = cpu_manager.stats:GetAbilityID( "fallen_soulfire" )
+	end
+	if (FalllenAngelsLibrarian.undivided_mark == nil) then
+		FalllenAngelsLibrarian.undivided_mark = cpu_manager.stats:GetAbilityID( "fallen_undivided_mark" )
+	end
+end
+
+function FallenAngelsLibrarianTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		Ability.DoAbilityArea( self.squad_ai, FalllenAngelsLibrarian.resentment_id, Ability.Filters.CloseInfantryEnemy, 20, 4 ) 
+		Ability.DoAbilityTarget( self.squad_ai, FalllenAngelsLibrarian.soulfire_id, Ability.Filters.CloseInfantryEnemy, 2 ) 
+		Ability.DoAbilityTarget( self.squad_ai, FalllenAngelsLibrarian.soulfire_id, Ability.Filters.CloseMonsterEnemy, 1 ) 
+	else
+		Ability.DoAbilityArea( self.squad_ai, FalllenAngelsLibrarian.resentment_id, Ability.Filters.CloseInfantryEnemy, 20, 8 ) 
+		Ability.DoAbilityTarget( self.squad_ai, FalllenAngelsLibrarian.soulfire_id, Ability.Filters.CloseInfantryEnemy, 4 ) 
+		Ability.DoAbilityTarget( self.squad_ai, FalllenAngelsLibrarian.soulfire_id, Ability.Filters.CloseMonsterEnemy, 2 ) 
+	end
+
+	-- Check if we can use undivided mark
+	if (self.squad_ai:CanDoAbility(FalllenAngelsLibrarian.undivided_mark)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(FalllenAngelsLibrarian.undivided_mark)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(FalllenAngelsLibrarian.undivided_mark, oUnit:GetSquad())
+		end
+	end
+end
+
+function FallenAngelsLibrarianTactic:Update()
+
+	if (self:IsComplete()) then
+        	return
+    	end
+    
+	-- State machine
+    	if (not InfantryTactic.Update( self )) then
+        	return
+    	end
+    
+	-- Check for close commander
+    	local bSetRanged = false
+    	local bSetMelee = false
+	local vSquadPos = self.squad_ai:GetPosition()
+	local eStance = self.squad_ai:GetMeleeStance()
+	local oEnemyCommander = Ability.Filters.CloseCommanderEnemy(vSquadPos, 20, 1)
+    	if (oEnemyCommander ~= nil) then
+       
+        	-- Check health
+        	if (self.squad_ai:GetHealthPercentage() > 0.8 and oEnemyCommander:GetHealthPercentage() < 0.3) then
+			bSetMelee = (eStance == SquadAI.MSTANCE_Ranged)
+            		self.dance_time = 0
+		else
+            		bSetRanged = (eStance == SquadAI.MSTANCE_Assault)
+        	end
+	else
+    
+    		-- Check for close attached commander
+    		local oSquad = Ability.Filters.CloseInfantryEnemy(vSquadPos, 20, 4)
+    		if (oSquad ~= nil and oSquad:IsAttached()) then
+    			bSetRanged = (eStance == SquadAI.MSTANCE_Assault)
+    		else
+    			bSetMelee = (eStance == SquadAI.MSTANCE_Ranged)
+    		end
+    	end
+
+    	-- At leat 10 secs ranged stance/dancing
+   	 if (bSetRanged) then
+        	self.squad_ai:DoSetMeleeStance( SquadAI.MSTANCE_Ranged )
+        	self.dance_time = g_iGMT
+    	elseif (bSetMelee and self.stateID ~= Tactic.StateID.DoDance and g_iGMT > self.dance_time + 10) then
+        	self.squad_ai:DoSetDefaultMeleeStance()
+        	self.dance_time = 0
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+    
+	-- Attach to melee
+	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+
+		if (self:TryAttachSquad(true, true, 50, 100, nil) == nil) then
+		
+			if (self:TryAttachSquad(false, false, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+				self:TryAttachSquadMelee()
+			end
+		end
+	end
+end

@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'Praetorian_TardisTactic.ai'
+-- Edited by fuggles		@ 05.01.2023
+
+class 'Praetorian_TardisTactic' (Praetorian_VehicleTactic)
+
+Praetorian_Tardis = {}
+
+function Praetorian_TardisTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorian_Tardis Tactic")
+
+	self.timedDirectSpawnAbility = Timer( Praetorian_TardisTactic.DoDirectSpawnAbility, self, 5 )
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+function Praetorian_TardisTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+
+	-- Try to spawn the Inquisitor
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		Praetorian_TardisTactic.DoDirectSpawnAbility(self)
+	end
+end
+
+function Praetorian_TardisTactic:DoDirectSpawnAbility()
+
+	-- Spawn Inquisitor in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end

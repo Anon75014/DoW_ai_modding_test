@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'slaanesh2btactic.ai'
+-- Edited by Gambit	@ 03.03.2019
+
+class 'Slaanesh2BTactic' (EmperorsChildrenInfantryTactic)
+
+Slaanesh2B = {}
+
+function Slaanesh2BTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("Slaanesh 2B Tactic")
+end
+
+
+function Slaanesh2BTactic:InitAbilities()
+	if Slaanesh2B.martial_id == nil then
+		Slaanesh2B.martial_id = cpu_manager.stats:GetAbilityID( "emperors_children_martial_stance_2b" )
+	end
+end
+
+
+function Slaanesh2BTactic:DoAbilities()
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(Slaanesh2B.martial_id) then
+		if  self.squad_ai:IsBroken()
+		or (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5)
+		or Ability.Filters.CloseCommanderEnemy(self.squad_ai:GetPosition(), 25, 1) ~= nil then
+			self.squad_ai:DoSpecialAbility(Slaanesh2B.martial_id)
+		end
+	end
+end

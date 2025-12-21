@@ -1,0 +1,105 @@
+---------------------------------
+-- File: 'assassinvanustactic.ai'
+-- Edited by Gambit	@ 05.10.2021
+-- Edited by Thudmeizer	@ 24.09.2023
+
+class 'AssassinVanusTactic' (GuardInfantryTactic)
+
+AssassinVanus = {}
+
+function AssassinVanusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Assassin Vanus Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function AssassinVanusTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function AssassinVanusTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function AssassinVanusTactic:InitAbilities()
+
+	-- Init ability ID's
+	if AssassinVanus.hack_id == nil then
+		AssassinVanus.hack_id = cpu_manager.stats:GetAbilityID( "guard_vanus_hack_control" )
+		AssassinVanus.reveal_id = cpu_manager.stats:GetAbilityID( "guard_vanus_hack_visibility" )
+		AssassinVanus.overload_id = cpu_manager.stats:GetAbilityID( "guard_vanus_wireshark" )
+		AssassinVanus.sabotage_id = cpu_manager.stats:GetAbilityID( "guard_sabotage_probe" )
+	end
+end
+
+
+function AssassinVanusTactic:DoAbilities()
+
+	-- Randomise choice for the first two abilities (they share recharge)
+	local choice = math.random(1,2)
+	local iPos = self.squad_ai:GetPosition()
+	if self.squad_ai:IsInCombat() then
+		if choice == 1 and self.squad_ai:CanDoAbility(AssassinVanus.hack_id) then
+			local oStructure = Ability.EntityFilters.CloseBaseEntityEnemy(iPos, 20, 1)
+			if oStructure ~= nil then
+				self.squad_ai:DoSpecialAbilityEntity(AssassinVanus.hack_id, oStructure)
+				return
+			end
+		elseif choice == 2 and self.squad_ai:CanDoAbility(AssassinVanus.reveal_id) then
+			local oStructure = Ability.EntityFilters.CloseBaseEntityEnemy(iPos, 20, 1)
+			if oStructure ~= nil then
+				self.squad_ai:DoSpecialAbilityEntity(AssassinVanus.reveal_id, oStructure)
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(AssassinVanus.overload_id) then
+			local oStructure = Ability.EntityFilters.CloseBaseEntityEnemy(iPos, 15, 1)
+			if oStructure ~= nil then
+				self.squad_ai:DoSpecialAbility(AssassinVanus.overload_id)
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(AssassinVanus.sabotage_id) then
+			local oStructure = Ability.EntityFilters.CloseBaseEntityEnemy(iPos, 10, 1)
+			if oStructure ~= nil then
+				self.squad_ai:DoSpecialAbilityEntity(AssassinVanus.sabotage_id, oStructure)
+				return
+			end
+		end
+	end
+end
+
+
+function AssassinVanusTactic:Reinforce()
+	-- Allow free reinforcing during harassing time
+	if (g_iGMT > DefendChokePointPlan.HarassingTime * 60) then
+		-- If there are no resource's available, don't upgrade!
+		if (not Tactic.Options.can_reinforce) then
+			return
+		end
+	end
+	-- If we lose Vanus, DO NOT reinforce. NOTE: We NEVER TRY to get the primary leader (Vanus)!
+	if self.squad_ai:CanReinforce(false, 0) then
+		return
+	end
+	if not self.squad_ai:IsReinforcing() then
+		-- Try for different types of squad members
+		local probeIndex = 0
+		local guardIndex = 1
+		-- Get current leader count
+		local numProbe = self.squad_ai:GetLeaderCount(probeIndex)
+		local numGuard = self.squad_ai:GetLeaderCount(guardIndex)
+		-- Desired order of reinforcing
+		if numGuard < 1 then
+			if self.squad_ai:CanReinforce(true, guardIndex) then
+				self.squad_ai:DoReinforce(true, guardIndex)
+			end
+		elseif numProbe < 1 then
+			if self.squad_ai:CanReinforce(true, probeIndex) then
+				self.squad_ai:DoReinforce(true, probeIndex)
+			end
+		end
+	end
+end

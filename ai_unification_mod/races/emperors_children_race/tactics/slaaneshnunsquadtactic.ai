@@ -1,0 +1,115 @@
+----------------------------------------
+-- File: 'slaaneshnunsquadtactic.ai'
+-- Edited by Thudmeizer	@ 23.07.2018
+
+class 'SlaaneshNunSquadTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshNunSquad = {}
+
+function SlaaneshNunSquadTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Nun Squad Tactic")
+end
+
+function SlaaneshNunSquadTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshNunSquad.combatdrugs_id == nil then
+		SlaaneshNunSquad.combatdrugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )	
+		SlaaneshNunSquad.rosarius_id = cpu_manager.stats:GetAbilityID( "emperors_children_miri_rosarius_wargear" )	
+		SlaaneshNunSquad.burn_id = cpu_manager.stats:GetAbilityID( "emperors_children_let_it_burn" )
+		SlaaneshNunSquad.overcharged_id = cpu_manager.stats:GetAbilityID( "emperors_children_overcharged_plasma_shot" )	
+	end
+end
+
+function SlaaneshNunSquadTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+
+		-- Use rosarius
+		if self.squad_ai:CanDoAbility(SlaaneshNunSquad.rosarius_id) and self.squad_ai:WasRecentlyHurt()
+		and self.squad_ai:GetHealthPercentage() < 0.25 then
+			self.squad_ai:DoSpecialAbility(SlaaneshNunSquad.rosarius_id)
+		end
+	
+		-- Use combat drugs
+		if self.squad_ai:CanDoAbility(SlaaneshNunSquad.combatdrugs_id) then
+			self.squad_ai:DoSpecialAbility( SlaaneshNunSquad.combatdrugs_id )
+		end
+
+		-- Use 'Let It Burn'
+		Ability.DoAbilityTarget(self.squad_ai, SlaaneshNunSquad.burn_id, Ability.Filters.CloseEnemy, 6)
+
+		-- Use Overcharge
+		Ability.DoAbilityTarget(self.squad_ai, SlaaneshNunSquad.overcharged_id, Ability.Filters.CloseVehicleEnemy, 1)
+		Ability.DoAbilityTarget(self.squad_ai, SlaaneshNunSquad.overcharged_id, Ability.Filters.CloseInfantryEnemy, 6)
+		Ability.DoAbilityTarget(self.squad_ai, SlaaneshNunSquad.overcharged_id, Ability.Filters.CloseMonsterEnemy, 2)
+		Ability.DoAbilityTarget(self.squad_ai, SlaaneshNunSquad.overcharged_id, Ability.Filters.CloseCommanderEnemy, 1)
+	end
+
+    self:DoThrowGrenades()
+
+end
+
+function SlaaneshNunSquadTactic:Reinforce()
+
+	-- always try for one veteran (regular) squad member first
+	if not self.squad_ai:IsReinforcing() then
+		if self.squad_ai:CanReinforce( false, 0 ) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local flamerIndex = 0
+		local meltaIndex = 1
+		local plasmaIndex = 2
+		local oldnunIndex = 3
+	
+		local numFlamers = self.squad_ai:GetLeaderCount( flamerIndex )
+		local numMeltas = self.squad_ai:GetLeaderCount( meltaIndex )
+		local numPlasmas = self.squad_ai:GetLeaderCount( plasmaIndex )
+		local numOldnuns = self.squad_ai:GetLeaderCount( oldnunIndex )
+
+		-- Desired order of reinforcing
+		if numFlamers < 1 then
+			if self.squad_ai:CanReinforce( true, flamerIndex ) then
+				self.squad_ai:DoReinforce( true, flamerIndex )
+			end
+
+		elseif numMeltas < 1 then
+			if self.squad_ai:CanReinforce( true, meltaIndex ) then
+				self.squad_ai:DoReinforce( true, meltaIndex )
+			end
+
+		elseif numPlasmas < 1 then
+			if self.squad_ai:CanReinforce( true, plasmaIndex ) then
+				self.squad_ai:DoReinforce( true, plasmaIndex )
+			end
+
+		elseif numOldnuns < 1 then
+			if self.squad_ai:CanReinforce( true, oldnunIndex ) then
+				self.squad_ai:DoReinforce( true, oldnunIndex )
+			end
+		end
+	end
+end
+
+function SlaaneshNunSquadTactic:CanOnlyDecap()
+	return true
+end
+
+function SlaaneshNunSquadTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end

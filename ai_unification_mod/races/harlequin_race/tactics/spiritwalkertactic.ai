@@ -1,0 +1,41 @@
+----------------------------------------
+-- File: 'SpiritWalkertactic.ai'
+-- Edited by Thudmeizer @ 23.02.2009
+
+class 'SpiritWalkerTactic' (HarlequinVehicleTactic)
+
+SpiritWalker = {}
+
+function SpiritWalkerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("SpiritWalker Tactic")
+end
+
+function SpiritWalkerTactic:NeedRepair()
+	return true
+end
+
+function SpiritWalkerTactic:InitAbilities()
+
+	 if (SpiritWalker.burst_id == nil) then
+	        SpiritWalker.burst_id = cpu_manager.stats:GetAbilityID( "harlequin_grenade_burst" )
+	 end
+end
+
+function SpiritWalkerTactic:DoAbilities()
+	
+         --SelfTarget: Multiple Grenade attack against Infantry
+	 Ability.DoAbilityPos( self.squad_ai, SpiritWalker.burst_id, Ability.Filters.CloseInfantryEnemy, 8 ) 
+	 Ability.DoAbilityPos( self.squad_ai, SpiritWalker.burst_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+	 Ability.DoAbilityPos( self.squad_ai, SpiritWalker.burst_id, Ability.Filters.CloseMonsterEnemy, 2 ) 
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		 Ability.DoAbilityPos( self.squad_ai, SpiritWalker.burst_id, Ability.Filters.CloseInfantryEnemy, 4 ) 
+		 Ability.DoAbilityPos( self.squad_ai, SpiritWalker.burst_id, Ability.Filters.CloseMonsterEnemy, 1 ) 
+	end
+end
+
+function SpiritWalkerTactic:NeedRepair()
+	return false
+end

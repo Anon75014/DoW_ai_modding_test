@@ -1,0 +1,68 @@
+----------------------------------------
+-- File: 'renegades_goldship_tactic.ai'
+-- Edited by Thudmeizer @ 26.10.2025
+
+class 'Renegades_Goldship_Tactic' (Renegades_Infantry_Tactic)
+
+Goldship = {}
+
+function Renegades_Goldship_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Gold Ship Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Goldship_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Goldship_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Goldship_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Goldship.sprint_id == nil) then
+		Goldship.sprint_id = cpu_manager.stats:GetAbilityID( "renegade_guard_sprint_gold_ship" )
+	end
+
+	if (Goldship.switch_id == nil) then
+		Goldship.switch_id = cpu_manager.stats:GetAbilityID( "renegade_guard_golshi_deadeye_switch" )
+	end
+end
+
+function Renegades_Goldship_Tactic:DoAbilities()
+
+	-- Check if we can run where possible
+	if (self.squad_ai:CanDoAbility( Goldship.sprint_id )) then
+		self.squad_ai:DoSpecialAbility( Goldship.sprint_id )
+	end
+
+	-- Check if I can use the DeadEye Switch
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea(self.squad_ai, Goldship.switch_id, Ability.Filters.CloseInfantryEnemy, 20, 4)
+		Ability.DoAbilityArea(self.squad_ai, Goldship.switch_id, Ability.Filters.CloseCommanderEnemy, 20, 1)
+	else
+		Ability.DoAbilityArea(self.squad_ai, Goldship.switch_id, Ability.Filters.CloseInfantryEnemy, 20, 8)
+		Ability.DoAbilityArea(self.squad_ai, Goldship.switch_id, Ability.Filters.CloseCommanderEnemy, 20, 1)
+	end
+end
+
+function Renegades_Goldship_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

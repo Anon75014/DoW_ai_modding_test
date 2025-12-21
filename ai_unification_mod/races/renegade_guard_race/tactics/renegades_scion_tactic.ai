@@ -1,0 +1,59 @@
+----------------------------------------
+-- File: 'renegades_scion_tactic.ai'
+-- Edited by Thudmeizer	@ 09.03.2024
+
+class 'Renegades_Scion_Tactic' (Renegades_Infantry_Tactic)
+
+Scion = {}
+
+function Renegades_Scion_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Scion Squad Tactic")
+end
+
+function Renegades_Scion_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Scion.blight_id == nil) then
+		Scion.blight_id = cpu_manager.stats:GetAbilityID("renegade_guard_blight_grenades")
+	end
+
+	if (Scion.blight_sp == nil) then
+		Scion.blight_sp = cpu_manager.stats:GetAbilityID("renegade_guard_blight_grenades_advance")
+	end
+end
+
+function Renegades_Scion_Tactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		if (self.squad_ai:CanDoAbility( Scion.blight_id )) then
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_id, Ability.Filters.CloseInfantryEnemy, 4 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_id, Ability.Filters.CloseMonsterEnemy, 2 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility( Scion.blight_sp )) then
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_sp, Ability.Filters.CloseInfantryEnemy, 4 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_sp, Ability.Filters.CloseMonsterEnemy, 2 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_sp, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+	else
+		if (self.squad_ai:CanDoAbility( Scion.blight_id )) then
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_id, Ability.Filters.CloseInfantryEnemy, 6 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_id, Ability.Filters.CloseMonsterEnemy, 4 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility( Scion.blight_sp )) then
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_sp, Ability.Filters.CloseInfantryEnemy, 6 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_sp, Ability.Filters.CloseMonsterEnemy, 4 )
+			Ability.DoAbilityTarget( self.squad_ai, Scion.blight_sp, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+	end
+end
+
+function Renegades_Scion_Tactic:CanOnlyDecap()
+	return true
+end

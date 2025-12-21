@@ -1,0 +1,63 @@
+----------------------------------------
+-- File: 'deathguardtyphustactic.ai'
+-- Edited by Thudmeizer	@ 11.05.2022
+
+class 'DeathGuardTyphusTactic' (DeathGuardInfantryTactic)
+
+DeathGuardTyphus = {}
+
+function DeathGuardTyphusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Typhus Tactic")
+end
+
+function DeathGuardTyphusTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DeathGuardTyphusTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DeathGuardTyphusTactic:InitAbilities()
+
+	if (DeathGuardTyphus.pestilence_id == nil) then
+		DeathGuardTyphus.pestilence_id = cpu_manager.stats:GetAbilityID( "death_guard_miasma_of_pestilence" )	
+		DeathGuardTyphus.hive_id = cpu_manager.stats:GetAbilityID( "death_guard_destroyer_hive" )	
+	end
+end
+
+function DeathGuardTyphusTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea( self.squad_ai, DeathGuardTyphus.pestilence_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityPos( self.squad_ai, DeathGuardTyphus.hive_id, Ability.Filters.CloseEnemy, 4 )
+	else
+		Ability.DoAbilityArea( self.squad_ai, DeathGuardTyphus.pestilence_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityPos( self.squad_ai, DeathGuardTyphus.hive_id, Ability.Filters.CloseEnemy, 8 )
+	end
+end
+
+function DeathGuardTyphusTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier3+
+    if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                self:TryAttachSquadMelee()
+            end
+        end
+    end
+end

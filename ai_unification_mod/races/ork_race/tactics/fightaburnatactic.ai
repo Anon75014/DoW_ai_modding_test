@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'fightaburnatactic.ai'
+-- Created by Gambit @ 21.10.2021
+
+class 'FightaBurnaTactic' (OrkVehicleTactic)
+
+FightaBurna = {}
+
+function FightaBurnaTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fighta Burna Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+
+function FightaBurnaTactic:InitAbilities()
+
+	-- Init ability ID's
+	if FightaBurna.incendiary_id == nil then
+		FightaBurna.incendiary_id = cpu_manager.stats:GetAbilityID( "ork_burna_bombs_run" )
+	end
+end
+
+
+function FightaBurnaTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Check if we're in close combat - to Use Incendiary
+		if self.squad_ai:CanDoAbility(FightaBurna.incendiary_id) and not self.squad_ai:IsInStateMove() then
+			local oPos = self.squad_ai:GetPosition()
+			local oEnemySquad = Ability.Filters.CloseInfantryEnemy(oPos, 25, 1)
+			if oEnemySquad ~= nil and not oEnemySquad:IsBroken() then
+				local oEnemyPos = oEnemySquad:GetPosition()
+				oPos.x = oPos.x + 2*(oEnemyPos.x - oPos.x)
+				oPos.z = oPos.z + 2*(oEnemyPos.z - oPos.z)
+				self.squad_ai:DoMove(oPos)
+				self.squad_ai:DoSpecialAbility(FightaBurna.incendiary_id)
+				return
+			end
+		end
+	end
+	
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

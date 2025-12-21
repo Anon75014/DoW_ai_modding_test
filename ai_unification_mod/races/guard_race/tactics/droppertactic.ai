@@ -1,0 +1,76 @@
+----------------------------------------
+-- File: 'droppertactic.ai'
+-- Edited by Thudmeizer @ 05.11.2025
+
+class 'DropperTactic' (GuardInfantryTactic)
+
+Dropper = {}
+
+function DropperTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Elysian Drop Trooper Squad Tactic")
+end
+
+function DropperTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Dropper.flashbang_id == nil) then
+		Dropper.flashbang_id = cpu_manager.stats:GetAbilityID( "guard_rangers_flashbangs" )	
+	end
+end
+
+function DropperTactic:DoAbilities()
+
+	-- Try to use abilities while in combat
+	if self.squad_ai:IsInCombat() then
+
+		if (self.squad_ai:CanDoAbility(Dropper.flashbang_id)) then
+	
+			-- Try to use flash bangs if low on health or broken
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) or (self.squad_ai:IsBroken()) then
+
+				local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), 20, 4)
+				if (oSquad ~= nil) then
+					self.squad_ai:DoSpecialAbility(Dropper.flashbang_id)
+				end
+			else
+				local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), 20, 8)
+				if (oSquad ~= nil) then
+					self.squad_ai:DoSpecialAbility(Dropper.flashbang_id)
+				end
+			end
+		end
+	end
+end
+
+function DropperTactic:Reinforce()
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local iLasCutterIndex = 0
+        	local iPathfinderIndex = 1
+		
+		local iNumLasCutter = self.squad_ai:GetLeaderCount( iLasCutterIndex )
+		local iNumPathfinder = self.squad_ai:GetLeaderCount( iPathfinderIndex )
+
+		-- Desired number of each leader type
+		local iDesiredLasCutter = math.random(0,2)
+		local iDesiredPathfinder = math.random(0,2)
+		
+		-- Desired order of reinforcing
+		if iNumLasCutter < iDesiredLasCutter then
+			if self.squad_ai:CanReinforce( true, iLasCutterIndex ) then
+				self.squad_ai:DoReinforce( true, iLasCutterIndex )
+			end
+		elseif iNumPathfinder < iDesiredPathfinder then 
+			if self.squad_ai:CanReinforce( true, iPathfinderIndex ) then
+				self.squad_ai:DoReinforce( true, iPathfinderIndex )
+			end
+        else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end

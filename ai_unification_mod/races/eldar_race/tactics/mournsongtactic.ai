@@ -1,0 +1,103 @@
+----------------------------------------
+-- File: 'mournsongtactic.ai'
+-- Edited by Gambit	@ 15.03.2022
+
+class 'MournsongTactic' (EldarVehicleTactic)
+
+Mournsong = {}
+
+function MournsongTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Yrrthilien Mournsong Tactic")
+
+	self.chargeTimer = g_iGMT
+end
+
+
+function MournsongTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Mournsong.mighty_charge_id == nil then
+		Mournsong.mighty_charge_id = cpu_manager.stats:GetAbilityID( "eldar_mournsong_mighty_charge" )
+	end
+end
+
+
+function MournsongTactic:DoAbilities()
+
+	-- Make sure the on/of takes at least some time before rechecking
+	if g_iGMT < self.chargeTimer + 6 then return end
+
+	local health = self.squad_ai:GetHealthPercentage()
+
+	if self.squad_ai:IsUsingAbility(Mournsong.mighty_charge_id) then
+		-- We are using the ability. Stop using it and retreat nearby, if of low health
+		if health < 0.4 then
+			self.squad_ai:DoSpecialAbility(Mournsong.mighty_charge_id)
+			self.chargeTimer = g_iGMT
+			self:Retreat()
+		end
+	elseif self.squad_ai:GetHealthPercentage() >= 0.4 then
+		-- We are not using the ability. Enable it, if of high health
+		self.squad_ai:DoSpecialAbility(Mournsong.mighty_charge_id)
+		self.chargeTimer = g_iGMT
+	end
+end
+
+
+function MournsongTactic:Update()
+
+	-- State machine
+	if not Tactic.Update(self) then
+		return false
+	end
+
+	-- Check if vehicle can be repaired
+	if self.squad_ai:CanBeRepaired() then
+		-- Set repair states
+		if self.squad_ai:GetHealthPercentage() < 0.1 then
+			self.m_bNeedRepair = true
+		end
+	end
+
+	-- Check if vehicle needs repair
+	if self.m_bNeedRepair then
+		-- Check if vehicle is repaired
+		aitrace("Current repair target = "..tostring(self.target.x)..", "..tostring(self.target.z))
+		if (self.squad_ai:GetHealthPercentage() > 0.5) then
+	        self.m_bNeedRepair = false
+	        self.hurt_level = 0.6
+	    end
+	end
+
+	if self.squad_ai:CanJump() then
+		self.tolerance_default = self.squad_ai:GetJumpDistance()
+	else
+		self.tolerance_default = 100
+	end
+
+	-- Special moves
+	self:CloseOnEnemy()
+
+	self:SyncSubState()
+	-- Don't update stance if in special substate !
+	if (self.stateID == Tactic.StateID.NoState) then
+		self:UpdateStance()
+	end
+
+	-- Check for battle stance
+	if self.squad_ai:GetHealthPercentage() > 0.3 then
+		self.squad_ai:DoSetDefaultMeleeStance()
+	else
+		self.squad_ai:DoSetMeleeStance( SquadAI.MSTANCE_Ranged )
+	end
+
+	-- Do abilities
+	self:InitAbilities()
+	self:DoAbilities()
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+
+	return true
+end

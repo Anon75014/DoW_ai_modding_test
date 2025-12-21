@@ -1,0 +1,111 @@
+----------------------------------------
+-- File: 'solitairetactic.ai'
+-- Edited by Thudmeizer @ 20.04.2010
+-- Edited by Gambit @ 21.11.2016
+
+class 'SolitaireTactic' (HarlequinInfantryTactic)
+
+Solitaire = {}
+
+function SolitaireTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Solitaire Tactic")
+	self.solitaryTMR = g_iGMT
+	self.masqueradeTMR = nil
+end
+
+function SolitaireTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function SolitaireTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function SolitaireTactic:IsAffectedByMorale()
+	return false
+end
+
+function SolitaireTactic:AlwaysAttack()
+	if self.masqueradeTMR ~= nil and g_iGMT < self.masqueradeTMR + 25 then
+		return false
+	else
+		return true
+	end
+end
+
+function SolitaireTactic:InitAbilities()
+
+	if Solitaire.masquerade_id == nil then
+		Solitaire.masquerade_id = cpu_manager.stats:GetAbilityID( "harlequin_solitaire_killme" )
+	end
+end
+
+
+function SolitaireTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Active masquerade, based on conditions
+		if  self.squad_ai:GetHealthPercentage() < 0.35
+		and self.squad_ai:WasRecentlyHurt()
+		and self.squad_ai:CanDoAbility(Solitaire.masquerade_id) then
+			self.squad_ai:DoSpecialAbility(Solitaire.masquerade_id)
+			self:TryToGoSolitaryFrom(self.squad_ai:GetPosition())
+			self.masqueradeTMR = g_iGMT
+		end
+
+		-- Try to activate solitaire dance
+		if self.squad_ai:CanMeleeDance() then
+			self.squad_ai:DoMeleeDance()
+		end
+	else
+
+	-- "Solitary" movement code, so that she moves away from friendly infantry when not in combat
+		if g_iGMT > self.solitaryTMR + 6 then
+			self.solitaryTMR = g_iGMT
+			if self:IsFriendlyMoraleSquadWithin(self.squad_ai:GetPosition(),26) then
+				self:TryToGoSolitaryFrom(self.squad_ai:GetPosition())
+			end
+		end
+	end
+end
+
+
+function SolitaireTactic:IsFriendlyMoraleSquadWithin(iPos,iRange)
+	for player in cpu_manager.stats:GetPlayerStats() do
+		if not (cpu_manager.player_stats:IsEnemy(player) or player:IsPlayerDead()) then
+			for oSquad in player:GetSquads() do
+				if oSquad ~= nil and oSquad:IsValid() then
+					-- This checks for squads that DO USE morale
+					if oSquad:GetMoralePercentage() ~= 0 or oSquad:IsBroken() then
+						if distance_sqr(oSquad:GetPosition(),iPos) <= iRange*iRange then
+							return true
+						end
+					end
+				end
+			end
+		end
+	end
+return false
+end
+
+
+function SolitaireTactic:TryToGoSolitaryFrom(iPos)
+	local lpPos = {}
+	for oStrategicPoint in resource_manager:GetStrategicPointAIs() do
+		if cpu_manager:IsFriendly(oStrategicPoint:Owner()) then
+			local oStrategicPointPosition = oStrategicPoint:GetPosition()
+			local oStrategicPointDistance = cpu_manager.terrain_analyzer:GetPathingDistance(iPos, oStrategicPointPosition)
+			if not self:IsFriendlyMoraleSquadWithin(oStrategicPointPosition,26) then
+				table.insert(lpPos, {oStrategicPointPosition, oStrategicPointDistance})
+			end
+		end
+	end
+	if table.getn(lpPos) > 0 then
+		table.sort(lpPos, function(oItem1, oItem2) return oItem1[2] < oItem2[2] end)
+		self.squad_ai:DoAttackMove( lpPos[1][1] )
+	else
+		self.squad_ai:DoAttackMove(cpu_manager.start_pos)
+	end
+end

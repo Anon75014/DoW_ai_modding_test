@@ -1,0 +1,77 @@
+----------------------------------------
+-- File: 'Commissartactic.ai'
+-- Edited by Thudmeizer @ 12.10.2005
+-- Edited by Arkhan 	@ 02.12.2005
+-- Edited by Gambit		@ 26.08.2021
+
+class 'CommissarTactic' (GuardInfantryTactic)
+
+Commissar = {}
+
+function CommissarTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Commissar Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+	
+	-- Init execute delay time
+	Commissar.NextExecuteCheck = 0
+end
+
+function CommissarTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function CommissarTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function CommissarTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Commissar.execute_id == nil or Commissar.NextExecuteCheck == nil) then
+		Commissar.execute_id = cpu_manager.stats:GetAbilityID( "guard_commissar_execute" )
+		Commissar.execute_camp_id = cpu_manager.stats:GetAbilityID( "guard_commissar_execute_advance_sp" )
+		Commissar.NextExecuteCheck = g_iGMT
+	end
+end
+
+function CommissarTactic:DoAbilities()
+
+	if Commissar.NextExecuteCheck == nil then 
+		Commissar.NextExecuteCheck = 0
+	end
+
+	-- TargetSelf: When attached to squad, executes one of his own soldiers to increase their fighting potential
+	-- GAMBIT: Added one more function (IsNearbySquadsMoraleBelow), for more cases of nearby morale-broken toorps
+	if g_iGMT > Commissar.NextExecuteCheck and (self.squad_ai:CanDoAbility(Commissar.execute_id) or self.squad_ai:CanDoAbility(Commissar.execute_camp_id))
+	and self.squad_ai:IsAttacking() and self.squad_ai:IsAttached() then
+		if self.squad_ai:GetNumTroopers() > 6
+		or self:IsNearbySquadsMoraleBelow( self.squad_ai:GetPosition(), 30, 0.3, false ) then
+			-- Use execute ability
+			if self.squad_ai:CanDoAbility(Commissar.execute_id) then
+				self.squad_ai:DoSpecialAbility(Commissar.execute_id) 
+				Commissar.NextExecuteCheck = g_iGMT + 20
+			elseif self.squad_ai:CanDoAbility(Commissar.execute_camp_id) then
+				self.squad_ai:DoSpecialAbility(Commissar.execute_camp_id) 
+				Commissar.NextExecuteCheck = g_iGMT + 20
+			end
+		end
+	end
+end
+
+function CommissarTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to squad
+	self:TryAttachSquad(false, false, 1000, 60, nil)
+end

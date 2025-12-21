@@ -1,0 +1,20 @@
+----------------------------------------
+-- File: 'sisterslightningtactic.ai'
+-- Created by Gambit @ 19.09.2017
+
+class 'SistersLightningTactic' (SistersVehicleTactic)
+
+function SistersLightningTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Lightning Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function SistersLightningTactic:DoAbilities()
+	
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

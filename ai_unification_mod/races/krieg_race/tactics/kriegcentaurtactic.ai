@@ -1,0 +1,52 @@
+----------------------------------------
+-- File: 'kriegcentaurtactic.ai'
+-- Edited by Arkhan		@ 23.11.2007
+-- Edited by Thudmeizer		@ 26.04.2022
+
+class 'KriegCentaurTactic' (KriegVehicleTactic)
+
+KriegCentaur = {}
+
+function KriegCentaurTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Centaur Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 2
+end
+
+function KriegCentaurTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegCentaur.missile_id == nil) then
+		KriegCentaur.missile_id = cpu_manager.stats:GetAbilityID( "krieg_hk_centaur" )
+	end
+
+	if (KriegCentaur.smoke_id == nil) then
+		KriegCentaur.smoke_id = cpu_manager.stats:GetAbilityID( "krieg_smoke_launchers_centaur" )
+	end
+end
+
+function KriegCentaurTactic:DoAbilities()
+
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(KriegCentaur.missile_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, KriegCentaur.missile_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, KriegCentaur.missile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, KriegCentaur.missile_id, Ability.Filters.CloseSquadEnemy, 4 )
+	end
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(KriegCentaur.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCentaur.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(KriegCentaur.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call standard method
+	KriegVehicleTactic.DoAbilities(self)
+end

@@ -1,0 +1,96 @@
+----------------------------------------
+-- File: 'wolfpriesttactic.ai'
+-- Edited by Thudmeizer @ 18.05.2022
+
+class 'WolfPriestTactic' (ThirteenthcomInfantryTactic)
+
+WolfPriest = {}
+
+function WolfPriestTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Wolf Priest Tactic")
+end
+
+-- WolfPriest is allowed to retreat even directly after a jump
+function WolfPriestTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function WolfPriestTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function WolfPriestTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- Assassinate win condition -- never jump into combat
+function WolfPriestTactic:JumpAttack()
+
+	if (cpu_manager.assassinate) or (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+function WolfPriestTactic:InitAbilities()
+
+	if WolfPriest.righteous_id == nil then
+	   WolfPriest.righteous_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_priest_righteous_fury" )	
+	end
+
+	if WolfPriest.demoralize_id == nil then
+	   WolfPriest.demoralize_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_demoralize" )	
+	end
+end
+
+function WolfPriestTactic:DoAbilities()
+
+	Ability.DoAbility( self.squad_ai, WolfPriest.righteous_id, Ability.Filters.IsInCombat )
+
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility( WolfPriest.demoralize_id ) then
+		local count = 0
+		local health = self.squad_ai:GetHealthPercentage()
+		if health < 0.5 then count = 4
+		elseif health < 0.8 then count = 6
+		else count = 7 end
+		if Ability.Filters.CloseSquadEnemy(self.squad_ai:GetPosition(), 20, count) ~= nil then
+			self.squad_ai:DoSpecialAbility(WolfPriest.demoralize_id)
+		end
+	end
+end
+
+function WolfPriestTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+
+	-- Try to attach to melee in tier 2+
+	if (cpu_manager:GetTierLevel() >= 2 or self.squad_ai:WasRecentlyHurt()) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+		
+		if (self:TryAttachSquad(false, true, 50, 100, nil) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+end
+
+-- Arkhan 03.2006: Inherited method used by commanders which are able to jump with an attached squad
+function WolfPriestTactic:CanJumpAttached()
+	return true
+end

@@ -1,0 +1,70 @@
+----------------------------------------
+-- File: 'kriegairshiptactic.ai'
+-- Edited by fuggles @ 07.04.2022
+-- Edited by Thudmeizer @ 28.04.2022
+
+class 'KriegAirshipTactic' (KriegVehicleTactic)
+
+KriegAirship = {}
+
+function KriegAirshipTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Airship Tactic")
+end
+
+function KriegAirshipTactic:InitAbilities()
+
+	-- Init ability ID's
+	if KriegAirship.gas_id == nil then
+		KriegAirship.gas_id = cpu_manager.stats:GetAbilityID( "krieg_gas_bombs" )
+		KriegAirship.tesla_id = cpu_manager.stats:GetAbilityID( "krieg_tesla_bombs" )
+		KriegAirship.mine_id = cpu_manager.stats:GetAbilityID( "krieg_mine_bombs" )
+	end
+end
+
+function KriegAirshipTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Check if we're in close combat - Gas
+		if self.squad_ai:CanDoAbility(KriegAirship.gas_id) and not self.squad_ai:IsInStateMove() then
+			local selfPos = self.squad_ai:GetPosition()
+			local oEnemySquad = Ability.Filters.CloseInfantryEnemy(selfPos, 25, 1)
+			if oEnemySquad ~= nil and not oEnemySquad:IsBroken() then
+				local oEnemyPos = oEnemySquad:GetPosition()
+				selfPos.x = selfPos.x + 2*(oEnemyPos.x - selfPos.x)
+				selfPos.z = selfPos.z + 2*(oEnemyPos.z - selfPos.z)
+				self.squad_ai:DoMove(selfPos)
+				self.squad_ai:DoSpecialAbility(KriegAirship.gas_id)
+				return
+			end
+		end
+		-- Check if we're in close combat - Tesla
+		if self.squad_ai:CanDoAbility(KriegAirship.tesla_id) and not self.squad_ai:IsInStateMove() then
+			local selfPos = self.squad_ai:GetPosition()
+			local oEnemyVehicle = Ability.Filters.CloseVehicleEnemy(selfPos, 25, 1)
+			if oEnemyVehicle ~= nil then
+				local oEnemyPos = oEnemyVehicle:GetPosition()
+				selfPos.x = selfPos.x + 2*(oEnemyPos.x - selfPos.x)
+				selfPos.z = selfPos.z + 2*(oEnemyPos.z - selfPos.z)
+				self.squad_ai:DoMove(selfPos)
+				self.squad_ai:DoSpecialAbility(KriegAirship.tesla_id)
+				return
+			end
+		end
+	end
+
+	-- Check if we can deploy mines even outside of combat
+	if self.squad_ai:CanDoAbility(KriegAirship.mine_id) then
+		-- Search for a friendly squad
+		local selfPos = self.squad_ai:GetPosition()
+		local oUnit = Ability.Filters.CloseHurt(selfPos, 30, 1)
+		if oUnit ~= nil and oUnit:IsInCombat() then -- and cpu_manager:GetUnitStrength(oUnit) > 150 then
+			local oFriendPos = oUnit:GetPosition()
+			selfPos.x = selfPos.x + 2*(oFriendPos.x - selfPos.x)
+			selfPos.z = selfPos.z + 2*(oFriendPos.z - selfPos.z)
+			self.squad_ai:DoMove(selfPos)
+			self.squad_ai:DoSpecialAbility(KriegAirship.mine_id)
+		end
+	end
+end
+

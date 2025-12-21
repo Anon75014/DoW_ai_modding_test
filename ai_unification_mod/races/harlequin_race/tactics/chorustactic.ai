@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'chorustactic.ai'
+-- Edited by Thudmeizer @ 26.06.2010
+
+class 'ChorusTactic' (EngineerTactic)
+
+Chorus = {}
+
+function ChorusTactic:__init( squad_ai ) super( squad_ai )
+
+        self:SetName("Chorus Tactic")
+end
+
+
+function ChorusTactic:CanRepair()
+       return false
+end
+
+function ChorusTactic:IsAffectedByMorale()
+       return false
+end
+
+function ChorusTactic:Reinforce()
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+		if (iRequisition > 300 and iPower > 150 and cpu_manager:GetTierLevel() >= 2) then
+
+        local use_leader = false
+        if self.squad_ai:CanReinforce( use_leader, 0 ) then
+            self.squad_ai:DoReinforce( use_leader, 0 )
+		end
+    end
+end
+
+function ChorusTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not EngineerTactic.Update(self)) then
+		return
+	end
+end

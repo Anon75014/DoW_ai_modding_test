@@ -1,0 +1,192 @@
+----------------------------------------
+-- File: 'ynnaristrategyinfo.ai'
+-- Edited by Thudmeizer  @ 28.05.2025
+
+BuildBaseStrategyInfo = 
+{
+	ynnari_race =
+	{
+		post_builder = 1,
+		flag_capture = 1,
+
+		-- Reserve this amount for building units, reinforcing and upgrading
+		req_reserve = 150,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+		
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Research Total: 24 (excludes 2 useless researches) 
+			-- Allround strategy
+			{
+				{ 1, 220, 50, 0, 1,	"Unit",		"ynnari_squad_yvainne" },
+				{ 1, 130, 0, 0, 1,	"Unit",		"ynnari_squad_guardian" }, -- Force a capturing squad
+			        { 1, 160, 20, 400, 1,	"Unit",		"ynnari_squad_rangers" },
+			        { 1, 200, 20, 550, 1,	"Unit",		"ynnari_squad_scorpions" },
+				{ 1, 100, 0, 0, 1,	"Building",	"ynnari_aspect_portal" },
+			        { 1, 50, 0, 0, 100,	"Addon",	"ynnari_stone_dark_eldar_infantry" },
+			        { 1, 50, 0, 0, 100,	"Addon",	"ynnari_stone_harlequin_infantry" },
+			        { 1, 50, 0, 0, 100,	"Addon",	"ynnari_stone_eldar_infantry" },
+				{ 1, 360, 0, 0, 1,	"Building",	"ynnari_hq" },
+				{ 1, 165, 0, 0, 1,	"Building",	"ynnari_warp_generator" },
+				{ 1, 100, 75, 750, 60,	"TurretAddon", 	"ynnari_list_post_addon_1" },
+				{ 1, 100, 50, 0, 1,	"Building",	"ynnari_platform_scatterlaser" },
+				{ 1, 125, 0, 0, 1,	"Building",	"ynnari_webway_gate" },
+				{ 1, 165, 0, 0, 2,	"Building",	"ynnari_warp_generator" },
+				{ 1, 165, 0, 800, 3,	"Building",	"ynnari_warp_generator" },
+				{ 1, 175, 50, 800, 1,	"Building",	"ynnari_armory" },
+				{ 1, 100, 75, 850, 100,	"TurretAddon", 	"ynnari_list_post_addon_1" },
+				{ 1, 125, 0, 850, 2,	"Building",	"ynnari_webway_gate" },
+				{ 1, 75, 75, 900, 1,	"Research",	"ynnari_infiltration_research" },
+				{ 1, 165, 0, 950, 4,	"Building",	"ynnari_warp_generator" },
+				{ 1, 250, 250, 1000, 1,	"Research",    	"ynnari_tier2_research" },
+			
+				{ 2, 100, 45, 0, 1,	"Unit",		"ynnari_squad_death_jesters" },
+				{ 2, 150, 100, 0, 1,	"Unit",		"ynnari_squad_venom" },
+				{ 2, 180, 40, 0, 1,	"Unit",		"ynnari_squad_visarch" },
+			        { 2, 200, 100, 250, 1,	"Building",	"ynnari_support_portal" },
+			        { 2, 50, 0, 250, 100,	"Addon",	"ynnari_stone_dark_eldar_vehicle" },
+			        { 2, 50, 0, 250, 100,	"Addon",	"ynnari_stone_eldar_vehicle" },
+			        { 2, 50, 0, 250, 100,	"Addon",	"ynnari_stone_harlequin_vehicle" },
+				{ 2, 165, 0, 1000, 6,	"Building",	"ynnari_warp_generator" },
+			        { 2, 50, 0, 1000, 20,	"TurretAddon", 	"ynnari_support_platform_addon" },
+			        { 2, 200, 40, 1000, 1,	"Research",	"ynnari_power_research_1" },
+		                { 2, 75, 250, 1500, 1,	"Research",    	"ynnari_requisition_research_1" },
+				{ 2, 125, 0, 1500, 4,	"Building",	"ynnari_webway_gate" },
+				{ 2, 250, 155, 2000, 40,"TurretAddon", 	"ynnari_list_post_addon_2" },
+				{ 2, 100, 50, 2000, 2,	"Building",	"ynnari_platform_scatterlaser" },
+				{ 2, 340, 340, 2000, 1,	"Research",    	"ynnari_tier3_research" },
+
+				{ 3, 150, 150, 0, 1,	"Unit",		"ynnari_squad_vehicle_war_walker" },
+				{ 3, 150, 250, 0, 1,	"Unit",		"ynnari_squad_harlequin_wraith_lord" },
+				{ 3, 180, 40, 0, 1,	"Unit",		"ynnari_squad_visarch" },
+			        { 3, 350, 0, 2000, 1,	"Research",	"ynnari_power_research_2" },
+			        { 3, 100, 350, 2000, 1,	"Research",	"ynnari_requisition_research_2" },
+				{ 3, 100, 50, 2000, 4,	"Building",	"ynnari_platform_scatterlaser" },
+				{ 3, 450, 450, 2000, 1, "Research",     "ynnari_tier4_research" },
+
+				{ 4, 300, 300, 0, 1,	"Unit",		"ynnari_squad_ynncarnate" },
+				{ 4, 100, 50, 2000, 6,	"Building",	"ynnari_platform_scatterlaser" },
+				{ 4, 250, 155, 3000, 100,"TurretAddon", "ynnari_list_post_addon_2" },
+				{ 4, 360, 0, 4000, 2,	"Building",	"ynnari_hq" }
+			},
+		},
+				
+		SquadLimits = 
+		{
+			standard = 
+			{
+				ynnari_squad_bonesinger = 0,
+				ynnari_squad_guardian = math.random( 2,3 ),
+				ynnari_squad_scorpions = math.random( 2,3 ),
+				ynnari_squad_aspect_hawk = math.random( 2,3 ),
+				ynnari_squad_warrior = math.random( 2,3 ),
+				ynnari_squad_hellion = math.random( 2,3 ),
+				ynnari_squad_mime = math.random( 2,3 ),
+				ynnari_squad_troupe = math.random( 2,3 ),
+				ynnari_squad_corsairs_heavy_weapons = 2,
+				ynnari_squad_death_jesters = math.random( 2,3 ),
+				ynnari_squad_wych = 3,
+				ynnari_squad_girax = 1,
+				ynnari_squad_girax_giant = 1,
+				ynnari_squad_library_guardians = 2,
+				ynnari_squad_rangers = 1,
+				ynnari_squad_trueborn = 2,
+				ynnari_squad_wraithblade = 2,
+				ynnari_squad_wraithguard = 2,
+				ynnari_squad_wraithseer = 1,
+				ynnari_squad_yvainne = 1,
+				ynnari_squad_visarch = 1,
+				ynnari_squad_ynncarnate = 1,
+				ynnari_squad_raven = math.random( 2,3 ),
+				ynnari_squad_razorwing = 1,
+				ynnari_squad_talos = math.random( 2,3 ),
+				ynnari_squad_harlequin_jetbikes = math.random( 3,4 ),
+				ynnari_squad_ravager = 2,
+				ynnari_squad_venom = math.random( 2,3 ),
+				ynnari_squad_vehicle_hornet = math.random( 2,3 ),
+				ynnari_squad_vehicle_war_walker = math.random( 3,4 ),
+				ynnari_squad_harlequin_wraith_lord = math.random( 2,3 ),
+				ynnari_squad_mocking_bird = 2,
+				ynnari_squad_vehicle_night_spinner = 2,
+				ynnari_squad_void_dragon_phoenix_titan = 1,
+				ynnari_squad_phantom_titan = 1,
+			}
+		}
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	ynnari_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_bonesinger" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_yvainne" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "ynnari_aspect_portal", true },
+			{ "building", "ynnari_warp_generator" }
+		},
+		
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_bonesinger" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_yvainne" },
+			{ "squad", "ynnari_squad_bonesinger" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "ynnari_aspect_portal", true },
+			{ "building", "ynnari_aspect_portal", true },
+			{ "building", "ynnari_warp_generator" }
+		},
+		
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_bonesinger" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_guardian" },
+			{ "squad", "ynnari_squad_guardian" },		
+			{ "squad", "ynnari_squad_yvainne" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "ynnari_aspect_portal", true },
+			{ "building", "ynnari_warp_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	ynnari_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

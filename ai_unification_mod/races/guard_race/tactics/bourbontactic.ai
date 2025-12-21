@@ -1,0 +1,51 @@
+----------------------------------------
+-- File: 'bourbontactic.ai'
+-- Edited by Thudmeizer @ 17.08.2023
+
+class 'BourbonTactic' (GuardInfantryTactic)
+
+Bourbon = {}
+
+function BourbonTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Bourbonian Guard Squad Tactic")
+end
+
+function BourbonTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Bourbon.frag_id == nil) then
+		Bourbon.frag_id = cpu_manager.stats:GetAbilityID( "guard_kasrkin_frag_grenades" )	
+	end
+
+	if (Bourbon.melta_id == nil) then
+		Bourbon.melta_id = cpu_manager.stats:GetAbilityID( "guard_melta_grenades" )	
+	end
+	
+	if (Bourbon.smoke_id == nil) then
+		Bourbon.smoke_id = cpu_manager.stats:GetAbilityID( "guard_smoke_grenades" )	
+	end
+end
+
+function BourbonTactic:DoAbilities()
+
+	-- Try to use abilities
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(Bourbon.frag_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.frag_id, Ability.Filters.CloseInfantryEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.frag_id, Ability.Filters.CloseMonsterEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.frag_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if self.squad_ai:CanDoAbility(Bourbon.smoke_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.smoke_id, Ability.Filters.CloseInfantryEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.smoke_id, Ability.Filters.CloseMonsterEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.smoke_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+	else
+		if self.squad_ai:CanDoAbility(Bourbon.melta_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Bourbon.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+			Ability.DoAbilityTargetEntity(self.squad_ai, Bourbon.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+		end
+	end
+end

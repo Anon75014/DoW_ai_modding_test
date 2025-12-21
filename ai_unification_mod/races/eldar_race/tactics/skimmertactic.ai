@@ -1,0 +1,67 @@
+----------------------------------------
+-- File: 'skimmertactic.ai'
+-- Created by Arkhan		@ 23.11.2007
+-- Edited by Thudmeizer		@ 11.08.2024
+
+class 'SkimmerTactic' (EldarVehicleTactic)
+
+Skimmer = {}
+
+function SkimmerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Skimmer Tactic")
+end
+
+function SkimmerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Skimmer.holofield_cobra == nil) then
+		Skimmer.holofield_cobra = cpu_manager.stats:GetAbilityID( "eldar_holofield_cobra_cannon" )
+	end
+
+	if (Skimmer.holofield_deathstalker == nil) then
+		Skimmer.holofield_deathstalker = cpu_manager.stats:GetAbilityID( "eldar_holofield_deathstalker_shuriken" )
+	end
+
+	if (Skimmer.holofield_scorpion == nil) then
+		Skimmer.holofield_scorpion = cpu_manager.stats:GetAbilityID( "eldar_holofield_scorpion_lance" )
+	end
+
+	if (Skimmer.holofield_void == nil) then
+		Skimmer.holofield_void = cpu_manager.stats:GetAbilityID( "eldar_holofield_void_spinner" )
+	end
+end
+
+function SkimmerTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Use holofield while in combat and if hurt beyond a threshold
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+			-- Cobra
+			if (self.squad_ai:CanDoAbility( Skimmer.holofield_cobra )) then
+				self.squad_ai:DoSpecialAbility( Skimmer.holofield_cobra )
+			end
+
+			-- Deathstalker
+			if (self.squad_ai:CanDoAbility( Skimmer.holofield_deathstalker )) then
+				self.squad_ai:DoSpecialAbility( Skimmer.holofield_deathstalker )
+			end
+
+			-- Scorpion
+			if (self.squad_ai:CanDoAbility( Skimmer.holofield_scorpion )) then
+				self.squad_ai:DoSpecialAbility( Skimmer.holofield_scorpion )
+			end
+
+			-- Void Spinner
+			if (self.squad_ai:CanDoAbility( Skimmer.holofield_void )) then
+				self.squad_ai:DoSpecialAbility( Skimmer.holofield_void )
+			end
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

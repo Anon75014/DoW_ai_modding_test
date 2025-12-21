@@ -1,0 +1,242 @@
+----------------------------------------
+-- File: 'necronlordtactic.ai'
+-- Edited by Thudmeizer @ 28.10.2023
+
+class 'NecronLordTactic' (NecronInfantryTactic)
+
+NecronLord = {}
+
+function NecronLordTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Necron Lord Tactic")
+
+	self.m_oTimedSpecialAbilities = Timer( NecronLordTactic.DoTimedSpecialAbilities, self, 7 )
+	self.posses_delay = g_iGMT + 4
+end
+
+-- Assassinate win condition -- never attack
+function NecronLordTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function NecronLordTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+-- Necron Lord is allowed to retreat even directly after a jump
+function NecronLordTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function NecronLordTactic:MoveToDisengage()
+	Tactic.MoveToDisengage(self)
+end
+
+-- Assassinate win condition -- never jump into combat
+function NecronLordTactic:JumpAttack()
+	if (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+function NecronLordTactic:InitAbilities()
+
+	-- Timed: Necron units advance normally while their opponents move in slow motion.
+	if (NecronLord.chronometron_id == nil) then
+		NecronLord.chronometron_id = cpu_manager.stats:GetAbilityID( "necron_chronometron" )
+	end
+
+	-- Timed: Necron units advance normally while their opponents move in slow motion. (Last Stand / Kill Team)
+	if (NecronLord.chronometron_ktgm == nil) then
+		NecronLord.chronometron_ktgm = cpu_manager.stats:GetAbilityID( "necron_ls_necron_lord_chronometron" )
+	end
+	
+	-- Timed: Lord and phase-shifted units are immune to all forms of damage, but cannot attack.	
+	if (NecronLord.phase_shifter_id == nil) then
+		NecronLord.phase_shifter_id = cpu_manager.stats:GetAbilityID( "necron_phase_shifter" )
+	end
+
+	-- Timed: Lord and phase-shifted units are immune to all forms of damage, but cannot attack. (Last Stand / Kill Team)	
+	if (NecronLord.phase_shifter_ktgm == nil) then
+		NecronLord.phase_shifter_ktgm = cpu_manager.stats:GetAbilityID( "necron_ls_necron_lord_phase_shifter" )
+	end
+
+	-- Timed / Passive: Mass Resurrection / Necron units in the Necron Lord's vicinity have a chance of returning to life.
+	if (NecronLord.mass_resurrection_id == nil) then
+		NecronLord.mass_resurrection_id = cpu_manager.stats:GetAbilityID( "necron_mass_resurrection" )
+	end
+
+	-- Timed / Passive: Mass Resurrection / Necron units in the Necron Lord's vicinity have a chance of returning to life. (Last Stand / Kill Team)
+	if (NecronLord.mass_resurrection_ktgm == nil) then
+		NecronLord.mass_resurrection_ktgm = cpu_manager.stats:GetAbilityID( "necron_ls_necron_lord_mass_resurrection" )
+	end
+	
+	-- Target Pos: Infiltrated units revealed, blinds units causing them firing inaccuracies.
+	if (NecronLord.solar_pulse_id == nil) then
+		NecronLord.solar_pulse_id = cpu_manager.stats:GetAbilityID( "necron_solar_pulse" )
+	end
+
+	-- Target Pos: Infiltrated units revealed, blinds units causing them firing inaccuracies. (Last Stand / Kill Team)
+	if (NecronLord.solar_pulse_ktgm == nil) then
+		NecronLord.solar_pulse_ktgm = cpu_manager.stats:GetAbilityID( "necron_ls_necron_lord_solar_pulse" )
+	end
+end
+
+function NecronLordTactic:DoAbilities()
+
+	-- Try to do everything, after a short delay...
+	if g_iGMT > self.posses_delay then
+		if self.squad_ai:CanPossess() then
+			local health = self.squad_ai:GetHealthPercentage()
+			if (health < 0.5 and self.squad_ai:WasRecentlyHurt()) or (health < 0.7 and self.squad_ai:IsInCombat()) or health < 0.15 then
+				self.squad_ai:DoPossess()
+			end
+		end
+
+		-- Try abilities
+		if (self.squad_ai:CanDoAbility( NecronLord.chronometron_id )) then
+			Ability.DoAbility(self.squad_ai, NecronLord.chronometron_id, Ability.PredicateFilters.IsInCombat)
+		end
+
+		if (self.squad_ai:CanDoAbility( NecronLord.phase_shifter_id )) then
+			Ability.DoAbility(self.squad_ai, NecronLord.phase_shifter_id, Ability.PredicateFilters.IsLowHealthAndUnderAttack, { min_health = 0.3 })
+		end
+
+		if (self.squad_ai:CanDoAbility( NecronLord.solar_pulse_id )) then
+			Ability.DoAbilityPos(self.squad_ai, NecronLord.solar_pulse_id, Ability.Filters.CloseInfiltratedEnemy, 1)
+			Ability.DoAbilityPos(self.squad_ai, NecronLord.solar_pulse_id, Ability.Filters.CloseEnemy, 6)
+		end
+
+		-- Try abilities (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility( NecronLord.chronometron_ktgm )) then
+			Ability.DoAbility(self.squad_ai, NecronLord.chronometron_ktgm, Ability.PredicateFilters.IsInCombat)
+		end
+
+		if (self.squad_ai:CanDoAbility( NecronLord.phase_shifter_ktgm )) then
+			Ability.DoAbility(self.squad_ai, NecronLord.phase_shifter_ktgm, Ability.PredicateFilters.IsLowHealthAndUnderAttack, { min_health = 0.3 })
+		end
+--[[
+		if (self.squad_ai:CanDoAbility( NecronLord.solar_pulse_ktgm )) then
+			Ability.DoAbilityPos(self.squad_ai, NecronLord.solar_pulse_ktgm, Ability.Filters.CloseInfiltratedEnemy, 1)
+			Ability.DoAbilityPos(self.squad_ai, NecronLord.solar_pulse_ktgm, Ability.Filters.CloseEnemy, 6)
+		end
+]]
+		-- Try to use mass resurrection ability
+		if (self.m_oTimedSpecialAbilities ~= nil) then
+			self.m_oTimedSpecialAbilities:Call()
+		else
+			NecronLordTactic.DoTimedSpecialAbilities(self)
+		end
+	end
+
+	-- Use Solar Pulse against either close standard or infiltrating enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(NecronLord.solar_pulse_ktgm)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(NecronLord.solar_pulse_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 8)
+		local oUnitB = cpu_manager.cpu_player:FindFirstInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Solar Pulse against normal enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(NecronLord.solar_pulse_ktgm, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Solar Pulse against Infiltrators for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(NecronLord.solar_pulse_ktgm, oUnitB:GetSquad())
+			return
+		end
+	end
+end
+
+function NecronLordTactic:DoTimedSpecialAbilities()
+
+	-- Try to use mass resurrection ability
+	if (self.squad_ai:CanDoAbility( NecronLord.mass_resurrection_id )) then
+		Ability.DoAbility(self.squad_ai, NecronLord.mass_resurrection_id, Ability.PredicateFilters.HasUsableBodies, { ability_id = NecronLord.mass_resurrection_id, min_bodies = 5 })
+	end
+
+	-- Try to use mass resurrection ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility( NecronLord.mass_resurrection_ktgm )) then
+		Ability.DoAbility(self.squad_ai, NecronLord.mass_resurrection_ktgm, Ability.PredicateFilters.HasUsableBodies, { ability_id = NecronLord.mass_resurrection_id, min_bodies = 5 })
+	end
+end
+
+function NecronLordTactic:CheckForDance()
+	InfantryTactic.CheckForDance(self)
+end
+
+function NecronLordTactic:CheckForDeath()
+	InfantryTactic.CheckForDeath(self)
+end
+
+-- MUST be that simple, orelse when back from possession, CTD!! Like the living Saint of Witch Hunters.
+function NecronLordTactic:Update()
+
+ 	-- State machine
+	if not Tactic.Update( self ) then
+		return false
+	end
+
+	if self.squad_ai:CanJump() then
+		self.tolerance_default = self.squad_ai:GetJumpDistance()
+	else
+		self.tolerance_default = 100
+	end
+
+	self:SyncSubState()	
+	self:CheckForBroken()
+	-- If not already in substate
+	if (self.stateID == Tactic.StateID.NoState) then
+	   
+		-- Check dance mode
+		if (CpuManager.AISettings.iDancing == 2) then
+		 	self:CheckForDeath()
+			if (self.stateID == Tactic.StateID.NoState) then
+				self:CheckForDance()
+				if (self.stateID == Tactic.StateID.NoState) then
+					self:CheckForStealthTroops()
+				end
+			end
+		elseif (CpuManager.AISettings.iDancing == 1 and g_iGMT > self.m_iDancing + 10) then
+			self:CheckForDeath()
+			if (self.stateID == Tactic.StateID.NoState) then
+				self:CheckForDance()
+				if (self.stateID == Tactic.StateID.NoState) then
+					self:CheckForStealthTroops()
+				end
+			end
+		end
+	end
+	
+	if (cpu_manager.assassinate and self.stateID == Tactic.StateID.NoState) then
+	
+		for i in self.commander do
+		
+			if self.squad_ai:HasSquadAttached( self.commander[i][1] ) and self.commander[i][2] then
+				
+				--if I'm nearly dead, run away
+				if self.squad_ai:GetAttachedHealthPercentage() < 0.7 then
+				   self.squad_ai:DoMoveToClosestSafePoint( self.safe_point, self.tolerance )
+				end
+				return
+			end
+		end
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+	-- Special moves
+	self:CloseOnEnemy()
+	-- Do abilities
+	self:InitAbilities()
+	self:DoAbilities()
+	-- Check stance
+	self:UpdateStance()
+	-- Return success
+	return true
+end

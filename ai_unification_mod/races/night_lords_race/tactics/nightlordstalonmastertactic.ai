@@ -1,0 +1,132 @@
+----------------------------------------
+-- File: 'nightlordsTalonmastertactic.ai'
+-- Edited by Torzel @ 18.05.2013
+-- Edited by Thudmeizer	@ 24.02.2023
+
+class 'NightLordsTalonmasterTactic' (NightLordsInfantryTactic)
+
+NightLordsTalonmaster = {}
+
+function NightLordsTalonmasterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Talonmaster Tactic")
+end
+
+function NightLordsTalonmasterTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function NightLordsTalonmasterTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- Night Lord is allowed to retreat even directly after a jump
+function NightLordsTalonmasterTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function NightLordsTalonmasterTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function NightLordsTalonmasterTactic:CanJumpAttached()
+	return true
+end
+
+function NightLordsTalonmasterTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (NightLordsTalonmaster.vision_id == nil) then
+		NightLordsTalonmaster.vision_id = cpu_manager.stats:GetAbilityID( "night_lords_night_vision" )	
+	end
+	if (NightLordsTalonmaster.flesh_id == nil) then
+		NightLordsTalonmaster.flesh_id = cpu_manager.stats:GetAbilityID( "night_lords_flesh_throw" )	
+	end
+	if (NightLordsTalonmaster.melta_id == nil) then
+		NightLordsTalonmaster.melta_id = cpu_manager.stats:GetAbilityID( "night_lords_melta_bombs" )	
+	end
+end
+
+function NightLordsTalonmasterTactic:DoAbilities()
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos( self.squad_ai, NightLordsTalonmaster.flesh_id, Ability.Filters.CloseEnemy, 5 )
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsTalonmaster.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, NightLordsTalonmaster.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+	else
+		Ability.DoAbilityPos( self.squad_ai, NightLordsTalonmaster.flesh_id, Ability.Filters.CloseEnemy, 10 )
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsTalonmaster.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, NightLordsTalonmaster.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+	end
+
+	-- Search for infiltrating squads first
+    	Ability.DoAbilityArea( self.squad_ai, NightLordsTalonmaster.vision_id, Ability.Filters.CloseInfiltratedEnemy, 30, 1 )
+--[[
+	-- Then search for infiltrating buildings
+	local pos = self.squad_ai:GetPosition()
+	if cpu_manager:CloseEnemyBuildings(pos, 30) then
+		-- Quick check to speed-up code
+        	local oBase = cpu_manager.cpu_player:FindFirstBaseEnemy(pos, 30, 1)
+        	if oBase ~= nil and oBase:IsInfiltrating() then
+            		self.squad_ai:DoSpecialAbility(NightLordsTalonmaster.vision_id)
+        	end
+	end
+]]
+    	-- Then search for infiltrating buildings
+    	local pos = self.squad_ai:GetPosition()
+    	if cpu_manager:CloseEnemyBuildings(pos, 30) then -- Quick check to speed-up code
+		if NightLordsTalonmasterTactic:IsEnemyInfiltratingBuildingWithin(pos, 30) then
+            		self.squad_ai:DoSpecialAbility(NightLordsTalonmaster.vision_id)
+        	end
+	end
+
+end
+
+function NightLordsTalonmasterTactic:IsEnemyInfiltratingBuildingWithin(iPos, iRange)
+	local iRangeSqr = iRange * iRange
+	for oPlayer in cpu_manager.stats:GetPlayerStats() do
+        	if not oPlayer:IsPlayerDead() then
+            		if cpu_manager.player_stats:IsEnemy(oPlayer) then
+                		for oBuilding in oPlayer:GetBases() do
+                    			if oBuilding:IsValid() and oBuilding:IsInfiltrating() then
+                        			if distance_sqr(oBuilding:GetPosition(), iPos) < iRangeSqr then
+                           				return true
+                        			end
+                    			end
+                		end
+            		end
+        	end
+	end
+	return false
+end
+
+function NightLordsTalonmasterTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+    	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+    	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

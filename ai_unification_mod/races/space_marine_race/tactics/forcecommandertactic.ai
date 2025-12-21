@@ -1,0 +1,130 @@
+----------------------------------------
+-- File: 'forcecommandertactic.ai'
+-- Edited by LarkinVB   @ 16.08.2005
+-- Edited by Thudmeizer @ 28.10.2023
+
+class 'ForceCommanderTactic' (SpaceMarineInfantryTactic)
+
+ForceCommander = {}
+
+function ForceCommanderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Force Commander Tactic")
+end
+
+-- Assassinate win condition -- never attack
+function ForceCommanderTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function ForceCommanderTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function ForceCommanderTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (ForceCommander.orbital_b == nil) then
+		ForceCommander.orbital_b = cpu_manager.stats:GetAbilityID( "marines_orbital_bombardment" )
+		ForceCommander.orbital_ktgm = cpu_manager.stats:GetAbilityID( "marines_ls_force_commander_orbital_bombardment" )
+		ForceCommander.battlecry = cpu_manager.stats:GetAbilityID( "marines_battlecry" )
+		ForceCommander.battlecry_ktgm = cpu_manager.stats:GetAbilityID( "marines_ls_force_commander_battlecry" )
+	end
+end
+
+function ForceCommanderTactic:DoAbilities()
+	if self.squad_ai:IsInCombat() then
+
+		-- Try to use battlecry
+		if self.squad_ai:CanDoAbility(ForceCommander.battlecry) then
+			if Ability.DoAbilityArea(self.squad_ai, ForceCommander.battlecry, Ability.Filters.CloseInCombat, 10, 1) then
+				return
+			end
+		end
+
+		-- Try to use battlecry (Last Stand / Kill Team)
+		if self.squad_ai:CanDoAbility(ForceCommander.battlecry_ktgm) then
+			if Ability.DoAbilityArea(self.squad_ai, ForceCommander.battlecry_ktgm, Ability.Filters.CloseInCombat, 10, 1) then
+				return
+			end
+		end
+
+		-- Try to use orbital bombardement
+		if self.squad_ai:CanDoAbility(ForceCommander.orbital_b) then
+
+			-- We are dying, lower requisites for attacks
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_b, Ability.Filters.CloseEnemy, 12)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 2) then
+					return
+				end
+			else
+				if Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_b, Ability.Filters.CloseEnemy, 24)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+					return
+				end
+			end
+		end
+--[[
+		-- Try to use orbital bombardement (Last Stand / Kill Team)
+		if self.squad_ai:CanDoAbility(ForceCommander.orbital_ktgm) then
+
+			-- We are dying, lower requisites for attacks
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseEnemy, 8)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseInfantryEnemy, 8)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseVehicleEnemy, 3)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseMonsterEnemy, 8)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.EntityFilters.CloseBaseEntityEnemy, 2) then
+					return
+				end
+			else
+				if Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseEnemy, 12)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseInfantryEnemy, 12)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseVehicleEnemy, 6)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.Filters.CloseMonsterEnemy, 12)
+					or Ability.DoAbilityPos(self.squad_ai, ForceCommander.orbital_ktgm, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+					return
+				end
+			end
+		end
+]]
+	end
+
+	-- Try to use orbital bombardement (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(ForceCommander.orbital_ktgm)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(ForceCommander.orbital_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 12)
+		if (oUnit ~= nil) then
+			--print("Using Orbital Bombardement ability Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(ForceCommander.orbital_ktgm, oUnit:GetSquad())
+			return
+		end
+	end
+end
+
+function ForceCommanderTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Assassinate win condition -- never attach to a squad
+    	if (not cpu_manager.assassinate and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+    	end
+end

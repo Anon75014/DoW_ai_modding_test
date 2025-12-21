@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'firstbornteslatroopertactic.ai'
+-- Edited by Thudmeizer	@ 02.05.2024
+
+class 'FirstbornTeslaTrooperTactic' (FirstbornInfantryTactic)
+
+TeslaTrooper = {}
+
+function FirstbornTeslaTrooperTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Tesla Trooper Squad Tactic")
+end
+
+function FirstbornTeslaTrooperTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TeslaTrooper.overcharge_id == nil) then
+		TeslaTrooper.overcharge_id = cpu_manager.stats:GetAbilityID( "firstborn_overcharge" )	
+	end
+end
+
+function FirstbornTeslaTrooperTactic:DoAbilities()
+
+	-- Try to activate weapon overcharge when in combat and with enough health
+	if (self.squad_ai:IsInCombat()) then
+
+		if (self.squad_ai:GetHealthPercentage() > 0.4) then
+
+			if (self.squad_ai:CanDoAbility( TeslaTrooper.overcharge_id )) then
+				self.squad_ai:DoSpecialAbility( TeslaTrooper.overcharge_id )
+			end
+		end
+	end
+end

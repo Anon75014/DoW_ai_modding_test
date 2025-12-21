@@ -1,0 +1,79 @@
+----------------------------------------
+-- File: 'guardinfantrytactic.ai'
+-- Edited by Thudmeizer		@ 12.10.2025
+
+class 'GuardInfantryTactic' (InfantryTactic)
+
+function GuardInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Guard Infantry Tactic")
+	
+	-- All Guard infantry are able to enter transport vehicles
+	self.m_iTransportable = 1	-- Chimera / Testudo / Valkyrie
+end
+
+function GuardInfantryTactic:AddTargetAbilities()
+	table.insert(InfantryTactic.TargetAbilities, { nil, "guard_kasrkin_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
+end
+
+function GuardInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "guard_squad_command_squad", true })
+	table.insert(self.commander, { "guard_squad_command_squad_advance_sp", true })
+	table.insert(self.commander, { "guard_squad_command_squad_advance_sp_wg", true })
+	table.insert(self.commander, { "guard_squad_command_squad_ktgm", true })
+	table.insert(self.commander, { "guard_squad_lieutenant", false })
+	table.insert(self.commander, { "guard_squad_general_castor_skirmish", false })
+	table.insert(self.commander, { "guard_squad_general_sturnn", false })
+	table.insert(self.commander, { "guard_squad_general_castor_ktgm", false })
+	table.insert(self.commander, { "guard_squad_inquisitor", false })
+end
+
+function GuardInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("guard_squad_commissar") or self.squad_ai:HasSquadAttached("guard_squad_commissar_advance_sp")) then
+			CommissarTactic.InitAbilities( self )
+			CommissarTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("guard_squad_psyker") or self.squad_ai:HasSquadAttached("guard_squad_psyker_sp_dxp3_prisoner")) then
+			PsykerTactic.InitAbilities( self )
+			PsykerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("guard_squad_priest") or self.squad_ai:HasSquadAttached("guard_squad_priest_sp_dxp3_prisoner")) then
+			PriestTactic.InitAbilities( self )
+			PriestTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("guard_squad_lieutenant")) then
+			LieutenantTactic.InitAbilities( self )
+			LieutenantTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("guard_squad_general_sturnn")) then
+			GeneralSturnnTactic.InitAbilities( self )
+			GeneralSturnnTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("guard_squad_general_castor_ktgm")) then
+			GeneralCastorKtgmTactic.InitAbilities( self )
+			GeneralCastorKtgmTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("guard_squad_inquisitor")) then
+			InquisitorTactic.InitAbilities( self )
+			InquisitorTactic.DoAbilities( self )
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function GuardInfantryTactic:CheckForDetach()
+
+	-- Detach commander from broken/capturing. guards stay attached
+	if ((self.squad_ai:IsBroken() or self.squad_ai:IsCapturing()) and
+		(self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) and
+		not self.squad_ai:HasSquadAttached( "guard_squad_commissar" ) and
+		not self.squad_ai:HasSquadAttached( "guard_squad_priest" ) and
+		not self.squad_ai:HasSquadAttached( "guard_squad_psyker" )) then 
+		
+		self.squad_ai:DoDetachSquad()
+		self.squad_ai:DoSetDefaultMeleeStance()
+	end
+
+	-- Call basic detach method
+	InfantryTactic.CheckForDetach(self)
+end

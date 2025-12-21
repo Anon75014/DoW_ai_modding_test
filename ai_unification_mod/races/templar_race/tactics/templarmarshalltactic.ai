@@ -1,0 +1,103 @@
+--------------------------------------
+-- File: 'templarmarshalltactic.ai'
+-- Edited by Melooo   @ 02.01.2008
+-- Edited by Gambit   @ 18.12.2021
+-- Edited by Thudmeizer @ 27.02.2023
+
+class 'TemplarMarshallTactic' (TemplarInfantryTactic)
+
+TemplarMarshall = {}
+
+function TemplarMarshallTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar Marshall Tactic")
+end
+
+function TemplarMarshallTactic:InitAbilities()
+
+	-- Init ability ID's
+	if TemplarMarshall.battlecry_id == nil then
+		TemplarMarshall.battlecry_id = cpu_manager.stats:GetAbilityID( "templar_battlecry" )
+		TemplarMarshall.orbital_b = cpu_manager.stats:GetAbilityID( "templar_orbital_bombardment" )
+		TemplarMarshall.holyorb_id = cpu_manager.stats:GetAbilityID( "templar_holy_orb" )
+	end
+end
+
+function TemplarMarshallTactic:DoAbilities()
+
+	-- Always try to spawn the Bladeguards first 
+	if self.squad_ai:CanDirectSpawn() then 
+		self.squad_ai:DoDirectSpawn()
+		return
+	end
+
+	if self.squad_ai:IsInCombat() then
+	
+		-- Try to use battlecry
+		if self.squad_ai:CanDoAbility(TemplarMarshall.battlecry_id) then
+			if Ability.DoAbilityArea(self.squad_ai, TemplarMarshall.battlecry_id, Ability.Filters.CloseEnemy, 10) then
+				return
+			end
+		end
+
+		-- Try to use orbital bombardment
+		if self.squad_ai:CanDoAbility(TemplarMarshall.orbital_b) then
+			-- If we are dying, lower requisites for attacks
+			if self.squad_ai:GetHealthPercentage() < 0.4 then
+				if Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.orbital_b, Ability.Filters.CloseEnemy, 8)
+				or Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+				or Ability.DoAbilityTarget(self.squad_ai, TemplarMarshall.orbital_b, Templar_Ability.Filters.CloseVehicleHighEnemy, 1) then
+					return
+				end
+			else
+				if Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.orbital_b, Ability.Filters.CloseEnemy, 12)
+				or Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 5) then
+					return
+				end
+			end
+		end
+
+		-- Try to use holy orb
+		if self.squad_ai:CanDoAbility(TemplarMarshall.holyorb_id) then
+			local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+			local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+			-- If we have excessive resources, lower requisites for attacks
+			if iReq > 350 and iPow > 350 then
+				if Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.holyorb_id, Templar_Ability.Filters.CloseMonsterHighEnemy, 1)
+				or Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.holyorb_id, Templar_Ability.Filters.CloseVehicleHighEnemy, 1)
+				or Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.holyorb_id, Ability.Filters.CloseCommanderEnemy, 1) then
+					return
+				end
+			else
+				if Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.holyorb_id, Ability.Filters.CloseEnemy, 16)
+				or Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.holyorb_id, Templar_Ability.Filters.CloseVehicleMedEnemy, 3)
+				or Ability.DoAbilityPos(self.squad_ai, TemplarMarshall.holyorb_id, Ability.EntityFilters.CloseBaseEntityEnemy, 5) then
+					return
+				end
+			end
+		end
+	end
+end
+
+
+function TemplarMarshallTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+			
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

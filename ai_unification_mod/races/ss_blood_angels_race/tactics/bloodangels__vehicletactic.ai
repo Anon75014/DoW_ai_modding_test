@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'bloodangelvehicletactic.ai'
+-- Edited by Thudmeizer	@ 03.09.2023
+
+class 'BloodAngelsVehicleTactic' (VehicleTactic)
+
+function BloodAngelsVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angels Vehicle Tactic")
+
+	-- Dreadnoughts can enter deepstrike buildings
+	local sName = squad_ai:GetSquadName()
+	if (sName == "blood_angel_squad_dreadnought" or
+		sName == "blood_angel_squad_dreadnought_furioso" or
+		sName == "blood_angel_squad_dreadnought_librarian" or
+		sName == "blood_angel_squad_dreadnought_moriar") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("blood_angel_orbital_relay")
+	end
+end
+
+-- Check if the vehicle should dance away in melee
+function BloodAngelsVehicleTactic:CheckVehicleDance(sName)
+
+	    if (sName == "blood_angel_squad_rhino" or
+		sName == "blood_angel_squad_death_company_rhino" or
+		sName == "blood_angel_squad_land_speeder" or
+		sName == "blood_angel_squad_razorback" or
+		sName == "blood_angel_squad_damocles" or
+		sName == "blood_angel_squad_vindicator" or
+		sName == "blood_angel_squad_whirlwind" or
+		sName == "blood_angel_squad_predator" or
+		sName == "blood_angel_squad_baal_predator" or
+		sName == "blood_angel_squad_land_raider" or
+		sName == "blood_angel_squad_land_raider_infernus" or
+		sName == "blood_angel_squad_stormraven" or
+ 		sName == "blood_angel_squad_sicaran") then
+		return true
+	end
+	return false
+end

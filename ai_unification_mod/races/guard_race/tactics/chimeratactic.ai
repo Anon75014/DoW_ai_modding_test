@@ -1,0 +1,41 @@
+----------------------------------------
+-- File: 'chimeratactic.ai'
+-- Edited by Arkhan	@ 23.11.2007
+-- Edited by Thudmeizer	@ 09.11.2023
+
+class 'ChimeraTactic' (GuardVehicleTactic)
+
+Chimera = {}
+
+function ChimeraTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chimera Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+	self.lastAddonTry = g_iGMT
+end
+
+function ChimeraTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+function ChimeraTactic:DoAbilities()
+
+	-- Check to build an addon every 10+ secs
+	if g_iGMT > self.lastAddonTry + 10 then
+		self.lastAddonTry = g_iGMT
+		self:AutoBuildAddOn(0)
+	end
+end

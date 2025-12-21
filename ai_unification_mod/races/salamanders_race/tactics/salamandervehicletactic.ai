@@ -1,0 +1,62 @@
+----------------------------------------
+-- File: 'spacemarinevehicletactic.ai'
+-- Edited by Thudo/Thudmeizer		@ 08.02.2025
+
+class 'SalamanderVehicleTactic' (VehicleTactic)
+
+SalamanderVehicles = {}
+
+function SalamanderVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Vehicle Tactic")
+	
+	-- Dreadnoughts and Ironclad Dreadnoughts can enter deepstrike buildings
+	local sName = squad_ai:GetSquadName()
+	if (sName == "salamander_squad_dreadnought_codex") or (sName == "salamander_squad_dreadnought_ironclad_ven") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("salamander_orbital_relay")
+	end
+end
+
+-- Check if the vehicle should dance away in melee
+function SalamanderVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "salamander_squad_rhino" or
+		sName == "salamander_squad_razorback" or
+		sName == "salamander_squad_land_speeder_variant" or
+		sName == "salamander_squad_lighting" or
+		sName == "salamander_squad_whirlwind" or
+		sName == "salamander_squad_vindicator" or
+		sName == "salamander_squad_predator" or
+		sName == "salamander_squad_sicaran_punisher" or
+		sName == "salamander_squad_sicaran_venator" or
+		sName == "salamander_squad_land_raider_redeemer" or
+		sName == "salamander_squad_land_raider_prometheus") then
+		return true
+	end
+	return false
+end
+
+function SalamanderVehicleTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SalamanderVehicles.smoke_id == nil) then
+		SalamanderVehicles.smoke_id = cpu_manager.stats:GetAbilityID( "salamander_smoke_launchers_dread" )
+	end
+end
+
+function SalamanderVehicleTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(SalamanderVehicles.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(SalamanderVehicles.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(SalamanderVehicles.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call standard method
+	VehicleTactic.DoAbilities(self)
+end

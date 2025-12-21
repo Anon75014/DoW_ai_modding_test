@@ -1,0 +1,345 @@
+----------------------------------------
+-- File: 'enclavesarrakontactic.ai'
+-- Edited by CaptJoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer 		@ 07.03.2024
+
+class 'EnclavesArrakonTactic' (EnclavesInfantryTactic)
+
+EnclavesArrakon = {}
+
+function EnclavesArrakonTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Arrakon Tactic")
+
+	self:InitAbilities()
+end
+
+-- Enclaves Arrakon is allowed to retreat even directly after a jump
+function EnclavesArrakonTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function EnclavesArrakonTactic:IsAttacker()	
+	return self:IsCommanderAttacker()
+end
+
+function EnclavesArrakonTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function EnclavesArrakonTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function EnclavesArrakonTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesArrakon.summon_id == nil) then
+		EnclavesArrakon.summon_id = cpu_manager.stats:GetAbilityID( "enclaves_beacon_summon" )	
+	end
+
+	if (EnclavesArrakon.summon_ktgm == nil) then
+		EnclavesArrakon.summon_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon" )	
+	end
+
+	if (EnclavesArrakon.summon1_ktgm == nil) then
+		EnclavesArrakon.summon1_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon1" )	
+	end
+
+	if (EnclavesArrakon.summon2_ktgm == nil) then
+		EnclavesArrakon.summon2_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon2" )	
+	end
+
+	if (EnclavesArrakon.summon3_ktgm == nil) then
+		EnclavesArrakon.summon3_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon3" )	
+	end
+
+	if (EnclavesArrakon.detection_id == nil) then
+		EnclavesArrakon.detection_id = cpu_manager.stats:GetAbilityID( "enclaves_detection_field" )
+	end
+
+	if (EnclavesArrakon.detection_ktgm == nil) then
+		EnclavesArrakon.detection_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_detection_field" )
+	end
+
+	if (EnclavesArrakon.barracuda_id == nil) then
+		EnclavesArrakon.barracuda_id = cpu_manager.stats:GetAbilityID( "enclaves_barracuda_barrage" )
+	end
+
+	if (EnclavesArrakon.barracuda_ktgm == nil) then
+		EnclavesArrakon.barracuda_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_barracuda_barrage" )
+	end
+
+	if (EnclavesArrakon.field_id == nil) then
+		EnclavesArrakon.field_id = cpu_manager.stats:GetAbilityID( "enclaves_repulsor_impact_field" )
+	end
+
+	if (EnclavesArrakon.field_ktgm == nil) then
+		EnclavesArrakon.field_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_repulsor_impact_field" )
+	end
+end
+
+function EnclavesArrakonTactic:DoAbilities()
+
+	-- Launch Barracuda strike or initiate the Impact Field based on health levels
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.barracuda_id)) then
+ 			Ability.DoAbilityPos( self.squad_ai, EnclavesArrakon.barracuda_id, Ability.Filters.CloseEnemy, 4 )
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.barracuda_ktgm)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.barracuda_ktgm)
+			local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 3)
+			if (oUnit ~= nil) then
+				--print("Using Barracuda Strike Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.barracuda_ktgm, oUnit:GetSquad())
+			end
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.field_id)) then
+ 			Ability.DoAbilityArea( self.squad_ai, EnclavesArrakon.field_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.field_ktgm)) then
+			Ability.DoAbilityArea(self.squad_ai, EnclavesArrakon.field_ktgm, Ability.Filters.CloseInCombat, 10, 3)
+		end
+	else
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.barracuda_id)) then
+ 			Ability.DoAbilityPos( self.squad_ai, EnclavesArrakon.barracuda_id, Ability.Filters.CloseEnemy, 8 )
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.barracuda_ktgm)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.barracuda_ktgm)
+			local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 6)
+			if (oUnit ~= nil) then
+				--print("Using Barracuda Strike Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.barracuda_ktgm, oUnit:GetSquad())
+			end
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.field_id)) then
+ 			Ability.DoAbilityArea( self.squad_ai, EnclavesArrakon.field_id, Ability.Filters.CloseEnemy, 10, 8 ) 
+		end
+
+		if (self.squad_ai:CanDoAbility(EnclavesArrakon.field_ktgm)) then
+			Ability.DoAbilityArea(self.squad_ai, EnclavesArrakon.field_ktgm, Ability.Filters.CloseInCombat, 10, 6)
+		end
+	end
+
+	-- Check for Infiltrators
+	if (self.squad_ai:CanDoAbility(EnclavesArrakon.detection_id)) then
+	
+		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.detection_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.detection_id, oSquad:GetSquad())
+			end
+		end
+	end
+
+	-- Check for Infiltrators -- Killteam
+	if (self.squad_ai:CanDoAbility(EnclavesArrakon.detection_ktgm)) then
+	
+		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.detection_ktgm)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.detection_ktgm, oSquad:GetSquad())
+			end
+		end
+	end
+
+	-- Try to summon an Orca if we have the needed resources 
+	if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 300 then
+
+		-- Try to summon an Orca
+    		if self.squad_ai:CanDoAbility(EnclavesArrakon.summon_id) then
+
+			-- Condition 1: Search for a nearby hurt squad
+        		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.summon_id)
+        		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+        		if (oUnit ~= nil) then
+				--print("Using Arrakon Close Hurt Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.summon_id, oUnit:GetSquad()) then
+                			return
+            			end
+        		end
+
+        		-- Condition 2: Check for low Power (lower than 250, for example)
+        		if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) < 250 then
+				--print("Using Arrakon Low Power Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+       			end
+
+        		-- Condition 3: Random calling, just for the sake of creating new squads
+        		if math.random(1,30) == 1 then
+				--print("Using Arrakon Random Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+			end
+        	end
+    	end
+
+	-- Try to summon an Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesArrakon.summon_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.summon_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Arrakon Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.summon_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Arrakon Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Arrakon Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 2nd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesArrakon.summon1_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.summon1_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Arrakon Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.summon1_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Arrakon Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon1_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Arrakon Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon1_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 3rd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesArrakon.summon2_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.summon2_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Arrakon Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.summon2_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Arrakon Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon2_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Arrakon Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon2_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 4th stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesArrakon.summon3_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesArrakon.summon3_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Arrakon Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesArrakon.summon3_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Arrakon Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon3_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Arrakon Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesArrakon.summon3_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end
+
+function EnclavesArrakonTactic:Upgrade()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+end
+
+function EnclavesArrakonTactic:Update()
+
+    	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

@@ -1,0 +1,75 @@
+----------------------------------------
+-- File: 'enclaveskokomitactic.ai'
+-- Edited by Thudmeizer @ 15.07.2023
+
+class 'EnclavesKokomiTactic' (EnclavesInfantryTactic)
+
+EnclavesKokomi = {}
+
+function EnclavesKokomiTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Kokomi Tactic")
+end
+
+function EnclavesKokomiTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function EnclavesKokomiTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function EnclavesKokomiTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesKokomi.rally_id == nil) then
+		EnclavesKokomi.rally_id = cpu_manager.stats:GetAbilityID( "enclaves_kokomi_rally" )	
+	end
+
+	if (EnclavesKokomi.luck_id == nil) then
+		EnclavesKokomi.luck_id = cpu_manager.stats:GetAbilityID( "enclaves_kokomi_luck" )	
+	end
+end
+
+function EnclavesKokomiTactic:DoAbilities()
+
+	-- If I am attached
+	if (self.squad_ai:IsAttached()) then
+
+		-- If I am broken while attached
+		if (self.squad_ai:IsBroken()) then
+	
+			-- Check if I can repair my morale
+			if (self.squad_ai:CanDoAbility( EnclavesKokomi.rally_id )) then
+				self.squad_ai:DoSpecialAbility( EnclavesKokomi.rally_id )
+			end
+		end
+
+		-- Activate Luck based on health level while in combat and still attached
+		if (self.squad_ai:IsInCombat()) then
+
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+				if (self.squad_ai:CanDoAbility(EnclavesKokomi.luck_id)) then 
+					self.squad_ai:DoSpecialAbility(EnclavesKokomi.luck_id)
+				end
+			end
+		end
+	end
+end
+
+function EnclavesKokomiTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to squad
+	self:TryAttachSquad(false, false, 1000, 60, nil)
+end
+ 

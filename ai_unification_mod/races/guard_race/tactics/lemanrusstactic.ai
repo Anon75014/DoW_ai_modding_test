@@ -1,0 +1,45 @@
+----------------------------------------
+-- File: 'lemanrusstactic.ai'
+-- Edited by Gambit @ 21.12.2020
+
+class 'LemanRussTactic' (GuardVehicleTactic)
+
+LemanRuss = {}
+
+function LemanRussTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Leman Russ Tactic")
+
+	self.Tank_Upgrade = math.random( 0, 9 )	  -- Choose one of the 10 vehicle upgrade types
+	self.lastAddonTry = g_iGMT
+end
+
+
+function LemanRussTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+
+
+function LemanRussTactic:DoAbilities()
+	-- Check to build an addon every 10+ secs
+	if g_iGMT > self.lastAddonTry + 10 then
+		self.lastAddonTry = g_iGMT
+		-- Check available resources and health, before performing any upgrade
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if iReq > 200 and iPow > 200 and self.squad_ai:GetHealthPercentage() > 0.35 then
+			self:AutoBuildAddOn(self.Tank_Upgrade)
+		end
+	end
+end

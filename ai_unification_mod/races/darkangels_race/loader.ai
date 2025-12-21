@@ -1,0 +1,290 @@
+----------------------------------------
+-- File: 'daloader.ai'
+-- Edited by Thudmeizer @ 07.09.2025
+
+class 'darkangels_race'
+
+-- Constructor
+function darkangels_race:__init()
+
+end
+
+-- Returns the name of the race
+function darkangels_race:GetRaceName()
+	return "darkangels_race"
+end
+
+-- This function is called if dark angels are the race being played
+function darkangels_race:LoadRace( eDifficulty )
+
+	-- Import strategies
+	import( 'Races/darkangels_race/Strategies/DarkAngelsBuildBaseStrategy.ai' )
+	
+	-- Import strategy info
+	import( "Races/darkangels_race/Strategies/DarkAngelsStrategyInfo.ai" )
+	
+	-- Import tactics
+	import( 'Races/darkangels_race/Tactics/DarkAngelsInfantryTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsVehicleTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsTechmarineTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsServitorTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsScoutTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsVeteransTactic.ai' )
+
+	import( 'Races/darkangels_race/Tactics/DarkAngelsApothecaryTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsBannerTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsLibrarianTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsLibrarianBikeTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsLibrarianTerminatorTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsChaplainTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsChaplainBikeTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsJudicarTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsChaplainTerminatorTactic.ai' )
+
+	import( 'Races/darkangels_race/Tactics/DarkAngelsGrandMasterTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsDeathwingChampionTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsCommandSquadTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsMasterRavenwingBikeTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsMasterRavenwingLandSpeederTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsDarkshroudTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsDarkTalonTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsDeathwingTerminatorTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsDeathwingKnightTactic.ai' )
+
+	import( 'Races/darkangels_race/Tactics/DarkAngelsBelialTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsSupremeGrandMasterTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsAsmodaiTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsEzekielTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsSammaelTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsLazarusTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsCypherTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsLionTactic.ai' )
+
+	import( 'Races/darkangels_race/Tactics/DarkAngelsRhinoTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsRazorbackTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsFallenInfantryTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsFallenVehicleTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsWhirlwindTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsFellbladeTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsLandRaiderTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsImperialKnightTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsThunderhawkTactic.ai' )
+
+	import( 'Races/darkangels_race/Tactics/DarkAngelsOrbitalRelayTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsRavenwingBuildingTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsChapelTactic.ai' )
+	import( 'Races/darkangels_race/Tactics/DarkAngelsHQTactic.ai' )
+
+ 	-- GAMBIT: New Method of returning a squad or base Tactic (from the CreateTactic function). Indexes.
+	-- Here follows a Global List with all the squad names as indexes, and their Tactics as values
+	-- The name of the Global List must be unique for each race.
+    	DA_Race_Squad_Tactic =
+    	{
+        -- Insert here SQUAD_NAME or BASE_NAME and the TACTIC NAME (with the comma at the end!)
+        -- If a squad must NOT have a Tactic attached to it AT ALL, use "NONE" (with quotes, case sensitive).
+        -- Suggestion: Better put all in alphabetical order (sorted by squad names) for easier reference
+
+	-- Builders
+        da_squad_techmarine = DarkAngelsTechmarineTactic,
+        da_squad_techmarine_bike = DarkAngelsTechmarineTactic,
+        da_squad_techmarine_terminator = DarkAngelsTechmarineTactic,
+        da_squad_servitor = DarkAngelsServitorTactic,
+
+	-- Infantry
+        da_squad_scout = DarkAngelsScoutTactic,
+        da_squad_veteran_tactical = DarkAngelsVeteransTactic,
+        da_squad_veteran_assault = DarkAngelsVeteransTactic,
+        da_squad_deathwing_terminator_knight = DarkAngelsDeathwingKnightTactic,
+
+	-- Apothecaries
+        da_squad_apothecary = DarkAngelsApothecaryTactic,
+        da_squad_ravenwing_apothecary = DarkAngelsApothecaryTactic,
+        da_squad_apothecary_terminator = DarkAngelsApothecaryTactic,
+        da_squad_apothecary_battle_company = DarkAngelsApothecaryTactic,
+
+	-- Banner Bearers
+        da_squad_banner_bearer = DarkAngelsBannerTactic,
+        da_squad_ravenwing_banner_bearer = DarkAngelsBannerTactic,
+        da_squad_banner_bearer_terminator = DarkAngelsBannerTactic,
+
+	-- Chaplains
+        da_squad_chaplain = DarkAngelsChaplainTactic,
+        da_squad_chaplain_terminator = DarkAngelsChaplainTerminatorTactic,
+        da_squad_ravenwing_chaplain = DarkAngelsChaplainBikeTactic,
+        da_squad_primaris_judicar = DarkAngelsJudicarTactic,
+
+	-- Librarians
+        da_squad_librarian  = DarkAngelsLibrarianTactic,
+        da_squad_librarian_terminator  = DarkAngelsLibrarianTerminatorTactic,
+        da_squad_ravenwing_librarian = DarkAngelsLibrarianBikeTactic,
+
+	-- Commanders
+        da_squad_grand_master = DarkAngelsGrandMasterTactic,
+        da_squad_deathwing_master = DarkAngelsDeathwingChampionTactic,
+        da_squad_master_ravenwing_land_speeder = DarkAngelsMasterRavenwingLandSpeederTactic,
+        da_squad_master_ravenwing_bike = DarkAngelsMasterRavenwingBikeTactic,
+        da_squad_command_squad = DarkAngelsCommandSquadTactic,
+        da_squad_deathwing_terminators_kill_team = DarkAngelsDeathwingTerminatorTactic,
+
+	-- Heroes
+        da_squad_hero_belial_deathwing = DarkAngelsBelialTactic,
+        da_squad_hero_azrael_master = DarkAngelsSupremeGrandMasterTactic,
+        da_squad_hero_asmodai_chaplain = DarkAngelsAsmodaiTactic,
+        da_squad_hero_ezekiel_librarian = DarkAngelsEzekielTactic,
+        da_squad_hero_sammael_ravenwing = DarkAngelsSammaelTactic,
+        da_squad_hero_lazarus_master = DarkAngelsLazarusTactic,
+        da_squad_hero_cypher_commander = DarkAngelsCypherTactic,
+        da_squad_lion_el_johnson_primarch = DarkAngelsLionTactic,
+        da_squad_lion_el_johnson_primarch_dw_rw = DarkAngelsLionTactic,
+
+	-- Vehicles
+        da_squad_rhino = DarkAngelsRhinoTactic,
+        da_squad_razorback = DarkAngelsRazorbackTactic,
+        da_squad_ravenwing_attack_bike = DarkAngelsFallenInfantryTactic,
+        da_squad_ravenwing_bike = DarkAngelsFallenInfantryTactic,
+        da_squad_ravenwing_land_speeder = DarkAngelsFallenVehicleTactic,
+        da_squad_ravenwing_tempest = DarkAngelsFallenVehicleTactic,
+        da_squad_ravenwing_land_speeder_darkshroud = DarkAngelsDarkshroudTactic,
+        da_squad_ravenwing_land_speeder_vengeance = DarkAngelsDarkshroudTactic,
+        da_squad_ravenwing_dark_talon = DarkAngelsDarkTalonTactic,
+        da_squad_whirlwind = DarkAngelsWhirlwindTactic,
+        da_squad_whirlwind_deathwing = DarkAngelsWhirlwindTactic,
+        da_squad_whirlwind_ravenwing = DarkAngelsWhirlwindTactic,
+        da_squad_company_land_raider_ares = DarkAngelsLandRaiderTactic,
+        da_squad_deathwing_land_raider_solemnus = DarkAngelsLandRaiderTactic,
+	da_squad_fellblade = DarkAngelsFellbladeTactic,
+ 	da_squad_fellblade_dw_rw = DarkAngelsFellbladeTactic,
+        da_squad_knight_vortigan = DarkAngelsImperialKnightTactic,
+        da_squad_thunderhawk = DarkAngelsThunderhawkTactic,
+        da_squad_thunderhawk_entrenched = DarkAngelsThunderhawkTactic,
+	}
+
+    	DA_Race_Base_Tactic =
+	{
+        darkangels_orbital_relay = DarkAngelsOrbitalRelayTactic,
+        darkangels_ravenwing_building = DarkAngelsRavenwingBuildingTactic,
+        darkangels_hero_building = DarkAngelsChapelTactic,
+        darkangels_hq = DarkAngelsHQTactic,
+	}
+	return true
+end
+
+-- This function is called even if dark angels are not the race being played
+function darkangels_race:LoadGlobalInfo()
+
+	-- Trick to limit the number of tactical/assault/scouts, in favour of RW/DW branch squads
+	IsRWorDWBranchChosen = false
+
+	-- Import info files
+	import( 'Races/darkangels_race/Info/darkangelsunitstats.ai' )
+	
+	-- Add dark angels unit stats
+	table.insert(UnitStats, DarkAngelsUnitStats)
+	return true
+end
+
+-- Creates build base strategy
+function darkangels_race:CreateBuildBaseStrategy()
+	return DarkAngelsBuildBaseStrategy(BuildBaseStrategyInfo)
+end
+
+-- Creates a special tactic for units
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function darkangels_race:CreateTactic(oSquadAI)
+
+    	-- Get unit name, and see if there is an attached tactic to it
+    	local sUnitName = oSquadAI:GetSquadName()    
+	if sUnitName ~= nil and DA_Race_Squad_Tactic[sUnitName] ~= nil then
+		if DA_Race_Squad_Tactic[sUnitName] == "NONE" then
+            		-- The squad must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return DA_Race_Squad_Tactic[sUnitName](oSquadAI)
+        	end
+    	end
+
+	-- Get class
+	local eClass = oSquadAI:GetStats():GetClass()
+
+	-- Check if there is a special tactic for the unit available
+	local bVehicle = (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or eClass == UnitStatsAI.UC_VehicleHigh)
+	local bAirPlane = (eClass == UnitStatsAI.UC_AirLow or eClass == UnitStatsAI.UC_AirMed or eClass == UnitStatsAI.UC_AirHigh)
+
+	if (bVehicle or bAirPlane) then
+		return DarkAngelsVehicleTactic(oSquadAI)
+	end
+	return DarkAngelsInfantryTactic(oSquadAI)
+end
+
+-- Creates a special tactic for buildings
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function darkangels_race:CreateBaseTactic(oBuilding)
+
+	-- Get building name
+	local sBuildingName = oBuilding:GetBaseName()
+	if sBuildingName ~= nil and DA_Race_Base_Tactic[sBuildingName] ~= nil then
+		if DA_Race_Base_Tactic[sBuildingName] == "NONE" then
+            		-- The building must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return DA_Race_Base_Tactic[sBuildingName](oBuilding)
+        	end
+    	end
+	return nil
+end
+
+-- Returns a specific information
+function darkangels_race:GetInfo(sType)
+
+	-- Check info type
+	if (sType == "TurretPower") then
+		return 400
+	elseif (sType == "SupportAllyFactor") then
+		return 9 / 4
+	elseif (sType == "AttackModifier") then
+		return -5
+	elseif (sType == "CriticalRangeIncreasePerTier") then
+		return 10
+	elseif (sType == "MinArmyStrengthPerTier") then
+		return 750
+	elseif (sType == "AttackRatio") then
+		return 4 / 5
+	elseif (sType == "RetreatRatio") then
+		return 3 / 5
+	elseif (sType == "InvisibleBuildings") then
+		return false
+	elseif (sType == "HarassingLeader") then
+		return "da_squad_grand_master"
+	elseif (sType == "AutoConstructBuildings") then
+		return false
+	end
+	return nil
+end
+
+-- Returns the building type and threat
+function darkangels_race:GetBuildingType(sBuildingName)
+
+	-- Return race specific object string
+	if (sBuildingName == "darkangels_hq") then
+		return "HQ", 0
+		
+	elseif (sBuildingName == "darkangels_generator") then
+		return "Generator", 0
+		
+	elseif (sBuildingName == "darkangels_thermo_generator") then
+		return "BiggerGenerator", 0
+		
+	elseif (sBuildingName == "darkangels_vehicle_building") then
+		return "VehicleBuilding", 0
+		
+	elseif (sBuildingName == "darkangels_armoury") then
+		return "Armoury", 0
+		
+	elseif (sBuildingName == "darkangels_listening_post") then
+		return "ListeningPost", 0
+		
+	elseif (sBuildingName == "darkangels_turret_bolter_spec") then
+		return "Turret", 300
+	end
+	return nil, 0
+end

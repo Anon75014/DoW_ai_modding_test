@@ -1,0 +1,100 @@
+----------------------------------------
+-- File: 'Troupetactic.ai'
+-- Edited by Thudmeizer @ 20.06.2023
+
+class 'TroupeTactic' (HarlequinInfantryTactic)
+
+Troupe = {}
+
+function TroupeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Troupe Tactic")
+end
+
+function TroupeTactic:InitAbilities()
+
+	if (Troupe.grenade_id == nil) then
+        	Troupe.grenade_id = cpu_manager.stats:GetAbilityID( "harlequin_troupe_grenades" )
+	end
+end
+
+function TroupeTactic:DoAbilities()
+
+	self:DoThrowGrenades()
+
+     --TargetEnemy: Use against Infantry and Commanders to stun them
+	Ability.DoAbilityPos( self.squad_ai, Troupe.grenade_id, Ability.Filters.CloseSquadEnemy, 1 )
+	Ability.DoAbilityPos( self.squad_ai, Troupe.grenade_id, Ability.Filters.CloseCommanderEnemy, 1 )
+
+	HarlequinInfantryTactic.DoAbilities(self)
+end
+
+function TroupeTactic:Upgrade()
+
+	-- Check if we have free resources
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Don't upgrade squads with less than 4 troopers
+	if (self.squad_ai:GetNumTroopers() < 3) then
+		return
+	end
+	
+	-- Check if we should upgrade
+	if (not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 3) then
+		
+		-- Figure out my enemy's favourite class
+		local enemy = cpu_manager:FindClosestEnemyPlayer()
+		if (enemy == nil) then
+			return
+		end
+		local class_type = enemy:GetMajorityClassType()
+		
+		-- Larkins hard counter upgrade for HeavyInfantryMed 
+		if (class_type < UnitStatsAI.UC_HeavyInfantryMed) then	  
+		  
+			local enemy_race = enemy:GetPlayerRaceName()
+			if (enemy_race == "space_marine_race" or enemy_race == "chaos_marine_race" or enemy_race == "necron_race") then
+		    	class_type = UnitStatsAI.UC_HeavyInfantryMed
+		  	end
+		end
+		
+		-- Do best upgrade
+		self.squad_ai:DoBestUpgrade(class_type)
+	end
+end
+
+function TroupeTactic:Reinforce()
+
+	-- if I am broken, don't reinforce!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- If there are no resources available, don't upgrade!
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	local iPower = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+	if (iRequisition < 300 and (not Tactic.Options.can_reinforce)) then
+	--if (iRequisition < 300 and iPower < 300 and (not Tactic.Options.can_reinforce)) then
+		return
+	end
+	
+	-- Reinforce
+	if (not self.squad_ai:IsReinforcing()) then
+		if self.squad_ai:CanReinforce( true, 0 ) then			
+			self.squad_ai:DoReinforce( true, 0 )
+		elseif self.squad_ai:CanReinforce( false, 0 ) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+end
+
+function TroupeTactic:CanOnlyDecap()
+		return true
+end

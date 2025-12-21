@@ -1,0 +1,24 @@
+----------------------------------------
+-- File: 'devilfishtactic.ai'
+-- Edited by Arkhan         @ 23.11.2007
+-- Edited by Thudmeizer     @ 27.09.2023
+
+class 'DevilfishTactic' (TauVehicleTactic)
+
+Devilfish = {}
+
+function DevilfishTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Devilfish Tactic")
+	
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+function DevilfishTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

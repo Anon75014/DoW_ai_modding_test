@@ -1,0 +1,32 @@
+----------------------------------------
+-- File: 'enclavesdronestealthtactic.ai'
+-- Edited by Thudmeizer				@ 09.09.2022
+
+class 'EnclavesDroneStealthTactic' (EnclavesVehicleTactic)
+
+EnclavesDroneStealth = {}
+
+function EnclavesDroneStealthTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Drone Stealth Tactic")
+end
+
+function EnclavesDroneStealthTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesDroneStealth.seeker_id == nil) then
+		EnclavesDroneStealth.seeker_id = cpu_manager.stats:GetAbilityID( "enclaves_seekers_tower" )	
+	end
+end
+
+function EnclavesDroneStealthTactic:DoAbilities()
+
+	-- Launch Seeker missile
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+ 		Ability.DoAbilityTarget( self.squad_ai, EnclavesDroneStealth.seeker_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, EnclavesDroneStealth.seeker_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) 
+	else
+ 		Ability.DoAbilityTarget( self.squad_ai, EnclavesDroneStealth.seeker_id, Ability.Filters.CloseVehicleEnemy, 1 ) 
+		Ability.DoAbilityTargetEntity( self.squad_ai, EnclavesDroneStealth.seeker_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) 
+	end
+end

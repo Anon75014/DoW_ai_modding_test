@@ -1,0 +1,46 @@
+----------------------------------------
+-- File: 'hellswordtactic.ai'
+-- Edited by Thudmeizer @ 16.08.2023
+
+class 'HellswordTactic' (GuardVehicleTactic)
+
+Hellsword = {}
+
+function HellswordTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Hellsword Squad Tactic")
+end
+
+function HellswordTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Hellsword.emp_id == nil) then
+		Hellsword.emp_id = cpu_manager.stats:GetAbilityID( "guard_emp_impact_ability" )	
+	end
+	
+	if (Hellsword.genius_id == nil) then
+		Hellsword.genius_id = cpu_manager.stats:GetAbilityID( "guard_tactical_genius_tank" )	
+	end
+end
+
+function HellswordTactic:DoAbilities()
+
+	-- Try to use abilities
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(Hellsword.emp_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Hellsword.emp_id, Ability.Filters.CloseVehicleEnemy, 1 )
+			Ability.DoAbilityTargetEntity(self.squad_ai, Hellsword.emp_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+			Ability.DoAbilityTarget( self.squad_ai, Hellsword.emp_id, Ability.Filters.CloseInfantryEnemy, 4 )
+			Ability.DoAbilityTarget( self.squad_ai, Hellsword.emp_id, Ability.Filters.CloseMonsterEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, Hellsword.emp_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		-- Try to infitrate if low on health
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.6) then
+			if (self.squad_ai:CanDoAbility( Hellsword.genius_id )) then
+				self.squad_ai:DoSpecialAbility( Hellsword.genius_id )
+			end
+		end
+	end
+end

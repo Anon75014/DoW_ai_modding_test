@@ -1,0 +1,83 @@
+----------------------------------------
+-- File: 'jainzartactic.ai'
+-- Edited by Gambit	@ 08.03.2022
+-- Edited by Thudmeizer	@ 20.09.2023
+
+class 'JainZarTactic' (EldarInfantryTactic)
+
+JainZar = {}
+
+function JainZarTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Jain Zar Tactic")
+	self.dance_time = 0
+end
+
+function JainZarTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function JainZarTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function JainZarTactic:InitAbilities()
+
+	-- Init ability ID's
+	if JainZar.mask_id == nil then
+		JainZar.mask_id = cpu_manager.stats:GetAbilityID( "eldar_jain_zar_warshout_mask" )
+		JainZar.throw_id = cpu_manager.stats:GetAbilityID( "eldar_jain_zar_silent_death_throw" )
+		JainZar.fleetoffoot_id = cpu_manager.stats:GetAbilityID( "eldar_fleetoffoot" )
+	end
+end
+
+function JainZarTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(JainZar.mask_id) then
+			if Ability.DoAbilityArea( self.squad_ai, JainZar.mask_id, Ability.Filters.CloseSquadEnemy, 10, 5 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(JainZar.throw_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, JainZar.throw_id, Ability.Filters.CloseCommanderEnemy, 1 )
+			or Ability.DoAbilityTarget( self.squad_ai, JainZar.throw_id, Ability.Filters.CloseInfantryEnemy, 6 )
+			or Ability.DoAbilityTarget( self.squad_ai, JainZar.throw_id, Ability.Filters.CloseMonsterEnemy, 4 ) then
+				return
+			end
+		end
+	end
+
+	-- Try to activate JainZar dance
+	if (self.squad_ai:IsInCombat() and self.squad_ai:CanMeleeDance() and not self.squad_ai:IsAttached()) then
+		self.squad_ai:DoMeleeDance()
+	end
+
+	-- Check if I should enable/disable fleet of foot
+	if (not self.squad_ai:IsAttached()) then
+		self:DoAbilityFoF()
+	end
+end
+
+function JainZarTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+    	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+   	end
+end

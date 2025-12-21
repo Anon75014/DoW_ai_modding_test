@@ -1,0 +1,35 @@
+----------------------------------------
+-- File: 'renegades_hellhound_tactic.ai'
+-- Edited by Thudmeizer		@ 04.05.2023
+
+class 'Renegades_Hellhound_Tactic' (Renegades_Vehicle_Tactic)
+
+Renegades_Hellhound = {}
+
+function Renegades_Hellhound_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Hellhound Tactic")
+end
+
+function Renegades_Hellhound_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Renegades_Hellhound.burn_id == nil) then
+		Renegades_Hellhound.burn_id = cpu_manager.stats:GetAbilityID("renegade_guard_let_it_burn")
+	end
+end
+
+function Renegades_Hellhound_Tactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		-- Try to use 'Let it Burn' (Renegades Hellhound)
+		Ability.DoAbilityTarget(self.squad_ai, Renegades_Hellhound.burn_id, Ability.Filters.CloseEnemy, 3)
+	else
+		Ability.DoAbilityTarget(self.squad_ai, Renegades_Hellhound.burn_id, Ability.Filters.CloseEnemy, 6)
+	end
+
+	-- Call standard method
+	Renegades_Vehicle_Tactic.DoAbilities(self)
+end

@@ -1,0 +1,51 @@
+-------------------------------------
+-- File: 'tslandraidertactic.ai'
+-- Edited by Gambit		@ 11.09.2025
+
+class 'TSLandraiderTactic' (TSVehicleTactic)
+
+TSLandRaider = {}
+
+function TSLandraiderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Trophy Grav Raider Tactic")
+
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+
+function TSLandraiderTactic:InitAbilities()
+	if TSLandRaider.spirit_id == nil then
+		TSLandRaider.spirit_id = cpu_manager.stats:GetAbilityID( "thousand_sons_machine_spirit" )
+		TSLandRaider.smoke_id = cpu_manager.stats:GetAbilityID( "thousand_sons_smoke_launchers" )	
+	end
+end
+
+
+function TSLandraiderTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Check if I can use machine spirit while stationary
+		if self.squad_ai:CanDoAbility(TSLandRaider.spirit_id) then
+			if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+				if (self.squad_ai:CanDoAbility(TSLandRaider.spirit_id)) then
+					self.squad_ai:DoSpecialAbility(TSLandRaider.spirit_id)
+				end	  
+			end
+		end
+		-- Check if we can launch smoke
+		if self.squad_ai:CanDoAbility(TSLandRaider.smoke_id) then
+			-- Search a squad
+			local iRange = self.squad_ai:GetAbilityRange(TSLandRaider.smoke_id)
+			local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+				self.squad_ai:DoSpecialAbilitySquad(TSLandRaider.smoke_id, oUnit:GetSquad())
+			end
+		end
+	end
+
+	-- Call standard method
+	VehicleTactic.DoAbilities(self)
+end

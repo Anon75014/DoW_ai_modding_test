@@ -1,0 +1,90 @@
+----------------------------------------
+-- File: 'thornprincesstactic.ai'
+-- Edited by Gambit	@ 24.06.2022
+-- Edited by Gambit	@ 19.09.2023
+
+class 'ThornPrincessTactic' (ChaosMarineInfantryTactic)
+
+ThornPrincess = {}
+
+function ThornPrincessTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thorn Princess Tactic")
+
+	self.m_iPrincessStealthTime = g_iGMT
+end
+
+function ThornPrincessTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function ThornPrincessTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function ThornPrincessTactic:InitAbilities()
+
+	-- Init ability ID's
+	if ThornPrincess.assassin_id == nil then
+		ThornPrincess.assassin_id = cpu_manager.stats:GetAbilityID( "chaos_yor_assassin_touch" )
+		ThornPrincess.infiltrate_id = cpu_manager.stats:GetAbilityID( "chaos_yor_assassin_infiltration" )
+	end
+end
+
+function ThornPrincessTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(ThornPrincess.assassin_id) then
+		if Ability.DoAbilityTarget( self.squad_ai, ThornPrincess.assassin_id, Ability.Filters.CloseCommanderEnemy, 1 ) then
+			return
+		end
+	end
+
+	-- Enable/Disable Infiltration
+	if self.m_iPrincessStealthTime == nil then self.m_iPrincessStealthTime = g_iGMT end
+	local was_recently_hurt = self.squad_ai:WasRecentlyHurt()
+	local health = self.squad_ai:GetHealthPercentage()
+	local pos = self.squad_ai:GetPosition()
+	local use_stealth = (was_recently_hurt and health < 0.35) or (health < 0.2 and cpu_manager.terrain_analyzer:HasThreat(pos, 40))
+	if self.squad_ai:IsUsingAbility(ThornPrincess.infiltrate_id) and g_iGMT > self.m_iPrincessStealthTime + 6 then
+		-- Stop stealth if not injured or we have enough health, to keep fighting
+		if not use_stealth then
+			self.squad_ai:DoSpecialAbility(ThornPrincess.infiltrate_id)
+			self.m_iPrincessStealthTime = g_iGMT
+		end
+	elseif use_stealth and g_iGMT > self.m_iPrincessStealthTime + 6 then
+		-- Enable stealth, to prevent further damage and enemy attacks
+		self.squad_ai:DoSpecialAbility(ThornPrincess.infiltrate_id)
+		self.m_iPrincessStealthTime = g_iGMT
+	end
+
+	-- Spawn fallen sisters
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+
+	-- Call basic DoAbilities methods
+	ChaosMarineInfantryTactic.DoAbilities(self)
+end
+
+function ThornPrincessTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier2+
+    	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+    	end
+end

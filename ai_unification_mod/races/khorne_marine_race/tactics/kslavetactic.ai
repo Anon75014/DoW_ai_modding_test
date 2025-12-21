@@ -1,0 +1,77 @@
+------------------------------------------
+-- File: 'kslavetactic.ai'
+-- Created by Gambit @ 07.09.2016
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kSlaveTactic' (EngineerTactic)
+
+KHM_Builder = {}
+
+function kSlaveTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("kSlave Tactic")
+	
+	-- Global time var. Starts as 0, so that to re-initiate counting immediately
+	--  on every new builder created, overriding the 8 secs step.
+	BLDR_CNTR_SWTCH_KHM = 0
+end
+
+function kSlaveTactic:InitAbilities()
+
+	if (KHM_Builder.rage_id == nil) then
+	   	KHM_Builder.rage_id = cpu_manager.stats:GetAbilityID( "khm_weapons_rage" )	
+		KHM_Builder.tribute_id = cpu_manager.stats:GetAbilityID( "khm_tribute_of_blood" )	
+	end
+end
+
+function kSlaveTactic:IsAffectedByMorale()
+	return false
+end
+
+function kSlaveTactic:DoAbilities()
+
+	-- First, count builders. Appears here, and not in update, because if attached and no other builder present,
+	--  the updaste function is NOT called. But the HasSquadAttached, triggered form the infantry tactics,
+	--  DOES call this kSlaveTactic:DoAbilities() function, to re-calculate number of builders!
+	-- Start by cheching if the BLDR_CNTR_SWTCH_KHM. Helpful, for AI re-initiation
+	if BLDR_CNTR_SWTCH_KHM == nil then BLDR_CNTR_SWTCH_KHM = 0 end
+	if KHM_FreeBuilders == nil then KHM_FreeBuilders = 0 end
+	-- Now, count builders ONCE (regardless number of builders present, by overriding code passes), every 8 secs
+	if g_iGMT > BLDR_CNTR_SWTCH_KHM + 8 then
+		KHM_FreeBuilders = 0
+		for oSquad in cpu_manager.stats:GetPlayerStatsFromID(cpu_manager.player_id):GetSquads() do
+			if oSquad:IsValid() then
+				local oName = oSquad:GetSquadName()
+				if oName == "khm_squad_slave" or oName == "khm_squad_techmarine" then
+					KHM_FreeBuilders = KHM_FreeBuilders + 1
+				end
+			end
+		end
+		BLDR_CNTR_SWTCH_KHM = g_iGMT
+	end
+
+	-- Try to attach, ONLY if we have more than 2 free, non-working builders, and we are at least at tier 2.
+	if KHM_FreeBuilders > 2 and not self.m_bBusy and cpu_manager:GetTierLevel() > 1 then
+		self:TryAttachSquad(false, false, 35, 0, nil)
+	end
+
+	-- Use Weapons' Rage ability if attacking
+	if self.squad_ai:CanDoAbility(KHM_Builder.rage_id) then
+		if self.squad_ai:IsAttacking() then
+			self.squad_ai:DoSpecialAbility(KHM_Builder.rage_id)
+		end
+	end
+
+	-- Use Tribute of Blood ability against an enemy squad, IF of proper health
+	if self.squad_ai:CanDoAbility(KHM_Builder.tribute_id) then
+		if self.squad_ai:GetHealthPercentage() > 0.8 then
+			local iRange = self.squad_ai:GetAbilityRange(KHM_Builder.tribute_id)
+			local oSquad = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if oSquad ~= nil then
+				if oSquad:GetNumTroopers() > 4 then
+					self.squad_ai:DoSpecialAbilitySquad(KHM_Builder.tribute_id, oSquad:GetSquad())
+				end
+			end
+		end
+	end
+end

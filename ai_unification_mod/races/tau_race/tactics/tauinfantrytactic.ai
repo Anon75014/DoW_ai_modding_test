@@ -1,0 +1,90 @@
+----------------------------------------
+-- File: 'tauinfantrytactic.ai'
+-- Edited by Thudmeizer		@ 24.09.2025
+
+class 'TauInfantryTactic' (InfantryTactic)
+
+function TauInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Tau Infantry Tactic")
+	
+	-- Basic Tau infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "tau_stealth_team_squad" or
+		sSquadName == "tau_stealth_team_squad_sp" or
+		sSquadName == "tau_initiate_squad" or
+		sSquadName == "tau_fire_warrior_squad" or
+		sSquadName == "tau_fire_warrior_squad_fem" or
+		sSquadName == "tau_fire_warrior_breacher_squad" or
+		sSquadName == "tau_pathfinder_squad" or
+		sSquadName == "tau_drone_controller_squad" or
+		sSquadName == "tau_squats_squad" or
+		sSquadName == "tau_broadside_battlesuit_squad" or
+		sSquadName == "tau_shasui_fire_warrior_bodyguard_sp" or
+		sSquadName == "tau_ethereal_squad" or
+		sSquadName == "tau_commander_squad" or
+		sSquadName == "tau_commander_squad_advance_sp" or
+		sSquadName == "tau_commander_squad_advance_sp_wg" or
+		sSquadName == "tau_xv_25_commander_squad" or
+		sSquadName == "tau_commander_longknife_squad" or
+		sSquadName == "tau_shadowsun_squad" or
+		sSquadName == "tau_cs_kroot_hero_squad" or
+		sSquadName == "tau_squad_greater_psionic_god" or
+		sSquadName == "tau_rahn_squad") then
+
+		-- Squads are transportable
+		self.m_iTransportable = 1 -- Devilfish
+	end
+end
+
+function TauInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "tau_commander_squad", true })
+	table.insert(self.commander, { "tau_commander_squad_advance_sp", true })
+	table.insert(self.commander, { "tau_commander_squad_advance_sp_wg", true })
+	table.insert(self.commander, { "tau_commander_squad_ktgm", true })
+	table.insert(self.commander, { "tau_xv_25_commander_squad", true })
+	table.insert(self.commander, { "tau_commander_longstrike_hh_squad", true })
+	table.insert(self.commander, { "tau_ethereal_squad", false })
+	table.insert(self.commander, { "tau_kroot_shaper_squad", false })
+	table.insert(self.commander, { "tau_cs_kroot_hero_squad", false })
+	table.insert(self.commander, { "tau_anghkor_prok_squad", false })
+	table.insert(self.commander, { "tau_squad_greater_psionic_god", false })
+	table.insert(self.commander, { "tau_rahn_squad", false })
+	table.insert(self.commander, { "tau_commander_longknife_squad", false })
+end
+
+function TauInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("tau_rahn_squad")) then
+			RahnTactic.InitAbilities( self )
+			RahnTactic.DoAbilities( self )
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function TauInfantryTactic:UpdateStance()
+
+	-- Check if I have setup time
+	if self.squad_ai:IsRanged() then
+		if self.squad_ai:GetStance() ~= SquadAI.STANCE_StandGround then
+			self.squad_ai:DoSetStance( SquadAI.STANCE_StandGround )
+		end
+	elseif self.squad_ai:GetStance() ~= SquadAI.STANCE_Hold then
+		self.squad_ai:DoSetStance( SquadAI.STANCE_Hold )
+	end
+end
+
+function TauInfantryTactic:CanOnlyDecap()
+
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "tau_dunerider_squad") then
+		return true
+	end
+	return false
+end

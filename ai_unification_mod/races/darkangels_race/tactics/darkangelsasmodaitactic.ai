@@ -1,0 +1,52 @@
+----------------------------------------
+-- File: 'darkangelsasmodaitactic.ai'
+-- Edited by Thudmeizer @ 15.01.2011
+
+class 'DarkAngelsAsmodaiTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsAsmodai = {}
+
+function DarkAngelsAsmodaiTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Asmodai Tactic")
+end
+
+function DarkAngelsAsmodaiTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkAngelsAsmodaiTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkAngelsAsmodaiTactic:InitAbilities()
+
+end
+
+function DarkAngelsAsmodaiTactic:DoAbilities()
+	
+end
+
+function DarkAngelsAsmodaiTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+	if (cpu_manager:GetTierLevel() > 1) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end
+

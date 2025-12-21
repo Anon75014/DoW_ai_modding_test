@@ -1,0 +1,58 @@
+----------------------------------------
+-- File: 'longknife.ai'
+-- Edited by fuggles	@ 14/02/2024
+-- Edited by Thudmeizer	@ 14.02.2024
+
+class 'LongknifeTactic' (TauInfantryTactic)
+
+Longknife = {}
+
+function LongknifeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Longknife Battlesuit Tactic")
+	self.lastAddonTry = g_iGMT
+	self.DoDance = false
+end
+
+function LongknifeTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function LongknifeTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function LongknifeTactic:CheckDance(oSquad)
+	return self.DoDance
+end
+
+function LongknifeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Longknife.shield == nil then
+		Longknife.shield = cpu_manager.stats:GetAbilityID( "tau_longknife_personal_shield" )
+	end
+end
+
+function LongknifeTactic:DoAbilities()
+
+	local was_recently_hurt = self.squad_ai:WasRecentlyHurt()
+	local health = self.squad_ai:GetHealthPercentage()
+	local use_shield = (health < 0.4 and was_recently_hurt)
+
+	if self.squad_ai:IsUsingAbility(Longknife.shield) then
+		-- Stop Shield not injured enough
+		if not use_shield then
+			self.squad_ai:DoSpecialAbility(Longknife.shield)
+			self.DoDance = false
+		end
+	elseif use_shield then
+		-- Enable Shield, to prevent further damage
+		self.squad_ai:DoSpecialAbility(Longknife.shield)
+		self.DoDance = true
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

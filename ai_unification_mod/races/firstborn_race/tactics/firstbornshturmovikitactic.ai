@@ -1,0 +1,67 @@
+----------------------------------------
+-- File: 'firstbornshturmovikitactic.ai'
+-- Edited by Thudmeizer	@ 27.11.2023
+
+class 'FirstbornShturmovikiTactic' (FirstbornInfantryTactic)
+
+Shturmoviki = {}
+
+function FirstbornShturmovikiTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Shturmoviki Squad Tactic")
+end
+
+function FirstbornShturmovikiTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Shturmoviki.frag_id == nil) then
+		Shturmoviki.frag_id = cpu_manager.stats:GetAbilityID( "firstborn_grenade_taborite" )	
+	end
+end
+
+function FirstbornShturmovikiTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, Shturmoviki.frag_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, Shturmoviki.frag_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, Shturmoviki.frag_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, Shturmoviki.frag_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Shturmoviki.frag_id, Ability.Filters.CloseMonsterEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Shturmoviki.frag_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+end
+
+function FirstbornShturmovikiTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local rpgIndex = 0
+		local medicIndex = 1
+
+		local numRpgs = self.squad_ai:GetLeaderCount( rpgIndex )
+		local numMedics = self.squad_ai:GetLeaderCount( medicIndex )	
+
+		-- Desired number of each rpg type
+		local desiredRpgs = math.random(0,3)
+		local desiredMedics = math.random(0,3) 
+
+		-- Desired order of reinforcing
+		if (numRpgs < desiredRpgs) then
+			if (self.squad_ai:CanReinforce( true, rpgIndex )) then
+				self.squad_ai:DoReinforce( true, rpgIndex )
+			end
+		elseif (numMedics < desiredMedics) then
+			if (self.squad_ai:CanReinforce( true, medicIndex )) then
+				self.squad_ai:DoReinforce( true, medicIndex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end

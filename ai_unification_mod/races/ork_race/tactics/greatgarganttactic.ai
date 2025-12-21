@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'greatgarganttactic.ai'
+-- Edited by Gambit		@ 18.00.2020
+-- Edited by Thudmeizer		@ 22.09.2023
+
+class 'GreatGargantTactic' (OrkVehicleTactic)
+
+GreatGargant = {}
+
+function GreatGargantTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Great Gargant Titan Tactic")
+
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 4
+end
+
+function GreatGargantTactic:InitAbilities()
+
+	-- Init ability ID's
+	if GreatGargant.charge_id == nil then
+		GreatGargant.charge_id = cpu_manager.stats:GetAbilityID( "ork_great_gargant_super_chargy" )
+		GreatGargant.push_id = cpu_manager.stats:GetAbilityID( "ork_gargant_charge" )
+	end
+end
+
+function GreatGargantTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(GreatGargant.charge_id) and self.squad_ai:WasRecentlyHurt()
+		and resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) > 500 then
+			self.squad_ai:DoSpecialAbility(GreatGargant.charge_id)
+		end
+
+		if self.squad_ai:CanDoAbility(GreatGargant.push_id) and self.squad_ai:IsInStateMove() then
+			if Ability.DoAbilityArea(self.squad_ai, GreatGargant.push_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+			or Ability.DoAbilityArea(self.squad_ai, GreatGargant.push_id, Ability.Filters.CloseMonsterEnemy, 10, 4) then
+				return
+			end
+		end
+	end
+end

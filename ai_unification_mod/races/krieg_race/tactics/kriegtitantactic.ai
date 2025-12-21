@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'kriegtitantactic.ai'
+-- Created by Gambit		@ 17.12.2021
+-- Edited by Thudmeizer		@ 07.05.2022
+
+class 'KriegTitanTactic' (KriegVehicleTactic)
+
+KriegTitan = {}
+
+function KriegTitanTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Titan Tactic")
+end
+
+function KriegTitanTactic:InitAbilities()
+
+	-- Init ability ID's
+	if KriegTitan.turret_id == nil then
+		KriegTitan.turret_id = cpu_manager.stats:GetAbilityID("krieg_wh_titan_charge")
+	end
+end
+
+function KriegTitanTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(KriegTitan.turret_id) and self.squad_ai:IsInStateMove() then
+			if Ability.DoAbilityArea(self.squad_ai, KriegTitan.turret_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+			or Ability.DoAbilityArea(self.squad_ai, KriegTitan.turret_id, Ability.Filters.CloseMonsterEnemy, 10, 4) then
+				return
+			end
+		end
+	end
+end

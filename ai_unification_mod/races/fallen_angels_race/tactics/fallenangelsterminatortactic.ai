@@ -1,0 +1,76 @@
+----------------------------------------
+-- File: 'fallenangelsterminatortactic.ai'
+-- Edited by Thudmeizer @ 10.10.2022
+
+class 'FallenAngelsTerminatorTactic' (FallenAngelsInfantryTactic)
+
+FallenAngelsTerminator = {}
+
+function FallenAngelsTerminatorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Terminator Tactic")
+end
+
+function FallenAngelsTerminatorTactic:Reinforce()
+
+  --always try for the actual leader first
+	if not self.squad_ai:IsReinforcing() then
+		if self.squad_ai:CanReinforce( false, 0 ) then
+		   self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local flamerIndex = 0
+		local assaultIndex = 1
+		local plasmaIndex = 2
+		local missileIndex = 3
+	
+		local numFlamers = self.squad_ai:GetLeaderCount( flamerIndex )
+		local numAssaults = self.squad_ai:GetLeaderCount( assaultIndex )
+		local numPlasmas = self.squad_ai:GetLeaderCount( plasmaIndex )
+		local numMissiles = self.squad_ai:GetLeaderCount( missileIndex )
+
+		-- Desired number of each leader type
+		local desiredFlamers = 1
+		local desiredAssaults = 1 
+		local desiredPlasmas = 1
+		local desiredMissiles = 1
+
+		-- Desired order of reinforcing
+		if numFlamers < desiredFlamers then
+			if self.squad_ai:CanReinforce( true, flamerIndex ) then
+				self.squad_ai:DoReinforce( true, flamerIndex )
+			end
+
+		elseif numAssaults < desiredAssaults then
+			if self.squad_ai:CanReinforce( true, assaultIndex ) then
+				self.squad_ai:DoReinforce( true, assaultIndex )
+			end
+
+		elseif numPlasmas < desiredPlasmas then
+			if self.squad_ai:CanReinforce( true, plasmaIndex ) then
+				self.squad_ai:DoReinforce( true, plasmaIndex )
+			end
+
+		elseif numMissiles < desiredMissiles then
+			if self.squad_ai:CanReinforce( true, missileIndex ) then
+				self.squad_ai:DoReinforce( true, missileIndex )
+			end
+		end
+	end
+end
+
+function FallenAngelsTerminatorTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end

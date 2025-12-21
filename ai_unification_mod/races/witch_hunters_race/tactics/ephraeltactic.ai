@@ -1,0 +1,76 @@
+----------------------------------------
+-- File: 'ephraeltactic.ai'
+-- Edited by Gambit   @ 3.6.2021
+
+class 'EphraelTactic' (WitchHuntersInfantryTactic)
+
+Ephrael = {}
+
+function EphraelTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Ephrael Stern Tactic")
+
+    self.fragLastUse = g_iGMT
+	self.krakLastUse = g_iGMT
+end
+
+function EphraelTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function EphraelTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+
+function EphraelTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Ephrael.frag_id == nil then
+		Ephrael.frag_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ephrael_frag_grenades" )	
+		Ephrael.krak_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ephrael_krak_grenades" )
+		Ephrael.prot_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ephrael_divine_protection" )
+		Ephrael.daem_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ephrael_daemonifuge" )
+	end
+end
+
+
+function EphraelTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+        if g_iGMT > self.fragLastUse + 30 and self.squad_ai:CanDoAbility(Ephrael.frag_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, Ephrael.frag_id, Ability.Filters.CloseSquadEnemy, 4 )
+            or Ability.DoAbilityTarget( self.squad_ai, Ephrael.frag_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            then
+                self.fragLastUse = g_iGMT
+				return
+            end
+        end
+    
+        if g_iGMT > self.krakLastUse + 30 and self.squad_ai:CanDoAbility(Ephrael.krak_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, Ephrael.krak_id, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, Ephrael.krak_id, Ability.Filters.CloseSquadEnemy, 7 )
+            then
+                self.krakLastUse = g_iGMT
+				return
+            end
+        end
+
+		if self.squad_ai:CanDoAbility(Ephrael.prot_id) and self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.7 then
+			self.squad_ai:DoSpecialAbilitySquad(Ephrael.prot_id, self.squad_ai:GetSquad())
+			return
+		end
+
+		if self.squad_ai:CanDoAbility(Ephrael.daem_id) then
+			local pos = self.squad_ai:GetPosition()
+			local do_it =  (Ability.Filters.CloseMonsterHighEnemy(pos, 20, 1) ~= nil or
+							Ability.Filters.CloseMonsterEnemy(pos, 20, 5) ~= nil or
+							Ability.Filters.CloseCommanderEnemy(pos, 20, 1) ~= nil)
+            if do_it then
+				self.squad_ai:DoSpecialAbilitySquad(Ephrael.daem_id, self.squad_ai:GetSquad())
+				return
+            end
+        end
+	end
+end

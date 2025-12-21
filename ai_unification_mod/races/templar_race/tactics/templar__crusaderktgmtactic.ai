@@ -1,0 +1,79 @@
+----------------------------------------
+-- File: 'templar__crusaderktgmtactic.ai'
+-- Edited by JONES   		@ 07.01.2010
+-- Edited by Thudmeizer		@ 06.08.2024
+
+class 'TemplarCrusaderKtgmTactic' (TemplarInfantryTactic)
+
+TemplarCrusaderKtgm = {}
+
+function TemplarCrusaderKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar Crusader Kill Team Tactic")
+end
+
+function TemplarCrusaderKtgmTactic:IsAffectedByMorale()
+	return (self.squad_ai:GetHealthPercentage() < 0.5)
+end
+
+function TemplarCrusaderKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TemplarCrusaderKtgm.frag_id == nil) then
+		TemplarCrusaderKtgm.frag_id = cpu_manager.stats:GetAbilityID( "templar_ls_frag_grenades_blessed" )
+	end
+
+	if (TemplarCrusaderKtgm.krak_id == nil) then
+		TemplarCrusaderKtgm.krak_id = cpu_manager.stats:GetAbilityID( "templar_ls_krak_grenades_blessed" )
+	end
+end
+
+function TemplarCrusaderKtgmTactic:DoAbilities()
+
+	-- Use Frag Grenade against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(TemplarCrusaderKtgm.frag_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TemplarCrusaderKtgm.frag_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 2)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Frag Grenade against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TemplarCrusaderKtgm.frag_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Frag Grenade against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TemplarCrusaderKtgm.frag_id, oUnitB:GetSquad())
+			return
+		elseif (oUnitC ~= nil) then
+			-- Get stats
+			local oStats = oUnitC:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					--print("Using Frag Grenade against monster enemies for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(TemplarCrusaderKtgm.frag_id, oUnitC:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	-- Use Krak Grenade against vehicle enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(TemplarCrusaderKtgm.krak_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TemplarCrusaderKtgm.krak_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Krak Grenade against vehicle enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TemplarCrusaderKtgm.krak_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	TemplarInfantryTactic.DoAbilities(self)
+end

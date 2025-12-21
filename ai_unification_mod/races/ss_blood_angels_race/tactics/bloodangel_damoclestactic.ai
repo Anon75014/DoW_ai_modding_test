@@ -1,0 +1,82 @@
+----------------------------------------
+-- File: 'bloodangeldamoclestactic.ai'
+-- Edited by Thudmeizer  @ 23.02.2023
+
+class 'BloodAngelDamoclesTactic' (BloodAngelsVehicleTactic)
+
+BloodAngelDamocles = {}
+
+function BloodAngelDamoclesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("BloodAngel Damocles Tactic")
+end
+
+function BloodAngelDamoclesTactic:IsAttacker()
+	return false
+end
+
+function BloodAngelDamoclesTactic:IsDefender()
+	return true
+end
+
+function BloodAngelDamoclesTactic:InitAbilities()
+
+	if BloodAngelDamocles.sensor_id == nil then
+		BloodAngelDamocles.sensor_id = cpu_manager.stats:GetAbilityID( "blood_angel_sensormap" )
+	end
+
+	if (BloodAngelDamocles.smoke_id == nil) then
+		BloodAngelDamocles.smoke_id = cpu_manager.stats:GetAbilityID( "blood_angel_smoke_launchers_damocles" )	
+	end
+
+	if (BloodAngelDamocles.missile_id == nil) then
+		BloodAngelDamocles.missile_id = cpu_manager.stats:GetAbilityID( "blood_angel_hk_missile_damocles" )	
+	end
+
+	if (BloodAngelDamocles.bombardment_id == nil) then
+		BloodAngelDamocles.bombardment_id = cpu_manager.stats:GetAbilityID( "blood_angel_orbital_bombardment" )	
+	end
+
+end
+
+function BloodAngelDamoclesTactic:DoAbilities()
+
+	-- Enable Reveal Map Area around Damocles
+	if (self.squad_ai:CanDoAbility(BloodAngelDamocles.sensor_id) and self.squad_ai:IsInCombat()) then
+			self.squad_ai:DoSpecialAbility(BloodAngelDamocles.sensor_id) 
+	end
+
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(BloodAngelDamocles.missile_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, BloodAngelDamocles.missile_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, BloodAngelDamocles.missile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, BloodAngelDamocles.missile_id, Ability.Filters.CloseSquadEnemy, 4 )
+	end
+
+	-- Check if we can launch Bombardment
+	if (self.squad_ai:CanDoAbility(BloodAngelDamocles.bombardment_id)) then
+
+		-- If we are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5) then
+			Ability.DoAbilityPos( self.squad_ai, BloodAngelDamocles.bombardment_id, Ability.Filters.CloseEnemy, 12)
+			Ability.DoAbilityPos( self.squad_ai, BloodAngelDamocles.bombardment_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+		else
+			Ability.DoAbilityPos( self.squad_ai, BloodAngelDamocles.bombardment_id, Ability.Filters.CloseEnemy, 24)
+			Ability.DoAbilityPos( self.squad_ai, BloodAngelDamocles.bombardment_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+		end
+	end
+
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(BloodAngelDamocles.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(BloodAngelDamocles.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(BloodAngelDamocles.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call standard method
+	BloodAngelsVehicleTactic.DoAbilities(self)
+end

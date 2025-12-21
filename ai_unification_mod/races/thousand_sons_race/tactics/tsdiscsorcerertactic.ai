@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'TSDiscSorcerertactic.ai'
+-- Created by Thudmeizer @ 12.09.2012
+-- Edited by Gambit @21.06.2014
+
+class 'TSDiscSorcererTactic' (TSInfantryTactic)
+
+TSDiscSorcerer = {}
+
+function TSDiscSorcererTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("TS Disc Sorcerer Tactic")
+end
+
+function TSDiscSorcererTactic:InitAbilities()
+
+
+	if (TSDiscSorcerer.doombolt_id == nil) then
+	   	TSDiscSorcerer.doombolt_id = cpu_manager.stats:GetAbilityID( "thousand_sons_doombolt_disc_sorc" )	
+	end
+
+	if (TSDiscSorcerer.befoul_id == nil) then
+	   	TSDiscSorcerer.befoul_id = cpu_manager.stats:GetAbilityID( "thousand_sons_befoul" )	
+	end
+
+	if (TSDiscSorcerer.warptime_id == nil) then
+	   	TSDiscSorcerer.warptime_id = cpu_manager.stats:GetAbilityID( "thousand_sons_warptime" )	
+	end
+
+end
+
+function TSDiscSorcererTactic:DoAbilities()
+
+    --self:DoTargetWeapon()
+
+	Ability.DoAbilityTarget( self.squad_ai, TSDiscSorcerer.doombolt_id, Ability.Filters.CloseSquadEnemy, 1 ) 
+	Ability.DoAbilityArea ( self.squad_ai, TSDiscSorcerer.warptime_id, Ability.Filters.CloseEnemy, 10, 8 )
+
+	if (self.squad_ai:CanDoAbility(TSDiscSorcerer.befoul_id)) then
+		-- Get closest enemy building in range
+		local iRange = self.squad_ai:GetAbilityRange(TSDiscSorcerer.befoul_id)
+		local oBuilding = cpu_manager.cpu_player:FindFirstBaseEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oBuilding ~= nil) then
+			if (oBuilding:IsAttacking()) then
+				-- Cast befoul on building
+				self.squad_ai:DoSpecialAbilityEntity(TSDiscSorcerer.befoul_id, oBuilding:GetEntity())
+			end
+		end
+	end
+
+	--Try to possess and become Lord of Change
+	if (self.squad_ai:IsInCombat() and self.squad_ai:CanPossess()) then
+		self.squad_ai:DoPossess()
+	end
+end

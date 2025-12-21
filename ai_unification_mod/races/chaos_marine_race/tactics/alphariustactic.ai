@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'alphariustactic.ai'
+-- Edited by Gambit	@ 25.06.2022
+-- Edited by Thudmeizer	@ 19.09.2023
+
+class 'AlphariusTactic' (ChaosMarineInfantryTactic)
+
+Alpharius = {}
+
+function AlphariusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Alpharius Tactic")
+end
+
+function AlphariusTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function AlphariusTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function AlphariusTactic:InitAbilities()
+
+	if Alpharius.venom_spheres_id == nil then
+		Alpharius.venom_spheres_id = cpu_manager.stats:GetAbilityID( "chaos_alpharius_venom_spheres" )
+	end
+end
+
+function AlphariusTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(Alpharius.venom_spheres_id) then
+		if Ability.DoAbilityTarget( self.squad_ai, Alpharius.venom_spheres_id, Ability.Filters.CloseSquadEnemy, 4 )
+		or Ability.DoAbilityTarget( self.squad_ai, Alpharius.venom_spheres_id, Ability.Filters.CloseCommanderEnemy, 1 ) then
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	ChaosMarineInfantryTactic.DoAbilities(self)
+end

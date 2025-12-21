@@ -1,0 +1,194 @@
+----------------------------------------
+-- File: 'TSLordOfChangetactic.ai'
+-- Created by Thudmeizer @ 08.08.2011
+
+class 'TSLordOfChangeTactic' (TSInfantryTactic)
+
+TSLordOfChange = {}
+
+TSLordOfChangeAbility =
+{
+    WindsChaosID = cpu_manager.stats:GetAbilityID("thousand_sons_wind_of_chaos_loc")
+    ,RainTearsID = cpu_manager.stats:GetAbilityID("thousand_sons_rot")
+    ,SoulQuakeID = cpu_manager.stats:GetAbilityID("thousand_sons_soul_quake")
+}
+
+function TSLordOfChangeTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("TS Lord Of Change Tactic")
+
+    self.windsChaosLastUse = g_iGMT
+    self.rainTearsLastUse = g_iGMT
+    self.soulQuakeLastUse = g_iGMT
+	self.initialPosition = self.squad_ai:GetPosition()
+	self.isStuck = false
+end
+
+-- TSLordOfChange is allowed to retreat even directly after a jump
+function TSLordOfChangeTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+
+function TSLordOfChangeTactic:InitAbilities()
+
+	if (TSLordOfChange.winds_id == nil) then
+	   	TSLordOfChange.winds_id = cpu_manager.stats:GetAbilityID( "thousand_sons_wind_of_chaos_loc" )	
+	end
+
+	if (TSLordOfChange.rain_id == nil) then
+	   	TSLordOfChange.rain_id = cpu_manager.stats:GetAbilityID( "thousand_sons_rot" )	
+	end
+
+	if (TSLordOfChange.quake_id == nil) then
+	   	TSLordOfChange.befoul_id = cpu_manager.stats:GetAbilityID( "thousand_sons_soul_quake" )	
+	end
+end
+
+function TSLordOfChangeTactic:DoAbilities()
+
+    self:DoLordOfChangeTargetWeapon()
+
+	--[[Ability.DoAbilityPos( self.squad_ai, TSLordOfChange.silence_id, Ability.Filters.CloseEnemy, 5 ) 
+ 	Ability.DoAbilityTarget( self.squad_ai, TSLordOfChange.twisting_id, Ability.Filters.CloseSquadEnemy, 1 ) 
+	Ability.DoAbilityArea ( self.squad_ai, TSLordOfChange.winds_id, Ability.Filters.CloseEnemy, 10, 10 ) 
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea ( self.squad_ai, TSLordOfChange.winds_id, Ability.Filters.CloseEnemy, 15, 5 ) 
+	end]]
+
+	--[[ Cast Befoul on Buildings
+	Ability.DoAbilityTargetEntity( self.squad_ai, TSLordOfChange.befoul_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+
+	if (self.squad_ai:CanDoAbility(TSLordOfChange.befoul_id)) then
+
+		-- Get closest building in range
+		local iRange = self.squad_ai:GetAbilityRange(TSLordOfChange.befoul_id)
+		local oBuilding = cpu_manager.cpu_player:FindFirstBaseEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oBuilding ~= nil) then
+		
+			-- Get stats
+			local oStats = oBuilding:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check building type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_BuildingLow) then
+					
+					-- Cast befoul on building
+					self.squad_ai:DoAbilityTargetEntity(TSLordOfChange.befoul_id, oBuilding:GetEntity())
+				end
+			end	
+		end
+	end]]
+    -- Jump squads' unstuck code call. Put ANYWHERE in the DoAbilities() function
+    -- Checks jump-able stuck squads, and force them to jump nearby
+	if self.squad_ai:CanJump() then
+		self:SolveStuckCase()
+	end
+end
+
+function TSLordOfChangeTactic:DoLordOfChangeTargetWeapon()
+
+    if self.squad_ai:IsInCombat() then
+
+        --[[if ( g_iGMT > self.silenceLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLordOfChangeAbility.SilenceID, Ability.Filters.CloseEnemy, 5 )
+            then
+                self.silenceLastUse = g_iGMT 
+            end
+        end]]
+
+
+        --[[if ( g_iGMT > self.befoulLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLordOfChangeAbility.BefoulID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            then
+                self.befoulLastUse = g_iGMT 
+            end
+        end]]
+
+
+        if ( g_iGMT > self.rainTearsLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLordOfChangeAbility.RainTearsID, Ability.Filters.CloseInfantryEnemy, 6 )
+            then
+                self.rainTearsLastUse = g_iGMT 
+            end
+        end
+
+
+        if ( g_iGMT > self.soulQuakeLastUse + 30 ) then
+            if Ability.DoAbilityPos( self.squad_ai, TSLordOfChangeAbility.SoulQuakeID, Ability.EntityFilters.CloseBaseEntityEnemy, 3 )
+            then
+                self.soulQuakeLastUse = g_iGMT 
+            end
+        end
+
+
+        if ( g_iGMT > self.windsChaosLastUse + 30 ) then
+            if Ability.DoAbilityArea( self.squad_ai, TSLordOfChangeAbility.WindsChaosID, Ability.Filters.CloseEnemy, 10, 10 )
+            then
+                self.windsChaosLastUse = g_iGMT 
+            end
+        end
+    end
+end
+
+--[[function TSLordOfChangeTactic:AlwaysAttack()
+	return true
+end]]
+
+function TSLordOfChangeTactic:Update()
+
+	if self:IsComplete() then
+		return
+	end
+	
+	  --state machine
+	  if not InfantryTactic.Update( self ) then
+		 return
+	  end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+
+-- Unstuck Code
+function TSLordOfChangeTactic:SolveStuckCase()
+	local iPosition = self.squad_ai:GetPosition()
+	if iPosition.x ~= self.initialPosition.x or iPosition.z ~= self.initialPosition.z then
+		self.isStuck = false
+	elseif (self.squad_ai:IsInStateMove() or self.squad_ai:IsInStateAttackMove()) and not self.squad_ai:IsInCombat()
+	and iPosition.x == self.initialPosition.x and iPosition.z == self.initialPosition.z then
+		self.isStuck = true
+	end
+	if self.isStuck then
+		self:ForceSquadJumpNear(iPosition)
+	end
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function TSLordOfChangeTactic:ForceSquadJumpNear(pos)
+	-- Try to jump somewhere near, perform 16 checks for a viable position
+	local jumpDisSqr = sqr(self.squad_ai:GetJumpDistance())
+	for iLoop1 = 1, 16 do
+		-- Create a jump position
+		local vJumpPosition = pos
+		local vDir = cpu_manager:GetDirectionToEnemy(pos)
+		vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(-20, 50)
+		vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(-20, 50)
+		-- Check if target position is in range and if unit is able to jump to target position
+		local iDistance = distance_sqr(vJumpPosition, pos)
+		if iDistance < jumpDisSqr and self.squad_ai:CanJumpToPosition(vJumpPosition) then
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			self.m_iLastGatherMove = self.last_jump - 10
+			return
+		end
+	end
+end

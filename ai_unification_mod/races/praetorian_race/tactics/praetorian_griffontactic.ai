@@ -1,0 +1,35 @@
+----------------------------------------
+-- File: 'praetorian_griffontactic.ai'
+-- Edited by Thudmeizer		@ 19.12.2022
+
+class 'Praetorian_GriffonTactic' (Praetorian_VehicleTactic)
+
+Praetorian_Griffon = {}
+
+function Praetorian_GriffonTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorians_Griffon Tactic")
+end
+
+function Praetorian_GriffonTactic:InitAbilities()
+
+	if (Praetorian_Griffon.smoke_id == nil) then
+		Praetorian_Griffon.smoke_id = cpu_manager.stats:GetAbilityID( "praetorian_smoke_shells" )	
+	end
+end
+
+function Praetorian_GriffonTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(Praetorian_Griffon.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(Praetorian_Griffon.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(Praetorian_Griffon.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	VehicleTactic.DoAbilities(self)
+end

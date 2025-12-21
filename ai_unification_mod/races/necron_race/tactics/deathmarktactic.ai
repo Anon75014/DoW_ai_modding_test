@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'deathmarktactic.ai'
+-- Created by Gambit  @ 19.01.2021
+
+class 'DeathmarkTactic' (NecronInfantryTactic)
+
+Deathmark = {}
+
+function DeathmarkTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Deathmark Tactic")
+end
+
+
+function DeathmarkTactic:InitAbilities()
+
+	if (Deathmark.translocation_id == nil) then
+		Deathmark.translocation_id = cpu_manager.stats:GetAbilityID( "necron_dimensional_translocation" )
+	end
+end
+
+
+function DeathmarkTactic:DoAbilities()
+	if self.squad_ai:CanDoAbility(Deathmark.translocation_id) then
+		if self.squad_ai:GetHealthPercentage() < 0.65 or self.squad_ai:IsBroken() then
+			self.squad_ai:DoSpecialAbility(Deathmark.translocation_id)
+		end
+	end
+end

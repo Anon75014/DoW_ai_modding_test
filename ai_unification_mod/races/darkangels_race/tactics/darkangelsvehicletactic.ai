@@ -1,0 +1,135 @@
+----------------------------------------
+-- File: 'darkangelsvehicletactic.ai'
+-- Updated by Gambit	@ 15.07.2016
+-- Edited by Thudmeizer	@ 07.09.2025
+
+class 'DarkAngelsVehicleTactic' (VehicleTactic)
+
+DarkAngelsVehicleAbility =
+{
+	-- Vehicle
+	HuntFallenVID = cpu_manager.stats:GetAbilityID("darkangels_hunt_the_fallen")
+	,HuntFallenCommVID = cpu_manager.stats:GetAbilityID("darkangels_hunt_the_fallen_commander")
+}
+
+function DarkAngelsVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Vehicle Tactic")
+	
+	-- All Deathwing Dreadnoughts can enter and deepstrike from the Orbital Relay building
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "da_squad_dreadnought_deathwing" or
+		sSquadName == "da_squad_dreadnought_mortis_deathwing" or
+		sSquadName == "da_squad_deathwing_ven_dreadnought") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("darkangels_orbital_relay")
+
+	-- All "Normal" Dreadnoughts can enter and deepstrike from the BC Chapel
+	elseif (sSquadName == "da_squad_dreadnought" or
+		sSquadName == "da_squad_dreadnought_mortis") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("darkangels_hero_building")
+
+	elseif (sSquadName == "da_squad_ravenwing_land_speeder" or
+		sSquadName == "da_squad_ravenwing_tempest" or
+		sSquadName == "da_squad_ravenwing_dark_talon" or
+		sSquadName == "da_squad_master_ravenwing_land_speeder") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("darkangels_ravenwing_building")
+
+	elseif sSquadName == "da_squad_deathwing_land_raider_solemnus" then
+		-- Vehicle is a transport
+		self.m_iTransportVehicle = 4
+		self.m_iTransportSlots = 1
+	end
+
+    self.huntFallenVLastUse = g_iGMT
+    self.huntFallenCommVLastUse = g_iGMT
+
+end
+
+function DarkAngelsVehicleTactic:DoAbilities()
+
+    self:DoHuntTheFallen()
+	
+	-- Call basic DoAbilities methods
+	VehicleTactic.DoAbilities(self)
+end
+
+function DarkAngelsVehicleTactic:DoHuntTheFallen()
+
+	if self.squad_ai:IsInCombat() then
+
+        	if ( g_iGMT > self.huntFallenVLastUse + 30 ) then
+            		if Ability.DoAbilityArea( self.squad_ai, DarkAngelsVehicleAbility.HuntFallenVID, Ability.Filters.CloseEnemy, 10, 1 )
+            		then
+                	self.huntFallenVLastUse = g_iGMT 
+            		end
+        	end
+
+        	if ( g_iGMT > self.huntFallenCommVLastUse + 30 ) then
+            		if Ability.DoAbilityArea( self.squad_ai, DarkAngelsVehicleAbility.HuntFallenCommVID, Ability.Filters.CloseEnemy, 10, 1 )
+            		then
+                	self.huntFallenCommVLastUse = g_iGMT 
+            		end
+        	end
+	end
+end
+
+-- Check if the vehicle should dance away in melee
+function DarkAngelsVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "da_squad_rhino" or
+		sName == "da_squad_razorback" or
+		sName == "da_squad_chapter_land_speeder" or
+		sName == "da_squad_ravenwing_land_speeder" or
+		sName == "da_squad_ravenwing_land_speeder_darkshroud" or
+		sName == "da_squad_ravenwing_land_speeder_vengeance" or
+		sName == "da_squad_dreadnought_mortis" or
+		sName == "da_squad_dreadnought_mortis_deathwing" or
+		sName == "da_squad_vindicator_ravenwing" or
+		sName == "da_squad_vindicator_deathwing" or
+		sName == "da_squad_vindicator" or
+		sName == "da_squad_whirlwind_ravenwing" or
+		sName == "da_squad_whirlwind_deathwing" or
+		sName == "da_squad_whirlwind" or
+		sName == "da_squad_predator_ravenwing" or
+		sName == "da_squad_predator_deathwing" or
+		sName == "da_squad_predator" or
+		sName == "da_squad_fellblade" or
+		sName == "da_squad_fellblade_dw_rw" or
+		sName == "da_squad_deathwing_land_raider_solemnus" or
+		sName == "da_squad_company_land_raider_ares") then
+		return true
+	end
+	return false
+end
+
+function DarkAngelsVehicleTactic:Reinforce()
+
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- Reinforce right away!
+	if (not self.squad_ai:IsReinforcing()) then
+			
+		if (self.squad_ai:CanReinforce( true, 0 )) then
+			self.squad_ai:DoReinforce( true, 0 )
+		elseif (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+end
+
+-- Updated function that takes the number of occupied slots per squad, into account.
+function DarkAngelsVehicleTactic:LoadSquad(oSquad, iSquadStrength)
+	-- Update transport data
+	self.m_iLoadedTroopStrength = self.m_iLoadedTroopStrength + iSquadStrength
+	self.m_iUsedTransportSlots = self.m_iUsedTransportSlots + (OccupiedSlotsDA[oSquad:GetSquadName()] or 1)
+	self.m_iUnloadTries = 2
+	-- Load squad
+	cpu_manager:DoMove(self.squad_ai, oSquad:GetPosition(), false, "Load troops")
+	for oEntity in self.squad_ai:GetEntities() do
+		oSquad:DoDefault(oEntity)
+		break
+	end
+	self.m_iMoveDelay = g_iGMT - 3
+end

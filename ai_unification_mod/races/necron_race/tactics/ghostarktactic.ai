@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'ghostarktactic.ai'
+-- Edited by Gambit @ 26.09.2023
+
+class 'GhostArkTactic' (NecronVehicleTactic)
+
+GhostArk = {}
+
+function GhostArkTactic:__init( squad_ai ) super( squad_ai )
+	
+	self:SetName("Ghost Ark Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+
+function GhostArkTactic:InitAbilities()
+
+	if GhostArk.phase_shift_id == nil then
+		GhostArk.phase_shift_id = cpu_manager.stats:GetAbilityID( "necron_ghost_ark_phase_shift" )
+	end
+end
+
+
+function GhostArkTactic:DoAbilities()
+
+	if self.squad_ai:WasRecentlyHurt() and self.squad_ai:CanDoAbility(GhostArk.phase_shift_id) then
+		if self.squad_ai:GetHealthPercentage() < 0.35 then
+			self.squad_ai:DoSpecialAbility(GhostArk.phase_shift_id)
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

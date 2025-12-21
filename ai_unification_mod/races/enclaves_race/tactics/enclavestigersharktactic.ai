@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'enclavestigersharktactic.ai'
+-- Edited by Thudmeizer				@ 07.03.2024
+
+class 'EnclavesTigersharkTactic' (EnclavesVehicleTactic)
+
+EnclavesTigershark = {}
+
+function EnclavesTigersharkTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Tigershark Tactic")
+end
+
+function EnclavesTigersharkTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesTigershark.seekerbarrage_id == nil) then
+		EnclavesTigershark.seekerbarrage_id = cpu_manager.stats:GetAbilityID( "enclaves_seeker_missiles_barrage_tigershark" )	
+	end
+end
+
+function EnclavesTigersharkTactic:DoAbilities()
+
+	-- Launch seeker missile barrage
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+ 		Ability.DoAbilityPos( self.squad_ai, EnclavesTigershark.seekerbarrage_id, Ability.Filters.CloseEnemy, 4 ) 
+	else
+ 		Ability.DoAbilityPos( self.squad_ai, EnclavesTigershark.seekerbarrage_id, Ability.Filters.CloseEnemy, 8 ) 
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

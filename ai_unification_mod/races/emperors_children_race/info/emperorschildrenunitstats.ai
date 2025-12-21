@@ -1,0 +1,3138 @@
+----------------------------------------
+-- File: 'ecunitstats.ai'
+-- Edited by Gambit @ 24.03.2018
+-- Edited by Thudmeizer @ 25.02.2025
+
+-- Campaign
+UnitStrengths.emperors_children_squad_cultist_cult_sp_dxp3_prisoner = 0
+UnitStrengths.emperors_children_squad_fallen_sister_sp_dxp3_prisoner = 0
+UnitStrengths.emperors_children_squad_raptor_sp_dxp3_prisoner = 0
+UnitStrengths.emperors_children_squad_havoc_sp_dxp3_prisoner = 0
+UnitStrengths.emperors_children_squad_daemonette_advance_sp = 80
+UnitStrengths.emperors_children_squad_raptor_advance_sp = 70
+UnitStrengths.emperors_children_squad_noise_marine_chosen_advance_sp = 70
+UnitStrengths.emperors_children_squad_glaw_agents_advance_sp = 40
+UnitStrengths.emperors_children_squad_fallen_hospitaller_advance_sp = 30
+UnitStrengths.emperors_children_squad_fallen_retributor_advance_sp = 80
+UnitStrengths.emperors_children_squad_intoner_miriael_advance_sp = 70
+UnitStrengths.emperors_children_squad_masque_advance_sp = 55
+UnitStrengths.emperors_children_squad_lord_advance_sp_wg = 270
+UnitStrengths.emperors_children_squad_miriel_advance_sp = 5000
+UnitStrengths.emperors_children_squad_princess_slaanesh_advance_sp = 5000
+UnitStrengths.emperors_children_squad_rhino_sp_dxp3 = 160
+UnitStrengths.emperors_children_squad_sentinel_advance_sp = 200
+UnitStrengths.emperors_children_squad_dreadnaught_noise_advance_sp = 450
+UnitStrengths.emperors_children_squad_whirlwind_advance_sp = 490
+
+-- Skirmish
+UnitStrengths.emperors_children_squad_slave = 0
+UnitStrengths.emperors_children_squad_slave_sororita_free = 0
+UnitStrengths.emperors_children_squad_slave_tortured_free = 0
+UnitStrengths.emperors_children_squad_beast_dummy = 0
+UnitStrengths.emperors_children_squad_fulgrim_dummy = 0
+UnitStrengths.emperors_children_squad_dr_unsummon_p = 0
+UnitStrengths.emperors_children_squad_dr_unsummon = 0
+UnitStrengths.emperors_children_summon_fulgrim_ability = 0
+UnitStrengths.emperors_children_squad_kekoulis = 0
+UnitStrengths.emperors_children_squad_mdcertainty = 0
+UnitStrengths.emperors_children_squad_cultist = 44
+UnitStrengths.emperors_children_squad_cultist_cult = 44
+UnitStrengths.emperors_children_squad_glaw_agents = 40
+UnitStrengths.emperors_children_squad_noise_marine = 50
+UnitStrengths.emperors_children_squad_havoc = 60
+UnitStrengths.emperors_children_squad_warp_talon = 60
+UnitStrengths.emperors_children_squad_noise_primaris_suppressor = 45
+UnitStrengths.emperors_children_squad_raptor = 70
+UnitStrengths.emperors_children_squad_noise_marine_chosen = 70
+UnitStrengths.emperors_children_squad_noise_palatine = 70
+UnitStrengths.emperors_children_squad_noise_primaris = 40
+UnitStrengths.emperors_children_squad_daemonette = 80
+UnitStrengths.emperors_children_squad_hate_angel = 80
+UnitStrengths.emperors_children_squad_daemonette_alpha = 60
+UnitStrengths.emperors_children_squad_nun = 30
+UnitStrengths.emperors_children_squad_masque = 55
+UnitStrengths.emperors_children_squad_intoner_lucius = 80
+UnitStrengths.emperors_children_squad_intoner_miriael = 70
+UnitStrengths.emperors_children_squad_fallen_sister = 60
+UnitStrengths.emperors_children_squad_fallen_retributor = 80
+UnitStrengths.emperors_children_squad_fallen_seraphim = 80
+UnitStrengths.emperors_children_squad_fiend_slaaneshi = 50
+UnitStrengths.emperors_children_squad_seeker = 45
+UnitStrengths.emperors_children_squad_possessed_marine = 80
+UnitStrengths.emperors_children_squad_noise_bezerker = 90
+UnitStrengths.emperors_children_squad_spawn = 80
+UnitStrengths.emperors_children_squad_terminator = 85
+UnitStrengths.emperors_children_squad_obliterator = 60
+UnitStrengths.emperors_children_squad_kakophoni = 200
+UnitStrengths.emperors_children_squad_fallen_hospitaller = 30
+UnitStrengths.emperors_children_squad_apothecary = 25
+UnitStrengths.emperors_children_squad_icon_bearer = 80
+UnitStrengths.emperors_children_squad_flag_bearer = 80
+UnitStrengths.emperors_children_squad_techmarine = 100
+UnitStrengths.emperors_children_squad_warpsmith = 100
+UnitStrengths.emperors_children_squad_soloist = 140
+UnitStrengths.emperors_children_squad_female_soloist = 80
+UnitStrengths.emperors_children_squad_slaanesh_herald = 180
+UnitStrengths.emperors_children_squad_miriel = 200
+UnitStrengths.emperors_children_squad_sorcerer = 225
+UnitStrengths.emperors_children_squad_priestress = 225
+UnitStrengths.emperors_children_squad_lord = 270
+UnitStrengths.emperors_children_squad_2b = 180
+UnitStrengths.emperors_children_squad_2b_surv = 180
+UnitStrengths.emperors_children_squad_lord_terminator = 300
+UnitStrengths.emperors_children_squad_lord_terminator_wg = 300
+UnitStrengths.emperors_children_squad_noise_moritat = 250
+UnitStrengths.emperors_children_squad_lucius = 320
+UnitStrengths.emperors_children_squad_daemon_prince = 800
+UnitStrengths.emperors_children_squad_daemon_prince_wg = 800
+UnitStrengths.emperors_children_squad_doomrider = 850
+UnitStrengths.emperors_children_squad_keeper_of_secrets = 1000
+UnitStrengths.emperors_children_squad_princess_slaanesh = 1200
+UnitStrengths.emperors_children_squad_primarch_fulgrim = 1200
+UnitStrengths.emperors_children_squad_primarch_fulgrim_snake = 1200
+UnitStrengths.emperors_children_squad_rhino = 160
+UnitStrengths.emperors_children_squad_razorback = 200
+UnitStrengths.emperors_children_squad_jetbike_marine = 200
+UnitStrengths.emperors_children_squad_jetbike_sister = 200
+UnitStrengths.emperors_children_squad_sonic_warp_speeder = 145
+UnitStrengths.emperors_children_squad_hell_talon = 100
+UnitStrengths.emperors_children_squad_hell_sword = 100
+UnitStrengths.emperors_children_squad_sentinel = 200
+UnitStrengths.emperors_children_squad_xiphon = 180
+UnitStrengths.emperors_children_squad_immolator = 280
+UnitStrengths.emperors_children_squad_defiler = 400
+UnitStrengths.emperors_children_squad_vindicator = 420
+UnitStrengths.emperors_children_squad_whirlwind = 490
+UnitStrengths.emperors_children_squad_dreadnaught = 450
+UnitStrengths.emperors_children_squad_dreadnaught_noise = 450
+UnitStrengths.emperors_children_squad_dreadnaught_daemonette = 470
+UnitStrengths.emperors_children_squad_predator = 480
+UnitStrengths.emperors_children_squad_defiler_slaanesh = 600
+UnitStrengths.emperors_children_squad_noiseblade = 1000
+UnitStrengths.emperors_children_squad_noisesword = 1000
+UnitStrengths.emperors_children_squad_questor = 1000
+UnitStrengths.emperors_children_squad_subjugator = 1000
+UnitStrengths.emperors_children_squad_knight = 1000
+UnitStrengths.emperors_children_squad_land_raider = 1000
+UnitStrengths.emperors_children_squad_land_gifter = 1000
+UnitStrengths.emperors_children_squad_land_rapier = 1000
+UnitStrengths.emperors_children_squad_sonic_thunderhawk = 1000
+UnitStrengths.emperors_children_squad_sonic_thunderhawk_entrenched = 1000
+
+-- Last Stand + Kill-Team Game Modes
+UnitStrengths.emperors_children_squad_raptor_ktgm = 70
+UnitStrengths.emperors_children_squad_princess_slaanesh_ktgm = 1200
+UnitStrengths.emperors_children_squad_kakophoni_ktgm = 5000
+UnitStrengths.emperors_children_squad_miriel_ktgm = 5000
+
+-- Campaign
+LeaderStrengths.emperors_children_squad_cultist_cult_sp_dxp3_prisoner = 40
+LeaderStrengths.emperors_children_squad_raptor_advance_sp = 60
+LeaderStrengths.emperors_children_squad_raptor_sp_dxp3_prisoner = 60
+LeaderStrengths.emperors_children_squad_fallen_sister_sp_dxp3_prisoner = 0
+LeaderStrengths.emperors_children_squad_fallen_retributor_advance_sp = 0
+LeaderStrengths.emperors_children_squad_glaw_agents_advance_sp = 40
+LeaderStrengths.emperors_children_squad_havoc_sp_dxp3_prisoner = 75
+LeaderStrengths.emperors_children_squad_noise_marine_chosen_advance_sp = 75
+
+-- Skirmish
+LeaderStrengths.emperors_children_squad_techmarine = 0
+LeaderStrengths.emperors_children_squad_cultist = 40
+LeaderStrengths.emperors_children_squad_cultist_cult = 50
+LeaderStrengths.emperors_children_squad_glaw_agents = 40
+LeaderStrengths.emperors_children_squad_noise_marine = 60
+LeaderStrengths.emperors_children_squad_warp_talon = 60
+LeaderStrengths.emperors_children_squad_noise_primaris_suppressor = 70
+LeaderStrengths.emperors_children_squad_raptor = 60
+LeaderStrengths.emperors_children_squad_noise_marine_chosen = 75
+LeaderStrengths.emperors_children_squad_noise_primaris = 75
+LeaderStrengths.emperors_children_squad_havoc = 75
+LeaderStrengths.emperors_children_squad_noise_palatine = 75
+LeaderStrengths.emperors_children_squad_hate_angel = 70
+LeaderStrengths.emperors_children_squad_nun = 0
+LeaderStrengths.emperors_children_squad_fallen_retributor = 50
+LeaderStrengths.emperors_children_squad_fallen_sister = 50
+LeaderStrengths.emperors_children_squad_fallen_seraphim = 50
+LeaderStrengths.emperors_children_squad_kakophoni = 80
+LeaderStrengths.emperors_children_squad_kakophoni_ktgm = 300
+LeaderStrengths.emperors_children_squad_possessed_marine = 80
+LeaderStrengths.emperors_children_squad_noise_bezerker = 80
+LeaderStrengths.emperors_children_squad_terminator = 80
+
+-- Campaign
+Attachments.emperors_children_squad_cultist_cult_sp_dxp3_prisoner = { "emperors_children_squad_fallen_hospitaller_advance_sp", "emperors_children_squad_masque_advance_sp", "emperors_children_squad_intoner_miriael_advance_sp", "emperors_children_squad_miriel_advance_sp", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator_wg" }
+Attachments.emperors_children_squad_daemonette_advance_sp = { "emperors_children_squad_fallen_hospitaller_advance_sp", "emperors_children_squad_masque_advance_sp", "emperors_children_squad_intoner_miriael_advance_sp", "emperors_children_squad_miriel_advance_sp", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator_wg" }
+Attachments.emperors_children_squad_fallen_sister_sp_dxp3_prisoner = { "emperors_children_squad_fallen_hospitaller_advance_sp", "emperors_children_squad_masque_advance_sp", "emperors_children_squad_intoner_miriael_advance_sp", "emperors_children_squad_miriel_advance_sp", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator_wg" }
+Attachments.emperors_children_squad_fallen_retributor_advance_sp = { "emperors_children_squad_fallen_hospitaller_advance_sp", "emperors_children_squad_masque_advance_sp", "emperors_children_squad_intoner_miriael_advance_sp", "emperors_children_squad_miriel_advance_sp", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator_wg" }
+Attachments.emperors_children_squad_havoc_sp_dxp3_prisoner = { "emperors_children_squad_fallen_hospitaller_advance_sp", "emperors_children_squad_masque_advance_sp", "emperors_children_squad_intoner_miriael_advance_sp", "emperors_children_squad_miriel_advance_sp", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator_wg" }
+Attachments.emperors_children_squad_noise_marine_chosen_advance_sp = { "emperors_children_squad_fallen_hospitaller_advance_sp", "emperors_children_squad_masque_advance_sp", "emperors_children_squad_intoner_miriael_advance_sp", "emperors_children_squad_miriel_advance_sp", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator_wg" }
+
+-- Skrimish
+Attachments.emperors_children_squad_cultist = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_female_soloist", "emperors_children_squad_intoner_miriael", "emperors_children_squad_apothecary", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_warpsmith", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_cultist_cult = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_female_soloist", "emperors_children_squad_intoner_miriael", "emperors_children_squad_apothecary", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_warpsmith", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_noise_marine = { "emperors_children_squad_apothecary", "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_warpsmith", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_noise_marine_chosen = { "emperors_children_squad_apothecary", "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_warpsmith", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_noise_primaris = { "emperors_children_squad_apothecary", "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_havoc = { "emperors_children_squad_apothecary", "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist", "emperors_children_squad_warpsmith", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_daemonette = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_slaanesh_herald", "emperors_children_squad_masque", "emperors_children_squad_intoner_miriael", "emperors_children_squad_lucius", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_flag_bearer", "emperors_children_squad_icon_bearer", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_soloist", "emperors_children_squad_apothecary" }
+Attachments.emperors_children_squad_daemonette_alpha = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_slaanesh_herald", "emperors_children_squad_masque", "emperors_children_squad_intoner_miriael", "emperors_children_squad_lucius", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_flag_bearer", "emperors_children_squad_icon_bearer", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_soloist", "emperors_children_squad_apothecary" }
+Attachments.emperors_children_squad_fallen_sister = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_female_soloist", "emperors_children_squad_flag_bearer", "emperors_children_squad_icon_bearer", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_masque", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_fallen_seraphim = { "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", }
+Attachments.emperors_children_squad_fallen_retributor = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_female_soloist", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist", "emperors_children_squad_icon_bearer", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_masque", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_kakophoni = { "emperors_children_squad_lucius" }
+Attachments.emperors_children_squad_noise_palatine = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_apothecary", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_masque", "emperors_children_squad_lucius", "emperors_children_squad_slaanesh_herald", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_soloist" }
+Attachments.emperors_children_squad_kakophoni_ktgm = { "emperors_children_squad_apothecary", "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_lucius", "emperors_children_squad_masque", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_nun = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_female_soloist", "emperors_children_squad_flag_bearer", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_masque", "emperors_children_squad_soloist", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_slaanesh_herald" }
+Attachments.emperors_children_squad_possessed_marine = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_masque", "emperors_children_squad_apothecary", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_lucius", "emperors_children_squad_slaanesh_herald", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_soloist" }
+Attachments.emperors_children_squad_noise_bezerker = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_apothecary", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_masque", "emperors_children_squad_lucius", "emperors_children_squad_slaanesh_herald", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_soloist" }
+Attachments.emperors_children_squad_terminator = { "emperors_children_squad_fallen_hospitaller", "emperors_children_squad_lucius", "emperors_children_squad_lord_terminator", "emperors_children_squad_lord_terminator_wg", "emperors_children_squad_lord", "emperors_children_squad_lord_advance_sp_wg", "emperors_children_squad_masque",  "emperors_children_squad_slaanesh_herald", "emperors_children_squad_sorcerer", "emperors_children_squad_priestress", "emperors_children_squad_apothecary", "emperors_children_squad_icon_bearer", "emperors_children_squad_flag_bearer", "emperors_children_squad_soloist" }
+
+EmperorsChildrenUnitStats = 
+{
+
+	race = "emperors_children_race",
+		{
+			name = "Emperors Children Slave",
+			sbp_name = "emperors_children_squad_slave",
+			ebp_name = "emperors_children_slave",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Unsummoned Dummy",
+			sbp_name = "emperors_children_squad_dr_unsummon_p",
+			ebp_name = "emperors_children_dr_dummy_p",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Unsummoned II Dummy",
+			sbp_name = "emperors_children_squad_dr_unsummon",
+			ebp_name = "emperors_children_dr_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Beast Dummy",
+			sbp_name = "emperors_children_squad_beast_dummy",
+			ebp_name = "emperors_children_beast_dummy",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Freed Adepta Sororita Slave",
+			sbp_name = "emperors_children_squad_slave_sororita_free",
+			ebp_name = "emperors_children_slave_sororita_free",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(1.2,1.5,0.3,1.2,0.4,0.2,0.6,0.0,1.1,0.6,0.8,1.0,0.2,0.0,0.0,0.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Freed Tortured Imperial Slave",
+			sbp_name = "emperors_children_squad_slave_tortured_free",
+			ebp_name = "emperors_children_slave_tortured_mo_free",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "emperors_children_hellgun_kasrkin",
+					effectiveness = GenerateUnitEffectiveness(1.2,1.5,0.3,1.2,0.4,0.2,0.6,0.0,1.1,0.6,0.8,1.0,0.2,0.0,0.0,0.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_kasrkin",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.2,0.4,2.2,0.4,0.0,0.0,0.0,0.7,0.4,0.7,1.0,0.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Cultist",
+			sbp_name = "emperors_children_squad_cultist",
+			ebp_name = "emperors_children_cultist",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 2.8,
+			potential =
+			{
+				{
+					name = "emperors_children_laspistol",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_cultist",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.2,0.4,2.2,0.4,0.0,0.0,0.0,0.7,0.4,0.7,1.0,0.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_plasma_pistol_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.8,5.6,4.9,4.5,3.8,1.6,1.3,1.3,3.8,2,2.7,2.5,1.8,1.3,0.0,1.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_dire_whip_cultists",
+					effectiveness = GenerateUnitEffectiveness(3.9,4.6,4.6,2.5,2.1,1,0.7,0.3,3.5,1.8,1.4,1,0.7,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_warp_infested_talons_cultists",
+					effectiveness = GenerateUnitEffectiveness(4,4.7,4.7,4,4.7,1.8,1.5,0.8,1.5,1.1,2,1.5,1,0.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Cultists of Slaanesh",
+			sbp_name = "emperors_children_squad_cultist_cult",
+			ebp_name = "emperors_children_cultist_cult",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "emperors_children_sword_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.1,4.2,3.2,2.9,0.0,0.0,0.0,0.0,0.9,0.0,0.9,2.0,0.8,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_flamer_cultist",
+					effectiveness = GenerateUnitEffectiveness(5.4,6.2,3.1,5.8,5.1,0.3,0.0,0.0,5.7,3.1,4.4,2.5,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_shotgun",
+					effectiveness = GenerateUnitEffectiveness(2.3,3.5,0.2,2.4,2.4,0.3,0.0,0.0,2.4,0.6,1.5,2.6,0.7,1.2,0.0,0.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.4,3.2,3.2,3.2,4.5,3.7,3.9,3.0,4.5,0.0,4.1,3.2,2.0,1.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.8,4.9,1.0,5.4,5.4,10.0,10.0,9.7,9.2,7.1,4.3,6.1,3.0,1.2,0.0,9.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_laspistol",
+					effectiveness = GenerateUnitEffectiveness(2.3,2.7,2.3,2.2,0.0,0.0,0.0,0.0,1.0,0.0,0.6,1.5,0.5,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Cultists of Slaanesh Campaign",
+			sbp_name = "emperors_children_squad_cultist_cult_sp_dxp3_prisoner",
+			ebp_name = "emperors_children_cultist_cult_sp_dxp3_prisoner",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "emperors_children_grenade_launcher_sp_dxp3_prisoner",
+					effectiveness = GenerateUnitEffectiveness(3.1,4.2,3.2,2.9,0.0,0.0,0.0,0.0,0.9,0.0,0.9,2.0,0.8,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_cultist",
+					effectiveness = GenerateUnitEffectiveness(5.4,6.2,3.1,5.8,5.1,0.3,0.0,0.0,5.7,3.1,4.4,2.5,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_shotgun",
+					effectiveness = GenerateUnitEffectiveness(2.3,3.5,0.2,2.4,2.4,0.3,0.0,0.0,2.4,0.6,1.5,2.6,0.7,1.2,0.0,0.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.4,3.2,3.2,3.2,4.5,3.7,3.9,3.0,4.5,0.0,4.1,3.2,2.0,1.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.8,4.9,1.0,5.4,5.4,10.0,10.0,9.7,9.2,7.1,4.3,6.1,3.0,1.2,0.0,9.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sword_tactical",
+					effectiveness = GenerateUnitEffectiveness(2.3,2.7,2.3,2.2,0.0,0.0,0.0,0.0,1.0,0.0,0.6,1.5,0.5,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Glaw Agents",
+			sbp_name = "emperors_children_squad_glaw_agents",
+			ebp_name = "emperors_children_glaw_agents",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 2.8,
+			potential =
+			{
+				{
+					name = "emperors_children_autogun",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_cultist",
+					effectiveness = GenerateUnitEffectiveness(5.4,6.2,3.1,5.8,5.1,0.3,0.0,0.0,5.7,3.1,4.4,2.5,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_lasgun_glaw",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.3,3.0,5.9,5.0,0.4,0.0,0.0,5.6,3.2,4.3,2.6,0.6,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_grenade_launcher",
+					effectiveness = GenerateUnitEffectiveness(2.2,3.0,0.2,2.5,1.3,0.8,0.8,0.3,1.3,0.2,0.3,1.0,0.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_gun_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.8,5.6,4.9,6.5,6.8,1.6,1.3,1.3,3.8,2,2.7,2.5,1.8,1.3,0.0,1.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_gun_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.8,4.9,1.0,5.4,5.4,10.0,10.0,9.7,9.2,7.1,4.3,6.1,3.0,1.2,0.0,9.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_longlasgun_glaw",
+					effectiveness = GenerateUnitEffectiveness(7.2,8.0,8.2,6.5,4.3,0.8,0.8,0.3,1.3,0.2,0.3,1.0,0.5,0.0,0.0,2.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_cultist",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.2,0.4,2.2,0.4,0.0,0.0,0.0,0.7,0.4,0.7,1.0,0.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Glaw Agents Campaign",
+			sbp_name = "emperors_children_squad_glaw_agents_advance_sp",
+			ebp_name = "emperors_children_glaw_agents",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 2.8,
+			potential =
+			{
+				{
+					name = "emperors_children_autogun",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,math.random(4.0*10,5.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_cultist",
+					effectiveness = GenerateUnitEffectiveness(5.4,6.2,3.1,5.8,5.1,0.3,0.0,0.0,5.7,3.1,4.4,2.5,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_lasgun_glaw",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.3,3.0,5.9,5.0,0.4,0.0,0.0,5.6,3.2,4.3,2.6,0.6,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_grenade_launcher",
+					effectiveness = GenerateUnitEffectiveness(2.2,3.0,0.2,2.5,1.3,0.8,0.8,0.3,1.3,0.2,0.3,1.0,0.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_gun_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.8,5.6,4.9,6.5,6.8,1.6,1.3,1.3,3.8,2,2.7,2.5,1.8,1.3,0.0,1.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_gun_cultist",
+					effectiveness = GenerateUnitEffectiveness(3.8,4.9,1.0,5.4,5.4,10.0,10.0,9.7,9.2,7.1,4.3,6.1,3.0,1.2,0.0,9.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_longlasgun_glaw",
+					effectiveness = GenerateUnitEffectiveness(7.2,8.0,8.2,6.5,4.3,0.8,0.8,0.3,1.3,0.2,0.3,1.0,0.5,0.0,0.0,2.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_cultist",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.2,0.4,2.2,0.4,0.0,0.0,0.0,0.7,0.4,0.7,1.0,0.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Marine",
+			sbp_name = "emperors_children_squad_noise_marine",
+			ebp_name = "emperors_children_noise_marine",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 2.9,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_marine_freq",
+					effectiveness = GenerateUnitEffectiveness(3.8,3.8,0.1,2.5,6.2,10.0,10.0,6.8,3.8,1.3,3.1,2.7,2.1,1.4,0.0,7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.3,3.9,0.6,3.3,3.0,0.0,0.0,0.0,3.2,0.6,2.6,3.0,0.8,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Warp Talons",
+			sbp_name = "emperors_children_squad_warp_talon",
+			ebp_name = "emperors_children_raptor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.1,
+			potential =
+			{
+				{
+					name = "emperors_children_power_claw_raptor",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Warp Talons (Kill Team)",
+			sbp_name = "emperors_children_squad_raptor_ktgm",
+			ebp_name = "emperors_children_raptor_ktgm",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.1,
+			potential =
+			{
+				{
+					name = "emperors_children_power_claw_raptor",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,	
+				},
+			}
+		},
+		{
+			name = "Emperors Children Primaris Suppressors",
+			sbp_name = "emperors_children_squad_noise_primaris_suppressor",
+			ebp_name = "emperors_children_noise_primaris_suppressor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.0,
+			potential =
+			{
+				{
+					name = "emperors_children_assault_cannon_suppressor",
+					effectiveness = GenerateUnitEffectiveness(6.8,7,6.8,6.8,7,0.8,0.9,1.1,3.6,6.3,6.2,6.0,0.6,0.6,0.0,0.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,	
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Raptors",
+			sbp_name = "emperors_children_squad_raptor",
+			ebp_name = "emperors_children_chaos_raptor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.3,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_raptor",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,3.9,3.1,3.8,3.6,0.1,0.0,0.0,3.8,3.1,3.4,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_plasma_gun_havoc",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,5.0,0.5,5.7,5.7,10.0,10.0,10.0,10.0,7.6,4.4,7.2,3.6,1.4,0.0,8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(5.9,7.1,1.0,5.9,5.8,1.1,0.2,0.0,5.8,1.0,3.5,5.5,1.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Raptors Campaign",
+			sbp_name = "emperors_children_squad_raptor_sp_dxp3_prisoner",
+			ebp_name = "emperors_children_chaos_raptor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.3,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_raptor",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,3.9,3.1,3.8,3.6,0.1,0.0,0.0,3.8,3.1,3.4,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_plasma_gun_havoc",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,5.0,0.5,5.7,5.7,10.0,10.0,10.0,10.0,7.6,4.4,7.2,3.6,1.4,0.0,8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(5.9,7.1,1.0,5.9,5.8,1.1,0.2,0.0,5.8,1.0,3.5,5.5,1.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Raptors Campaign",
+			sbp_name = "emperors_children_squad_raptor_advance_sp",
+			ebp_name = "emperors_children_chaos_raptor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.3,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_raptor",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,3.9,3.1,3.8,3.6,0.1,0.0,0.0,3.8,3.1,3.4,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_plasma_gun_havoc",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,5.0,0.5,5.7,5.7,10.0,10.0,10.0,10.0,7.6,4.4,7.2,3.6,1.4,0.0,8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(5.9,7.1,1.0,5.9,5.8,1.1,0.2,0.0,5.8,1.0,3.5,5.5,1.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Marine Havoc",
+			sbp_name = "emperors_children_squad_havoc",
+			ebp_name = "emperors_children_marine_havoc",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.2,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter",
+					effectiveness = GenerateUnitEffectiveness(9.0,9.0,1.4,8.2,7.5,1.7,0.8,0.0,7.5,1.4,4.4,3.4,1.7,0.8,0.0,1.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_havoc",
+					effectiveness = GenerateUnitEffectiveness(5.7,5.7,0.2,5.7,5.7,4.9,3.7,2.5,5.7,2.9,2.4,2.5,2.5,1.2,0.0,4.9,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_havoc",
+					effectiveness = GenerateUnitEffectiveness(1.3,2.3,0.1,2.5,1.5,10.0,10.0,9.8,3.7,4.8,1.4,4.2,1.6,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_havoc",
+					effectiveness = GenerateUnitEffectiveness(3.4,3.4,0.1,2.3,5.7,10.0,10.0,6.2,3.4,1.2,2.9,2.5,1.9,1.2,0.0,10.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.0,3.6,0.5,3.0,2.7,0.0,0.0,0.0,3.0,0.5,2.4,2.8,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Marine Havoc Campaign",
+			sbp_name = "emperors_children_squad_havoc_sp_dxp3_prisoner",
+			ebp_name = "emperors_children_marine_havoc_sp_dxp3_prisoner",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.2,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter",
+					effectiveness = GenerateUnitEffectiveness(9.0,9.0,1.4,8.2,7.5,1.7,0.8,0.0,7.5,1.4,4.4,3.4,1.7,0.8,0.0,1.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_havoc",
+					effectiveness = GenerateUnitEffectiveness(5.7,5.7,0.2,5.7,5.7,4.9,3.7,2.5,5.7,2.9,2.4,2.5,2.5,1.2,0.0,4.9,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_sp_dxp3_prisoner",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_havoc",
+					effectiveness = GenerateUnitEffectiveness(1.3,2.3,0.1,2.5,1.5,10.0,10.0,9.8,3.7,4.8,1.4,4.2,1.6,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_havoc",
+					effectiveness = GenerateUnitEffectiveness(3.4,3.4,0.1,2.3,5.7,10.0,10.0,6.2,3.4,1.2,2.9,2.5,1.9,1.2,0.0,10.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.0,3.6,0.5,3.0,2.7,0.0,0.0,0.0,3.0,0.5,2.4,2.8,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Daemonette",
+			sbp_name = "emperors_children_squad_daemonette",
+			ebp_name = "emperors_children_daemonette",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3.3,
+			potential =
+			{
+				{
+					name = "emperors_children_daemonette_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Daemonette Campaign",
+			sbp_name = "emperors_children_squad_daemonette_advance_sp",
+			ebp_name = "emperors_children_daemonette",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3.3,
+			potential =
+			{
+				{
+					name = "emperors_children_daemonette_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Hate-Angels",
+			sbp_name = "emperors_children_squad_hate_angel",
+			ebp_name = "emperors_children_hate_angel",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3.3,
+			potential =
+			{
+				{
+					name = "emperors_children_poison_staff",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Daemonette Alpha",
+			sbp_name = "emperors_children_squad_daemonette_alpha",
+			ebp_name = "emperors_children_daemonette_alpha",
+			class = UnitStatsAI.UC_LightInfantryMed,
+			rating = 3.4,
+			potential =
+			{
+				{
+					name = "emperors_children_daemonette_alpha_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_daemonette_alpha_melee",
+					effectiveness = GenerateUnitEffectiveness(3.4,4.2,0.6,3.8,2.7,0.5,0.1,0.0,3.7,0.6,2.1,1.5,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Fallen Battle Sister",
+			sbp_name = "emperors_children_squad_fallen_sister",
+			ebp_name = "emperors_children_fallen_battle_sister",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.5,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,5.0,0.5,5.7,5.7,10.0,10.0,10.0,10.0,7.6,4.4,7.2,3.6,1.4,0.0,8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_shotgun_tactical",
+					effectiveness = GenerateUnitEffectiveness(6.9,6.9,6.1,8.1,5.2,1.3,0.6,0.0,5.7,1.1,3.4,2.6,1.3,0.6,0.0,1.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sword_tactical",
+					effectiveness = GenerateUnitEffectiveness(0.9,1.1,0.2,0.9,0.9,0.8,0.2,0.2,0.9,0.7,0.7,0.8,0.2,0.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Fallen Battle Sister Campaign",
+			sbp_name = "emperors_children_squad_fallen_sister_sp_dxp3_prisoner",
+			ebp_name = "emperors_children_fallen_battle_sister_sp_dxp3_prisoner",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.5,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,5.0,0.5,5.7,5.7,10.0,10.0,10.0,10.0,7.6,4.4,7.2,3.6,1.4,0.0,8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_shotgun_tactical_sp_dxp3_prisoner",
+					effectiveness = GenerateUnitEffectiveness(6.9,6.9,6.1,8.1,5.2,1.3,0.6,0.0,5.7,1.1,3.4,2.6,1.3,0.6,0.0,1.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sword_tactical",
+					effectiveness = GenerateUnitEffectiveness(0.9,1.1,0.2,0.9,0.9,0.8,0.2,0.2,0.9,0.7,0.7,0.8,0.2,0.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Fallen Angel Sisters",
+			sbp_name = "emperors_children_squad_fallen_seraphim",
+			ebp_name = "emperors_children_fallen_seraphim_sister",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 4.5,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistols_twin",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_pistols_twin",
+					effectiveness = GenerateUnitEffectiveness(3.7,3.9,3.1,3.8,3.6,0.1,0.0,0.0,3.8,3.1,3.4,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_plasma_pistols_twin",
+					effectiveness = GenerateUnitEffectiveness(3.8,5.6,4.9,6.5,6.8,1.6,1.3,1.3,3.8,2.0,2.7,2.5,1.8,1.3,0.0,1.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sword_tactical",
+					effectiveness = GenerateUnitEffectiveness(0.9,1.1,0.2,0.9,0.9,0.8,0.2,0.2,0.9,0.7,0.7,0.8,0.2,0.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Fallen Retributor",
+			sbp_name = "emperors_children_squad_fallen_retributor",
+			ebp_name = "emperors_children_fallen_retributor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.5,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_assault",
+					effectiveness = GenerateUnitEffectiveness(6.3,6.8,6.2,6.2,6.6,0.8,0.9,1.1,3.6,6.3,6.2,6.0,0.6,0.6,0.0,0.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_retributor_multi_melta",
+					effectiveness = GenerateUnitEffectiveness(2.1,2.1,0.1,2.1,2.1,10.0,10.0,10.0,3.1,3.1,2.1,8.5,4.9,2.7,0.0,10,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_bludgeon_tactical",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.8,0.0,0.7,0.6,0.2,0.1,0.1,0.1,0.1,0.6,0.2,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Fallen Retributor Campaign",
+			sbp_name = "emperors_children_squad_fallen_retributor_advance_sp",
+			ebp_name = "emperors_children_fallen_retributor",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.5,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_assault",
+					effectiveness = GenerateUnitEffectiveness(6.3,6.8,6.2,6.2,6.6,0.8,0.9,1.1,3.6,6.3,6.2,6.0,0.6,0.6,0.0,0.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_retributor_multi_melta",
+					effectiveness = GenerateUnitEffectiveness(2.1,2.1,0.1,2.1,2.1,10.0,10.0,10.0,3.1,3.1,2.1,8.5,4.9,2.7,0.0,10,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_bludgeon_tactical",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.8,0.0,0.7,0.6,0.2,0.1,0.1,0.1,0.1,0.6,0.2,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Fiend",
+			sbp_name = "emperors_children_squad_fiend_slaaneshi",
+			ebp_name = "emperors_children_fiend",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3.6,
+			potential =
+			{
+				{
+					name = "emperors_children_fiend_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Seeker of Slaanesh",
+			sbp_name = "emperors_children_squad_seeker",
+			ebp_name = "emperors_children_seeker",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3.4,
+			potential =
+			{
+				{
+					name = "emperors_children_seeker_sword",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Cachophony",
+			sbp_name = "emperors_children_squad_kakophoni",
+			ebp_name = "emperors_children_cachophony",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 4.9,
+			potential =
+			{
+				{
+					name = "emperors_children_kakophoni",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_noise_marine",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.3,0.4,0.4,0.4,0.2,0.3,0.3,0.3,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Cachophony (Kill Team)",
+			sbp_name = "emperors_children_squad_kakophoni_ktgm",
+			ebp_name = "emperors_children_noise_marine_chosen_ktgm",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_group_test_ktgm",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_heavy_ktgm",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_caliver_ktgm",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_noise_marine",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.3,0.4,0.4,0.4,0.2,0.3,0.3,0.3,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Marine Chosen",
+			sbp_name = "emperors_children_squad_noise_marine_chosen",
+			ebp_name = "emperors_children_noise_marine_chosen",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.7,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_group_test",
+					effectiveness = GenerateUnitEffectiveness(1.6,1.6,0.0,1.2,1.0,1.1,1.2,0.8,0.7,0.2,0.4,1.1,0.5,0.4,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_caliver",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,4.0,9.2,10.0,10.0,10.0,10.0,10.0,6.6,10.0,5.7,4.3,2.8,0.0,10.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_heavy",
+					effectiveness = GenerateUnitEffectiveness(1.5,2.2,1.0,1.9,1.9,4.2,3.4,2.9,2.8,1.3,1.7,2.5,1.4,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_noise_marine",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.2,0.4,0.3,0.4,0.2,0.3,0.2,0.2,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+--[[				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Marine Chosen Campaign",
+			sbp_name = "emperors_children_squad_noise_marine_chosen_advance_sp",
+			ebp_name = "emperors_children_noise_marine_chosen",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.7,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_group_test",
+					effectiveness = GenerateUnitEffectiveness(1.6,1.6,0.0,1.2,1.0,1.1,1.2,0.8,0.7,0.2,0.4,1.1,0.5,0.4,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_caliver",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,4.0,9.2,10.0,10.0,10.0,10.0,10.0,6.6,10.0,5.7,4.3,2.8,0.0,10.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_heavy",
+					effectiveness = GenerateUnitEffectiveness(1.5,2.2,1.0,1.9,1.9,4.2,3.4,2.9,2.8,1.3,1.7,2.5,1.4,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_noise_marine",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.2,0.4,0.3,0.4,0.2,0.3,0.2,0.2,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+]]
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Marine Campaign",
+			sbp_name = "emperors_children_squad_noise_marine_chosen_advance_sp",
+			ebp_name = "emperors_children_noise_marine_sp",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 3.7,
+			potential =
+			{
+				{
+					name = "emperors_children_plasma_gun_havoc",
+					effectiveness = GenerateUnitEffectiveness(1.6,1.6,0.0,1.2,1.0,1.1,1.2,0.8,0.7,0.2,0.4,1.1,0.5,0.4,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_grav_gun_tactical",
+					effectiveness = GenerateUnitEffectiveness(1.5,2.2,1.0,1.9,1.9,4.2,3.4,2.9,2.8,1.3,1.7,2.5,1.4,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_tactical",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.2,0.4,0.3,0.4,0.2,0.3,0.2,0.2,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Palatines Squad",
+			sbp_name = "emperors_children_squad_noise_palatine",
+			ebp_name = "emperors_children_palatine",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 4.5,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.2,0.4,0.3,0.4,0.2,0.3,0.2,0.2,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},		
+				{
+					name = "emperors_children_lightning_claw",
+					effectiveness = GenerateUnitEffectiveness(7.7,7.4,7.4,6.9,8.8,6.2,5.9,7.3,6.7,6.0,6.4,6.1,5.7,4.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_thunder_hammer",
+					effectiveness = GenerateUnitEffectiveness(7.3,7.4,7.4,6.9,6.5,6.2,6.1,7.3,6.9,6.0,6.6,6.1,5.9,4.9,5.1,5.2,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Primaris Marines",
+			sbp_name = "emperors_children_squad_noise_primaris",
+			ebp_name = "emperors_children_noise_primaris",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "emperors_children_stalker_bolter_primaris",
+					effectiveness = GenerateUnitEffectiveness(2.7,3.1,0.5,3.2,2.8,0.4,1.2,0.2,2.8,1.1,1.8,2.0,0.5,0.0,0.0,0.9,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_caliver",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,4.0,9.2,10.0,10.0,10.0,10.0,10.0,6.6,10.0,5.7,4.3,2.9,0.0,10.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_noise_marine",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.2,0.4,0.3,0.4,0.2,0.3,0.2,0.2,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Terminator",
+			sbp_name = "emperors_children_squad_terminator",
+			ebp_name = "emperors_children_terminator",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 5.4,
+			potential =
+			{
+				{
+					name = "emperors_children_combi_flamer_terminator",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_power_fist_terminator",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.8,0.0,0.7,0.6,0.2,0.1,0.1,0.1,0.1,0.6,0.2,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_power_sword_terminator",
+					effectiveness = GenerateUnitEffectiveness(8.4,8.2,8.8,8.9,8.3,8.3,8.6,8.1,8.5,8.7,4.9,7.7,2.3,3.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Noise Obliterators",
+			sbp_name = "emperors_children_squad_obliterator",
+			ebp_name = "emperors_children_obliterator",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "emperors_children_power_fist_obliterator",
+					effectiveness = GenerateUnitEffectiveness(5.9,5.7,5.5,5.7,5.6,5.3,2.9,1.8,4.8,1.8,3.1,4.1,2.7,2.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_obliterator_ranged_group",
+					effectiveness = GenerateUnitEffectiveness(6.3,7.2,7.0,7.2,6.0,5.7,5.2,3.8,7.3,3.9,5.4,6.5,4.9,5.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Jetbike Chaos Marines",
+			sbp_name = "emperors_children_squad_jetbike_marine",
+			ebp_name = "emperors_children_jetbike_marine",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 5.0,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter_jetbike",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_heavy_jetbike",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_jetbike",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Jetbike Fallen Sisters",
+			sbp_name = "emperors_children_squad_jetbike_sister",
+			ebp_name = "emperors_children_jetbike_sister",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 5.0,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter_jetbike",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_melta_heavy_jetbike",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_jetbike",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,math.random(5*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Possessed Marine",
+			sbp_name = "emperors_children_squad_possessed_marine",
+			ebp_name = "emperors_children_possessed_marine",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 5.4,
+			potential =
+			{
+				{
+					name = "emperors_children_flamer_possessed",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_possessed_melee",
+					effectiveness = GenerateUnitEffectiveness(6.1,6.4,6.4,6.4,6.4,5.6,5.4,3.6,5.5,3.6,5.4,5.6,5.0,4.7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Zerker Noise Marine",
+			sbp_name = "emperors_children_squad_noise_bezerker",
+			ebp_name = "emperors_children_noise_bezerker",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 5.5,
+			potential =
+			{
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_power_sword_zerk",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.3,2.0,5.8,5.9,0.6,0.2,1.2,5.7,4.1,5.6,2.4,0.9,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_chainaxe_zerk",
+					effectiveness = GenerateUnitEffectiveness(4.3,5.3,2.0,4.8,4.9,7.6,7.2,6.2,5.7,4.1,5.6,2.4,0.9,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_chainaxe_zerk",
+					effectiveness = GenerateUnitEffectiveness(6,6,5,5,4.9,1.6,1.2,1.2,5.7,4.1,5.6,2.4,0.9,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},			
+				{
+					name = "emperors_children_flamer_pistol_zerk",
+					effectiveness = GenerateUnitEffectiveness(5.4,6.2,3.1,5.8,5.1,0.3,0.0,0.0,5.7,3.1,4.4,2.5,0.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_melta_pistol_zerk",
+					effectiveness = GenerateUnitEffectiveness(3.8,4.9,1.0,5.4,5.4,10.0,10.0,9.7,9.2,7.1,4.3,6.1,3.0,1.2,0.0,9.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Slaanesh Herald",
+			sbp_name = "emperors_children_squad_slaanesh_herald",
+			ebp_name = "emperors_children_slaanesh_herald",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 6.1,
+			potential =
+			{
+				{
+					name = "emperors_children_possessed_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Spawn",
+			sbp_name = "emperors_children_squad_spawn",
+			ebp_name = "emperors_children_spawn",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 6.1,
+			potential =
+			{
+				{
+					name = "emperors_children_spawn_flamer",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_spawn_melee",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,8.2,0.0,7.9,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Kekoulis",
+			sbp_name = "emperors_children_squad_kekoulis",
+			ebp_name = "emperors_children_kekoulis",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 7.1,
+			potential =
+			{
+				{
+					name = "emperors_children_combi_bolter_plasma_commander",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,10.0,10.0,10.0,10.0,0.0,10.0,1.8,8.3,10.0,3.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Mdcertainty",
+			sbp_name = "emperors_children_squad_mdcertainty",
+			ebp_name = "emperors_children_mdcertainty",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 7.1,
+			potential =
+			{
+				{
+					name = "emperors_children_power_fist_champion",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Masque",
+			sbp_name = "emperors_children_squad_masque",
+			ebp_name = "emperors_children_masque",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 6.1,
+			potential =
+			{
+				{
+					name = "emperors_children_dual_blades_masque",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Masque Campaign",
+			sbp_name = "emperors_children_squad_masque_advance_sp",
+			ebp_name = "emperors_children_masque",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 6.1,
+			potential =
+			{
+				{
+					name = "emperors_children_dual_blades_masque",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Intoner",
+			sbp_name = "emperors_children_squad_intoner_miriael",
+			ebp_name = "emperors_children_intoner_miriael",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6.8,
+			potential =
+			{
+				{
+					name = "emperors_children_intoner_sword",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Intoner Campaign",
+			sbp_name = "emperors_children_squad_intoner_miriael_advance_sp",
+			ebp_name = "emperors_children_intoner_miriael",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6.8,
+			potential =
+			{
+				{
+					name = "emperors_children_intoner_sword",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+
+				},
+			}
+		},
+		{
+			name = "Emperors Children Intoner Squad",
+			sbp_name = "emperors_children_squad_intoner_lucius",
+			ebp_name = "emperors_children_intoner_lucius",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6.8,
+			potential =
+			{
+				{
+					name = "emperors_children_intoner_sword",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+
+				},
+			}
+		},
+		{
+			name = "Emperors Children Icon Bearer",
+			sbp_name = "emperors_children_squad_icon_bearer",
+			ebp_name = "emperors_children_icon_bearer",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 5.9,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_champion",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_champion",
+					effectiveness = GenerateUnitEffectiveness(8.3,10.0,0.6,9.2,1.9,0.9,0.0,0.0,9.1,3.0,4.8,7.3,2.0,0.0,0.0,1.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(5.9,7.1,1.0,5.9,5.8,1.1,0.2,0.0,5.8,1.0,3.5,5.5,1.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_power_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,10.0,10.0,10.0,10.0,0.0,10.0,1.8,8.3,10.0,3.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_power_fist_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,2.1,10.0,8.5,10.0,10.0,1.8,10.0,3.7,7.1,9.5,3.5,4.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Flag Bearer",
+			sbp_name = "emperors_children_squad_flag_bearer",
+			ebp_name = "emperors_children_flag_bearer",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 5.9,
+			potential =
+			{
+				{
+					name = "emperors_children_fallen_sister_veteran_power_sword",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,10.0,10.0,10.0,10.0,0.0,10.0,1.8,8.3,10.0,3.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Soloist",
+			sbp_name = "emperors_children_squad_soloist",
+			ebp_name = "emperors_children_soloist",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 6.1,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_soloist",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blastmaster_soloist",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.3,10.0,10.0,10.0,10.0,0.0,10.0,1.3,10.0,10.0,9.8,0.0,0.0,8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knife_noise_marine",
+					effectiveness = GenerateUnitEffectiveness(0.3,0.4,0.0,0.4,0.4,0.3,0.4,0.4,0.4,0.2,0.3,0.3,0.3,0.3,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Female Soloist",
+			sbp_name = "emperors_children_squad_female_soloist",
+			ebp_name = "emperors_children_female_soloist",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 4.8,
+			potential =
+			{
+				{
+					name = "emperors_children_combi_bolter_flamer_commander",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,10.0,10.0,10.0,10.0,0.0,10.0,1.8,8.3,10.0,3.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Hospitaller",
+			sbp_name = "emperors_children_squad_fallen_hospitaller",
+			ebp_name = "emperors_children_hospitaller",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 6.2,
+			potential =
+			{
+				{
+					name = "emperors_children_hospitaller_laspistol",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_hospitaller_chainsword",
+					effectiveness = GenerateUnitEffectiveness(1.4,1.4,0.2,1.2,1.2,0.2,0.1,0.1,1.2,0.4,1.1,1.1,0.3,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Hospitaller Campaign",
+			sbp_name = "emperors_children_squad_fallen_hospitaller_advance_sp",
+			ebp_name = "emperors_children_hospitaller",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 6.2,
+			potential =
+			{
+				{
+					name = "emperors_children_hospitaller_laspistol",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_hospitaller_chainsword",
+					effectiveness = GenerateUnitEffectiveness(1.4,1.4,0.2,1.2,1.2,0.2,0.1,0.1,1.2,0.4,1.1,1.1,0.3,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Apothecary",
+			sbp_name = "emperors_children_squad_apothecary",
+			ebp_name = "emperors_children_apothecary",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 6.4,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_champion",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_sorceror",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,1.8,0.0,0.0,10.0,3.5,9.9,10.0,5.0,8.2,0.0,2.1,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_champion",
+					effectiveness = GenerateUnitEffectiveness(5.9,7.1,1.0,5.9,5.8,1.1,0.2,0.0,5.8,1.0,3.5,5.5,1.5,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_subsonic_sword_apoth",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,10.0,10.0,10.0,10.0,0.0,10.0,1.8,8.3,10.0,3.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Slaneeshi Nun",
+			sbp_name = "emperors_children_squad_nun",
+			ebp_name = "emperors_children_slaneeshi_nun",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6.2,
+			potential =
+			{
+				{
+					name = "emperors_children_nun_bolter",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_nun",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.3,2.0,5.8,5.9,0.6,0.2,1.2,5.7,4.1,5.6,2.4,0.9,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Artisan",
+			sbp_name = "emperors_children_squad_techmarine",
+			ebp_name = "emperors_children_techmarine",
+			class = UnitStatsAI.UC_Commander,
+			rating = 7.1,
+			potential =
+			{
+				{
+					name = "emperors_children_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_nun",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.3,2.0,5.8,5.9,0.6,0.2,1.2,5.7,4.1,5.6,2.4,0.9,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_flamer_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,3.9,3.1,3.8,3.6,0.1,0.0,0.0,3.8,3.1,3.4,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+
+		{
+			name = "Emperors Children Noise Warpsmith",
+			sbp_name = "emperors_children_squad_warpsmith",
+			ebp_name = "emperors_children_warpsmith",
+			class = UnitStatsAI.UC_Commander,
+			rating = 6.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_havoc",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_gun_havoc",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_nun",
+					effectiveness = GenerateUnitEffectiveness(5.3,6.3,2.0,5.8,5.9,0.6,0.2,1.2,5.7,4.1,5.6,2.4,0.9,0.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Sorcerer",
+			sbp_name = "emperors_children_squad_sorcerer",
+			ebp_name = "emperors_children_sorcerer",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_sorceror",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_sorceror",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,1.8,0.0,0.0,10.0,3.5,9.9,10.0,5.0,8.2,0.0,2.1,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_bedlam_staff",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,8.4,10.0,10.0,10.0,8.5,10.0,10.0,10.0,10.0,10.0,9.1,10.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Slaaneshi Priestess",
+			sbp_name = "emperors_children_squad_priestress",
+			ebp_name = "emperors_children_priestress",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_hospitaller_laspistol",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,8.4,10.0,10.0,10.0,8.5,10.0,10.0,10.0,10.0,10.0,9.1,10.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Lucius",
+			sbp_name = "emperors_children_squad_lucius",
+			ebp_name = "emperors_children_lucius",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_plasma_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_bliss_giver_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,2.4,10.0,10.0,8.0,5.3,1.3,10.0,6.0,10.0,8.0,4.0,2.7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_manreaper_2",
+					effectiveness = GenerateUnitEffectiveness(7.4,8.6,8.5,8.8,8.5,7.0,6.6,8.9,8.9,8.9,7.3,7.1,5.5,5.7,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Lord",
+			sbp_name = "emperors_children_squad_lord",
+			ebp_name = "emperors_children_lord",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,10.0,5.9,0.0,10.0,7.2,10.0,10.0,4.1,0.0,0.0,2.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_manreaper",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,7.5,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,6.5,7.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Lord Commander Eidolon",
+			sbp_name = "emperors_children_squad_lord_advance_sp_wg",
+			ebp_name = "emperors_children_lord_wg",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolt_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_pistol_lord",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,10.0,5.9,0.0,10.0,7.2,10.0,10.0,4.1,0.0,0.0,2.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_manreaper",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,7.5,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,6.5,7.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Reprogrammed 2B",
+			sbp_name = "emperors_children_squad_2b",
+			ebp_name = "emperors_children_2b",
+			class = UnitStatsAI.UC_Commander,
+			rating = 7.0,
+			potential =
+			{
+				{
+					name = "emperors_children_power_sword_2b",
+					effectiveness = GenerateUnitEffectiveness(8.0,7.0,8.6,7.0,7.0,7.0,5.9,0.0,5.0,7.2,5.0,5.0,4.1,0.0,0.0,0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Terminator Lord",
+			sbp_name = "emperors_children_squad_lord_terminator",
+			ebp_name = "emperors_children_lord_terminator",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.5,
+			potential =
+			{
+				{
+					name = "emperors_children_storm_bolter_termi_lord",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,10.0,5.9,0.0,10.0,7.2,10.0,10.0,4.1,0.0,0.0,2.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_fist_termi_lord",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,7.5,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,6.5,7.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Lord Commander Eidolon",
+			sbp_name = "emperors_children_squad_lord_terminator_wg",
+			ebp_name = "emperors_children_lord_terminator_wg",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.5,
+			potential =
+			{
+				{
+					name = "emperors_children_storm_bolter_termi_lord",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,10.0,5.9,0.0,10.0,7.2,10.0,10.0,4.1,0.0,0.0,2.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_fist_termi_lord",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,7.5,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,6.5,7.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Moritat",
+			sbp_name = "emperors_children_squad_noise_moritat",
+			ebp_name = "emperors_children_noise_moritat",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 6.0,
+			potential =
+			{
+				{
+					name = "emperors_children_plasma_pistol_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,0.6,10.0,10.0,10.0,5.9,0.0,10.0,7.2,10.0,10.0,4.1,0.0,0.0,2.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_serpenta_twin",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flame_pistol_twin",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_power_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,7.5,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,6.5,7.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Miriael Sabathiel",
+			sbp_name = "emperors_children_squad_miriel",
+			ebp_name = "emperors_children_miriel",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_miriel_agonizer",
+					effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,5.7,3.4,1.7,6.0,6.2,6.8,6.0,2.8,1.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Miriael Sabathiel (Kill Team)",
+			sbp_name = "emperors_children_squad_miriel_ktgm",
+			ebp_name = "emperors_children_miriel_ktgm",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_miriel_agonizer",
+					effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,5.7,3.4,1.7,6.0,6.2,6.8,6.0,2.8,1.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Miriael Sabathiel Single Player",
+			sbp_name = "emperors_children_squad_miriel_advance_sp",
+			ebp_name = "emperors_children_miriel_sp",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9.0,
+			potential =
+			{
+				{
+					name = "emperors_children_bolter_tactical",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_miriel_agonizer",
+					effectiveness = GenerateUnitEffectiveness(6.0,6.0,6.0,6.0,6.0,5.7,3.4,1.7,6.0,6.2,6.8,6.0,2.8,1.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Rhino",
+			sbp_name = "emperors_children_squad_rhino",
+			ebp_name = "emperors_children_rhino",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 3.4,
+			potential =
+			{
+				{
+					name = "emperors_children_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_combi_rhino",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_vehicle_plasma_gun",
+					effectiveness = GenerateUnitEffectiveness(2.3,7.3,0.5,7.3,2.3,0.6,0.3,0.0,2.3,7.5,2.0,7.9,0.4,0.2,0.0,0.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_melta_gun",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,8.4,8.4,7.4,6.7,5.0,2.9,4.6,7.3,7.9,7.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_land_raider",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Rhino Campaign",
+			sbp_name = "emperors_children_squad_rhino_sp_dxp3",
+			ebp_name = "emperors_children_rhino_sp_dxp3",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 3.4,
+			potential =
+			{
+				{
+					name = "emperors_children_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_combi_rhino",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_vehicle_plasma_gun",
+					effectiveness = GenerateUnitEffectiveness(2.3,7.3,0.5,7.3,2.3,0.6,0.3,0.0,2.3,7.5,2.0,7.9,0.4,0.2,0.0,0.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_melta_gun",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,8.4,8.4,7.4,6.7,5.0,2.9,4.6,7.3,7.9,7.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_land_raider",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Razorback",
+			sbp_name = "emperors_children_squad_razorback",
+			ebp_name = "emperors_children_razorback",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 3.8,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter_razorback",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_flamer_razorback",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_assault_cannon_razorback",
+					effectiveness = GenerateUnitEffectiveness(6.3,6.8,6.2,6.2,6.6,0.8,0.9,1.1,3.6,6.3,6.2,6.0,0.6,0.6,0.0,0.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_razorback",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_multi_melta_razorback",
+					effectiveness = GenerateUnitEffectiveness(2.1,2.1,0.1,2.1,2.1,10.0,10.0,10.0,3.1,3.1,2.1,8.5,4.9,2.7,0.0,10,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,3.8,3.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,2.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Sonic Warp Speeder",
+			sbp_name = "emperors_children_squad_sonic_warp_speeder",
+			ebp_name = "emperors_children_sonic_warp_speeder",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 3.8,
+			potential =
+			{
+				{
+					name = "emperors_children_assault_cannon_warpspeeder",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_flamer_warpspeeder",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_warpspeeder",
+					effectiveness = GenerateUnitEffectiveness(2.3,7.3,0.5,7.3,2.3,0.6,0.3,0.0,2.3,7.5,2.0,7.9,0.4,0.2,0.0,0.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_warpspeeder",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,8.4,8.4,7.4,6.7,5.0,2.9,4.6,7.3,7.9,7.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_warpspeeder",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Glaw Renegade Sentinel",
+			sbp_name = "emperors_children_squad_sentinel",
+			ebp_name = "emperors_children_glaw_sentinel",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "emperors_children_multi_laser_sentinel",
+					effectiveness = GenerateUnitEffectiveness(5.0,5.1,5.0,4.9,5.1,8.3,8.6,5.6,5.0,5.7,5.2,6.5,5.7,5.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_flamer_sentinel",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_autocannon_sentinel",
+					effectiveness = GenerateUnitEffectiveness(6.3,6.8,6.2,6.2,6.6,0.8,0.9,1.1,3.6,6.3,6.2,6.0,0.6,0.6,0.0,0.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_sentinel",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_sentinel",
+					effectiveness = GenerateUnitEffectiveness(1.3,2.3,0.1,2.5,1.5,6.0,7.0,7.8,3.7,4.8,1.4,4.2,1.6,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Glaw Renegade Sentinel Campaign",
+			sbp_name = "emperors_children_squad_sentinel_advance_sp",
+			ebp_name = "emperors_children_glaw_sentinel",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "emperors_children_multi_laser_sentinel",
+					effectiveness = GenerateUnitEffectiveness(5.0,5.1,5.0,4.9,5.1,8.3,8.6,5.6,5.0,5.7,5.2,6.5,5.7,5.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_flamer_sentinel",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_autocannon_sentinel",
+					effectiveness = GenerateUnitEffectiveness(6.3,6.8,6.2,6.2,6.6,0.8,0.9,1.1,3.6,6.3,6.2,6.0,0.6,0.6,0.0,0.8,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_sentinel",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_sentinel",
+					effectiveness = GenerateUnitEffectiveness(1.3,2.3,0.1,2.5,1.5,6.0,7.0,7.8,3.7,4.8,1.4,4.2,1.6,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Hell Talon",
+			sbp_name = "emperors_children_squad_hell_talon",
+			ebp_name = "emperors_children_hell_talon",
+			class = UnitStatsAI.UC_AirMed,
+			rating = 3.5,
+			potential =
+			{
+				{
+					name = "emperors_children_autocannon_hell_talon_nis",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Xiphon Interceptor",
+			sbp_name = "emperors_children_squad_xiphon",
+			ebp_name = "emperors_children_xiphon",
+			class = UnitStatsAI.UC_AirMed,
+			rating = 4.2,
+			potential =
+			{
+				{
+					name = "emperors_children_lascannons_xiphon",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,2.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_frag_xiphon",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Hell Sword",
+			sbp_name = "emperors_children_squad_hell_sword",
+			ebp_name = "emperors_children_hell_sword",
+			class = UnitStatsAI.UC_AirMed,
+			rating = 3.5,
+			potential =
+			{
+				{
+					name = "emperors_children_lascannon_hell_sword",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_hell_sword2",
+					effectiveness = GenerateUnitEffectiveness(4.4,4.1,0.8,4.3,4.2,10.0,10.0,10.0,8.8,10.0,3.6,10.0,10.0,7.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Pleasure Giver",
+			sbp_name = "emperors_children_squad_immolator",
+			ebp_name = "emperors_children_immolator",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "emperors_children_immolator_twin_sonic_blaster",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_immolator_twin_heavy_bolter",
+					effectiveness = GenerateUnitEffectiveness(8.0,8.0,8.8,8.5,8.6,7.2,3.6,0.0,8.3,8.8,8.5,4.5,0.6,1.2,0.0,3.9,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_immolator_twin_blastmaster",
+					effectiveness = GenerateUnitEffectiveness(2.9,4.0,1.1,4.3,6.3,8.0,8.0,8.3,4.3,3.8,4.1,8.0,8.3,8.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Brass Scorpion",
+			sbp_name = "emperors_children_squad_defiler",
+			ebp_name = "emperors_children_defiler",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 4.9,
+			potential =
+			{
+				{
+					name = "emperors_children_battlecannon",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_twin_defiler",
+					effectiveness = GenerateUnitEffectiveness(8.0,8.0,8.8,8.5,8.6,7.2,3.6,0.0,8.3,8.8,8.5,4.5,0.6,1.2,0.0,3.9,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_flamer_defiler",
+					effectiveness = GenerateUnitEffectiveness(8.0,8.0,8.8,8.5,8.6,7.2,3.6,0.0,8.3,8.8,8.5,4.5,0.6,1.2,0.0,3.9,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_land_raider",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,8.6,10.0,10.0,8.7,8.3,8.0,10.0,1.9,9.7,10.0,8.8,0.4,0.0,5.7,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_defiler_melee",
+					effectiveness = GenerateUnitEffectiveness(2.9,4.0,1.1,4.3,6.3,8.0,8.0,8.3,4.3,3.8,4.1,8.0,8.3,8.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Sonic Dreadnought",
+			sbp_name = "emperors_children_squad_dreadnaught",
+			ebp_name = "emperors_children_dreadnaught",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_twin_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(8.0,8.0,2.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0,9.7,8.0,4.7,8.5,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(1.3,2.3,0.1,2.5,1.5,6.0,7.0,7.8,3.7,4.8,1.4,4.2,1.6,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_culverin_dread",
+					effectiveness = GenerateUnitEffectiveness(1.3,2.3,0.1,2.5,1.5,10.0,10.0,9.8,3.7,4.8,1.4,4.2,1.6,1.3,0.0,0.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chain_fist_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(2.6,9.6,1.0,7.4,7.4,9.1,8.9,7.4,7.4,3.4,3.6,10.0,6.5,6.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_flamer_tactical",
+					effectiveness = GenerateUnitEffectiveness(3.7,3.9,3.1,3.8,3.6,0.1,0.0,0.0,3.8,3.1,3.4,0.7,0.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Dreadnought",
+			sbp_name = "emperors_children_squad_dreadnaught_noise",
+			ebp_name = "emperors_children_dreadnaught_noise",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_twin_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_bolter_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_multi_melta_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chain_fist_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(2.6,9.6,1.0,7.4,7.4,9.1,8.9,7.4,7.4,3.4,3.6,10.0,6.5,6.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noise Dreadnought Campaign",
+			sbp_name = "emperors_children_squad_dreadnaught_noise_advance_sp",
+			ebp_name = "emperors_children_dreadnaught_noise",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_twin_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_bolter_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_multi_melta_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_plasma_cannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chain_fist_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(2.6,9.6,1.0,7.4,7.4,9.1,8.9,7.4,7.4,3.4,3.6,10.0,6.5,6.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Dreaded Daemonette",
+			sbp_name = "emperors_children_squad_dreadnaught_daemonette",
+			ebp_name = "emperors_children_dreadnaught_daemonette",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 5.6,
+			potential =
+			{
+				{
+					name = "emperors_children_sonic_blaster_twin_dread",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blast_master_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(8.0,8.0,2.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0,9.7,8.0,4.7,8.5,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chain_fist_dreadnaught",
+					effectiveness = GenerateUnitEffectiveness(2.6,9.6,1.0,7.4,7.4,9.1,8.9,7.4,7.4,3.4,3.6,10.0,6.5,6.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Defiler (Debaser)",
+			sbp_name = "emperors_children_squad_defiler_slaanesh",
+			ebp_name = "emperors_children_defiler_slaanesh",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 5.5,
+			potential =
+			{
+				{
+					name = "emperors_children_blastmaster_twin",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_right",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.9,0.1,0.9,0.9,5.2,5.2,1.1,0.9,0.9,0.9,2.2,1.3,0.0,0.0,5.2,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_left",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.9,0.1,0.9,0.9,5.2,5.2,1.1,0.9,0.9,0.9,2.2,1.3,0.0,0.0,5.2,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_defiler_melee",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,6.5,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Vindicator",
+			sbp_name = "emperors_children_squad_vindicator",
+			ebp_name = "emperors_children_vindicator",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 5.5,
+			potential =
+			{
+				{
+					name = "emperors_children_demolisher_cannon",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_combi_rhino",
+					effectiveness = GenerateUnitEffectiveness(7.9,1.9,7.5,1.9,7.9,1.0,0.1,0.1,7.6,1.6,7.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_vehicle_plasma_gun",
+					effectiveness = GenerateUnitEffectiveness(2.3,7.3,0.5,7.3,2.3,0.6,0.3,0.0,2.3,7.5,2.0,7.9,0.4,0.2,0.0,0.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_melta_gun",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,8.4,8.4,7.4,6.7,5.0,2.9,4.6,7.3,7.9,7.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_land_raider",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Sonic Whirlwind",
+			sbp_name = "emperors_children_squad_whirlwind",
+			ebp_name = "emperors_children_whirlwind",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "emperors_children_missile_battery",
+					effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,3.4,3.4,4.4,6.7,5.0,2.9,4.6,3.3,4.9,3.0,3.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Sonic Whirlwind Campaign",
+			sbp_name = "emperors_children_squad_whirlwind_advance_sp",
+			ebp_name = "emperors_children_whirlwind",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "emperors_children_missile_battery",
+					effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,3.4,3.4,4.4,6.7,5.0,2.9,4.6,3.3,4.9,3.0,3.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Predator",
+			sbp_name = "emperors_children_squad_predator",
+			ebp_name = "emperors_children_predator",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "emperors_children_autocannon_predator_improved",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_bolter_predator_r",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,7.5,4.6,7.2,3.6,0.0,7.3,1.8,4.5,4.5,0.6,1.2,0.0,3.9,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_bolter_predator_r_improved",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,7.5,4.6,10.0,10.0,6.8,7.3,4.5,4.5,7.5,3.0,3.0,0.0,2.1,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_bolter_predator_l",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,7.5,4.6,7.2,3.6,0.0,7.3,1.8,4.5,4.5,0.6,1.2,0.0,3.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_heavy_bolter_predator_l_improved",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,1.8,7.5,4.6,10.0,10.0,6.8,7.3,4.5,4.5,7.5,3.0,3.0,0.0,3.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_volkite_demi_culverin",
+					effectiveness = GenerateUnitEffectiveness(2.3,3.3,1.1,3.5,2.5,10.0,10.0,9.8,4.7,5.8,2.4,5.2,2.6,3.3,0.0,2.5,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Daemon Prince",
+			sbp_name = "emperors_children_squad_daemon_prince",
+			ebp_name = "emperors_children_daemon_prince",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "emperors_children_dp_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Daemon Prince Eidolon",
+			sbp_name = "emperors_children_squad_daemon_prince_wg",
+			ebp_name = "emperors_children_daemon_prince_wg",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "emperors_children_dp_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Doomrider",
+			sbp_name = "emperors_children_squad_doomrider",
+			ebp_name = "emperors_children_doomrider",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "emperors_children_twin_linked_bolter_doomrider",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_chainsword_doomrider",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,7.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Keeper Of Secrets",
+			sbp_name = "emperors_children_squad_keeper_of_secrets",
+			ebp_name = "emperors_children_keeper_of_secrets",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "emperors_children_kos_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "emperors_children_kos_melee",
+					effectiveness = GenerateUnitEffectiveness(10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,8.8,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Princess Slaanesh Avatar",
+			sbp_name = "emperors_children_squad_princess_slaanesh",
+			ebp_name = "emperors_children_princess_slaanesh",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_princess_weapon",
+					effectiveness = GenerateUnitEffectiveness(6,8,8,8,8,3,3,3,8,9,8,3,3,3,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Princess Slaanesh Avatar (Kill Team)",
+			sbp_name = "emperors_children_squad_princess_slaanesh_ktgm",
+			ebp_name = "emperors_children_princess_slaanesh_ktgm",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_princess_weapon",
+					effectiveness = GenerateUnitEffectiveness(6,8,8,8,8,3,3,3,8,9,8,3,3,3,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Princess Slaanesh Avatar Single Player",
+			sbp_name = "emperors_children_squad_princess_slaanesh_advance_sp",
+			ebp_name = "emperors_children_princess_slaanesh_sp",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_princess_weapon",
+					effectiveness = GenerateUnitEffectiveness(6,8,8,8,8,3,3,3,8,9,8,3,3,3,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Land Raider",
+			sbp_name = "emperors_children_squad_land_raider",
+			ebp_name = "emperors_children_land_raider",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_heavy_bolter_land_raider",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_tank_right",
+					effectiveness = GenerateUnitEffectiveness(4.4,4.1,0.8,4.3,4.2,10.0,10.0,10.0,8.8,10.0,3.6,10.0,10.0,7.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_tank_left",
+					effectiveness = GenerateUnitEffectiveness(4.4,4.1,0.8,4.3,4.2,10.0,10.0,9.5,4.4,9.4,3.6,10.0,10.0,7.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_combi_bolter_predator",
+					effectiveness = GenerateUnitEffectiveness(5.0,8.5,0.5,6.6,5.9,1.6,0.8,0.3,5.9,0.7,4.2,0.0,0.9,0.5,0.0,1.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_combi_rhino",
+					effectiveness = GenerateUnitEffectiveness(9.9,1.9,9.5,1.9,9.9,1.0,0.1,0.1,9.6,1.6,9.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_vehicle_plasma_gun",
+					effectiveness = GenerateUnitEffectiveness(2.3,9.3,0.5,9.3,2.3,0.6,0.3,0.0,2.3,9.5,2.0,9.9,0.4,0.2,0.0,0.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_melta_gun",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,9.4,9.4,9.4,6.7,5.0,2.9,4.6,9.3,9.9,9.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_combi_volkite",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_land_raider",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Land Gifter",
+			sbp_name = "emperors_children_squad_land_gifter",
+			ebp_name = "emperors_children_land_gifter",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_missile_battery_helios",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_tank_right_2",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,9.4,9.4,9.4,6.7,5.0,2.9,4.6,9.3,9.9,9.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_tank_left_2",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,9.4,9.4,9.4,6.7,5.0,2.9,4.6,9.3,9.9,9.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Land Rapier",
+			sbp_name = "emperors_children_squad_land_rapier",
+			ebp_name = "emperors_children_land_rapier",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_lascannon_twin_tank_centre",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_tank_right_2",
+					effectiveness = GenerateUnitEffectiveness(4.4,4.1,0.8,4.3,4.2,10.0,10.0,10.0,8.8,10.0,3.6,10.0,10.0,7.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_tank_left_2",
+					effectiveness = GenerateUnitEffectiveness(4.4,4.1,0.8,4.3,4.2,10.0,10.0,9.5,4.4,9.4,3.6,10.0,10.0,7.4,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_combi_bolter_predator",
+					effectiveness = GenerateUnitEffectiveness(5.0,8.5,0.5,6.6,5.9,1.6,0.8,0.3,5.9,0.7,4.2,0.0,0.9,0.5,0.0,1.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_flamer_combi_rhino",
+					effectiveness = GenerateUnitEffectiveness(9.9,1.9,9.5,1.9,9.9,1.0,0.1,0.1,9.6,1.6,9.8,0.7,0.1,0.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "emperors_children_vehicle_plasma_gun",
+					effectiveness = GenerateUnitEffectiveness(2.3,9.3,0.5,9.3,2.3,0.6,0.3,0.0,2.3,9.5,2.0,9.9,0.4,0.2,0.0,0.6,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_melta_gun",
+					effectiveness = GenerateUnitEffectiveness(2.5,3.3,0.4,3.7,3.7,9.4,9.4,9.4,6.7,5.0,2.9,4.6,9.3,9.9,9.0,7.4,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_vehicle_combi_volkite",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_missile_launcher_havoc_land_raider",
+					effectiveness = GenerateUnitEffectiveness(3.0,2.6,0.4,1.0,0.6,4.8,6.2,1.9,1.0,1.0,0.6,2.1,2.1,1.4,0.0,5.3,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Sonic Thunderhawk",
+			sbp_name = "emperors_children_squad_sonic_thunderhawk",
+			ebp_name = "emperors_children_sonic_thunderhawk",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_battle_cannon_thunderhawk",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Sonic Thunderhawk",
+			sbp_name = "emperors_children_squad_sonic_thunderhawk_entrenched",
+			ebp_name = "emperors_children_sonic_thunderhawk_entrenched",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(8.9,8.5,7.8,8.4,8.6,7.1,6.3,7.5,7.0,7.5,7.7,8.1,7.0,7.2,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noiseblade",
+			sbp_name = "emperors_children_squad_noiseblade",
+			ebp_name = "emperors_children_noiseblade",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_blastmaster_twin_baneblade",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_demolisher_cannon",
+					effectiveness = GenerateUnitEffectiveness(6.0,6.0,0.6,4.4,3.3,6.0,6.0,6.0,4.4,3.8,3.3,6.0,6.0,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_baneblade_left",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.9,0.1,0.9,0.9,5.2,5.2,1.1,0.9,0.9,0.9,2.2,1.3,0.0,0.0,5.2,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_baneblade_hull",
+					effectiveness = GenerateUnitEffectiveness(5.0,4.2,1.8,4.2,3.9,0.6,0.3,0.0,3.6,1.8,2.7,5.1,5.1,5.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_baneblade_right",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.9,0.1,0.9,0.9,5.2,5.2,1.1,0.9,0.9,0.9,2.2,1.3,0.0,0.0,5.2,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_baneblade",
+					effectiveness = GenerateUnitEffectiveness(4.6,4.7,4.7,4.7,4.7,6.9,6.5,6.2,4.6,5.2,4.5,6.9,6.5,6.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Noisesword",
+			sbp_name = "emperors_children_squad_noisesword",
+			ebp_name = "emperors_children_noisesword",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_noisesword_main_cannon",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_demolisher_cannon",
+					effectiveness = GenerateUnitEffectiveness(6.0,6.0,0.6,4.4,3.3,6.0,6.0,6.0,4.4,3.8,3.3,6.0,6.0,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_baneblade_left",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.9,0.1,0.9,0.9,5.2,5.2,1.1,0.9,0.9,0.9,2.2,1.3,0.0,0.0,5.2,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_baneblade_hull",
+					effectiveness = GenerateUnitEffectiveness(5.0,4.2,1.8,4.2,3.9,0.6,0.3,0.0,3.6,1.8,2.7,5.1,5.1,5.1,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_sonic_blaster_twin_baneblade_right",
+					effectiveness = GenerateUnitEffectiveness(0.9,0.9,0.1,0.9,0.9,5.2,5.2,1.1,0.9,0.9,0.9,2.2,1.3,0.0,0.0,5.2,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Primarch Fulgrim",
+			sbp_name = "emperors_children_squad_primarch_fulgrim",
+			ebp_name = "emperors_children_primarch_fulgrim",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_fulgrims_blade",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Primarch Fulgrim Snake",
+			sbp_name = "emperors_children_squad_primarch_fulgrim_snake",
+			ebp_name = "emperors_children_primarch_fulgrim_snake",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_fulgrims_blade",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Questor Titan",
+			sbp_name = "emperors_children_squad_questor",
+			ebp_name = "emperors_children_questor",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_lascannon_twin_titan",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blastmaster_left_titan",
+					effectiveness = GenerateUnitEffectiveness(1.4,3.6,3.4,2.9,2.9,3.5,3.4,3,2.9,1.6,1.7,4.3,2.7,2.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_blastmaster_right_titan",
+					effectiveness = GenerateUnitEffectiveness(1.4,3.6,3.4,2.9,2.9,3.5,3.4,3,2.9,1.6,1.7,4.3,2.7,2.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_titan_right",
+					effectiveness = GenerateUnitEffectiveness(4,3.8,3.5,5.6,4.5,4.9,4.4,3.3,3,1.7,1.7,4.2,3.8,3.5,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_autocannon_titan_left",
+					effectiveness = GenerateUnitEffectiveness(4,3.8,3.5,5.6,4.5,4.9,4.4,3.3,3,1.7,1.7,4.2,3.8,3.5,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_titan_melee",
+					effectiveness = GenerateUnitEffectiveness(4.2,6,6.2,6.4,6.3,5.3,5.5,4.7,6.2,4.7,2.7,5.3,3.7,4.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Subjugator Titan",
+			sbp_name = "emperors_children_squad_subjugator",
+			ebp_name = "emperors_children_subjugator",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_blastmaster_twin_titan",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannonrail_tail_titan",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_lascannon_twin_titan",
+					effectiveness = GenerateUnitEffectiveness(4,3.8,3.5,5.6,4.5,4.9,4.4,3.3,3,1.7,1.7,4.2,3.8,3.5,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_titan_melee",
+					effectiveness = GenerateUnitEffectiveness(4.2,6,6.2,6.4,6.3,5.3,5.5,4.7,6.2,4.7,2.7,5.3,3.7,4.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Emperors Children Knight",
+			sbp_name = "emperors_children_squad_knight",
+			ebp_name = "emperors_children_knight",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "emperors_children_knight_autocannon_r",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "emperors_children_knight_chainsword_l",
+					effectiveness = GenerateUnitEffectiveness(4.2,6,6.2,6.4,6.3,5.3,5.5,4.7,6.2,4.7,2.7,5.3,3.7,4.9,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+}

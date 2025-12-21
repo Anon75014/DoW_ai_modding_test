@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'slaaneshquestortactic.ai'
+-- Edited by Thudmeizer   @ 24.07.2018
+
+class 'SlaaneshQuestorTactic' (EmperorsChildrenVehicleTactic)
+
+SlaaneshTitan = {}
+
+function SlaaneshQuestorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Titan Tactic")
+end
+
+function SlaaneshQuestorTactic:AlwaysAttack()
+	return true
+end
+
+function SlaaneshQuestorTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshTitan.shield_id == nil) then
+		SlaaneshTitan.shield_id = cpu_manager.stats:GetAbilityID( "emperors_children_questor_shield" )	
+		SlaaneshTitan.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren_titan" )	
+	end
+end
+
+function SlaaneshQuestorTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() and self.squad_ai:WasRecentlyHurt() then
+		if self.squad_ai:CanDoAbility(SlaaneshTitan.shield_i) and self.squad_ai:GetHealthPercentage() < 0.4 then
+			self.squad_ai:DoSpecialAbility(SlaaneshTitan.shield_id)
+		elseif self.squad_ai:CanDoAbility(SlaaneshTitan.siren_id) then
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshTitan.siren_id, Ability.Filters.CloseEnemy, 10, 4 ) 
+		end
+	end
+end

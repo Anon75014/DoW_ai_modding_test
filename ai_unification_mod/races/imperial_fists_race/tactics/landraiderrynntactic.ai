@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'landraiderrynntactic.ai'
+-- Edited by Thudmeizer @ 07.09.2024
+
+class 'LandRaiderRynnTactic' (ImperialFistsVehicleTactic)
+
+LandRaiderRynn = {}
+
+function LandRaiderRynnTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Imperial Fists Land Raider Rynn Tactic")
+
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function LandRaiderRynnTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (LandRaiderRynn.might_id == nil) then
+		LandRaiderRynn.might_id = cpu_manager.stats:GetAbilityID( "imperial_fists_might_of_rynn_ability" )
+	end
+end
+
+function LandRaiderRynnTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(LandRaiderRynn.might_id)) then
+			self.squad_ai:DoSpecialAbility(LandRaiderRynn.might_id)
+		end	  
+	end
+
+	-- Do basic abilities
+	ImperialFistsVehicleTactic.DoAbilities(self)
+end

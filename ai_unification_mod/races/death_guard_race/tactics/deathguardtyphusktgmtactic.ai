@@ -1,0 +1,104 @@
+----------------------------------------
+-- File: 'deathguardtyphusktgmtactic.ai'
+-- Edited by Thudmeizer	@ 11.05.2024
+
+class 'DeathGuardTyphusKtgmTactic' (DeathGuardInfantryTactic)
+
+DeathGuardTyphusKtgm = {}
+
+function DeathGuardTyphusKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Typhus Kill Team Tactic")
+end
+
+function DeathGuardTyphusKtgmTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DeathGuardTyphusKtgmTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DeathGuardTyphusKtgmTactic:InitAbilities()
+
+	if (DeathGuardTyphusKtgm.pestilence_id == nil) then
+		DeathGuardTyphusKtgm.pestilence_id = cpu_manager.stats:GetAbilityID( "death_guard_ls_typhus_miasma_of_pestilence" )
+		DeathGuardTyphusKtgm.booster_id = cpu_manager.stats:GetAbilityID( "death_guard_ls_typhus_intoxicating_booster" )		
+		DeathGuardTyphusKtgm.hive_id = cpu_manager.stats:GetAbilityID( "death_guard_ls_typhus_destroyer_hive" )	
+		DeathGuardTyphusKtgm.blow_id = cpu_manager.stats:GetAbilityID( "death_guard_ls_typhus_necrosis_blow" )	
+	end
+end
+
+function DeathGuardTyphusKtgmTactic:DoAbilities()
+
+	-- Try to conjure Pestilence
+	if ( self.squad_ai:CanDoAbility(DeathGuardTyphusKtgm.pestilence_id) ) then
+
+		-- Search for a nearby enemy squad
+		local oSquad = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), 10, 1)
+		local oSquadB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), 10, 1)
+		if ( oSquad ~= nil ) then
+			--print("Using Pestilence Ability against enemy infantry for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbility(DeathGuardTyphusKtgm.pestilence_id)
+		elseif (oSquadB ~= nil) then
+			--print("Using Pestilence Ability against enemy commanders for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbility(DeathGuardTyphusKtgm.pestilence_id)
+		end
+	end
+
+	-- Activate/Deactivate Booster Ability when close in combat and with enough health
+	if (self.squad_ai:IsUsingAbility(DeathGuardTyphusKtgm.booster_id)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 10, 1)
+		if ((oUnit ~= nil) or self.squad_ai:GetHealthPercentage() > 0.3) then
+			self.squad_ai:DoSpecialAbility(DeathGuardTyphusKtgm.booster_id)
+		end
+	elseif (cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 20, 1)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 20, 1)
+		if ((oUnit == nil) and self.squad_ai:GetHealthPercentage() < 0.3) then
+			self.squad_ai:DoSpecialAbility(DeathGuardTyphusKtgm.booster_id)
+		end
+	end
+
+	-- Try to use Destroyer Hive
+	if (self.squad_ai:CanDoAbility(DeathGuardTyphusKtgm.hive_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(DeathGuardTyphusKtgm.hive_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Destroyer Hive Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(DeathGuardTyphusKtgm.hive_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Try to use Necrosis Blow
+	if (self.squad_ai:CanDoAbility(DeathGuardTyphusKtgm.blow_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(DeathGuardTyphusKtgm.blow_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Necrosis Blow Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(DeathGuardTyphusKtgm.blow_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Spawn Zombie Squad
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function DeathGuardTyphusKtgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+end

@@ -1,0 +1,135 @@
+----------------------------------------
+-- File: 'LPTactic.ai'
+-- Edited by Thudmeizer	@ 26.10.2008
+-- Edited by fuggles @ 04.01.2014
+-- Updated by Gambit @ 11.10.2015
+
+class 'LPTactic' (BaseTactic)
+
+AMListeningPost = {}
+
+function LPTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Listening Post Tactic")
+	-- Global timers, to ensure that both the Power Surges and the LPs ADDONs are processed after a short delay
+	AM_LP_POW_TMR = g_iGMT
+	AM_LP_RSRC_TMR = g_iGMT
+	-- Number of research LPs required
+	local sMapSize, iClosestEnemyDistance = BuildOrderStrategy:GetMapSize()
+	if (sMapSize == "large" and iClosestEnemyDistance > 140) or iClosestEnemyDistance > 250 then
+		AM_LP_RSRC_NMR = 2
+	else
+		AM_LP_RSRC_NMR = 1
+	end
+end
+
+
+function LPTactic:AutoBuildLPAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+			-- Reset timer so that we do not re-build immediately
+			AM_LP_RSRC_TMR = g_iGMT
+			-- In case we build a research addon, update the control variable
+			if addonSlot == 2 then
+				AM_RSRC_CHCK = g_iGMT
+			end
+		end
+	end
+end
+
+
+function LPTactic:InitAbilities()
+
+	-- Init Ability ID's and Addon ID's
+	if (AMListeningPost.pow_conv_1ID == nil) then
+		AMListeningPost.pow_conv_1ID = cpu_manager.stats:GetAbilityID( "mechanicus_power_surge" )
+		AMListeningPost.pow_conv_2ID = cpu_manager.stats:GetAbilityID( "mechanicus_power_surge_2" )
+		AMListeningPost.pow_conv_3ID = cpu_manager.stats:GetAbilityID( "mechanicus_power_surge_3" )
+		AMListeningPost.iLPTurret1ID = cpu_manager.stats:GetAddOnID( "addon_mechanicus_gun_post_1" )
+		AMListeningPost.iLPTurret2ID = cpu_manager.stats:GetAddOnID( "addon_mechanicus_gun_post_2" )
+		AMListeningPost.iLPResearch1ID = cpu_manager.stats:GetAddOnID( "addon_mechanicus_rech_post_1" )
+		AMListeningPost.iLPResearch2ID = cpu_manager.stats:GetAddOnID( "addon_mechanicus_rech_post_2" )
+	end
+end
+
+
+function LPTactic:DoAbilities()
+
+-- Reset the check after the time required to build the addon, for the case the original research LP is destroyed
+if AM_RSRC_CHCK ~= nil then
+	if g_iGMT > (AM_RSRC_CHCK + 36) then
+		AM_RSRC_CHCK = nil
+	end
+end
+
+-- Enable/Disable power surge abilities, based on conditions and resources required
+-- First, make any possible change in any ONE existing LP, AFTER 1 sec (so that to re-calculate resources)
+if g_iGMT > AM_LP_POW_TMR + 1 then
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iReqRate = resource_manager:GetResourceRate( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	local iPowRate = resource_manager:GetResourceRate( ResourceAmount.RT_Power )
+	local test_Resources = ((iPower < iRequisition*0.6) or (iPower < iRequisition and iPowRate ~= 0 and iPowRate < iReqRate*0.2)) and iPowRate < 350
+	--local test_Resources = (iPower < 500)
+	if self.base_ai:CanDoAbility(AMListeningPost.pow_conv_1ID) then
+		if (self.base_ai:IsUsingAbility(AMListeningPost.pow_conv_1ID)) then
+			if not test_Resources then
+				self.base_ai:DoSpecialAbility(AMListeningPost.pow_conv_1ID)
+				AM_LP_POW_TMR = g_iGMT
+				return
+			end
+		elseif test_Resources then
+			self.base_ai:DoSpecialAbility(AMListeningPost.pow_conv_1ID)
+			AM_LP_POW_TMR = g_iGMT
+			return
+		end
+	end
+
+end
+
+-- Building Addons --
+
+--if not Tactic.Options.can_reinforce then 
+--	return 
+--end
+
+-- Return if we have already upgraded to one of the 1st upgrades. For 2nd upgrades, use the normal mechstrategyinfo.ai
+if self.base_ai:HasAddOn(AMListeningPost.iLPTurret1ID) or self.base_ai:HasAddOn(AMListeningPost.iLPResearch1ID) then
+	return
+end
+
+local numTurret = 0
+local numResearch = 0
+-- Check every 1.8 secs, so that not to do all addons immediately (resource checking problem)
+if g_iGMT > AM_LP_RSRC_TMR + 1.8 then
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	if (iRequisition > 160 and iPower > 120) then
+		local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+		-- Check LP's for addons
+		for oBase in oStats:GetBases() do
+		-- Check for valid LP building
+			if (oBase:IsValid() and oBase:IsListeningPost()) then
+				-- Check for LP Turret addons, and count them
+				if (oBase:HasAddOn(AMListeningPost.iLPTurret1ID)) then
+					numTurret = numTurret + 1
+				-- Check for LP Research addons, and count them
+			elseif (oBase:HasAddOn(AMListeningPost.iLPResearch1ID)) then
+					numResearch = numResearch + 1
+				end
+			end
+		end
+		-- Now make the checks, and build what is needed
+		if numResearch < AM_LP_RSRC_NMR and AM_RSRC_CHCK == nil then
+			-- Research addon1 (slot 2). Slot starts from 0, while addons in the LP entity from _01
+			self:AutoBuildLPAddOn(2, self.base_ai:GetEntity():GetID())
+		else
+			-- Turret addon1 (slot 0). Slot starts from 0, while addons in the LP entity from _01
+			self:AutoBuildLPAddOn(0, self.base_ai:GetEntity():GetID())
+		end
+	end
+end
+end

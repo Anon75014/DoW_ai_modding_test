@@ -1,0 +1,72 @@
+----------------------------------------
+-- File: 'dhlordgarithostactic.ai'
+-- Edited by Thudmeizer	 @ 29.12.2024
+
+class 'DHLordGarithosTactic' (DaemonhuntInfantryGKTactic)
+
+DHLordGarithos = {}
+
+function DHLordGarithosTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Inquisitor Lord Garithos Tactic")
+end
+
+function DHLordGarithosTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DHLordGarithosTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DHLordGarithosTactic:InitAbilities()
+
+	if (DHLordGarithos.retribution_id == nil) then
+		DHLordGarithos.retribution_id = cpu_manager.stats:GetAbilityID( "inquisition_garithos_divine_retribution" )	
+	end
+
+	if (DHLordGarithos.light_id == nil) then
+		DHLordGarithos.light_id = cpu_manager.stats:GetAbilityID( "inquisition_garithos_holy_light" )	
+	end
+
+	if (DHLordGarithos.shockwave_id == nil) then
+		DHLordGarithos.shockwave_id = cpu_manager.stats:GetAbilityID( "inquisition_garithos_shockwave" )
+	end
+end
+
+function DHLordGarithosTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Casting Divine Retribution while in combat
+		if self.squad_ai:CanDoAbility(DHLordGarithos.retribution_id) and self.squad_ai:IsAttacking() then
+			if Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 15, 1) == nil
+			and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Ranged then
+				self.squad_ai:DoSpecialAbility(DHLordGarithos.retribution_id)
+			end
+		end
+	end
+
+	-- Casting Holy Light on nearby allied hurt squad
+	if self.squad_ai:CanDoAbility(DHLordGarithos.light_id) then
+
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(DHLordGarithos.light_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if oUnit ~= nil and oUnit:IsInCombat() then
+			self.squad_ai:DoSpecialAbilitySquad(DHLordGarithos.light_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Casting Shockwave
+	if self.squad_ai:CanDoAbility(DHLordGarithos.shockwave_id) then
+
+		-- We are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityPos( self.squad_ai, DHLordGarithos.shockwave_id, Ability.Filters.CloseEnemy, 4 )
+		else
+			Ability.DoAbilityPos( self.squad_ai, DHLordGarithos.shockwave_id, Ability.Filters.CloseEnemy, 8 )
+		end
+	end
+end
+

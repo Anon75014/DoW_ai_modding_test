@@ -1,0 +1,39 @@
+----------------------------------------
+-- File: 'slaaneshjetbiketactic.ai'
+-- Edited by Gambit	@ 27.08.2018
+-- Edited by Thudmeizer	@ 11.10.2023
+
+class 'SlaaneshJetBikeTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshJetbike = {}
+
+function SlaaneshJetBikeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Jetbike Tactic")
+end
+
+function SlaaneshJetBikeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshJetbike.siren_id == nil) then
+		SlaaneshJetbike.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren" )
+		SlaaneshJetbike.drugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )
+	end
+end
+
+function SlaaneshJetBikeTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SlaaneshJetbike.siren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshJetbike.siren_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshJetbike.drugs_id) then
+			self.squad_ai:DoSpecialAbility(SlaaneshJetbike.drugs_id)
+		end
+	end
+end
+
+function SlaaneshJetBikeTactic:CanOnlyDecap()
+	return true
+end

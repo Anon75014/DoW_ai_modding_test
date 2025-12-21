@@ -1,0 +1,66 @@
+----------------------------------------
+-- File: 'RenegadeGuardhqtactic.ai'
+-- Edited by Thudmeizer	@ 14.01.2024
+
+class 'Renegades_HQ_Tactic' (BaseTactic)
+
+RenegadeGuardHQ = {}
+
+function Renegades_HQ_Tactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Renegades HQ Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
+
+function Renegades_HQ_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RenegadeGuardHQ.detection_id == nil) then
+		RenegadeGuardHQ.detection_id = cpu_manager.stats:GetAbilityID("renegade_guard_detection_field")
+	end
+
+	if (RenegadeGuardHQ.propaganda_id == nil) then
+		RenegadeGuardHQ.propaganda_id = cpu_manager.stats:GetAbilityID("renegade_guard_propaganda_carrier")
+	end
+end
+
+function Renegades_HQ_Tactic:DoAbilities()
+
+	-- Try to activate detection field
+	if (self.base_ai:CanDoAbility(RenegadeGuardHQ.detection_id)) then
+	
+		local iRange = self.base_ai:GetAbilityRange(RenegadeGuardHQ.detection_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.base_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.base_ai:DoSpecialAbilitySquad(RenegadeGuardHQ.detection_id, oSquad:GetSquad())
+			end
+		end
+	end
+
+	-- Try to activate the propaganda carrier
+	if (self.base_ai:CanDoAbility(RenegadeGuardHQ.propaganda_id)) then
+
+		-- Check available resources before propagandizing
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if iReq > 250 and iPow > 250 then
+
+			local range = self.base_ai:GetAbilityRange(RenegadeGuardHQ.propaganda_id)	
+			local squad_filter = function( squad_ai )		
+				return squad_ai:IsInCombat() and squad_ai:IsInStateAttackMove() and 
+						squad_ai:GetNumTroopers() >= 4 and not squad_ai:IsBroken() and
+						not squad_ai:IsCapturing()
+			end	
+
+   			local target_squad = cpu_manager:GetClosestSquad( self.base_ai:GetPosition(), range, squad_filter )
+			if (target_squad ~= nil) then
+				self.base_ai:DoSpecialAbility(RenegadeGuardHQ.propaganda_id)
+ 			end
+		end
+	end
+end

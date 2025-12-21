@@ -1,0 +1,261 @@
+----------------------------------------
+-- File: 'kriegcommandsquadktgmtactic.ai'
+-- Edited by Thudmeizer @ 18.08.2024
+
+class 'KriegCommandSquadKtgmTactic' (KriegInfantryTactic)
+
+KriegCommandSquadKtgm = {}
+
+function KriegCommandSquadKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Command Squad Kill Team Tactic")
+	
+	-- Command squad is able to enter a bunker
+	self.m_bBunkerSquad = true
+end
+
+function KriegCommandSquadKtgmTactic:IsAttacker()
+
+	-- Attack if we have more than one squad member
+	if (self.squad_ai:GetNumTroopers() > 1) then
+		return true
+	end
+	return self:IsCommanderAttacker()
+end
+
+function KriegCommandSquadKtgmTactic:IsDefender()
+
+	-- Defend if we have more than one squad member
+	if (self.squad_ai:GetNumTroopers() > 1) then
+		return true
+	end
+	return self:IsCommanderDefender()
+end
+
+function KriegCommandSquadKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegCommandSquadKtgm.strafing_id == nil) then
+		KriegCommandSquadKtgm.strafing_id = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_strafing_run" )
+	end
+
+	if (KriegCommandSquadKtgm.earthshaker_id == nil) then
+		KriegCommandSquadKtgm.earthshaker_id = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_vox_earthshaker_round" )
+	end
+
+	if (KriegCommandSquadKtgm.earthshaker_gas == nil) then
+		KriegCommandSquadKtgm.earthshaker_gas = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_vox_gas_earthshaker_round" )
+	end
+
+	if (KriegCommandSquadKtgm.grenade_id == nil) then
+		KriegCommandSquadKtgm.grenade_id = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_gas_grenades" )
+	end
+
+	if (KriegCommandSquadKtgm.defenses_id == nil) then
+		KriegCommandSquadKtgm.defenses_id = cpu_manager.stats:GetAbilityID( "krieg_ls_bolster_defenses" )
+	end
+
+	if (KriegCommandSquadKtgm.bunker_id == nil) then
+		KriegCommandSquadKtgm.bunker_id = cpu_manager.stats:GetAbilityID( "krieg_ls_bunker_deployment" )
+	end
+
+	if (KriegCommandSquadKtgm.run_id == nil) then
+		KriegCommandSquadKtgm.run_id = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_hit_and_run" )
+	end
+
+	if (KriegCommandSquadKtgm.rally_id == nil) then
+		KriegCommandSquadKtgm.rally_id = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_enhanced_commisar_rally_ktgm" )
+	end
+end
+
+function KriegCommandSquadKtgmTactic:DoAbilities()
+
+	-- Check if we can Bolster Defenses
+	if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.defenses_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCommandSquadKtgm.defenses_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		if (oUnit ~= nil and oUnit:IsInCombat()) then
+			self.squad_ai:DoSpecialAbility(KriegCommandSquadKtgm.defenses_id)
+		end
+	end
+
+	-- Check if we deploy a bunker to nearby hurt friendly squads
+	if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.bunker_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCommandSquadKtgm.bunker_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(KriegCommandSquadKtgm.bunker_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Activate Run and Gun if in combat but hurt
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if ((self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
+			if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.run_id)) then
+				self.squad_ai:DoSpecialAbility(KriegCommandSquadKtgm.run_id)
+			end
+		end
+	end
+
+	-- Launch strafing run at close enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.strafing_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCommandSquadKtgm.strafing_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 8)
+		if (oUnit ~= nil) then
+			--print("Using Deploy Strafing Run for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegCommandSquadKtgm.strafing_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Launch earthshaker round at close enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.earthshaker_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCommandSquadKtgm.earthshaker_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		if (oUnit ~= nil) then
+			--print("Using Earthshaker Round for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegCommandSquadKtgm.earthshaker_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Launch earthshaker gas round at close infantry or monster enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.earthshaker_gas)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCommandSquadKtgm.earthshaker_gas)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		local oUnitB = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Earthshaker Gas Round against enemy infantry for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegCommandSquadKtgm.earthshaker_gas, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			-- Get stats
+			local oStats = oUnitB:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					--print("Using Earthshaker Gas Round against enemy monsters for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(KriegCommandSquadKtgm.earthshaker_gas, oUnitB:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	-- Use Gas Grenade at close infantry enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegCommandSquadKtgm.grenade_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegCommandSquadKtgm.grenade_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		if (oUnit ~= nil) then
+			--print("Using Gas Grenade for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegCommandSquadKtgm.grenade_id, oUnit:GetSquad())
+			return
+		end
+	end
+end
+
+function KriegCommandSquadKtgmTactic:CheckForBroken()
+
+	if (self.squad_ai:IsBroken()) then
+	
+		-- Check if I can repair my morale (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility( KriegCommandSquadKtgm.rally_id )) then
+			self.squad_ai:DoSpecialAbility( KriegCommandSquadKtgm.rally_id )
+		end
+	end
+	
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end
+
+function KriegCommandSquadKtgmTactic:Reinforce()
+
+	-- Allow free reinforcing during harassing time
+	if (g_iGMT > DefendChokePointPlan.HarassingTime * 60) then
+
+		-- If there are no ressources available, don't upgrade!
+		if (not Tactic.Options.can_reinforce) then
+			return
+		end
+	end
+
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- Always try for the actual leader first
+		if (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+			return
+		end
+
+		-- Try for different types of squad members
+		local bannerIndex = 0
+		local voxIndex = 1
+		local veteranIndex = 2
+		local commissarIndex = 3
+	
+		-- Get current leader count
+		local numVeteran = self.squad_ai:GetLeaderCount( veteranIndex )
+		local numCommissar = self.squad_ai:GetLeaderCount( commissarIndex)
+		local numBanner = self.squad_ai:GetLeaderCount( bannerIndex )
+		local numVox = self.squad_ai:GetLeaderCount( voxIndex )
+
+		-- Desired number of each leader type
+		local desiredVeteran = 1
+		local desiredCommissar = 1
+		local desiredBanner = 0
+		local desiredVox = 0
+		
+		-- If squad size research is done want a psyker
+		local squadMax = self.squad_ai:GetMaxLeaderCount()
+		if (squadMax >= 4) then
+			desiredVeteran = 1
+			desiredCommissar = 1
+			desiredBanner = 1
+			desiredVox = 1
+		end
+		
+		-- Check if the enemy has infiltrators
+		if (cpu_manager:EnemyHasUnitInfiltrators() or cpu_manager:EnemyHasBaseInfiltrators()) then
+		
+			-- Make sure we have a psyker
+			if (numVox <= 0) then
+				desiredVox = 1
+				desiredVeteran = 1
+				desiredBanner = 0
+			end
+		end
+
+		-- Desired order of reinforcing
+		if (numCommissar < desiredCommissar) then
+			if self.squad_ai:CanReinforce( true, commissarIndex ) then
+				self.squad_ai:DoReinforce( true, commissarIndex )
+			end
+		elseif (numVeteran < desiredVeteran) then
+			if self.squad_ai:CanReinforce( true, veteranIndex ) then
+				self.squad_ai:DoReinforce( true, veteranIndex )
+			end
+		elseif (numVox < desiredVox) then
+			if self.squad_ai:CanReinforce( true, voxIndex ) then
+				self.squad_ai:DoReinforce( true, voxIndex )
+			end
+		elseif (numBanner < desiredBanner) then
+			if self.squad_ai:CanReinforce( true, bannerIndex ) then
+				self.squad_ai:DoReinforce( true, bannerIndex )
+			end
+		end
+	end
+end
+

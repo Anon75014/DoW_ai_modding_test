@@ -1,0 +1,65 @@
+----------------------------------------
+-- File: 'darkangelsfallenvehicletactic.ai'
+-- Edited by Thudmeizer		@ 18.10.2011
+-- Edited by Gamit @ 8.10.2014
+
+class 'DarkAngelsWhirlwindTactic' (DarkAngelsVehicleTactic)
+
+DarkAngelsWhirlwind = {}
+
+function DarkAngelsWhirlwindTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Whirlwind Tactic")
+
+	self:InitAbilities()
+	self.lastused_ability_castellan_position = squad_ai:GetPosition()
+	self.min_castellan_distance = squad_ai:GetAbilityRange(DarkAngelsWhirlwind.castellan_id)
+
+end
+
+function DarkAngelsWhirlwindTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DarkAngelsWhirlwind.vengeance_id == nil) then
+		DarkAngelsWhirlwind.vengeance_id = cpu_manager.stats:GetAbilityID( "darkangels_whirlwind_vengeance_missiles" )	
+	end
+	if (DarkAngelsWhirlwind.castellan_id == nil) then
+		DarkAngelsWhirlwind.castellan_id = cpu_manager.stats:GetAbilityID( "darkangels_whirlwind_castellan_missile" )	
+	end
+
+end
+
+function DarkAngelsWhirlwindTactic:DoAbilities()
+
+	if cpu_manager.cpu_player:IsResearchComplete("darkangels_chapter_research") then
+		if self.squad_ai:IsInCombat() then
+			local iReq = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+			local iPow = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+			if ( iReq >= 450 and  iPow>= 450) then
+				Ability.DoAbilityPos(self.squad_ai, DarkAngelsWhirlwind.vengeance_id, Ability.Filters.CloseEnemy, 12)
+			end
+		else
+			local iReq = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+			local iPow = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+			if ( iReq >= 400 and  iPow>= 400) then
+				local iRange = self.squad_ai:GetAbilityRange(DarkAngelsWhirlwind.castellan_id)
+				local oTarget = Ability.Filters.CloseStrategicPoint(self.squad_ai:GetPosition(), iRange)
+				if (oTarget ~= nil) then
+					local last_pos = self.lastused_ability_castellan_position
+					local min_distance = self.min_castellan_distance
+					local vTargetPos = oTarget:GetPosition()
+					local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)
+					local iOffset = math.random(5, 12)		
+					vTargetPos.x = vTargetPos.x + vDir.x * iOffset
+					vTargetPos.z = vTargetPos.z + vDir.z * iOffset
+					local iDistanceSqr = distance_sqr(vTargetPos, self.squad_ai:GetPosition())
+					if (iDistanceSqr < sqr(iRange) and iDistanceSqr > 1 and distance(vTargetPos,last_pos) > min_distance) then
+						self.squad_ai:DoSpecialAbilityPos(DarkAngelsWhirlwind.castellan_id, vTargetPos)
+						self.lastused_ability_castellan_position = vTargetPos
+					end
+				end
+			end
+		end
+	end
+
+end

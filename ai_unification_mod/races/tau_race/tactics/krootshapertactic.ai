@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'KrootShapertactic.ai'
+-- Edited by Thudmeizer @ 24.09.2025
+
+class 'KrootShaperTactic' (TauInfantryTactic)
+
+KrootShaper = {}
+
+function KrootShaperTactic:__init( squad_ai ) super( squad_ai )
+
+	self.timedDirectSpawnAbility = Timer( KrootShaperTactic.DoDirectSpawnAbility, self, 5 )
+
+	self:SetName("Kroot Shaper Tactic")
+end
+
+function KrootShaperTactic:DoAbilities()
+
+	-- Try to spawn dune riders
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		KrootShaperTactic.DoDirectSpawnAbility(self)
+	end
+end
+
+function KrootShaperTactic:DoDirectSpawnAbility()
+
+	-- Spawn dune riders in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function KrootShaperTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+	
+	-- Attach to squad
+	self:TryAttachSquad( true, false, 1000, 100, nil )
+end
+ 

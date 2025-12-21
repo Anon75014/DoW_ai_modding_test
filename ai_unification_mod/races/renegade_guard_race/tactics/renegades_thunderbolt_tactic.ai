@@ -1,0 +1,32 @@
+----------------------------------------
+-- File: 'renegades_thunderbolt_tactic.ai'
+-- Edited by Thudmeizer		@ 04.05.2023
+
+class 'Renegades_Thunderbolt_Tactic' (Renegades_Vehicle_Tactic)
+
+Renegades_Thunderbolt = {}
+
+function Renegades_Thunderbolt_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Thunderbolt Tactic")
+end
+
+function Renegades_Thunderbolt_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Renegades_Thunderbolt.kamikaze_id == nil) then
+		Renegades_Thunderbolt.kamikaze_id = cpu_manager.stats:GetAbilityID("renegade_guard_zero_kamikaze")
+	end
+end
+
+function Renegades_Thunderbolt_Tactic:DoAbilities()
+
+	-- Honourably self-delete in style against the enemy if health is too low
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.3) then
+		Ability.DoAbilityPos( self.squad_ai, Renegades_Thunderbolt.kamikaze_id, Ability.Filters.CloseEnemy, 8 ) 
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

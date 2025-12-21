@@ -1,0 +1,50 @@
+----------------------------------------
+-- File: 'templarlandraidertactic.ai'
+-- Edited by Thudmeizer         @ 15.04.2008
+
+class 'TemplarLandRaiderTactic' (TemplarVehicleTactic)
+
+TemplarLandRaider = {}
+
+function TemplarLandRaiderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar Land Raider Tactic")
+	
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function TemplarLandRaiderTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TemplarLandRaider.spirit_id == nil) then
+		TemplarLandRaider.spirit_id = cpu_manager.stats:GetAbilityID( "templar_machine_spirit" )
+	end
+end
+
+function TemplarLandRaiderTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(TemplarLandRaider.spirit_id)) then
+			self.squad_ai:DoSpecialAbility(TemplarLandRaider.spirit_id)
+		end	  
+	end
+
+	-- Check if we can launch smoke
+	local iSmokeID = cpu_manager.stats:GetAbilityID( "templar_smoke_launchers" )
+	if (self.squad_ai:CanDoAbility(iSmokeID)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(iSmokeID)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 200) then
+			self.squad_ai:DoSpecialAbilitySquad(iSmokeID, oUnit:GetSquad())
+		end
+	end
+	
+	-- Do basic abilities
+	TemplarVehicleTactic.DoAbilities(self)
+end

@@ -1,0 +1,129 @@
+----------------------------------------
+-- File: 'kinfantrytactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kTOKTactic' (kInfantryTactic)
+
+TOK = {}
+
+function kTOKTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("k TOK Tactic")
+
+	TOK.NextExecuteCheck = 0
+end
+
+function kTOKTactic:InitAbilities()
+
+	if (TOK.sarcrificle_id == nil or TOK.NextExecuteCheck == nil) then
+		TOK.sarcrificle_id = cpu_manager.stats:GetAbilityID( "khm_sarcrificle" )
+		TOK.NextExecuteCheck = iGMT
+	end
+
+	if (TOK.rage_id == nil) then
+		TOK.rage_id = cpu_manager.stats:GetAbilityID( "khm_furious_rage" )	
+	end
+
+	if (TOK.burn_id == nil) then
+		TOK.burn_id = cpu_manager.stats:GetAbilityID( "khm_ectoplasma_burn" )	
+	end
+end
+
+function kTOKTactic:DoAbilities()
+
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(TOK.sarcrificle_id) and
+		self.squad_ai:GetNumTroopers() > 6 and g_iGMT > TOK.NextExecuteCheck) then
+		self.squad_ai:DoSpecialAbility(TOK.sarcrificle_id) 
+		TOK.NextExecuteCheck = g_iGMT + 20
+	end
+
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+		if (not self:IsMoving()) then
+			if (self.squad_ai:CanDoAbility( TOK.rage_id )) then
+				self.squad_ai:DoSpecialAbility( TOK.rage_id )
+			end
+		end		
+	end
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		if (self.squad_ai:CanDoAbility( TOK.burn_id )) then
+			Ability.DoAbilityPos( self.squad_ai, TOK.burn_id, Ability.Filters.CloseEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, TOK.burn_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+		else
+			Ability.DoAbilityPos( self.squad_ai, TOK.burn_id, Ability.Filters.CloseEnemy, 8 )
+			Ability.DoAbilityPos( self.squad_ai, TOK.burn_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3 )
+		end
+	end
+
+	kInfantryTactic.DoAbilities(self)
+end
+
+function kTOKTactic:Reinforce()
+
+	if (g_iGMT > DefendChokePointPlan.HarassingTime * 60) then
+		if (not Tactic.Options.can_reinforce) then
+			return
+		end
+	end
+
+	if (not self.squad_ai:IsReinforcing()) then
+		if (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+			return
+		end
+
+		local marinesergIndex = 0
+		local iconIndex = 1
+		local skullchampIndex = 2
+
+		local nummarinesergs = self.squad_ai:GetLeaderCount( marinesergIndex )
+		local numicons = self.squad_ai:GetLeaderCount( iconIndex )
+		local numskullchamps = self.squad_ai:GetLeaderCount( skullchampIndex )
+
+		local desiredmarinesergs = 1
+		local desiredicons = 1
+		local desiredskullchamps = 1
+
+		local squadMax = self.squad_ai:GetMaxLeaderCount()
+
+		if (squadMax >= 2) then
+			desiredmarinesergs = 1
+			desiredicons = 1
+			desiredskullchamps = 1
+		end
+
+		if (cpu_manager:EnemyHasUnitInfiltrators() or cpu_manager:EnemyHasBaseInfiltrators()) then
+			if (numicons <= 0) then
+				desiredmarinesergs = 1
+				desiredicons = 1
+				desiredskullchamps = 0
+			end
+			if (nummarinesergs <= 0) then
+				desiredmarinesergs = 1
+				desiredicons = 0
+				desiredskullchamps = 1
+			end
+			if (numskullchamps <= 0) then
+				desiredmarinesergs = 0
+				desiredicons = 1
+				desiredskullchamps = 1
+			end
+		end
+			if (nummarinesergs < desiredmarinesergs) then
+			if self.squad_ai:CanReinforce( true, marinesergIndex ) then
+				self.squad_ai:DoReinforce( true, marinesergIndex )
+			end
+		elseif (numicons < desiredicons) then
+			if self.squad_ai:CanReinforce( true, iconIndex ) then
+				self.squad_ai:DoReinforce( true, iconIndex )
+			end
+		elseif (numskullchamps < desiredskullchamps) then
+			if self.squad_ai:CanReinforce( true, skullchampIndex ) then
+				self.squad_ai:DoReinforce( true, skullchampIndex )
+			end
+		end
+	end
+end

@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'firstbornvanustactic.ai'
+-- Edited by Thudmeizer @ 24.01.2023
+
+class 'FirstbornVanusTactic' (FirstbornInfantryTactic)
+
+FirstbornVanus = {}
+
+function FirstbornVanusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Vanus Assassin Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function FirstbornVanusTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FirstbornVanusTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function FirstbornVanusTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (FirstbornVanus.critshot_id == nil) then
+		FirstbornVanus.critshot_id = cpu_manager.stats:GetAbilityID( "firstborn_vanus_crit_shot" )
+	end
+
+	if (FirstbornVanus.strike_id == nil) then
+		FirstbornVanus.strike_id = cpu_manager.stats:GetAbilityID( "firstborn_vanus_irritator_strike" )
+	end
+
+	if (FirstbornVanus.grenade_id == nil) then
+		FirstbornVanus.grenade_id = cpu_manager.stats:GetAbilityID( "firstborn_vanus_optical_flare_grenade" )
+	end
+end
+
+function FirstbornVanusTactic:DoAbilities()
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.critshot_id, Ability.Filters.CloseSquadEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.critshot_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.strike_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.grenade_id, Ability.Filters.CloseEnemy, 1 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.critshot_id, Ability.Filters.CloseSquadEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.critshot_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.strike_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, FirstbornVanus.grenade_id, Ability.Filters.CloseEnemy, 2 )
+	end
+end

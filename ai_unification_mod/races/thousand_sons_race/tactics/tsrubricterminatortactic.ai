@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'tsrubricterminatortactic.ai'
+-- Created by Thudmeizer @ 19.07.2011
+
+class 'TSRubricTerminatorTactic' (TSInfantryTactic)
+
+TSRubricTerminator = {}
+
+function TSRubricTerminatorTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("TS Rubric Terminator Tactic")
+end
+
+function TSRubricTerminatorTactic:DoAbilities()
+
+	-- Try to possess and become Lord of Change
+	if (self.squad_ai:IsInCombat() and self.squad_ai:CanPossess()) then
+		self.squad_ai:DoPossess()
+	end
+
+	TSInfantryTactic.DoAbilities(self)
+end

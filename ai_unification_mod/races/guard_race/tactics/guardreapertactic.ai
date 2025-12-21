@@ -1,0 +1,49 @@
+----------------------------------------
+-- File: 'guardreapertactic.ai'
+-- Edited by Shepherd @ 6.5.2023
+-- Edited by Thudmeizer @ 17.08.2023
+
+class 'GuardReaperTactic' (GuardInfantryTactic)
+
+Reaper = {}
+
+function GuardReaperTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Guard Reaper Squad Tactic")
+end
+
+function GuardReaperTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Reaper.grenade_id == nil) then
+		Reaper.grenade_id = cpu_manager.stats:GetAbilityID( "guard_timed_grenades" )	
+	end
+	
+	if (Reaper.stungrenade_id == nil) then
+		Reaper.stungrenade_id = cpu_manager.stats:GetAbilityID( "guard_stun_grenades" )	
+	end
+
+	if (Reaper.tactical_id == nil) then
+		Reaper.tactical_id = cpu_manager.stats:GetAbilityID( "guard_tactical_genius_infantry" )	
+	end
+end
+
+function GuardReaperTactic:DoAbilities()
+
+	-- Try to use abilities
+	if self.squad_ai:IsInCombat() then
+		Ability.DoAbilityArea( self.squad_ai, Reaper.tactical_id, Ability.Filters.CloseEnemy, 5, 2 )
+		Ability.DoAbilityTargetEntity(self.squad_ai, Reaper.grenade_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	else
+		Ability.DoAbilityArea( self.squad_ai, Reaper.tactical_id, Ability.Filters.CloseEnemy, 5, 2 )
+		Ability.DoAbilityTargetEntity(self.squad_ai, Reaper.grenade_id, Ability.EntityFilters.CloseBaseEntityEnemy, 4)
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseMonsterEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Reaper.stungrenade_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+end

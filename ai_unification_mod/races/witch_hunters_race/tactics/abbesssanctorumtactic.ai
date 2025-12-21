@@ -1,0 +1,174 @@
+----------------------------------------
+-- File: 'abbesssanctorumtactic.ai'
+-- Edited by Thudmeizer   @ 11.03.2024
+
+class 'AbbessSanctorumTactic' (WitchHuntersInfantryTactic)
+
+AbbessSanctorum = {}
+
+function AbbessSanctorumTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Abbess Sanctorum Retinue Tactic")
+    	self.m_iTransportable = 1	--Rhino
+end
+
+function AbbessSanctorumTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function AbbessSanctorumTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function AbbessSanctorumTactic:InitAbilities()
+
+	-- Init ability ID's
+	if AbbessSanctorum.th_strike_id == nil then
+		AbbessSanctorum.th_strike_id = cpu_manager.stats:GetAbilityID("witch_hunters_th_strike_ability")
+		AbbessSanctorum.th_strike_sp = cpu_manager.stats:GetAbilityID("witch_hunters_th_strike_ability_advance")
+		AbbessSanctorum.true_banish_id = cpu_manager.stats:GetAbilityID("witch_hunters_true_banishment")
+		AbbessSanctorum.true_banish_sp = cpu_manager.stats:GetAbilityID("witch_hunters_true_banishment_advance")
+	end
+end
+
+function AbbessSanctorumTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(AbbessSanctorum.th_strike_id) then
+		Ability.DoAbilityPos(self.squad_ai, AbbessSanctorum.th_strike_id, Ability.Filters.CloseEnemy, 10)
+	end
+
+	if self.squad_ai:CanDoAbility(AbbessSanctorum.th_strike_sp) then
+		Ability.DoAbilityPos(self.squad_ai, AbbessSanctorum.th_strike_sp, Ability.Filters.CloseEnemy, 10)
+	end
+
+	if self.squad_ai:CanDoAbility(AbbessSanctorum.true_banish_id) then
+		local iRange = self.squad_ai:GetAbilityRange(AbbessSanctorum.true_banish_id) + 5
+		local iPos = self.squad_ai:GetPosition()
+		local oUnit = Ability_WH.Filters.CloseMonsterHighEnemy(iPos, iRange, 1)
+		if oUnit ~= nil and cpu_manager:GetUnitStrength(oUnit) > 300 and distance_sqr(iPos, oUnit:GetPosition())> 36 then
+			self.squad_ai:DoSpecialAbilitySquad(AbbessSanctorum.true_banish_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(AbbessSanctorum.true_banish_sp) then
+		local iRange = self.squad_ai:GetAbilityRange(AbbessSanctorum.true_banish_sp) + 5
+		local iPos = self.squad_ai:GetPosition()
+		local oUnit = Ability_WH.Filters.CloseMonsterHighEnemy(iPos, iRange, 1)
+		if oUnit ~= nil and cpu_manager:GetUnitStrength(oUnit) > 300 and distance_sqr(iPos, oUnit:GetPosition())> 36 then
+			self.squad_ai:DoSpecialAbilitySquad(AbbessSanctorum.true_banish_sp, oUnit:GetSquad())
+			return
+		end
+	end
+end
+
+function AbbessSanctorumTactic:Reinforce()
+
+	if not self.squad_ai:IsReinforcing() then
+		-- Always try for the actual leader first
+		if self.squad_ai:CanReinforce( false, 0 ) then
+		   self.squad_ai:DoReinforce( false, 0 )
+		   return
+		end
+
+		if self.squad_ai:GetLeaderCount(0) == 0 and self.squad_ai:CanReinforce( true, 0 ) then
+			self.squad_ai:DoReinforce( true, 0 )
+			return
+		end
+
+		if self.squad_ai:GetLeaderCount(1) == 0 and self.squad_ai:CanReinforce( true, 1 ) then
+			self.squad_ai:DoReinforce( true, 1 )
+		end
+	end
+end
+
+---------------------------------------------------------
+
+Ability_WH = 
+{
+Filters = 
+{
+	CloseMonsterEnemy = function(vPosition, iTolerance, iCount)
+
+		-- Make sure that count is valid
+		if (iCount == nil) then
+			iCount = 1
+		end
+
+		-- Quick check
+		if (not cpu_manager:CloseEnemyUnits(vPosition, iTolerance)) then
+			return nil
+		end
+
+		local oFunctor = function(oSquad, iCount)
+			local oStats = oSquad:GetStats()
+			if (oStats == nil) then
+				return false
+			end
+			return ((oStats:GetClass() == UnitStatsAI.UC_MonsterHigh or oStats:GetClass() == UnitStatsAI.UC_MonsterMed) and oSquad:GetNumTroopers() >= iCount)
+		end
+		return AbbessSanctorumTactic:GetClosestEnemySquad(vPosition, iTolerance, oFunctor, iCount)
+	end,
+
+
+	CloseMonsterHighEnemy = function(vPosition, iTolerance, iCount)
+
+		-- Make sure that count is valid
+		if (iCount == nil) then
+			iCount = 1
+		end
+
+		-- Quick check
+		if (not cpu_manager:CloseEnemyUnits(vPosition, iTolerance)) then
+			return nil
+		end
+
+		local oFunctor = function(oSquad, iCount)
+			local oStats = oSquad:GetStats()
+			if (oStats == nil) then
+				return false
+			end
+			return (oStats:GetClass() == UnitStatsAI.UC_MonsterHigh and oSquad:GetNumTroopers() >= iCount)
+		end
+		return AbbessSanctorumTactic:GetClosestEnemySquad(vPosition, iTolerance, oFunctor, iCount)
+	end,
+}
+}
+
+function AbbessSanctorumTactic:GetClosestEnemySquad(vPosition, iRange, oFunctor, iCount)
+
+	-- Init variables
+	local oEnemySquad = nil
+	local vCurrentPos = Vector3f()
+	local iCurrentDistanceSqr = 0
+	local iRangeSqr = sqr(iRange)
+
+	if (iCount == nil) then
+		iCount = 1
+	end
+
+	-- Compute all enemy squads from all players
+	for iEnemyPlayer in cpu_manager.stats:GetPlayerStats() do
+		if not iEnemyPlayer:IsPlayerDead() then
+			if cpu_manager.player_stats:IsEnemy(iEnemyPlayer) then
+				for oSquad in iEnemyPlayer:GetSquads() do
+					-- Check requirements
+					if (oSquad:IsValid() and oFunctor(oSquad, iCount)) then	      
+						-- Check if squad is in range
+						local vSquadPos = oSquad:GetPosition()
+						local iDistanceSqr = distance_sqr(vSquadPos, vPosition)
+						if (iDistanceSqr <= iRangeSqr) then
+							-- Check if it's closer than the last one
+							if (oEnemySquad == nil or iDistanceSqr < iCurrentDistanceSqr) then
+								oEnemySquad = oSquad
+								vCurrentPos = vSquadPos
+								iCurrentDistanceSqr = iDistanceSqr
+							end
+						end
+					end
+				end                
+			end          
+		end
+	end
+	return oEnemySquad
+end

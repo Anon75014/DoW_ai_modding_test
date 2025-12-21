@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'darkangelsliontactic.ai'
+-- Edited by Gambit @ 21.08.2018
+
+class 'DarkAngelsLionTactic' (InfantryTactic)
+
+DarkAngelsLion = {}
+
+function DarkAngelsLionTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Primarch Tactic")
+
+	if cpu_manager.cpu_player:IsResearchComplete("darkangels_chapter_research") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("darkangels_hero_building")
+	--elseif cpu_manager.cpu_player:IsResearchComplete("darkangels_deathwing_research") then
+		--self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("darkangels_orbital_relay")
+	end
+
+	self.plasma_weapons = g_iGMT
+end
+
+
+function DarkAngelsLionTactic:InitAbilities()
+	if DarkAngelsLion.plasma_weapons == nil then
+		DarkAngelsLion.plasma_weapons = cpu_manager.stats:GetAbilityID("darkangels_lion_plasma_battlecry")
+		DarkAngelsLion.orbital_bombardment = cpu_manager.stats:GetAbilityID("darkangels_orbital_bombardment")
+		DarkAngelsLion.reveal_secret = cpu_manager.stats:GetAbilityID("darkangels_lion_reveal_secret")
+	end
+end
+
+
+function DarkAngelsLionTactic:DoAbilities()
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(DarkAngelsLion.orbital_bombardment) then
+			if Ability.DoAbilityPos(self.squad_ai, DarkAngelsLion.orbital_bombardment, Ability.Filters.CloseEnemy, 24)
+			or Ability.DoAbilityPos(self.squad_ai, DarkAngelsLion.orbital_bombardment, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(DarkAngelsLion.reveal_secret) then
+			if Ability.DoAbilityTarget(self.squad_ai, DarkAngelsLion.reveal_secret, Ability.Filters.CloseSquadEnemy, 1)
+            or Ability.DoAbilityTarget(self.squad_ai, DarkAngelsLion.reveal_secret, Ability.Filters.CloseMonsterEnemy, 1) then
+				return
+			end
+		end
+	end
+	
+	if self.squad_ai:CanDoAbility(DarkAngelsLion.plasma_weapons) then
+		local oHurtSquad = cpu_manager.cpu_player:FindFirstHurtSquad( self.squad_ai:GetPosition(), 512 )
+		if oHurtSquad ~= nil and oHurtSquad:IsValid() and oHurtSquad:WasRecentlyHurt() then
+			if oHurtSquad:GetNumTroopers() > 3 then
+				self.squad_ai:DoSpecialAbility(DarkAngelsLion.plasma_weapons)
+			end
+		end
+	end
+end

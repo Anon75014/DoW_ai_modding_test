@@ -1,0 +1,122 @@
+----------------------------------------
+-- File: 'daemonprincetactic.ai'
+-- Edited by Thudmeizer @ 28.10.2023
+
+class 'DaemonPrinceTactic' (ChaosMarineInfantryTactic)
+
+DaemonPrince = {}
+
+function DaemonPrinceTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemon Prince Tactic")
+	
+	self.m_oTimedSpecialAbilities = Timer( DaemonPrinceTactic.DoTimedSpecialAbilities, self, 7 )
+end
+
+function DaemonPrinceTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DaemonPrince.strength_id == nil) then
+		DaemonPrince.strength_id = cpu_manager.stats:GetAbilityID( "chaos_daemon_strength" )	
+	end
+
+	if (DaemonPrince.strength_ktgm == nil) then
+		DaemonPrince.strength_ktgm = cpu_manager.stats:GetAbilityID( "chaos_ls_daemon_prince_daemon_strength" )	
+	end
+
+	if (DaemonPrince.roar_id == nil) then
+		DaemonPrince.roar_id = cpu_manager.stats:GetAbilityID( "chaos_fear_roar" )	
+	end
+
+	if (DaemonPrince.roar_ktgm == nil) then
+		DaemonPrince.roar_ktgm = cpu_manager.stats:GetAbilityID( "chaos_ls_chaos_lord_fear_roar" )	
+	end
+
+	if (DaemonPrince.detector_id == nil) then
+		DaemonPrince.detector_id = cpu_manager.stats:GetAbilityID( "chaos_detector" )	
+	end
+
+	if (DaemonPrince.detector_ktgm == nil) then
+		DaemonPrince.detector_ktgm = cpu_manager.stats:GetAbilityID( "chaos_ls_chaos_lord_detector" )	
+	end	
+
+	if (DaemonPrince.medkit_ktgm == nil) then
+		DaemonPrince.medkit_ktgm = cpu_manager.stats:GetAbilityID( "chaos_ls_chaos_lord_corrupted_medkit" )	
+	end	
+
+	if (DaemonPrince.shrine_ktgm == nil) then
+		DaemonPrince.shrine_ktgm = cpu_manager.stats:GetAbilityID( "chaos_ls_chaos_lord_shrine" )	
+	end	
+end
+
+function DaemonPrinceTactic:DoAbilities()
+
+	-- Try to use daemon strength ability
+	if (self.squad_ai:CanDoAbility(DaemonPrince.strength_id)) then
+		Ability.DoAbility( self.squad_ai, DaemonPrince.strength_id, Ability.Filters.IsInCombat )
+	end
+
+	-- Try to use daemon strength ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(DaemonPrince.strength_ktgm)) then
+		Ability.DoAbility( self.squad_ai, DaemonPrince.strength_ktgm, Ability.Filters.IsInCombat )
+	end
+
+	-- Try to use fear roar ability
+	if (self.squad_ai:CanDoAbility(DaemonPrince.roar_id)) then
+		Ability.DoAbilityArea(self.squad_ai, DaemonPrince.roar_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+	end
+
+	-- Try to use fear roar ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(DaemonPrince.roar_ktgm)) then
+		Ability.DoAbilityArea(self.squad_ai, DaemonPrince.roar_ktgm, Ability.Filters.CloseInCombat, 10, 4)
+	end
+
+	-- Use medkit ability if low on health (Last Stand / Kill Team)
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		if (self.squad_ai:CanDoAbility(DaemonPrince.medkit_ktgm)) then 
+			self.squad_ai:DoSpecialAbility(DaemonPrince.medkit_ktgm)
+		end
+	end
+
+	-- Try to summon a Chaos Shrine ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(DaemonPrince.shrine_ktgm)) then 
+
+		-- Search for a nearby hurt squad
+		local iRange = self.squad_ai:GetAbilityRange(DaemonPrince.shrine_ktgm)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Deploy Close Hurt Chaos Shrine for player "..tostring(cpu_manager.player_id).."")
+			if self.squad_ai:DoSpecialAbilitySquad(DaemonPrince.shrine_ktgm, oUnit:GetSquad()) then
+				return
+			end
+		end
+	end
+
+	if (self.m_oTimedSpecialAbilities ~= nil) then
+		self.m_oTimedSpecialAbilities:Call()
+	else
+		DaemonPrinceTactic.DoTimedSpecialAbilities(self)
+	end
+end
+
+function DaemonPrinceTactic:DoTimedSpecialAbilities()
+
+	-- Try to use detection ability
+	if (self.squad_ai:CanDoAbility(DaemonPrince.detector_id)) then
+	
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), 35, 1)
+		if (oSquad ~= nil) then
+			self.squad_ai:DoSpecialAbility(DaemonPrince.detector_id)
+		end
+	end
+
+	-- Try to use detection ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(DaemonPrince.detector_ktgm)) then
+	
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), 35, 1)
+		if (oSquad ~= nil) then
+			self.squad_ai:DoSpecialAbility(DaemonPrince.detector_ktgm)
+		end
+	end
+end

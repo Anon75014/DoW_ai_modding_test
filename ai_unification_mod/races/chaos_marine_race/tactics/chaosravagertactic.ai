@@ -1,0 +1,63 @@
+----------------------------------------
+-- File: 'chaosravagertactic.ai'
+-- Created by Gambit		@ 21.12.2021
+-- Edited by Thudmeizer		@ 19.09.2023
+
+class 'ChaosRavagerTactic' (ChaosMarineVehicleTactic)
+
+ChaosRavager = {}
+
+function ChaosRavagerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Ravager Titan Tactic")
+	self.lastAddonTry = g_iGMT
+	self.doAddonTurboLaser = math.random(1,5)
+end
+
+function ChaosRavagerTactic:AutoBuildAddOn(addonSlot)
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == 						BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				-- OK, performed, no need to re-try any more - it is only one for the Ravager!
+				self.doAddonTurboLaser = 0
+				return
+			end
+		end
+	end
+	return
+end
+
+function ChaosRavagerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if ChaosRavager.battle_titan_id == nil then
+		ChaosRavager.battle_titan_id = cpu_manager.stats:GetAbilityID("chaos_ravager_titan_charge")
+	end
+end
+
+function ChaosRavagerTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(ChaosRavager.battle_titan_id) and self.squad_ai:IsInStateMove() then
+			if Ability.DoAbilityArea(self.squad_ai, ChaosRavager.battle_titan_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+			or Ability.DoAbilityArea(self.squad_ai, ChaosRavager.battle_titan_id, Ability.Filters.CloseMonsterEnemy, 10, 4) then
+				return
+			end
+		end
+	end
+
+	-- Check to build an addon every 10+ secs
+	if self.doAddonTurboLaser > 3 and g_iGMT > self.lastAddonTry + 10 then
+		self.lastAddonTry = g_iGMT
+		-- Check available resources and health, before performing any upgrade
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if iReq > 200 and iPow > 200 and self.squad_ai:GetHealthPercentage() > 0.35 then
+			self:AutoBuildAddOn(0)
+			return
+		end
+	end
+end

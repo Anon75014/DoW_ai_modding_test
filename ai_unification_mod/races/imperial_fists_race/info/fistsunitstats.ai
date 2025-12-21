@@ -1,0 +1,1474 @@
+----------------------------------------
+-- File: 'fistsunitstats.ai'
+-- Edited by Thudmeizer @ 01.09.2025
+
+-- Skirmish
+UnitStrengths.imperial_fists_squad_techmarine = 0
+--UnitStrengths.imperial_fists_squad_techmarine_terminator = 0
+UnitStrengths.imperial_fists_squad_skull_probe = 35
+UnitStrengths.imperial_fists_squad_thunderfire_cannon = 45
+UnitStrengths.imperial_fists_squad_thunderfire_cannon_dummy = 45
+UnitStrengths.imperial_fists_squad_siege_marines = 60
+UnitStrengths.imperial_fists_squad_tactical = 65
+UnitStrengths.imperial_fists_squad_devastator = 75
+UnitStrengths.imperial_fists_squad_destroyer = 100
+UnitStrengths.imperial_fists_squad_assault = 70
+UnitStrengths.imperial_fists_squad_terminator = 85
+UnitStrengths.imperial_fists_squad_terminator_assault = 85
+UnitStrengths.imperial_fists_squad_centurion = 85
+UnitStrengths.imperial_fists_squad_centurion_assault = 85
+UnitStrengths.imperial_fists_squad_sons_of_dorn = 90
+UnitStrengths.imperial_fists_squad_crimson_primaris = 90
+UnitStrengths.imperial_fists_squad_apothecary = 60
+UnitStrengths.imperial_fists_squad_crimson_voxer = 80
+UnitStrengths.imperial_fists_squad_sister = 60
+UnitStrengths.imperial_fists_squad_banner_bearer = 60
+UnitStrengths.imperial_fists_squad_librarian = 325
+UnitStrengths.imperial_fists_squad_chaplain = 310
+UnitStrengths.imperial_fists_squad_police = 150
+UnitStrengths.imperial_fists_squad_police_sniper = 150
+UnitStrengths.imperial_fists_squad_diomedes = 330
+UnitStrengths.imperial_fists_squad_mavuika = 350
+UnitStrengths.imperial_fists_squad_captain = 310
+UnitStrengths.imperial_fists_squad_captain_primaris = 380
+UnitStrengths.imperial_fists_squad_morales = 380
+UnitStrengths.imperial_fists_squad_pedro_kantor = 400
+UnitStrengths.imperial_fists_squad_captain_dummy = 0
+UnitStrengths.imperial_fists_squad_rhino = 145
+UnitStrengths.imperial_fists_squad_cf_rhino = 155
+UnitStrengths.imperial_fists_squad_rhino_damocles = 500
+UnitStrengths.imperial_fists_squad_razorback = 450
+UnitStrengths.imperial_fists_squad_sabre = 450
+UnitStrengths.imperial_fists_squad_rapier_cannon = 400
+UnitStrengths.imperial_fists_squad_dreadnought = 460
+UnitStrengths.imperial_fists_squad_dreadnought_ironclad = 470
+UnitStrengths.imperial_fists_squad_dreadnought_venerable = 650
+UnitStrengths.imperial_fists_squad_dreadnought_venerable_cf = 650
+UnitStrengths.imperial_fists_squad_assault_ram = 1100
+UnitStrengths.imperial_fists_squad_assault_ram_entrenched = 1100
+UnitStrengths.imperial_fists_squad_predator = 1000
+UnitStrengths.imperial_fists_squad_predator_natlan = 1000
+UnitStrengths.imperial_fists_squad_stormhawk_interceptor = 700
+UnitStrengths.imperial_fists_squad_vindicator = 475
+UnitStrengths.imperial_fists_squad_basilisk_legion = 450
+UnitStrengths.imperial_fists_squad_whirlwind_scorpius = 500
+UnitStrengths.imperial_fists_squad_land_raider_prometheus = 1000
+UnitStrengths.imperial_fists_squad_land_raider_achilles = 1000
+UnitStrengths.imperial_fists_squad_land_raider_might_of_rynn = 1000
+UnitStrengths.imperial_fists_squad_falchion = 1200
+UnitStrengths.imperial_fists_squad_fellblade = 1100
+UnitStrengths.imperial_fists_squad_glaive = 1100
+UnitStrengths.imperial_fists_squad_mastodon = 1100
+UnitStrengths.imperial_fists_squad_dorn_of_war = 1100
+
+LeaderStrengths.imperial_fists_squad_siege_marines = 75
+LeaderStrengths.imperial_fists_squad_tactical = 75
+LeaderStrengths.imperial_fists_squad_assault = 75
+LeaderStrengths.imperial_fists_squad_devastator = 75
+LeaderStrengths.imperial_fists_squad_crimson_primaris = 75
+LeaderStrengths.imperial_fists_squad_destroyer = 75
+LeaderStrengths.imperial_fists_squad_centurion = 100
+LeaderStrengths.imperial_fists_squad_centurion_assault = 100
+
+Attachments.imperial_fists_squad_tactical = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_assault = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_siege_marines = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_devastator = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_crimson_primaris = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_terminator = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_terminator_assault = { "imperial_fists_squad_captain_primaris", "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_centurion = { "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_captain_primaris", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_centurion_assault = { "imperial_fists_squad_captain_primaris", "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+Attachments.imperial_fists_squad_sons_of_dorn = { "imperial_fists_squad_captain_primaris", "imperial_fists_squad_skull_probe", "imperial_fists_squad_apothecary", "imperial_fists_squad_crimson_voxer", "imperial_fists_squad_mavuika", "imperial_fists_squad_captain", "imperial_fists_squad_librarian", "imperial_fists_squad_chaplain", "imperial_fists_squad_diomedes", "imperial_fists_squad_sister", "imperial_fists_banner_bearer", "imperial_fists_hero_police", "imperial_fists_hero_police_sniper", "imperial_fists_squad_morales", "imperial_fists_squad_pedro_kantor" }
+
+ImperialFistsUnitStats =
+{
+	race = "imperial_fists_race",
+	{
+		name = "Imperial Fists Techmarine",
+		sbp_name = "imperial_fists_squad_techmarine",
+		ebp_name = "imperial_fists_hero_techmarine",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolter_techmarine",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.6,3.1,2.8,0.3,1.1,0.0,2.7,1.2,1.7,1.8,0.5,0.0,0.0,0.7,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_axe_techmarine",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,2.0,2.1,1.0,0.0,0.0,0.0,4.0,0.0,1.6,2.1,1.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+--[[			},
+		}
+	},
+	{
+		name = "Imperial Fists Techmarine Terminator",
+		sbp_name = "imperial_fists_squad_techmarine_terminator",
+		ebp_name = "imperial_fists_techmarine_terminator",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "imperial_fists_storm_bolter_techmarine",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.6,3.1,2.8,0.3,1.1,0.0,2.7,1.2,1.7,1.8,0.5,0.0,0.0,0.7,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_gun_veteran",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.6,3.1,2.8,0.3,1.1,0.0,2.7,1.2,1.7,1.8,0.5,0.0,0.0,0.7,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_sword_terminator",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,2.0,2.1,1.0,0.0,0.0,0.0,4.0,0.0,1.6,2.1,1.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_thunder_hammer",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,2.0,2.1,1.0,0.0,0.0,0.0,4.0,0.0,1.6,2.1,1.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+]]
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Skull Probe",
+		sbp_name = "imperial_fists_squad_skull_probe",
+		ebp_name = "imperial_fists_skull_probe",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Thunderfire Cannon",
+		sbp_name = "imperial_fists_squad_thunderfire_cannon",
+		ebp_name = "imperial_fists_thunderfire_cannon",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "imperial_fists_thunderfire_cannon",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.6,3.1,2.8,0.3,1.1,0.0,2.7,1.2,1.7,1.8,0.5,0.0,0.0,0.7,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Rapier Engine",
+		sbp_name = "imperial_fists_squad_rapier_cannon",
+		ebp_name = "imperial_fists_rapier_cannon",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 5.0,
+		potential =
+		{
+			{
+				name = "imperial_fists_rapier_laser",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Thunderfire Cannon Dummy",
+		sbp_name = "imperial_fists_squad_thunderfire_cannon_dummy",
+		ebp_name = "imperial_fists_thunderfire_cannon_dummy",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.6,3.1,2.8,0.3,1.1,0.0,2.7,1.2,1.7,1.8,0.5,0.0,0.0,0.7,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Siege Marine Squad",
+		sbp_name = "imperial_fists_squad_siege_marines",
+		ebp_name = "imperial_fists_marine_siege",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_scout",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.3,2.8,2.7,2.0,0.8,0.8,0.0,1.4,0.0,0.8,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_flamer_scout",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_plasma_pistol_seige",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_melta_pistol_seige",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_siege_shield",
+				effectiveness = GenerateUnitEffectiveness(2.9,3.2,2.3,2.3,0.0,0.0,0.0,0.0,2.3,0.0,0.0,2.9,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Space Marine Squad",
+		sbp_name = "imperial_fists_squad_tactical",
+		ebp_name = "imperial_fists_marine_tactical",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.0,5.3,4.8,2.3,2.2,0.0,4.1,0.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_flamer_tactical",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.3,7.1,4.4,4.1,1.5,3.0,0.0,4.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.5,3.5,3.4,6.5,6.1,4.0,3.0,0.0,6.0,0.0,4.8,4.9,3.1,2.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_gun_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.4,3.7,3.7,6.1,6.5,5.6,2.7,1.3,6.1,1.3,5.1,4.1,2.8,2.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Devastator Marine Squad",
+		sbp_name = "imperial_fists_squad_devastator",
+		ebp_name = "imperial_fists_marine_devastator",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4.6,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(6.5,7.0,6.2,5.5,4.8,2.4,2.5,0.0,4.2,0.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_devastator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_cannon_devastator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_multi_melta_devastator",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_devastator",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Destroyer Marine Squad",
+		sbp_name = "imperial_fists_squad_destroyer",
+		ebp_name = "imperial_fists_marine_destroyer",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.0,5.3,4.8,2.3,2.2,0.0,4.1,0.0,4.1,4.4,3.6,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_grenade_launcher_phosphor",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_rad_launcher",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_cryogun_destroyer",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_gravity_cannon",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.6,4.0,4.1,4.0,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Assault Marine Squad",
+		sbp_name = "imperial_fists_squad_assault",
+		ebp_name = "imperial_fists_marine_assault",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "imperial_fists_dummy_weapon",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.6,3.2,3.3,3.3,1.1,1.0,0.0,3.2,0.0,2.8,3.3,1.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_chainsword_assault",
+				effectiveness = GenerateUnitEffectiveness(5.0,5.4,5.1,5.2,5.1,3.7,2.6,1.8,5.1,0.0,4.0,3.8,2.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_power_sword_assault",
+				effectiveness = GenerateUnitEffectiveness(2.7,2.4,1.3,2.2,2.2,2.0,2.0,0.9,2.2,1.3,1.9,3.9,1.2,1.9,0.9,1.0,0.9),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_power_fist_assault",
+				effectiveness = GenerateUnitEffectiveness(5.2,6.1,4.7,5.7,4.5,4.2,4.4,3.8,5.4,3.5,4.9,3.1,3.6,5.0,3.8,0.8,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_lightning_claw_assault",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.2,6.2,5.7,6.5,6.2,6.1,5.3,3.7,2.9,4.4,5.1,5.9,5.9,3.1,2.2,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_thunder_hammer_assault",
+				effectiveness = GenerateUnitEffectiveness(5.3,5.4,5.4,6.9,6.5,6.2,6.1,6.3,5.9,5.0,5.6,5.1,5.9,4.9,4.1,5.2,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Terminator Squad",
+		sbp_name = "imperial_fists_squad_terminator",
+		ebp_name = "imperial_fists_marine_terminator",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_storm_bolter",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,5.9,5.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_assault_cannon_terminator",
+				effectiveness = GenerateUnitEffectiveness(5.3,7.1,5.6,5.6,7.3,6.0,5.6,4.1,4.6,4.1,5.7,7.0,5.6,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_cannon_terminator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_fist_terminator",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.9,3.7,4.0,3.7,2.6,2.2,1.3,4.0,1.3,3.0,3.6,2.1,2.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Assault Terminator Squad",
+		sbp_name = "imperial_fists_squad_terminator_assault",
+		ebp_name = "imperial_fists_marine_terminator_assault",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_thunder_hammer",
+				effectiveness = GenerateUnitEffectiveness(6.7,6.8,7.0,6.8,6.7,6.1,5.7,4.2,6.3,4.2,5.8,6.9,5.3,5.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_chainfists_terminator",
+				effectiveness = GenerateUnitEffectiveness(4.7,5.4,6.4,5.9,6.8,6.2,5.9,7.3,6.7,6.0,6.4,6.1,5.7,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_lightning_claws_terminator",
+				effectiveness = GenerateUnitEffectiveness(7.1,7.2,7.2,6.7,8.5,8.2,8.1,8.3,6.7,5.9,6.4,7.1,7.9,7.9,7.1,5.2,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Assault Centurion Squad",
+		sbp_name = "imperial_fists_squad_centurion_assault",
+		ebp_name = "imperial_fists_marine_centurion_assault",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_siege_drills_centurion",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_heavy_flamer",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.0,3.7,3.3,3.9,3.5,3.8,0.0,2.3,0.0,2.3,4.7,4.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Centurion Squad",
+		sbp_name = "imperial_fists_squad_centurion",
+		ebp_name = "imperial_fists_marine_centurion",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{		
+			{
+				name = "imperial_fists_gravity_gun_centurion",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_centurion",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_centurion",
+				effectiveness = GenerateUnitEffectiveness(5.3,7.1,5.6,5.6,7.3,6.0,5.6,4.1,4.6,4.1,5.7,7.0,5.6,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_fists_centurion",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.9,3.7,4.0,3.7,2.6,2.2,1.3,4.0,1.3,3.0,3.6,2.1,2.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Crimson Primaris",
+		sbp_name = "imperial_fists_squad_crimson_primaris",
+		ebp_name = "imperial_fists_crimson_primaris",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_crimson_bolt_rifle",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,5.9,5.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crimson_grenade_launcher",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crimson_volkite",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crimson_knife",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.7,0.4,2.1,2.1,0.0,0.0,0.0,2.1,0.4,1.6,1.9,0.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Hospitalier",
+		sbp_name = "imperial_fists_squad_sister",
+		ebp_name = "imperial_fists_sister",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_apothecary",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.0,3.7,3.7,3.7,1.6,0.6,0.0,3.7,0.0,3.3,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_chainsword_apothecary",
+				effectiveness = GenerateUnitEffectiveness(5.3,7.1,5.6,5.6,7.3,6.0,5.6,4.1,4.6,4.1,5.7,7.0,5.6,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Banner Bearer",
+		sbp_name = "imperial_fists_squad_banner_bearer",
+		ebp_name = "imperial_fists_banner_bearer",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_apothecary",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.0,3.7,3.7,3.7,1.6,0.6,0.0,3.7,0.0,3.3,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_chainsword_apothecary",
+				effectiveness = GenerateUnitEffectiveness(5.3,7.1,5.6,5.6,7.3,6.0,5.6,4.1,4.6,4.1,5.7,7.0,5.6,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+
+	{
+		name = "Imperial Fists Apothecary",
+		sbp_name = "imperial_fists_squad_apothecary",
+		ebp_name = "imperial_fists_apothecary",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_apothecary",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.0,3.7,3.7,3.7,1.6,0.6,0.0,3.7,0.0,3.3,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_chainsword_apothecary",
+				effectiveness = GenerateUnitEffectiveness(5.3,7.1,5.6,5.6,7.3,6.0,5.6,4.1,4.6,4.1,5.7,7.0,5.6,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Crimson Primaris Voxer",
+		sbp_name = "imperial_fists_squad_crimson_voxer",
+		ebp_name = "imperial_fists_crimson_primaris_voxer",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "imperial_fists_crimson_plasma_gun",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crimson_knife",
+				effectiveness = GenerateUnitEffectiveness(5.3,7.1,5.6,5.6,7.3,6.0,5.6,4.1,4.6,4.1,5.7,7.0,5.6,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_crimson_vox_orbital_strike",
+				effectiveness = GenerateUnitEffectiveness(5.3,5.9,5.3,6.0,5.3,4.4,3.4,0.0,6.0,3.7,4.8,5.5,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Librarian",
+		sbp_name = "imperial_fists_squad_librarian",
+		ebp_name = "imperial_fists_hero_librarian",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_librarian",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_pistol_librarian",
+				effectiveness = GenerateUnitEffectiveness(7.1,7.1,7.1,7.8,7.1,6.2,5.1,0.0,7.1,5.4,6.2,6.2,4.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_sword_librarian",
+				effectiveness = GenerateUnitEffectiveness(5.3,5.9,5.3,6.0,5.3,4.4,3.4,0.0,6.0,3.7,4.8,5.5,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_force_weapon",
+				effectiveness = GenerateUnitEffectiveness(5.8,7.1,6.9,7.2,7.0,5.5,5.2,7.5,7.4,7.5,5.8,5.6,4.3,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Chaplain",
+		sbp_name = "imperial_fists_squad_chaplain",
+		ebp_name = "imperial_fists_hero_chaplain",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_chaplain",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_pistol_chaplain",
+				effectiveness = GenerateUnitEffectiveness(6.4,7.0,6.4,7.1,6.4,5.4,4.3,0.0,7.0,4.7,5.9,6.6,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crozius_arcanum",
+				effectiveness = GenerateUnitEffectiveness(6.4,7.7,7.5,7.8,7.5,6.1,5.8,8.0,8.0,8.0,6.9,6.1,4.6,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_power_sword_chaplain",
+				effectiveness = GenerateUnitEffectiveness(6.3,7.8,7.8,7.8,7.8,7.3,7.1,4.8,7.8,7.8,7.1,6.3,5.5,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Field Disciplinary Officer",
+		sbp_name = "imperial_fists_squad_police",
+		ebp_name = "imperial_fists_marine_police",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_adeptus_arbites_shotgun",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.5,5.9,6.7,6.0,5.0,3.9,0.0,6.6,4.3,5.4,6.2,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Field Disciplinary Officer Sniper",
+		sbp_name = "imperial_fists_squad_police_sniper",
+		ebp_name = "imperial_fists_marine_police_sniper",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_exitus_rifle",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.5,5.9,6.7,6.0,5.0,3.9,0.0,6.6,4.3,5.4,6.2,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Dummy",
+		sbp_name = "imperial_fists_squad_captain_dummy",
+		ebp_name = "imperial_fists_hero_captain_dummy",
+		class = UnitStatsAI.UC_Commander,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Captain",
+		sbp_name = "imperial_fists_squad_captain",
+		ebp_name = "imperial_fists_hero_captain",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_forcecommander",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_pistol_commander",
+				effectiveness = GenerateUnitEffectiveness(6.7,7.9,7.8,8.1,7.8,6.3,6.0,8.2,8.2,8.2,7.2,6.4,4.9,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_sword_force_commander",
+				effectiveness = GenerateUnitEffectiveness(7.5,7.2,7.4,7.4,7.4,6.5,5.4,0.0,7.4,5.7,6.6,6.5,4.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_daemon_hammer",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.5,5.9,6.7,6.0,5.0,3.9,0.0,6.6,4.3,5.4,6.2,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Captain Alessio Cortez",
+		sbp_name = "imperial_fists_squad_morales",
+		ebp_name = "imperial_fists_hero_morales",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_crimson_fists_morales_rifle",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Pedro Kantor",
+		sbp_name = "imperial_fists_squad_pedro_kantor",
+		ebp_name = "imperial_fists_hero_pedro",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_crimson_storm_bolter_pedro",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_fist_commander",
+				effectiveness = GenerateUnitEffectiveness(7.5,7.2,7.4,7.4,7.4,6.5,5.4,0.0,7.4,5.7,6.6,6.5,4.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Primaris Captain",
+		sbp_name = "imperial_fists_squad_captain_primaris",
+		ebp_name = "imperial_fists_hero_captain_primaris",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_bolt_pistol_forcecommander",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_gravity_gun_comander",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_fist_commander",
+				effectiveness = GenerateUnitEffectiveness(7.5,7.2,7.4,7.4,7.4,6.5,5.4,0.0,7.4,5.7,6.6,6.5,4.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Mavuika",
+		sbp_name = "imperial_fists_squad_mavuika",
+		ebp_name = "imperial_fists_hero_mavuika",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_mavuika_melta_gun",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_mavuika_sword",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.5,5.9,6.7,6.0,5.0,3.9,0.0,6.6,4.3,5.4,6.2,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Lexandro D'Arquebus",
+		sbp_name = "imperial_fists_squad_diomedes",
+		ebp_name = "imperial_fists_hero_diomedes",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_storm_bolter_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_power_sword_force_commander",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.5,5.9,6.7,6.0,5.0,3.9,0.0,6.6,4.3,5.4,6.2,3.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Sons of Dorn",
+		sbp_name = "imperial_fists_squad_sons_of_dorn",
+		ebp_name = "imperial_fists_marine_son_of_dorn",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_thunder_hammer_veteran",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Rogal Dorn",
+		sbp_name = "imperial_fists_squad_dorn_of_war",
+		ebp_name = "imperial_fists_hero_dorn_of_war",
+		class = UnitStatsAI.UC_Commander,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_chain_sword_rogal_dorn",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Rhino Transport",
+		sbp_name = "imperial_fists_squad_rhino",
+		ebp_name = "imperial_fists_rhino",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 2,
+		potential =
+		{
+			{
+				name = "imperial_fists_storm_bolter_vindicator",
+				effectiveness = GenerateUnitEffectiveness(math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Rhino Sacred Rose",
+		sbp_name = "imperial_fists_squad_cf_rhino",
+		ebp_name = "imperial_fists_rhino_sacred_rose",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 2,
+		potential =
+		{
+			{
+				name = "imperial_fists_storm_bolter_vindicator",
+				effectiveness = GenerateUnitEffectiveness(math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Damocles Command Rhino",
+		sbp_name = "imperial_fists_squad_rhino_damocles",
+		ebp_name = "imperial_fists_rhino_damocles",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "imperial_fists_storm_bolter_damocles",
+				effectiveness = GenerateUnitEffectiveness(math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,math.random(3*10,5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Razorback",
+		sbp_name = "imperial_fists_squad_razorback",
+		ebp_name = "imperial_fists_razorback",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "imperial_fists_lascannon_razorback",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_storm_bolter_razorback",
+				effectiveness = GenerateUnitEffectiveness(2.6,2.7,2.5,2.9,2.7,2.7,2.5,0.0,2.8,2.0,2.1,2.7,2.0,2.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_gun_razorback",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.1,4.1,5.0,4.7,2.1,1.9,0.0,5.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Sabre Tank Hunter",
+		sbp_name = "imperial_fists_squad_sabre",
+		ebp_name = "imperial_fists_sabre",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "imperial_fists_lascannon_neutron_sabre",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_volkite_cannon_sabre",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Ironclad Dreadnought",
+		sbp_name = "imperial_fists_squad_dreadnought_ironclad",
+		ebp_name = "imperial_fists_dreadnought_ironclad",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "imperial_fists_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_hurricane_bolter_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.7,7.5,7.9,6.7,6.7,5.5,0.0,7.8,7.0,7.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_flamer_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.0,3.7,3.3,3.9,3.5,3.8,0.0,2.3,0.0,2.3,4.7,4.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Siege Dreadnought",
+		sbp_name = "imperial_fists_squad_dreadnought",
+		ebp_name = "imperial_fists_dreadnought",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_inferno_cannon",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.8,5.7,5.0,5.7,5.4,5.2,5.4,5.0,5.4,5.9,5.5,5.9,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_flamer_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.0,3.7,3.3,3.9,3.5,3.8,0.0,2.3,0.0,2.3,4.7,4.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Venerable Dreadnought",
+		sbp_name = "imperial_fists_squad_dreadnought_venerable",
+		ebp_name = "imperial_fists_dreadnought_venerable",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_multi_melta_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.7,7.5,7.9,6.7,6.7,5.5,0.0,7.8,7.0,7.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_assault_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.7,7.5,7.9,6.7,6.7,5.5,0.0,7.8,7.0,7.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Crimson Fists Venerable Dreadnought",
+		sbp_name = "imperial_fists_squad_dreadnought_venerable_cf",
+		ebp_name = "imperial_fists_dreadnought_venerable_cf",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_assault_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_cannon_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(3.5*10,5*10)/10,math.random(3.5*10,5*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_flamer_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7*10,8.5*10)/10,math.random(3.5*10,5*10)/10,math.random(3.5*10,5*10)/10,math.random(3.5*10,5*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_missile_launcher_hellfire",
+				effectiveness = GenerateUnitEffectiveness(7.6,7.7,7.5,7.9,6.7,6.7,5.5,0.0,7.8,7.0,7.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Crimson Fists Predator Jaguar",
+		sbp_name = "imperial_fists_squad_predator_natlan",
+		ebp_name = "imperial_fists_predator_natlan",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_crimson_las_talon_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crimson_gatling_cannon_predator_r",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_crimson_gatling_cannon_predator_l",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Predator Executioner",
+		sbp_name = "imperial_fists_squad_predator",
+		ebp_name = "imperial_fists_predator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_plasma_cannon_tank",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_cannon_tank_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_plasma_cannon_tank_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Crimson Fists Stormhawk",
+		sbp_name = "imperial_fists_squad_stormhawk_interceptor",
+		ebp_name = "imperial_fists_stormhawk_interceptor",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "imperial_fists_las_talon_stormhawk",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_icarus_stormcannon_stormhawk",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_assault_cannons_stormhawk",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_missile_frag_stormhawk",
+				effectiveness = GenerateUnitEffectiveness(2.5,3.0,0.4,3.0,2.2,0.6,0.3,0.2,1.4,0.9,2.0,0.9,0.5,0.2,0.0,0.6,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Vindicator",
+		sbp_name = "imperial_fists_squad_vindicator",
+		ebp_name = "imperial_fists_vindicator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_vindicator_gun",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Legion Basilisk",
+		sbp_name = "imperial_fists_squad_basilisk_legion",
+		ebp_name = "imperial_fists_basilisk_legion",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_earthshaker_cannon_basilisk",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Whirlwind Scorpius",
+		sbp_name = "imperial_fists_squad_whirlwind_scorpius",
+		ebp_name = "imperial_fists_whirlwind_scorpius",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "imperial_fists_missile_battery_scorpius",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Assault Ram",
+		sbp_name = "imperial_fists_squad_assault_ram",
+		ebp_name = "imperial_fists_cram",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_magma_melta",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_missile_krak_caestus",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Assault Ram Entrenched",
+		sbp_name = "imperial_fists_squad_assault_ram_entrenched",
+		ebp_name = "imperial_fists_cram_entrenched",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 10,
+		potential =
+		{
+			{	name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},		
+		}	
+	},
+	{
+
+		name = "Imperial Fists Land Raider Prometheus",
+		sbp_name = "imperial_fists_squad_land_raider_prometheus",
+		ebp_name = "imperial_fists_land_raider_prometheus",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_heavy_bolter_twin_l",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_twin_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Imperial Fists Land Raider Achilles",
+		sbp_name = "imperial_fists_squad_land_raider_achilles",
+		ebp_name = "imperial_fists_land_raider_achilles",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_thunderfire_cannon_achilles",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_multi_melta_quad_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_multi_melta_quad_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Crimson Fists Land Raider Might Of Rynn",
+		sbp_name = "imperial_fists_squad_land_raider_might_of_rynn",
+		ebp_name = "imperial_fists_land_raider_might_of_rynn",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_heavy_bolter_twin",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_mor_lascannon_twin_tank_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_mor_lascannon_twin_tank_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_storm_bolter_turret",
+				effectiveness = GenerateUnitEffectiveness(4.9,4.9,0.4,4.9,4.9,3.8,2.5,1.3,4.9,1.5,3.2,5.1,1.3,1.3,0.0,3.8,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Fellblade",
+		sbp_name = "imperial_fists_squad_fellblade",
+		ebp_name = "imperial_fists_fellblade",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_battle_cannon_fellblade",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_demolisher_cannon_fellblade",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,7.0,7.0,7.9,7.2,7.0,7.6,7.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_fellblade_hull",
+				effectiveness = GenerateUnitEffectiveness(9.0,9.0,9.0,9.0,8.7,7.9,7.2,7.0,9.6,9.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_lascannon_quad_fellblade_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_quad_fellblade_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Glaive",
+		sbp_name = "imperial_fists_squad_glaive",
+		ebp_name = "imperial_fists_glaive",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_volkite_carronade_glaive",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_demolisher_cannon_fellblade",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,7.0,7.0,7.9,7.2,7.0,7.6,7.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_fellblade_hull",
+				effectiveness = GenerateUnitEffectiveness(9.0,9.0,9.0,9.0,8.7,7.9,7.2,7.0,9.6,9.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_lascannon_quad_fellblade_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_quad_fellblade_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Falchion",
+		sbp_name = "imperial_fists_squad_falchion",
+		ebp_name = "imperial_fists_falchion",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_volcano_cannon_fellblade_twin",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_demolisher_cannon_fellblade",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,7.0,7.0,7.9,7.2,7.0,7.6,7.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_bolter_fellblade_hull",
+				effectiveness = GenerateUnitEffectiveness(9.0,9.0,9.0,9.0,8.7,7.9,7.2,7.0,9.6,9.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_lascannon_quad_fellblade_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_quad_fellblade_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Mastodon",
+		sbp_name = "imperial_fists_squad_mastodon",
+		ebp_name = "imperial_fists_mastodon",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10,
+		potential =
+		{
+			{
+				name = "imperial_fists_dummy_weapon",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "imperial_fists_assault_cannon_mastodon",
+				effectiveness = GenerateUnitEffectiveness(9.0,9.0,9.0,9.0,8.7,7.9,7.2,7.0,9.6,9.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "imperial_fists_lascannon_mastodon_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_lascannon_mastodon_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,6.0,7.0,7.9,7.0,4.0,7.0,7.8,2.6,7.9,7.3,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_flamer_mastodon_left",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "imperial_fists_heavy_flamer_mastodon_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+}

@@ -1,0 +1,37 @@
+----------------------------------------
+-- File: 'demolishertactic.ai'
+-- Edited by Thudmeizer @ 13.01.2009
+
+class 'DemolisherTactic' (SteelLegionVehicleTactic)
+
+Demolisher = {}
+
+function DemolisherTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Demolisher Tactic")
+end
+
+function DemolisherTactic:InitAbilities()
+
+	if (Demolisher.defenders_id == nil) then
+	    Demolisher.defenders_id = cpu_manager.stats:GetAbilityID( "steel_legion_frag_defenders" )
+	end
+end
+
+function DemolisherTactic:DoAbilities()
+
+	Ability.DoAbilityArea( self.squad_ai, Demolisher.defenders_id, Ability.Filters.CloseSquadEnemy, 10, 2 )
+end
+
+function DemolisherTactic:Update()
+
+   if self:IsComplete() then
+      return
+   end
+
+   --state machine
+   if not VehicleTactic.Update( self ) then
+	  return
+   end
+
+end

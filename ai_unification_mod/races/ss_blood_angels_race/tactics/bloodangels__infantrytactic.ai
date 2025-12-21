@@ -1,0 +1,174 @@
+----------------------------------------
+-- File: 'bloodangelinfantrytactic.ai'
+-- Created by Thudmeizer	@ 17.10.2023
+
+class 'BloodAngelsInfantryTactic' (InfantryTactic)
+
+function BloodAngelsInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angels Infantry Tactic")
+
+	-- Set infantry options
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "blood_angel_squad_scout_assault" or
+		sSquadName == "blood_angel_squad_tactical" or
+		sSquadName == "blood_angel_squad_devastator" or
+		sSquadName == "blood_angel_squad_veteran" or
+		sSquadName == "blood_angel_squad_primaris_heavy_intercessor" or
+		sSquadName == "blood_angel_squad_highpriest" or
+		sSquadName == "blood_angel_squad_daniel" or
+		sSquadName == "blood_angel_squad_hg_mephiston" or
+		sSquadName == "blood_angel_squad_mephiston" or
+		sSquadName == "blood_angel_squad_commander_tycho" or
+		sSquadName == "blood_angel_squad_commander_tycho_dc") then
+		
+		-- Squads are transportable
+		self.m_iTransportable = 1	-- Rhino
+		self.m_iTransportable = 2	-- Razorback
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("blood_angel_orbital_relay")
+
+	elseif (sSquadName == "blood_angel_squad_terminator" or
+			sSquadName == "blood_angel_squad_terminator_assault" or
+			sSquadName == "blood_angel_squad_terminator_honour_guard") then
+
+		-- Squads are transportable and can deepstrike
+		self.m_iTransportable = 3	-- Land Raider / Land Raider Inferus
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("blood_angel_orbital_relay")
+
+	elseif (sSquadName == "blood_angel_squad_assault_veteran") then
+
+		-- Squads can deepstrike
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("blood_angel_barracks")
+
+	elseif (sSquadName == "blood_angel_squad_primaris_suppressor" or
+			sSquadName == "blood_angel_squad_primaris_assault_intercessor" or
+			sSquadName == "blood_angel_squad_assault_death_company" or
+			sSquadName == "blood_angel_squad_hg_dante" or
+			sSquadName == "blood_angel_squad_dante") then
+
+		-- Squads can deepstrike
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("blood_angel_ability_building")
+
+	elseif (sSquadName == "blood_angel_squad_death_company") then
+
+		-- Squads are transportable
+		self.m_iTransportable = 4	-- Death Company Rhino
+	end
+end
+
+function BloodAngelsInfantryTactic:AddTargetAbilities()
+	table.insert(InfantryTactic.TargetAbilities, { nil, "blood_angel_frag_grenades", Ability.Filters.CloseSquadEnemy, 1, 0 })
+	table.insert(InfantryTactic.TargetAbilities, { nil, "blood_angel_melta_bombs", Ability.Filters.CloseVehicleEnemy, 1, 0 })
+end
+
+function BloodAngelsInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "blood_angel_squad_commander_tycho", true })
+	table.insert(self.commander, { "blood_angel_squad_commander_tycho_dc", false })
+	table.insert(self.commander, { "blood_angel_squad_highpriest", false })
+	table.insert(self.commander, { "blood_angel_squad_mephiston", false })
+	table.insert(self.commander, { "blood_angel_squad_hg_mephiston", false })
+	table.insert(self.commander, { "blood_angel_squad_hg_dante", false })
+	table.insert(self.commander, { "blood_angel_squad_daniel", false })
+end
+
+function BloodAngelsInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+
+		if (self.squad_ai:HasSquadAttached("blood_angel_squad_commander_tycho")) then
+			BloodAngelCommanderTychoTactic.InitAbilities( self )
+			BloodAngelCommanderTychoTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("blood_angel_squad_commander_tycho_dc")) then
+			BloodAngelCommanderTychoDCTactic.InitAbilities( self )
+			BloodAngelCommanderTychoDCTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("blood_angel_squad_mephiston")) then
+			BloodAngelMephistonTactic.InitAbilities( self )
+			BloodAngelMephistonTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("blood_angel_squad_daniel")) then
+			BloodAngelDanielTactic.InitAbilities( self )
+			BloodAngelDanielTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("blood_angel_squad_skull_probe")) then
+			BloodAngelSkullProbeTactic.InitAbilities( self )
+			BloodAngelSkullProbeTactic.DoAbilities( self )
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function BloodAngelsInfantryTactic:CheckForBroken()
+
+	if (self.squad_ai:IsBroken()) then
+	
+		-- Check if I can repair my morale
+		local rally_id = cpu_manager.stats:GetAbilityID( "blood_angel_rally" )
+		if (self.squad_ai:CanDoAbility( rally_id )) then
+			self.squad_ai:DoSpecialAbility( rally_id )
+		end
+	end
+
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end
+
+function BloodAngelsInfantryTactic:CheckDance(oSquad)
+
+	-- Check opponent
+	if (oSquad == nil) then
+		return false
+	end
+	
+	-- Compare opponents
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "blood_angel_squad_tactical" or sSquadName == "blood_angel_squad_terminator" or
+      sSquadName == "blood_angel_squad_devastator" ) then
+		
+		-- Check opponent
+		if (oSquad:GetSquadName() == "chaos_squad_cultist") or (oSquad:GetSquadName() == "eldar_guardian_squad") or (oSquad:GetSquadName() == "dark_eldar_squad_mandrake") then  
+			return false
+		end
+	end
+	return true
+end
+
+function BloodAngelsInfantryTactic:Upgrade()
+
+	-- Check if we have free resources
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Don't upgrade space marine squads with less than 6 troopers
+	if (self.squad_ai:GetSquadName() == "blood_angel_squad_tactical" and self.squad_ai:GetNumTroopers() < 6) then
+		return
+	end
+	
+	if (not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 3) then
+		
+		-- Figure out my enemy's favourite class
+		local enemy = cpu_manager:FindClosestEnemyPlayer()
+		if (enemy == nil) then
+			return
+		end
+		local class_type = enemy:GetMajorityClassType()
+		
+		-- Larkins hard counter upgrade for HeavyInfantryMed 
+		if (class_type < UnitStatsAI.UC_HeavyInfantryMed) then	  
+		  
+			local enemy_race = enemy:GetPlayerRaceName()
+			if (enemy_race == "space_marine_race" or enemy_race == "chaos_marine_race" or enemy_race == "necron_race") then
+		    	class_type = UnitStatsAI.UC_HeavyInfantryMed
+		  	end
+		end
+		
+		-- Do best upgrade
+		self.squad_ai:DoBestUpgrade(class_type)
+	end
+end

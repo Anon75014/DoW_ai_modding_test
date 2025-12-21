@@ -1,0 +1,929 @@
+----------------------------------------
+-- File: 'darkangelbuildbasestrategy.ai'
+-- Edited by Thudmeizer @ 09.09.2025
+
+class 'DarkAngelsBuildBaseStrategy' (BuildBaseStrategy)
+
+function DarkAngelsBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+
+	-- Add detector units (Best first, worst last)
+	self:AddDetectorUnit("da_squad_scout")
+	self:AddDetectorUnit("da_squad_watcher_in_the_dark")
+	self:AddDetectorUnit("da_squad_deathwing_ven_dreadnought")
+	self:AddDetectorUnit("da_squad_ravenwing_land_speeder_darkshroud")
+	self:AddDetectorUnit("da_squad_master_ravenwing_bike")
+	self:AddDetectorUnit("da_squad_librarian")
+	self:AddDetectorUnit("da_squad_deathwing_master")
+	self:AddDetectorUnit("da_squad_librarian_terminator")
+	self:AddDetectorUnit("da_squad_ravenwing_librarian")
+	self:AddDetectorUnit("da_squad_grand_master")
+	self:AddDetectorUnit("da_squad_hero_ezekiel_librarian")
+	self:AddDetectorUnit("da_squad_lion_el_johnson_primarch")
+	self:AddDetectorUnit("da_squad_lion_el_johnson_primarch_dw_rw")
+
+	CpuPrerequisites2.AddSpecialItem("da_squad_fellblade", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("da_squad_fellblade_dw_rw", CpuPrerequisites.BT_Squad)
+
+	-- Choose one of three patterns for the special Company Hero
+	self.m_iDarkAngelHeroPattern = math.random(1, 3)
+	
+	-- Trick to limit the number of tactical/assault/scouts, in favour of RW/DW branch squads
+	self.swapMadeRWDW = false
+	self.swapMadeBC = false
+end
+
+
+function DarkAngelsBuildBaseStrategy:ChooseBuildProgram()
+
+	-- Check build program count
+	if (table.getn(self.info.BuildPrograms) ~= 3) then
+		return BuildBaseStrategy.ChooseBuildProgram(self)
+	end
+
+	-- Try to maintain the same strategy, on AI re-initiation (Save->Load, Change Players, etc.)
+	-- First see if we have already completed a branch research
+	if cpu_manager.cpu_player:IsResearchComplete("darkangels_ravenwing_research") then
+		return 1
+	elseif cpu_manager.cpu_player:IsResearchComplete("darkangels_deathwing_research") then
+		return 2
+	elseif cpu_manager.cpu_player:IsResearchComplete("darkangels_chapter_research") then
+		return 3
+	end
+	-- Then, see if we are currently building a branch research
+	-- Regrettably, cued researches cannot be detected, only those that are currently being built
+	local research1 = cpu_manager.stats:GetResearchID("darkangels_ravenwing_research")
+	local research2 = cpu_manager.stats:GetResearchID("darkangels_deathwing_research")
+	local research3 = cpu_manager.stats:GetResearchID("darkangels_chapter_research")
+	for oBuilding in military_manager:GetBases() do
+		if oBuilding:IsValid() then
+			if oBuilding:GetBaseName() == "darkangels_hq" then
+				local buildChannel = build_manager:GetBuildChannelFromID(oBuilding:GetEntity():GetID())
+				if buildChannel ~= nil then
+					if buildChannel:IsBuilding() == research1 then
+						return 1
+					elseif buildChannel:IsBuilding() == research2 then
+						return 2
+					elseif buildChannel:IsBuilding() == research3 then
+						return 3
+					end
+				end
+			end
+		end
+	end
+
+	-- Set probabilities of the strategies according to the map size
+	local iBuildProgram1 = 33	-- Ravenwing Strike Strategy
+	local iBuildProgram2 = 34	-- Deathwing Assault Strategy
+	local iBuildProgram3 = 33	-- Might of the 3rd Company Strategy
+	
+	-- Modify probabilities according to the closest enemy player
+	local oEnemy = cpu_manager:FindClosestEnemyPlayer(false)
+	local sEnemy = oEnemy:GetPlayerRaceName()		
+	if (sEnemy == "ork_race" or sEnemy == "guard_race") then
+
+		iBuildProgram1 = iBuildProgram1 + 20
+		iBuildProgram2 = iBuildProgram2 - 20
+		iBuildProgram3 = iBuildProgram3 - 10
+		
+	elseif (sEnemy == "chaos_marine_race" or sEnemy == "necron_race") then
+	
+		iBuildProgram1 = iBuildProgram1 - 20
+		iBuildProgram2 = iBuildProgram2 + 20
+		iBuildProgram3 = iBuildProgram3 + 10
+	end
+		
+	-- Now choose a program
+	iBuildProgram2 = iBuildProgram1 + iBuildProgram2
+	iBuildProgram3 = iBuildProgram2 + iBuildProgram3
+	local iRandom = math.random(1, 100)
+	if (iRandom <= iBuildProgram1) then
+		return 1
+	elseif (iRandom <= iBuildProgram2) then
+		return 2
+	elseif (iRandom <= iBuildProgram3) then
+		return 3
+	end
+	return math.random(1, 3)
+end
+
+function DarkAngelsBuildBaseStrategy:EvaluateSquadCap()
+
+	-- Check squad cap
+	if (self:CheckSquadCap(300, 0)) then
+		
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		
+		if (not cpu_manager.cpu_player:IsResearchComplete( "darkangels_squad_cap_research" )) then
+			tBuildType.name = "darkangels_squad_cap_research"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "darkangels_squad_cap_research_1" ) then
+			tBuildType.name = "darkangels_squad_cap_research_1"
+		else
+			return
+		end
+		
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+	
+	-- Check support cap
+	if (self:CheckSupportCap(150, 300)) then
+		
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		
+		if (not cpu_manager.cpu_player:IsResearchComplete( "darkangels_support_cap_research" )) then
+			tBuildType.name = "darkangels_support_cap_research"
+		elseif (not cpu_manager.cpu_player:IsResearchComplete( "darkangels_support_cap_research_1" )) then
+			tBuildType.name = "darkangels_support_cap_research_1"
+		elseif (not cpu_manager.cpu_player:IsResearchComplete( "darkangels_support_cap_research_2" )) then
+			tBuildType.name = "darkangels_support_cap_research_2"
+		elseif (not cpu_manager.cpu_player:IsResearchComplete( "darkangels_support_cap_research_3" )) then
+			tBuildType.name = "darkangels_support_cap_research_3"
+		else
+			return
+		end
+		
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+end
+
+function DarkAngelsBuildBaseStrategy:GetBuildingName( sType )
+
+	-- Return race specific object string
+	if (sType == "HQ") then
+		return "darkangels_hq"
+
+	elseif (sType == "Generator") then
+		return "darkangels_generator"
+		
+	elseif (sType == "BiggerGenerator") then
+		return "darkangels_thermo_generator"
+		
+	elseif (sType == "VehicleBuilding") then
+		return "darkangels_vehicle_building"
+		
+	elseif (sType == "ListeningPost") then
+		return "darkangels_listening_post"
+		
+	elseif (sType == "Turret") then
+			return "darkangels_turret_bolter_spec"
+
+	elseif (sType == "Mine") then
+		return nil
+	end
+	return nil
+end
+
+function DarkAngelsBuildBaseStrategy:GetAddonBuilding( sType )
+
+	if (sType == "darkangels_list_post_addon_1") then
+		return "darkangels_listening_post"
+
+	elseif (sType == "darkangels_list_post_addon_2") then
+		return "darkangels_listening_post"
+
+	elseif (sType == "darkangels_turret_plasma_addon") then
+		return "darkangels_turret_bolter_spec"
+
+	elseif (sType == "darkangels_turret_las_addon") then
+		return "darkangels_turret_bolter_spec"
+
+	elseif (sType == "darkangels_turret_plasma_addon") then
+		return "darkangels_turret_bolter_no_limit"
+
+	elseif (sType == "darkangels_turret_las_addon") then
+		return "darkangels_turret_bolter_no_limit"
+
+	elseif (sType == "darkangels_hq_addon_1") then
+		return "darkangels_hq"
+	end
+	return nil
+end
+
+-- Arkhan 01.2006: Inherited method to check if an addon is a tier addon
+function DarkAngelsBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+
+	-- Check addon name and target tier
+	if (sName == "darkangels_hq_addon_1" and iTargetTier == 2) then
+		return true
+	end
+	return false
+end
+
+-- Arkhan 11.2005: Returns the squad cap and support cap of the given squad
+function DarkAngelsBuildBaseStrategy:GetUnitStats(sSquadName)
+
+	if sSquadName == "da_squad_assault" then
+		return 3, 0
+	elseif sSquadName == "da_squad_command_squad" then
+		return 2, 0
+	elseif sSquadName == "da_squad_company_land_raider_ares" then
+		return 0, 3
+	elseif sSquadName == "da_squad_deathwing_land_raider_solemnus" then
+		return 0, 4
+	elseif sSquadName == "da_squad_knight_vortigan" then
+		return 0, 6
+	elseif sSquadName == "da_squad_deathwing_terminator" then
+		return 3, 0
+	elseif sSquadName == "da_squad_deathwing_terminator_assault" then
+		return 3, 0
+	elseif sSquadName == "da_squad_deathwing_terminator_knight" then
+		return 3, 0
+	elseif sSquadName == "da_squad_deathwing_terminators_kill_team" then
+		return 2, 0
+	elseif sSquadName == "da_squad_deathwing_ven_dreadnought" then
+		return 0, 4
+	elseif sSquadName == "da_squad_devastator" then
+		return 3, 0
+	elseif sSquadName == "da_squad_primaris_hellblaster" then
+		return 3, 0
+	elseif sSquadName == "da_squad_dreadnought" then
+		return 0, 3
+	elseif sSquadName == "da_squad_dreadnought_deathwing" then
+		return 0, 3
+	elseif sSquadName == "da_squad_dreadnought_mortis" then
+		return 0, 3
+	elseif sSquadName == "da_squad_dreadnought_mortis_deathwing" then
+		return 0, 3
+	elseif sSquadName == "da_squad_hero_ezekiel_librarian" then
+		return 1, 0
+	elseif sSquadName == "da_squad_hero_asmodai_chaplain" then
+		return 1, 0
+	elseif sSquadName == "da_squad_hero_belial_deathwing" then
+		return 1, 0
+	elseif sSquadName == "da_squad_hero_sammael_ravenwing" then
+		return 1, 0
+	elseif sSquadName == "da_squad_master_ravenwing_land_speeder" then
+		return 0, 1
+	elseif sSquadName == "da_squad_predator" then
+		return 0, 5
+	elseif sSquadName == "da_squad_predator_deathwing" then
+		return 0, 5
+	elseif sSquadName == "da_squad_predator_ravenwing" then
+		return 0, 5
+	elseif sSquadName == "da_squad_ravenwing_attack_bike" then
+		return 3, 0
+	elseif sSquadName == "da_squad_ravenwing_bike" then
+		return 3, 0
+	elseif sSquadName == "da_squad_ravenwing_dark_talon" then
+		return 0, 4
+	elseif sSquadName == "da_squad_ravenwing_land_speeder" then
+		return 0, 2
+	elseif sSquadName == "da_squad_ravenwing_land_speeder_darkshroud" then
+		return 0, 3
+	elseif sSquadName == "da_squad_ravenwing_land_speeder_vengeance" then
+		return 0, 3
+	elseif sSquadName == "da_squad_ravenwing_tempest" then
+		return 0, 2
+	elseif sSquadName == "da_squad_razorback" then
+		return 0, 2
+	elseif sSquadName == "da_squad_rhino" then
+		return 0, 1
+	elseif sSquadName == "da_squad_scout" then
+		return 1, 0
+	elseif sSquadName == "da_squad_tactical" then
+		return 2, 0
+	elseif sSquadName == "da_squad_hero_azrael_master" then
+		return 1, 0
+	elseif sSquadName == "da_squad_thunderhawk" then
+		return 0, 4
+	elseif sSquadName == "da_squad_lion_el_johnson_primarch" then
+		return 5, 0
+	elseif sSquadName == "da_squad_lion_el_johnson_primarch_dw_rw" then
+		return 5, 0
+	elseif sSquadName == "da_squad_hero_lazarus_master" then
+		return 1, 0
+	elseif sSquadName == "da_squad_veteran_assault" then
+		return 3, 0
+	elseif sSquadName == "da_squad_veteran_tactical" then
+		return 3, 0
+	elseif sSquadName == "da_squad_vindicator" then
+		return 0, 4
+	elseif sSquadName == "da_squad_vindicator_deathwing" then
+		return 0, 4
+	elseif sSquadName == "da_squad_vindicator_ravenwing" then
+		return 0, 4
+	elseif sSquadName == "da_squad_whirlwind" then
+		return 0, 4
+	elseif sSquadName == "da_squad_whirlwind_deathwing" then
+		return 0, 4
+	elseif sSquadName == "da_squad_whirlwind_ravenwing" then
+		return 0, 4
+	elseif sSquadName == "da_squad_fellblade" then
+		return 0, 6
+	elseif sSquadName == "da_squad_fellblade_dw_rw" then
+		return 0, 6
+	end
+	return 0, 0
+end
+
+function DarkAngelsBuildBaseStrategy:UpdateTierLevel()
+
+	-- Reset tier level
+	self.tierLevel = 1
+	
+	-- Prepare
+	local iHQAddon1ID = cpu_manager.stats:GetAddOnID("darkangels_hq_addon_1")
+ 	local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+	
+	-- Check HQ's for addons
+	for oBase in oStats:GetBases() do
+	
+		-- Check for valid building
+		if (oBase:IsValid() and not oBase:IsListeningPost()) then
+
+			-- Check for HQ addon 1
+			if (oBase:HasAddOn(iHQAddon1ID)) then
+				self.tierLevel = 2
+			end
+
+			-- Check for Tier3 researches
+			if (cpu_manager.cpu_player:IsResearchComplete("darkangels_chapter_research") or 
+			    cpu_manager.cpu_player:IsResearchComplete("darkangels_deathwing_research") or
+			    cpu_manager.cpu_player:IsResearchComplete("darkangels_ravenwing_research")) then
+				self.tierLevel = 3
+			end
+				
+			-- Check for Tier4 researches
+			if (cpu_manager.cpu_player:IsResearchComplete("darkangels_heavy_armour_deployment") or 
+			    cpu_manager.cpu_player:IsResearchComplete("darkangels_deathwing_deployment") or
+			    cpu_manager.cpu_player:IsResearchComplete("darkangels_heavy_armour_deployment_ravenwing")) then
+				self.tierLevel = 4
+			end
+		end
+	end
+end
+
+function DarkAngelsBuildBaseStrategy:BuildFlexible()
+
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	self:BuildFirstBuilder("da_squad_servitor")
+
+	-- Changes limits. IsRWorDWBranchChosen is set to true in the RW/DW buildings. The swapMades, allow re-calculation, ONCE.
+	if IsRWorDWBranchChosen and not self.swapMadeRWDW then
+		BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_scout = math.random( math.random(1,2), 2 )
+		BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_tactical = math.random( 2, math.random(2,3) )
+		if (BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_scout +
+		    BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_tactical) > 4 then
+			BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_assault = 1
+		else
+			BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_assault = math.random( 1, math.random(1,2) )
+		end
+		if (BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_scout +
+		    BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_tactical +
+			BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_assault) == 4 then
+			BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_scout =
+			BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_scout + 1
+		end
+		self.swapMadeRWDW = true
+		self.swapMadeBC = false
+		--print("RW-DW squad limits !!")
+	end
+	if not IsRWorDWBranchChosen and not self.swapMadeBC then
+		BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_scout = math.random( 2,3 )
+		BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_tactical = math.random( 4,6 )
+		BuildBaseStrategyInfo.darkangels_race.SquadLimits.standard.da_squad_assault = math.random( 2,3 )
+		self.swapMadeBC = true
+		self.swapMadeRWDW = false
+		--print("BC squad limits !!")
+	end
+	-- If a brabch building is destroyed, revert squad limits to standard!
+	IsRWorDWBranchChosen = false
+
+	-- Dynamic research item syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+	local iArmyStrength = cpu_manager:GetArmyStrength()
+	local iInfantrySquads = self:CountSquads("da_squad_scout") + self:CountSquads("da_squad_tactical") + self:CountSquads("da_squad_assault") + self:CountSquads("da_squad_devastator") + self:CountSquads("da_squad_ravenwing_bike") + self:CountSquads("da_squad_veteran_tactical") + self:CountSquads("da_squad_veteran_assault")
+	local iVeteranSquads = self:CountSquads("da_squad_veteran_tactical") + self:CountSquads("da_squad_veteran_assault")
+	local iSpecialInfantrySquads = self:CountSquads("da_squad_devastator") + iVeteranSquads
+	local iDeathwingTerminatorSquads = self:CountSquads("da_squad_deathwing_terminator") + self:CountSquads("da_squad_deathwing_terminator_assault")
+	local iBannerSquads = self:CountSquads("da_squad_banner_bearer") + self:CountSquads("da_squad_ravenwing_banner_bearer") + self:CountSquads("da_squad_banner_bearer_terminator") + self:CountSquads("da_squad_command_squad")
+	local iLibrarianSquads = self:CountSquads("da_squad_librarian") + self:CountSquads("da_squad_ravenwing_librarian") + self:CountSquads("da_squad_librarian_terminator")
+	local iChaplainSquads = self:CountSquads("da_squad_chaplain") + self:CountSquads("da_squad_ravenwing_chaplain") + self:CountSquads("da_squad_chaplain_terminator")
+	local iCommanderSquads = self:CountSquads("da_squad_grand_master") + self:CountSquads("da_squad_deathwing_master") + self:CountSquads("da_squad_master_ravenwing_bike") + self:CountSquads("da_squad_master_ravenwing_land_speeder") + iChaplainSquads + iLibrarianSquads
+	local iRavenwingVehicles = self:CountSquads("da_squad_ravenwing_land_speeder") + self:CountSquads("da_squad_ravenwing_attack_bike") + self:CountSquads("da_squad_ravenwing_bike") + self:CountSquads("da_squad_ravenwing_tempest") +  self:CountSquads("da_squad_ravenwing_land_speeder_darkshroud")
+
+	-- Compute tier 1 researches
+	if (self.tierLevel >= 1) then
+
+		-- Compute infantry researches
+		if (iInfantrySquads >= 3) then
+			self:DynamicResearch("darkangels_grenade_research", 1, 40, 95, 0, 0, "da_squad_tactical", 2)
+			self:DynamicResearch("darkangels_stubborn", 1, 50, 30, 0, 0, "da_squad_tactical", 2)
+		end
+
+		-- Compute secondary researches
+		if (iArmyStrength >= 750) then
+
+			-- Compute infantry researches
+			if (iCommanderSquads >= 1) then
+				self:DynamicResearch("darkangels_rumours_of_the_fallen", 1, 25, 25, 0, 0, nil, 0)
+			end
+		end
+	end
+	
+	-- Compute tier 2 researches
+	if (self.tierLevel >= 2) then
+	
+		-- Compute infantry researches
+		if (iInfantrySquads >= 3) then
+			self:DynamicResearch("darkangels_intractable", 2, 70, 45, 0, 0, nil, 0)
+		end
+
+		-- Compute commander researches
+		if (self:CountSquads("da_squad_grand_master") >= 1) then
+			self:DynamicResearch("darkangels_sword_of_secrets_upgrade", 2, 50, 20, 0, 0, nil, 0)
+		end
+		
+		-- Compute bonus researches
+		if (iArmyStrength >= 1250) then
+		
+			-- Compute infantry researches
+			if (iInfantrySquads >= 3) then
+				self:DynamicResearch("darkangels_advanced_weapons_leaders", 2, 120, 80, 0, 0, nil, 0)
+			end
+		end
+
+		-- Compute librarian researches
+		if (iLibrarianSquads >= 1) then
+			self:DynamicResearch("darkangels_book_of_salvation_research", 2, 25, 75, 0, 0, nil, 0)
+			self:DynamicResearch("darkangels_librarian_research_1", 2, 75, 40, 0, 0, nil, 0)
+		end
+		
+		-- Compute bonus researches
+		if (iArmyStrength >= 1750) then
+					
+			-- Compute scout researches
+			if (self:CountSquads("da_squad_scout") >= 1) then
+				self:DynamicResearch("darkangels_infiltrate_research", 2, 100, 150, 0, 0, nil, 0)
+			end
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("darkangels_turret_bolter_no_limit", 2, 2, 200, 100, 0, 0)
+	end
+	
+	-- Compute tier 3 researches
+	if (self.tierLevel >= 3) then
+	
+		-- Compute secondary researches
+		if (iArmyStrength >= 1750) then
+
+			if (cpu_manager.cpu_player:IsResearchComplete("darkangels_ravenwing_research")) then
+
+				-- Compute infantry researches
+				if (iInfantrySquads >= 3) then
+					self:DynamicResearch("darkangels_hunt_fallen_research", 3, 15, 60, 0, 0, nil, 0)
+				end
+				
+				-- Compute vehicle researches
+				if (iRavenwingVehicles >= 2) then
+					self:DynamicResearch("darkangels_ravenwing_jink_research", 3, 150, 50, 0, 0, nil, 0)
+					self:DynamicResearch("darkangels_hunt_fallen_research", 3, 200, 60, 0, 0, nil, 0)
+				end
+
+				-- Compute banner researches
+				if (iBannerSquads >= 1) then
+					self:DynamicResearch("darkangels_standard_of_retribution_research", 3, 25, 75, 0, 0, nil, 0)
+				end
+
+				-- Compute commander researches
+				if (iLibrarianSquads >= 1) then
+					self:DynamicResearch("darkangels_librarian_research_2_dwrw", 3, 40, 50, 0, 0, nil, 0)
+				end
+
+				-- Compute techmarine specific researches
+				self:DynamicResearch("darkangels_techmarine_master_ravenwing", 3, 50, 20, 0, 0, nil, 0)
+			end
+
+			if (cpu_manager.cpu_player:IsResearchComplete("darkangels_deathwing_research")) then
+
+				-- Compute terminator researches
+				if (iDeathwingTerminatorSquads >= 2) then
+					self:DynamicResearch("darkangels_personalteleporter_research", 3, 125, 75, 0, 0, nil, 0)
+				end
+
+				-- Compute banner researches
+				if (iBannerSquads >= 1) then
+					self:DynamicResearch("darkangels_standard_of_devastation_research", 3, 25, 75, 0, 0, nil, 0)
+				end
+
+				-- Compute commander researches
+				if (iLibrarianSquads >= 1) then
+					self:DynamicResearch("darkangels_librarian_research_2_dwrw", 3, 40, 50, 0, 0, nil, 0)
+				end
+
+				-- Compute techmarine specific researches
+				self:DynamicResearch("darkangels_techmarine_master_deathwing", 3, 50, 20, 0, 0, nil, 0)
+			end
+
+			if (cpu_manager.cpu_player:IsResearchComplete("darkangels_chapter_research")) then
+
+				-- Compute infantry researches
+				if (iInfantrySquads >= 3) then
+					self:DynamicResearch("darkangels_advanced_weapons", 3, 100, 100, 0, 0, nil, 0)
+				end
+
+				-- Compute commander researches
+				if (self:CountSquads("da_squad_hero_lazarus_master") >= 1) then
+					self:DynamicResearch("darkangels_sword_enmitys_edge_upgrade", 2, 100, 100, 0, 0, nil, 0)
+				end
+
+				-- Compute advanced infantry researches
+				if (iSpecialInfantrySquads >= 2) then
+					self:DynamicResearch("darkangels_relentless", 3, 100, 175, 0, 0, nil, 0)
+				end
+
+				-- Compute Veteran researches
+				if (iVeteranSquads >= 1) then
+					self:DynamicResearch("darkangels_infiltrate_research_veterans", 3, 100, 150, 0, 0, nil, 0)
+					self:DynamicResearch("darkangels_furious_charge_research", 3, 75, 50, 0, 0, nil, 0)
+				end
+
+				-- Compute banner researches
+				if (iBannerSquads >= 1) then
+					self:DynamicResearch("darkangels_standard_of_fortitude_research", 3, 25, 75, 0, 0, nil, 0)
+				end
+
+				-- Compute commander researches
+				if (iLibrarianSquads >= 1) then
+					self:DynamicResearch("darkangels_librarian_research_2", 3, 40, 50, 0, 0, nil, 0)
+				end
+	
+				-- Compute commander researches
+				if (iCommanderSquads >= 1) then
+					self:DynamicResearch("darkangels_artificer_armour", 3, 100, 25, 0, 0, nil, 0)
+				end
+
+				-- Compute grand master specific researches
+				if (self:CountSquads("da_squad_grand_master") >= 1) then
+					self:DynamicResearch("darkangels_rites_of_battle", 3, 100, 50, 0, 0, nil, 0)
+				end
+
+				-- Compute techmarine specific researches
+				self:DynamicResearch("darkangels_techmarine_master_company", 3, 50, 20, 0, 0, nil, 0)
+			end
+		end
+
+		-- Force build additional generators in late game if we can with enough requisition and when low on power
+                local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+                local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+                if iReq > 400 and iReq/iPow > 1.6 then
+
+                	-- Check if a plan exists
+                	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("Generator"))
+                    	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+                       		return
+                    	end
+
+             		-- Check if any generators are in production
+                    	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+                        	-- Check building ID
+                        	if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+                            		return
+                        	end
+                    	end
+
+             		-- Build a Generator
+                    	local tBuildType = CpuBuildType()
+                    	tBuildType.btype = CpuPrerequisites.BT_Building
+                    	tBuildType.name = self:GetBuildingName("Generator")
+                    	if (self:TryBuild( tBuildType )) then
+               			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("darkangels_turret_bolter_no_limit", 4, 3, 300, 200, 0, 0)
+	end
+
+	-- Compute tier 4 researches
+	if (self.tierLevel >= 4) then
+
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+		-- Compute HQ Tier2 Addons for future HQs
+		if (self:GetBuildingCountByName("darkangels_hq") > 1 and (iPower >= 500 and iRequisition >= 500)) then
+			self:DynamicAddon("darkangels_hq_addon_1", 100, 4, 300, 125, 0, 0, nil, nil, false)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("darkangels_turret_bolter_no_limit", 10, 4, 400, 300, 0, 0)
+	end
+
+	-- Special Hero pattern (3rd Company branch)
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	if (cpu_manager.cpu_player:IsResearchComplete("darkangels_advanced_weapons") and iRequisition >= 400 and iPower >= 400) then
+
+		-- Build Chaplain Asmodai
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = "da_squad_hero_asmodai_chaplain"
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+
+		-- Build Master Azrael
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = "da_squad_hero_azrael_master"
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+
+		-- Build Librarian Ezekiel
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = "da_squad_hero_ezekiel_librarian"
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+	end
+
+	-- After all is done, attempt building the optional turrets! And... Make some delays :)
+	if math.random(1, 10) < 5 then
+		local total_trts = self:GetBuildingCountByName("darkangels_turret_bolter_spec", true)
+		self:DynamicBuild("darkangels_turret_bolter_spec", total_trts+1, 2, 200, 100, 0, 0)
+	end
+
+	-- Restrict dynamic builds to hard difficulty or higher
+	if (CpuManager.AISettings.bMultiBuildings) then
+	
+		-- Dynamic buildings
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinPower, MinSquadCap, MinSupportCap
+		self:DynamicBuild("darkangels_barracks", 2, 2, 800, 0, 0, 0)
+		self:DynamicBuild("darkangels_vehicle_building", 2, 2, 200, 600, 0, 0)
+		self:DynamicBuild("darkangels_barracks", 3, 3, 2000, 0, 0, 0)
+		self:DynamicBuild("darkangels_vehicle_building", 3, 3, 500, 1500, 0, 0)
+		self:DynamicBuild("darkangels_vault", 3, 4, 300, 900, 0, 0)
+		self:DynamicBuild("darkangels_hq", 2, 3, 700, 300, 0, 0)
+		self:DynamicBuild("darkangels_hq", 3, 4, 1000, 600, 0, 0)
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function DarkAngelsBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function DarkAngelsBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+-- Arkhan 01.2006: Method to check if force tech should be computed
+function DarkAngelsBuildBaseStrategy:ForceTech()
+
+	-- Check time
+	if (g_iGMT < 60 * CpuManager.ForceTech.StartTier1) then
+		return false
+	end
+	
+	-- Check ressources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	-- Check tier
+	local iTierLevel = self:GetTierLevel()
+	if (iTierLevel == 1) then
+	
+		-- Check resources
+		if (iRequisition > 600 and iPower > 200) then
+			return false
+		end
+		return not self.m_bHQAddon1
+		
+	elseif (iTierLevel == 2) then
+
+		-- Check current build program
+		if (self.m_iCurrentBuildProgram == 2) then
+
+			-- Check build channel for vault building
+			if (self:GetBuildingCountByName("darkangels_vault", false) < 1) then
+				return true
+			end		
+		else
+			-- Check build channel for machine cult
+			if (self:GetBuildingCountByName("darkangels_vehicle_building", false) < 1) then
+				return true
+			end
+		end
+		
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier2 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+		
+	elseif (iTierLevel == 3) then	
+
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+	end
+	return false
+end
+
+-- Arkhan 03.2006: Return placement type for buildings
+function DarkAngelsBuildBaseStrategy:GetPlacementType(iBuildingID)
+	
+	-- Check building
+	if (cpu_manager:IsHQ(iBuildingID)) then
+		local count = self:GetBuildingCountByName("darkangels_hq", false)
+		local friend = cpu_manager:FindClosestFriendPlayer()
+		if friend == nil then
+			-- Lone Player
+			if count == 0 and not cpu_manager:HQThreat() then
+				return "HQ"
+			else
+				return "Safeplace"
+			end
+		else
+			-- Has allies
+			if count > 0 or cpu_manager:HQThreat() then
+				return "HQ"
+			else
+				return "Safeplace"
+			end
+		end
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_barracks") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_vehicle_building") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_vault")) then
+		return "Military"
+	elseif (cpu_manager:IsGenerator(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_armoury"))  then
+		return "BaseBack"
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_orbital_relay") then
+		if self:GetBuildingCountByName("darkangels_orbital_relay", false) == 0 then
+			return "BaseBack"
+		else
+			return "Military"
+		end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_ravenwing_building") then
+		if self:GetBuildingCountByName("darkangels_ravenwing_building", false) == 0 then
+			return "BaseBack"
+		else
+			return "Military"
+		end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_hero_building") then
+		if self:GetBuildingCountByName("darkangels_hero_building", false) == 0 then
+			return "BaseBack"
+		else
+			return "Military"
+		end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_turret_bolter_spec")
+	or iBuildingID == cpu_manager.stats:GetBuildingID("darkangels_turret_bolter_no_limit")
+	or cpu_manager:IsTurret(iBuildingID) then
+		return "Front2"
+	end
+	return "Basic"
+end
+-- Arkhan 03.2006: Inherited method to modify squad demand
+function DarkAngelsBuildBaseStrategy:ModifySquadDemand(iUnitID)
+
+	-- No more apothecaries then squads 
+	if (iUnitID == cpu_manager.stats:GetSquadID("da_squad_apothecary") or
+	    	iUnitID == cpu_manager.stats:GetSquadID("da_squad_ravenwing_apothecary") or
+		iUnitID == cpu_manager.stats:GetSquadID("da_squad_apothecary_terminator") or
+		iUnitID == cpu_manager.stats:GetSquadID("da_squad_apothecary_battle_company")) then
+
+		-- Check number of attachable squads 
+		local apoth_attach = function ( squad_ai )
+			return (squad_ai:GetTactic():GetUnitStrength() >= 250 and squad_ai:CanReceiveAttachment())
+		end
+		local num_attach = self:CountSquads("da_squad_scout", apoth_attach) +
+				   self:CountSquads("da_squad_tactical", apoth_attach) +
+				   self:CountSquads("da_squad_devastator", apoth_attach) +
+				   self:CountSquads("da_squad_ravenwing_bike", apoth_attach) + 
+				   self:CountSquads("da_squad_ravenwing_attack_bike", apoth_attach) + 
+				   self:CountSquads("da_squad_veteran_tactical", apoth_attach) + 
+				   self:CountSquads("da_squad_veteran_assault", apoth_attach) + 
+				   self:CountSquads("da_squad_deathwing_terminator", apoth_attach) + 
+				   self:CountSquads("da_squad_deathwing_terminator_assault", apoth_attach) 
+
+ 		-- Check apothecary count
+		local num_apothecary = self:CountSquads("da_squad_apothecary")
+		local num_apothecary_bike = self:CountSquads("da_squad_ravenwing_apothecary")
+		local num_apothecary_terminator = self:CountSquads("da_squad_apothecary_terminator")
+		local num_apothecary_company = self:CountSquads("da_squad_apothecary_battle_company")
+
+		if (num_apothecary >= num_attach) or (num_apothecary_bike >= num_attach) or (num_apothecary_terminator >= num_attach) or (num_apothecary_company >= num_attach) then
+			return 0
+		end	
+	end
+
+	-- No more banners then squads 
+	if (iUnitID == cpu_manager.stats:GetSquadID("da_squad_banner_bearer") or
+	    	iUnitID == cpu_manager.stats:GetSquadID("da_squad_banner_bearer_terminator") or
+		iUnitID == cpu_manager.stats:GetSquadID("da_squad_ravenwing_banner_bearer")) then
+		
+		-- Check number of attachable squads 
+		local banner_attach = function ( squad_ai )
+			return (squad_ai:GetTactic():GetUnitStrength() >= 250 and squad_ai:CanReceiveAttachment())
+		end
+		local num_attach = self:CountSquads("da_squad_scout", banner_attach) +
+				   self:CountSquads("da_squad_tactical", banner_attach) +
+				   self:CountSquads("da_squad_devastator", banner_attach) +
+				   self:CountSquads("da_squad_ravenwing_bike", banner_attach) +
+				   self:CountSquads("da_squad_ravenwing_attack_bike", banner_attach) + 
+				   self:CountSquads("da_squad_veteran_tactical", banner_attach) + 
+				   self:CountSquads("da_squad_veteran_assault", banner_attach) +
+ 				   self:CountSquads("da_squad_deathwing_terminator", banner_attach) + 
+				   self:CountSquads("da_squad_deathwing_terminator_assault", banner_attach)
+ 
+ 		-- Check banner count
+		local num_standard_banner = self:CountSquads("da_squad_banner_bearer")
+		local num_terminator_banner = self:CountSquads("da_squad_banner_bearer_terminator")
+		local num_bike_banner = self:CountSquads("da_squad_ravenwing_banner_bearer")
+		if (2 * num_standard_banner >= num_attach) or (2 * num_terminator_banner >= num_attach) or (2 * num_bike_banner >= num_attach) then
+			return 0
+		end	
+	end
+	
+	-- Only build rhinos if we've full support cap
+	if (iUnitID == cpu_manager.stats:GetSquadID("da_squad_rhino")) then
+		
+		-- Check army strength
+		if (cpu_manager:GetArmyStrength() < 4000) then
+			return 0
+		end
+	end
+
+	return BuildBaseStrategy.ModifySquadDemand(self, iUnitID)
+end
+
+-- Arkhan 11.2006: Virtual method for checking out relic units
+function DarkAngelsBuildBaseStrategy:RelicRequired(sName)
+
+	-- Check name
+	if (sName == "da_squad_hero_sammael_ravenwing") then
+		return true
+	elseif (sName == "da_squad_thunderhawk") then
+		return true
+	elseif (sName == "da_squad_hero_belial_deathwing") then
+		return true
+	elseif (sName == "da_squad_hero_asmodai_chaplain") then
+		return true
+	elseif (sName == "da_squad_hero_ezekiel_librarian") then
+		return true
+	elseif (sName == "da_squad_hero_azrael_master") then
+		return true
+	elseif (sName == "da_squad_lion_el_johnson_primarch") then
+		return true
+	elseif (sName == "da_squad_lion_el_johnson_primarch_dw_rw") then
+		return true
+	elseif (sName == "da_squad_company_land_raider_ares") then
+		return true
+	elseif (sName == "da_squad_deathwing_land_raider_solemnus") then
+		return true
+	elseif (sName == "da_squad_knight_vortigan") then
+		return true
+	end
+	return false
+end

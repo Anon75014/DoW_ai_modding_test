@@ -1,0 +1,112 @@
+----------------------------------------
+-- File: 'krieghwtmortartactic.ai'
+-- Edited by Thudmeizer @ 26.04.2022
+
+class 'KriegHeavyWeaponsTeamMortarTactic' (KriegInfantryTactic)
+
+KriegHeavyWeaponsTeamMortar = {}
+
+function KriegHeavyWeaponsTeamMortarTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Heavy Weapons Team Mortar Tactic")
+	
+	-- Squad is transportable and able to occupy bunkers
+	self.m_iTransportable = 1
+	self.m_bBunkerSquad = true
+end
+
+function KriegGrenadierTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegHeavyWeaponsTeamMortar.entrench_id == nil) then
+		KriegHeavyWeaponsTeamMortar.entrench_id = cpu_manager.stats:GetAbilityID( "krieg_hwt_entrench" )
+	end
+
+	if (KriegHeavyWeaponsTeamMortar.gas_shell == nil) then
+		KriegHeavyWeaponsTeamMortar.gas_shell = cpu_manager.stats:GetAbilityID( "krieg_mortar_gas_shells_ability" )
+	end
+
+	if (KriegHeavyWeaponsTeamMortar.gas_recharge == nil) then
+		KriegHeavyWeaponsTeamMortar.gas_recharge = cpu_manager.stats:GetAbilityID( "krieg_mortar_rearmament_gas_shells" )
+	end
+
+	if (KriegHeavyWeaponsTeamMortar.smoke_recharge == nil) then
+		KriegHeavyWeaponsTeamMortar.smoke_recharge = cpu_manager.stats:GetAbilityID( "krieg_mortar_rearmament_smoke_shells" )
+	end
+
+	if (KriegHeavyWeaponsTeamMortar.smoke_shell == nil) then
+		KriegHeavyWeaponsTeamMortar.smoke_shell = cpu_manager.stats:GetAbilityID( "krieg_mortar_smoke_shells_ability" )
+	end
+end
+
+function KriegHeavyWeaponsTeamMortarTactic:DoAbilities()
+
+	-- Check if we can use Gas Shells
+	if (self.squad_ai:CanDoAbility(KriegHeavyWeaponsTeamMortar.gas_shell)) then
+	
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), 20, 8)
+		if (oSquad ~= nil) then
+			
+			-- Only try to use Gas Shells if enemy infantry is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbility(KriegHeavyWeaponsTeamMortar.gas_shell)
+				--print("Using Mortar Team Gas Shell ability for player "..tostring(cpu_manager.player_id).."")
+			end
+		end
+	end
+
+	-- Recharge Gas Shells when possible
+	if (self.squad_ai:CanDoAbility(KriegHeavyWeaponsTeamMortar.gas_recharge)) then
+		self.squad_ai:DoSpecialAbility(KriegHeavyWeaponsTeamMortar.gas_recharge)
+	end
+
+	-- Check if we can use Smoke Shells
+	if (self.squad_ai:CanDoAbility(KriegHeavyWeaponsTeamMortar.smoke_shell)) then
+	
+		local oSquad = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 20, 4)
+		if (oSquad ~= nil) then
+			
+			-- Only try to use Smoke Shells if enemy units are attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbility(KriegHeavyWeaponsTeamMortar.smoke_shell)
+				--print("Using Mortar Team Smoke Shell ability for player "..tostring(cpu_manager.player_id).."")
+			end
+		end
+	end
+
+	-- Recharge Smoke Shells when possible
+	if (self.squad_ai:CanDoAbility(KriegHeavyWeaponsTeamMortar.smoke_recharge)) then
+		self.squad_ai:DoSpecialAbility(KriegHeavyWeaponsTeamMortar.smoke_recharge)
+	end
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5) then
+
+		-- Check if we can Dig In
+		if (self.squad_ai:CanDoAbility(KriegHeavyWeaponsTeamMortar.entrench_id)) then
+	
+			local oSquad = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 20, 1)
+			if (oSquad ~= nil) then
+			
+				-- Only try to Dig In if enemy unit is attacking
+				if (oSquad:IsAttacking()) then
+					self.squad_ai:DoSpecialAbility(KriegHeavyWeaponsTeamMortar.entrench_id)
+					--print("Using Mortar Team Entrench ability for player "..tostring(cpu_manager.player_id).."")
+				end
+			end
+		end
+	end
+end
+
+function KriegHeavyWeaponsTeamMortarTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end
+

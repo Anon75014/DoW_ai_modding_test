@@ -1,0 +1,108 @@
+----------------------------------------
+-- File: 'renegades_tengu_tactic.ai'
+-- Edited by Thudmeizer @ 27.12.2023
+
+class 'Renegades_Tengu_Tactic' (Renegades_Infantry_Tactic)
+
+Tengu = {}
+
+function Renegades_Tengu_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Tengu Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+
+	self.timedDirectSpawnAbility = Timer( Renegades_Tengu_Tactic.DoDirectSpawnAbility, self, 5 )
+end
+
+function Renegades_Tengu_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Tengu_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Tengu_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Tengu.shot_id == nil) then
+		Tengu.shot_id = cpu_manager.stats:GetAbilityID( "renegade_guard_execution_shot_real" )
+	end
+	if (Tengu.bombardment_id == nil) then
+		Tengu.bombardment_id = cpu_manager.stats:GetAbilityID( "renegade_guard_thunder_bombardment" )
+	end
+	if (Tengu.mortar_id == nil) then
+		Tengu.mortar_id = cpu_manager.stats:GetAbilityID( "renegade_guard_knee_mortar_switch" )
+	end
+end
+
+function Renegades_Tengu_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Try to Execute!
+		if self.squad_ai:CanDoAbility(Tengu.shot_id) then
+			if Ability.DoAbilityTarget(self.squad_ai, Tengu.shot_id, Ability.Filters.CloseSquadEnemy, 4)
+			or Ability.DoAbilityTarget(self.squad_ai, Tengu.shot_id, Ability.Filters.CloseMonsterEnemy, 2) then
+				return
+			end
+		end
+		-- Try to use thunder bombardment
+		if self.squad_ai:CanDoAbility(Tengu.bombardment_id) then
+			if Ability.DoAbilityPos(self.squad_ai, Tengu.bombardment_id, Ability.Filters.CloseEnemy, 24)
+			or Ability.DoAbilityPos(self.squad_ai, Tengu.bombardment_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+		-- Try to use mortar switch
+		if self.squad_ai:CanDoAbility(Tengu.mortar_id) then
+			if Ability.DoAbilityArea(self.squad_ai, Tengu.mortar_id, Ability.Filters.CloseInfantryEnemy, 20, 8)
+			or Ability.DoAbilityArea(self.squad_ai, Tengu.mortar_id, Ability.Filters.CloseMonsterEnemy, 20, 4) then
+				return
+			end
+		end
+	end
+
+	-- Try to spawn an Assassin
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		Renegades_Tengu_Tactic.DoDirectSpawnAbility(self)
+	end
+end
+
+function Renegades_Tengu_Tactic:DoDirectSpawnAbility()
+
+	-- Spawn Assassin in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function Renegades_Tengu_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

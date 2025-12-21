@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'firestormtactic.ai'
+-- Created by Gambit		@ 09.04.2022
+
+class 'FirestormTactic' (EldarVehicleTactic)
+
+function FirestormTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firestorm Grav Tank Tactic")
+	
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 1
+end
+
+
+function FirestormTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

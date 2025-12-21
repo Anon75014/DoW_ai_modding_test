@@ -1,0 +1,375 @@
+----------------------------------------
+-- File: 'enclavestorchstartactic.ai'
+-- Edited by CaptJoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer			@ 07.03.2024
+
+class 'EnclavesTorchstarTactic' (EnclavesInfantryTactic)
+
+EnclavesTorchstar = {}
+
+function EnclavesTorchstarTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Torchstar Tactic")
+
+	self:InitAbilities()
+end
+
+-- Enclaves Torchstar is allowed to retreat even directly after a jump
+function EnclavesTorchstarTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function EnclavesTorchstarTactic:IsAttacker()	
+	return self:IsCommanderAttacker()
+end
+
+function EnclavesTorchstarTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function EnclavesTorchstarTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function EnclavesTorchstarTactic:CanOnlyDecap()
+
+    	local sSquadName = self.squad_ai:GetSquadName()
+    	if (sSquadName == "enclaves_squad_torchstar") then
+		return true
+	end
+	return false
+end
+
+function EnclavesTorchstarTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesTorchstar.summon_id == nil) then
+		EnclavesTorchstar.summon_id = cpu_manager.stats:GetAbilityID( "enclaves_beacon_summon" )	
+	end
+
+	if (EnclavesTorchstar.summon_ktgm == nil) then
+		EnclavesTorchstar.summon_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon" )	
+	end
+
+	if (EnclavesTorchstar.summon1_ktgm == nil) then
+		EnclavesTorchstar.summon1_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon1" )	
+	end
+
+	if (EnclavesTorchstar.summon2_ktgm == nil) then
+		EnclavesTorchstar.summon2_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon2" )	
+	end
+
+	if (EnclavesTorchstar.summon3_ktgm == nil) then
+		EnclavesTorchstar.summon3_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon3" )	
+	end
+
+	if (EnclavesTorchstar.burn_id == nil) then
+		EnclavesTorchstar.burn_id = cpu_manager.stats:GetAbilityID( "enclaves_let_it_burn" )
+	end
+
+	if (EnclavesTorchstar.burn_ktgm == nil) then
+		EnclavesTorchstar.burn_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_let_it_burn" )
+	end
+
+	if (EnclavesTorchstar.markerlight_id == nil) then
+		EnclavesTorchstar.markerlight_id = cpu_manager.stats:GetAbilityID( "enclaves_mark_squad_drone" )	
+	end
+
+	if (EnclavesTorchstar.markerlight_ktgm == nil) then
+		EnclavesTorchstar.markerlight_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_mark_squad_drone" )	
+	end
+--[[
+	if (EnclavesTorchstar.marksquad_id == nil) then
+		EnclavesTorchstar.marksquad_id = cpu_manager.stats:GetAbilityID( "enclaves_mark_squad" )	
+	end
+]]
+end
+
+function EnclavesTorchstarTactic:DoAbilities()
+
+	-- Try to use 'Let it Burn'
+	if (self.squad_ai:CanDoAbility(EnclavesTorchstar.burn_id)) then
+		Ability.DoAbilityTarget(self.squad_ai, EnclavesTorchstar.burn_id, Ability.Filters.CloseEnemy, 6)
+	end
+
+	-- Try to use 'Let it Burn' -- Killteam
+	if (self.squad_ai:CanDoAbility(EnclavesTorchstar.burn_ktgm)) then 
+
+		-- Search for a nearby enemy
+		local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.burn_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 4)
+		if (oUnit ~= nil) then
+			--print("Using Let It Burn Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.burn_ktgm, oUnit:GetSquad())
+		end
+	end
+
+	-- Check if we can use markerlight squad ability while in combat
+	if (self.squad_ai:CanDoAbility(EnclavesTorchstar.markerlight_id)) then
+
+		if (self.squad_ai:IsInCombat()) then
+
+			-- Get closest squad in range
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.markerlight_id)
+			local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oSquad ~= nil) then
+		
+				-- Get stats
+				local oStats = oSquad:GetStats()
+				if (oStats ~= nil) then
+			
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+						eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+						eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+						-- Use mark ability on squad
+						self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.markerlight_id, oSquad:GetSquad())
+					end
+				end
+			end	
+		end
+	end
+
+	-- Check if we can use markerlight squad ability while in combat -- Killteam
+	if (self.squad_ai:CanDoAbility(EnclavesTorchstar.markerlight_ktgm)) then
+
+		if (self.squad_ai:IsInCombat()) then
+
+			-- Get closest squad in range
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.markerlight_ktgm)
+			local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oSquad ~= nil) then
+		
+				-- Get stats
+				local oStats = oSquad:GetStats()
+				if (oStats ~= nil) then
+			
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+						eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+						eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+						-- Use mark ability on squad
+						self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.markerlight_ktgm, oSquad:GetSquad())
+					end
+				end
+			end	
+		end
+	end
+--[[
+	-- Check if we can use mark squad ability while in combat
+	if (self.squad_ai:CanDoAbility(EnclavesTorchstar.marksquad_id)) then
+	
+		if (self.squad_ai:IsInCombat()) then
+
+			-- Get closest squad in range
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.marksquad_id)
+			local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oSquad ~= nil) then
+		
+				-- Get stats
+				local oStats = oSquad:GetStats()
+				if (oStats ~= nil) then
+			
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+						eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+						eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+						-- Use mark ability on squad
+						self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.marksquad_id, oSquad:GetSquad())
+					end
+				end
+			end	
+		end
+	end
+]]
+	-- Try to summon an Orca if we have the needed resources 
+      	if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 350 then
+
+		-- Try to summon an Orca
+    		if self.squad_ai:CanDoAbility(EnclavesTorchstar.summon_id) then
+
+			-- Condition 1: Search for a nearby hurt squad
+        		local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.summon_id)
+        		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+        		if (oUnit ~= nil) then
+				--print("Using Torchstar Close Hurt Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.summon_id, oUnit:GetSquad()) then
+                			return
+            			end
+        		end
+
+        		-- Condition 2: Check for low Power (lower than 250, for example)
+        		if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) < 250 then
+				--print("Using Torchstar Low Power Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+       			end
+
+        		-- Condition 3: Random calling, just for the sake of creating new squads
+        		if math.random(1,30) == 1 then
+				--print("Using Torchstar Random Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+			end
+        	end
+    	end
+
+	-- Try to summon an Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesTorchstar.summon_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.summon_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Torchstar Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.summon_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Torchstar Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Torchstar Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 2nd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesTorchstar.summon1_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.summon1_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Torchstar Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.summon1_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Torchstar Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon1_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Torchstar Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon1_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 3rd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesTorchstar.summon2_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.summon2_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Torchstar Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.summon2_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Torchstar Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon2_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Torchstar Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon2_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 4th stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesTorchstar.summon3_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesTorchstar.summon3_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Torchstar Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesTorchstar.summon3_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Torchstar Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon3_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Torchstar Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesTorchstar.summon3_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end
+
+function EnclavesTorchstarTactic:Upgrade()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+end
+
+function EnclavesTorchstarTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+		return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

@@ -1,0 +1,61 @@
+----------------------------------------
+-- File: 'lemanrusstactic.ai'
+-- Edited by Thudmeizer @ 02.11.2023
+
+class 'LemanRussTactic' (ThirteenthcomInfantryTactic)
+
+LemanRuss = {}
+
+function LemanRussTactic:__init( squad_ai ) super( squad_ai )
+
+	self.timedDirectSpawnAbility = Timer( LemanRussTactic.DoDirectSpawnAbility, self, 5 )
+
+	self:SetName("Leman Russ Tactic")
+end
+
+function LemanRussTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function LemanRussTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function LemanRussTactic:InitAbilities()
+
+end
+
+function LemanRussTactic:DoAbilities()
+
+	-- Try to spawn Leman Russ Exterminator tanks
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		LemanRussTactic.DoDirectSpawnAbility(self)
+	end
+end
+
+function LemanRussTactic:DoDirectSpawnAbility()
+
+	-- Spawn Leman Russ Exterminator tanks in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function LemanRussTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+
+

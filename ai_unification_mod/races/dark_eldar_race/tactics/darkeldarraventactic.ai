@@ -1,0 +1,37 @@
+----------------------------------------
+-- File: 'darkeldarraventactic.ai'
+-- Edited by Thudmeizer @ 23.10.2008
+
+class 'DarkEldarRavenTactic' (DarkEldarVehicleTactic)
+
+DarkEldarRaven = {}
+
+function DarkEldarRavenTactic:__init( squad_ai ) super( squad_ai )
+	
+	self:SetName("Dark Eldar Raven Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function DarkEldarRavenTactic:InitAbilities()
+
+	if (DarkEldarRaven.shortcircuit_id == nil) then
+		DarkEldarRaven.shortcircuit_id = cpu_manager.stats:GetAbilityID( "dark_eldar_short_circuit" )	
+	end
+end
+
+function DarkEldarRavenTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Send pulse which stuns enemy vehicle/building
+		if self.squad_ai:CanDoAbility(DarkEldarRaven.shortcircuit_id) then
+			Ability.DoAbilityTarget( self.squad_ai, DarkEldarRaven.shortcircuit_id, Ability.Filters.CloseVehicleEnemy, 1 ) 
+			Ability.DoAbilityTargetEntity( self.squad_ai, DarkEldarRaven.shortcircuit_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

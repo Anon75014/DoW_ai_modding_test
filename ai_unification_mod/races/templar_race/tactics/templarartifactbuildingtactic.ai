@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'templarartifactbuildingtactic.ai'
+-- Edited by Thudmeizer		@ 15.04.2008
+
+class 'TemplarArtifactBuildingTactic' (BaseTactic)
+
+function TemplarArtifactBuildingTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Templar Artifact Building Tactic")
+end
+
+function TemplarArtifactBuildingTactic:CanDeepStrikeTroops()
+	return true
+end

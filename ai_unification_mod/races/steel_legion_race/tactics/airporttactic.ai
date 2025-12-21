@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'airporttactic.ai'
+-- Edited by Thudmeizer		@ 23.02.2009
+
+class 'AirportTactic' (BaseTactic)
+
+function AirportTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Airport Tactic")
+
+	self.m_iRelayID = cpu_manager.stats:GetBuildingID("steel_legion_relay_station")
+end
+
+function AirportTactic:CanDeepStrikeTroops()
+	return (cpu_manager.player_stats:GetNumBasesByBPID(self.m_iRelayID, true) > 0)
+end

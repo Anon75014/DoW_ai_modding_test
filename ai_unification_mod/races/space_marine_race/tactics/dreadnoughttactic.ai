@@ -1,0 +1,30 @@
+----------------------------------------
+-- File: 'dreadnoughttactic.ai'
+-- Created by Arkhan		@ 18.09.2023
+
+class 'DreadnoughtTactic' (SpaceMarineVehicleTactic)
+
+function DreadnoughtTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dreadnought Tactic")
+
+	self.Chosen_Upgrade = math.random( 0, 10 )	  -- Choose whether to upgrade hardpoints or not
+	self.lastUpgradeTry = g_iGMT
+end
+
+-- Randomly don't upgrade
+function DreadnoughtTactic:Upgrade()
+
+	-- Check to Upgrade every 30+ secs
+	if self.Chosen_Upgrade < 9 and g_iGMT > self.lastUpgradeTry + 30 then
+		self.lastUpgradeTry = g_iGMT
+
+		-- Choose not to upgrade any hardpoints
+		return false
+
+	elseif self.Chosen_Upgrade > 8 then
+		-- Attempt to upgrade hardpoints based on best class type
+		local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+		self.squad_ai:DoBestUpgrade( class_type )
+	end
+end

@@ -1,0 +1,1080 @@
+----------------------------------------
+-- File: 'nightlordsunitstats.ai'
+-- Edited by Thudmeizer	@ 25.05.2025
+
+-- Skirmish
+UnitStrengths.night_lords_squad_serf = 0
+UnitStrengths.night_lords_squad_cyclops = 20
+UnitStrengths.night_lords_squad_raptor_scout = 45
+UnitStrengths.night_lords_squad_raptor_scout_nocap = 45
+UnitStrengths.night_lords_squad_fury = 20
+UnitStrengths.night_lords_squad_marine = 55
+UnitStrengths.night_lords_squad_marine_nocap = 55
+UnitStrengths.night_lords_squad_raptor = 60
+UnitStrengths.night_lords_squad_night_sister = 65
+UnitStrengths.night_lords_squad_havoc = 70
+UnitStrengths.night_lords_squad_chosen_raptor = 85
+UnitStrengths.night_lords_squad_possessed_marine = 80
+UnitStrengths.night_lords_squad_terminator_assault = 105
+UnitStrengths.night_lords_squad_obliterator = 105
+UnitStrengths.night_lords_squad_sorcerer = 223
+UnitStrengths.night_lords_squad_talos = 250
+UnitStrengths.night_lords_squad_talos_future = 0
+UnitStrengths.night_lords_squad_mawdrym_llansahai = 250
+UnitStrengths.night_lords_squad_talonmaster = 300
+UnitStrengths.night_lords_squad_lord = 270
+UnitStrengths.night_lords_squad_rhino = 160
+UnitStrengths.night_lords_squad_razorback = 180
+UnitStrengths.night_lords_squad_vindicator = 200
+UnitStrengths.night_lords_squad_whirlwind = 490
+UnitStrengths.night_lords_squad_hell_talon = 260
+UnitStrengths.night_lords_squad_hell_blade = 250
+UnitStrengths.night_lords_squad_dreadnought = 470
+UnitStrengths.night_lords_squad_dreadnought_nocap = 470
+UnitStrengths.night_lords_squad_predator = 480
+UnitStrengths.night_lords_squad_predator_no_cap = 480
+UnitStrengths.night_lords_squad_land_raider = 1000
+UnitStrengths.night_lords_squad_land_raider_no_cap = 1000
+UnitStrengths.night_lords_squad_kratos = 1000
+UnitStrengths.night_lords_squad_daemon_prince = 800
+UnitStrengths.night_lords_squad_imperial_knight_titan = 1000
+UnitStrengths.night_lords_squad_reaver_titan = 1500
+
+LeaderStrengths.night_lords_squad_raptor_scout = 75
+LeaderStrengths.night_lords_squad_marine = 75
+LeaderStrengths.night_lords_squad_raptor = 75
+LeaderStrengths.night_lords_squad_chosen_raptor = 75
+LeaderStrengths.night_lords_squad_night_sister = 75
+LeaderStrengths.night_lords_squad_havoc = 75
+LeaderStrengths.night_lords_squad_possessed_marine = 75
+LeaderStrengths.night_lords_squad_terminator_assault = 75
+
+Attachments.night_lords_squad_raptor_scout = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_raptor_scout_nocap = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_marine = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_marine_nocap = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_raptor = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_night_sister = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_havoc = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_chosen_raptor = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+Attachments.night_lords_squad_obliterator = { "night_lords_squad_lord", "night_lords_squad_talonmaster", "night_lords_squad_talos", "night_lords_squad_mawdrym_llansahai", "night_lords_squad_sorcerer" }
+
+NightLordsUnitStats =
+{
+	race = "night_lords_race",
+	{
+		name = "Serf",
+		sbp_name = "night_lords_squad_serf",
+		ebp_name = "night_lords_serf",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Raptor Scout",
+		sbp_name = "night_lords_squad_raptor_scout",
+		ebp_name = "night_lords_raptor_scout",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 2,
+		potential =
+		{
+			{
+				name = "night_lords_bolt_pistol_raptor_scout",
+				effectiveness = GenerateUnitEffectiveness(3.2,4.0,4.2,4.5,4.1,1.6,0.0,0.0,4.1,0.0,3.3,2.9,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_raptor_scout",
+				effectiveness = GenerateUnitEffectiveness(3.3,4.1,4.3,4.6,4.2,1.7,2.0,2.5,4.2,1.3,3.4,3.2,2.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_chainsword_raptor_scout",
+				effectiveness = GenerateUnitEffectiveness(2.1,3.6,5.1,5.0,4.6,2.4,0.7,0.0,4.3,0.0,2.2,4.0,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_chainsword_raptor_scout_improved",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.0,4.2,4.5,4.5,1.3,2.4,2.0,4.6,1.0,3.7,3.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Raptor Scout Survival",
+		sbp_name = "night_lords_squad_raptor_scout_nocap",
+		ebp_name = "night_lords_raptor_scout",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 2,
+		potential =
+		{
+			{
+				name = "night_lords_bolt_pistol_raptor_scout",
+				effectiveness = GenerateUnitEffectiveness(3.2,4.0,4.2,4.5,4.1,1.6,0.0,0.0,4.1,0.0,3.3,2.9,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_raptor_scout",
+				effectiveness = GenerateUnitEffectiveness(3.3,4.1,4.3,4.6,4.2,1.7,2.0,2.5,4.2,1.3,3.4,3.2,2.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_chainsword_raptor_scout",
+				effectiveness = GenerateUnitEffectiveness(2.1,3.6,5.1,5.0,4.6,2.4,0.7,0.0,4.3,0.0,2.2,4.0,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_chainsword_raptor_scout_improved",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.0,4.2,4.5,4.5,1.3,2.4,2.0,4.6,1.0,3.7,3.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Fury",
+		sbp_name = "night_lords_squad_fury",
+		ebp_name = "night_lords_fury",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 2,
+		potential =
+		{
+			{
+				name = "night_lords_fury_melee",
+				effectiveness = GenerateUnitEffectiveness(2.1,3.6,5.1,5.0,4.6,2.4,0.7,0.0,4.3,0.0,2.2,4.0,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Marine",
+		sbp_name = "night_lords_squad_marine",
+		ebp_name = "night_lords_marine_bolter",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "night_lords_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.9,4.4,4.1,4.2,4.1,1.5,0.0,0.0,4.1,0.0,3.0,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_raptor",
+				effectiveness = GenerateUnitEffectiveness(6.5,6.1,5.9,5.9,5.7,3.4,2.4,0.0,7.4,7.0,4.2,4.3,2.6,1.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_plasma_gun_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,5.9,7.1,4.9,3.8,2.2,3.1,2.2,7.5,7.0,4.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_melta_gun_raptor",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.3,7.1,2.9,4.8,4.2,3.1,2.2,6.5,0.0,7.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.4,4.0,4.1,4.1,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Marine Survival",
+		sbp_name = "night_lords_squad_marine_nocap",
+		ebp_name = "night_lords_marine_bolter",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "night_lords_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.9,4.4,4.1,4.2,4.1,1.5,0.0,0.0,4.1,0.0,3.0,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_raptor",
+				effectiveness = GenerateUnitEffectiveness(6.5,6.1,5.9,5.9,5.7,3.4,2.4,0.0,7.4,7.0,4.2,4.3,2.6,1.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_plasma_gun_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,5.9,7.1,4.9,3.8,2.2,3.1,2.2,7.5,7.0,4.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_melta_gun_raptor",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.3,7.1,2.9,4.8,4.2,3.1,2.2,6.5,0.0,7.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.4,4.0,4.1,4.1,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Raptor",
+		sbp_name = "night_lords_squad_raptor",
+		ebp_name = "night_lords_raptor",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 4,
+		potential =
+		{
+			{
+				name = "night_lords_bolt_pistol_raptor",
+				effectiveness = GenerateUnitEffectiveness(3.2,4.0,4.2,4.5,4.1,1.6,0.0,0.0,4.1,0.0,3.3,2.9,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_raptor",
+				effectiveness = GenerateUnitEffectiveness(6.5,6.1,5.9,5.9,5.7,3.4,2.4,0.0,7.4,7.0,4.2,4.3,2.6,1.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_plasma_gun_raptor",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,5.9,7.1,4.9,3.8,2.2,3.1,2.2,7.5,7.0,4.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_melta_gun_raptor",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.3,7.1,2.9,4.8,4.2,3.1,2.2,6.5,0.0,7.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_chainsword_raptor",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,2.3,2.3,2.6,2.4,0.7,0.0,2.3,0.0,2.2,4.0,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_power_sword_raptor",
+				effectiveness = GenerateUnitEffectiveness(5.1,2.6,5.3,2.3,4.6,2.2,0.7,0.0,5.3,0.0,4.2,4.0,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_power_claw_raptor",
+				effectiveness = GenerateUnitEffectiveness(2.1,5.6,2.3,5.3,2.6,2.2,0.7,0.0,2.3,5.0,4.2,4.0,2.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Night Sister",
+		sbp_name = "night_lords_squad_night_sister",
+		ebp_name = "night_lords_night_sister",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 3.7,
+		potential =
+		{
+			{
+				name = "night_lords_sister_bolter",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.9,4.3,4.4,4.2,1.5,1.0,0.0,4.0,0.0,3.3,2.9,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_sister_flamer",
+				effectiveness = GenerateUnitEffectiveness(5.4,6.2,3.0,5.8,5.0,0.4,0.0,0.0,4.3,3.2,4.0,2.5,1.6,0.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_sister_melta",
+				effectiveness = GenerateUnitEffectiveness(2.4,2.4,0.6,2.4,5.7,6.0,5.9,6.6,2.4,2.9,3.2,8.8,4.7,3.4,0.0,6.5,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_sister_knife",
+				effectiveness = GenerateUnitEffectiveness(1.8,2.4,0.3,1.8,1.8,0.0,0.0,0.0,1.8,0.3,1.4,1.7,0.4,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Havoc",
+		sbp_name = "night_lords_squad_havoc",
+		ebp_name = "night_lords_havoc",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "night_lords_heavy_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.9,4.4,4.1,4.2,4.1,1.5,0.0,0.0,4.1,0.0,3.0,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_autocannon_havoc",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,7.3,7.1,3.9,3.8,2.2,3.1,2.2,6.5,3.0,4.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_missile_launcher_havoc",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.3,5.1,5.8,5.9,2.2,3.1,2.2,4.5,6.0,4.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_havoc",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.3,5.1,5.9,5.8,6.2,3.1,2.2,4.5,5.0,7.1,3.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.4,4.0,4.1,4.1,0.0,0.0,0.0,4.0,0.0,3.6,4.1,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Chosen Raptor",
+		sbp_name = "night_lords_squad_chosen_raptor",
+		ebp_name = "night_lords_chosen_raptor",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "night_lords_power_claw_raptor",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.3,6.3,6.3,6.3,4.6,4.2,3.5,5.4,3.5,5.3,3.1,2.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Possessed Chaos Marine",
+		sbp_name = "night_lords_squad_possessed_marine",
+		ebp_name = "night_lords_possessed_marine",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_flamer_possessed",
+				effectiveness = GenerateUnitEffectiveness(5.2,5.7,5.1,5.4,4.8,1.9,0.0,0.0,5.4,0.0,4.2,5.1,3.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_possessed_melee",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.4,6.4,6.4,6.4,5.6,5.4,3.6,5.5,3.6,5.4,5.6,5.0,4.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Altamentar",
+		sbp_name = "night_lords_squad_terminator_assault",
+		ebp_name = "night_lords_terminator_assault",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_lightning_claws",
+				effectiveness = GenerateUnitEffectiveness(6.9,6.7,6.5,6.7,6.6,6.3,6.9,6.8,6.8,6.8,6.1,4.1,2.7,2.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Obliterator",
+		sbp_name = "night_lords_squad_obliterator",
+		ebp_name = "night_lords_obliterator",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_obliterator_ranged_group",
+				effectiveness = GenerateUnitEffectiveness(5.9,7.7,5.5,7.7,5.6,7.3,2.9,7.8,4.8,7.8,3.1,5.1,2.4,3.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_power_fist_obliterator",
+				effectiveness = GenerateUnitEffectiveness(6.3,7.2,7.0,7.2,6.0,5.7,5.2,3.8,7.3,3.9,5.4,6.5,4.9,5.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_heavy_flamer_obliterator",
+				effectiveness = GenerateUnitEffectiveness(6.3,7.2,7.0,7.2,6.0,5.7,5.2,3.8,7.3,3.9,5.4,6.5,4.9,5.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Talos Valcoran",
+		sbp_name = "night_lords_squad_talos",
+		ebp_name = "night_lords_talos",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "night_lords_combi_bolter_talos",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_pistol_champion",
+				effectiveness = GenerateUnitEffectiveness(6.9,7.0,7.0,7.0,7.0,3.3,0.0,0.0,7.0,4.2,6.1,5.9,4.9,5.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_power_sword_talos",
+				effectiveness = GenerateUnitEffectiveness(3.9,4.4,4.1,4.2,4.1,1.5,0.0,0.0,4.1,0.0,3.0,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Mawdrym Llansahai",
+		sbp_name = "night_lords_squad_mawdrym_llansahai",
+		ebp_name = "night_lords_mawdrym_llansahai",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_bolt_pistol_champion",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_pistol_champion",
+				effectiveness = GenerateUnitEffectiveness(6.9,7.0,7.0,7.0,7.0,3.3,0.0,0.0,7.0,4.2,6.1,5.9,4.9,5.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_chainsword_apothecary",
+				effectiveness = GenerateUnitEffectiveness(2.9,3.4,3.1,3.2,3.1,0.5,0.0,0.0,3.1,0.0,2.0,2.7,0.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_power_sword_champion",
+				effectiveness = GenerateUnitEffectiveness(3.9,4.4,4.1,4.2,4.1,1.5,0.0,0.0,4.1,0.0,3.0,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Sorcerer (Commander Unit)",
+		sbp_name = "night_lords_squad_sorcerer",
+		ebp_name = "night_lords_sorcerer",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_bedlam_staff",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_plasma_pistol_sorceror",
+				effectiveness = GenerateUnitEffectiveness(6.9,7.0,7.0,7.0,7.0,3.3,0.0,0.0,7.0,4.2,6.1,5.9,4.9,5.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_bolt_pistol_sorceror",
+				effectiveness = GenerateUnitEffectiveness(3.6,4.3,3.9,3.7,3.7,1.0,0.0,0.0,3.7,1.5,2.9,3.7,2.0,2.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Captain (Commander Unit)",
+		sbp_name = "night_lords_squad_lord",
+		ebp_name = "night_lords_lord",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_bolt_pistol_lord",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_pistol_lord",
+				effectiveness = GenerateUnitEffectiveness(7.3,7.2,7.2,7.2,7.2,5.7,5.2,0.0,6.6,5.5,6.7,6.3,4.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_manreaper",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.6,6.0,6.7,6.0,5.1,4.0,0.0,6.7,4.3,5.5,6.2,3.4,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Talonmaster (Commander Unit)",
+		sbp_name = "night_lords_squad_talonmaster",
+		ebp_name = "night_lords_talonmaster",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_power_sword_talonmaster",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Daemon Prince",
+		sbp_name = "night_lords_squad_daemon_prince",
+		ebp_name = "night_lords_daemon_prince",
+		class = UnitStatsAI.UC_MonsterHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_kai_gun",
+				effectiveness = GenerateUnitEffectiveness(8.3,9.4,9.5,9.5,9.5,8.6,8.6,8.2,9.5,8.2,8.3,8.3,7.9,7.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_kai_gun_upgrade",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.6,6.0,6.7,6.0,5.1,4.0,0.0,6.7,4.3,5.5,6.2,3.4,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_daemon_prince_sword",
+				effectiveness = GenerateUnitEffectiveness(8.3,9.4,9.5,9.5,9.5,8.6,8.6,8.2,9.5,8.2,8.3,8.3,7.9,7.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_daemon_prince_sword_rending",
+				effectiveness = GenerateUnitEffectiveness(6.0,6.6,6.0,6.7,6.0,5.1,4.0,0.0,6.7,4.3,5.5,6.2,3.4,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Cyclops",
+		sbp_name = "night_lords_squad_cyclops",
+		ebp_name = "night_lords_cyclops",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 1,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Night Lords Rhino",
+		sbp_name = "night_lords_squad_rhino",
+		ebp_name = "night_lords_rhino",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 1,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Night Lords Razorback",
+		sbp_name = "night_lords_squad_razorback",
+		ebp_name = "night_lords_razorback",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "night_lords_heavy_bolter_twin_razorback",
+				effectiveness = GenerateUnitEffectiveness(4.7,6.4,6.4,6.7,6.2,5.5,5.0,3.7,6.6,4.0,5.5,5.2,3.8,4.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_heavy_flamer_razorback",
+				effectiveness = GenerateUnitEffectiveness(4.9,7.0,7.0,7.0,6.5,8.8,8.0,7.1,7.0,6.8,1.6,8.6,8.2,8.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_multi_melta_razorback",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,7.0,8.8,8.0,8.1,6.0,5.8,1.6,8.9,8.2,8.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_lascannon_twin_razorback",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.0,5.0,5.0,5.0,8.9,8.1,7.0,6.0,5.8,6.6,8.2,8.3,8.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_storm_bolter",
+				effectiveness = GenerateUnitEffectiveness(3.9,4.4,4.1,4.2,4.1,1.5,0.0,0.0,4.1,0.0,3.0,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Hell Talon",
+		sbp_name = "night_lords_squad_hell_talon",
+		ebp_name = "night_lords_hell_talon",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "night_lords_autocannon_hell_talon",
+				effectiveness = GenerateUnitEffectiveness(6.3,6.7,6.3,5.6,4.5,7.6,7.3,5.8,5.6,4.4,4.4,5.9,4.4,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_hell_talon",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.9,5.4,5.9,5.9,2.5,2.0,1.0,1.5,1.1,1.3,2.5,1.5,1.0,0.0,2.5,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_hell_talon_2",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.9,5.4,5.9,5.9,2.5,2.0,1.0,1.5,1.1,1.3,2.5,1.5,1.0,0.0,2.5,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_incendiary_bomb",
+				effectiveness = GenerateUnitEffectiveness(5.2,5.2,5.2,5.2,5.8,5.0,5.0,5.7,8.4,5.3,3.3,7.3,5.1,2.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Hell Blade",
+		sbp_name = "night_lords_squad_hell_blade",
+		ebp_name = "night_lords_hell_blade",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "night_lords_autocannon_hell_blade",
+				effectiveness = GenerateUnitEffectiveness(6.3,6.7,6.3,5.6,4.5,7.6,7.3,5.8,5.6,4.4,4.4,5.9,4.4,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Dreadnought",
+		sbp_name = "night_lords_squad_dreadnought",
+		ebp_name = "night_lords_dreadnought",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "night_lords_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.8,5.7,5.0,5.7,5.4,5.2,5.4,5.0,5.4,5.9,5.5,5.9,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_autocannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(6.6,5.7,6.5,3.9,6.7,4.7,4.5,0.0,5.8,6.0,6.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.2,4.1,4.5,4.3,8.5,8.3,4.2,4.9,4.2,3.1,6.5,6.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_cannon_dread",
+				effectiveness = GenerateUnitEffectiveness(4.1,7.2,4.1,7.5,7.3,3.5,3.3,3.2,6.9,4.2,3.1,6.5,6.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_multi_melta_dread",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.2,4.1,4.5,4.3,8.5,8.3,8.2,4.9,4.2,3.1,7.5,8.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_dreadnought_fist_twin",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.8,5.7,5.0,5.7,5.4,5.2,5.4,5.0,5.4,5.9,5.5,5.9,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Dreadnought Survival",
+		sbp_name = "night_lords_squad_dreadnought_nocap",
+		ebp_name = "night_lords_dreadnought",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "night_lords_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.8,5.7,5.0,5.7,5.4,5.2,5.4,5.0,5.4,5.9,5.5,5.9,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_autocannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(6.6,5.7,6.5,3.9,6.7,4.7,4.5,0.0,5.8,6.0,6.1,5.7,5.0,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.2,4.1,4.5,4.3,8.5,8.3,4.2,4.9,4.2,3.1,6.5,6.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_cannon_dread",
+				effectiveness = GenerateUnitEffectiveness(4.1,7.2,4.1,7.5,7.3,3.5,3.3,3.2,6.9,4.2,3.1,6.5,6.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_multi_melta_dread",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.2,4.1,4.5,4.3,8.5,8.3,8.2,4.9,4.2,3.1,7.5,8.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_dreadnought_fist_twin",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.8,5.7,5.0,5.7,5.4,5.2,5.4,5.0,5.4,5.9,5.5,5.9,5.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Night Lords Vindicator",
+		sbp_name = "night_lords_squad_vindicator",
+		ebp_name = "night_lords_vindicator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_vindicator_gun",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Whirlwind",
+		sbp_name = "night_lords_squad_whirlwind",
+		ebp_name = "night_lords_whirlwind",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_missile_battery",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_missile_battery_terror",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,5.8,4.9,3.9,5.4,5.4,5.4,5.2,4.9,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_storm_bolter",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.2,3.1,3.5,3.3,4.5,4.3,4.2,2.9,2.2,2.1,3.5,2.7,2.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Predator",
+		sbp_name = "night_lords_squad_predator",
+		ebp_name = "night_lords_predator",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_autocannon_predator",
+				effectiveness = GenerateUnitEffectiveness(5.3,5.5,5.3,5.6,4.5,7.6,7.3,5.8,5.6,4.4,4.4,5.9,4.4,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_volkite_demiculverin_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_cannon_predator_executioner",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_heavy_bolter_predator_r",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,4.9,4.7,4.0,2.6,2.0,4.4,6.1,6.1,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_heavy_bolter_predator_l",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,4.9,4.7,4.0,2.6,2.0,4.4,6.1,6.1,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_combi_rhino",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,4.9,4.7,4.0,2.6,2.0,4.4,6.1,6.1,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_havoc_missile_launcher_rhino",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Predator Survival",
+		sbp_name = "night_lords_squad_predator_no_cap",
+		ebp_name = "night_lords_predator",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "night_lords_autocannon_predator",
+				effectiveness = GenerateUnitEffectiveness(5.3,5.5,5.3,5.6,4.5,7.6,7.3,5.8,5.6,4.4,4.4,5.9,4.4,4.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_volkite_demiculverin_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_plasma_cannon_predator_executioner",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_heavy_bolter_predator_r",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,4.9,4.7,4.0,2.6,2.0,4.4,6.1,6.1,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_heavy_bolter_predator_l",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,4.9,4.7,4.0,2.6,2.0,4.4,6.1,6.1,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_flamer_combi_rhino",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,4.9,4.7,4.0,2.6,2.0,4.4,6.1,6.1,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "night_lords_havoc_missile_launcher_rhino",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.7,3.3,3.6,2.5,3.8,3.7,3.1,2.6,2.0,4.4,3.0,3.0,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Kratos",
+		sbp_name = "night_lords_squad_kratos",
+		ebp_name = "night_lords_kratos",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_battle_cannon_kratos",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_kratos_left",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_kratos_right",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_autocannon",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_heavy_bolter_twin",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.7,4.3,3.6,2.5,8.9,8.7,8.0,2.6,2.0,4.4,6.1,6.1,6.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Land Raider",
+		sbp_name = "night_lords_squad_land_raider",
+		ebp_name = "night_lords_land_raider",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_heavy_bolter_twin",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_tank_right",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_tank_left",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_combi_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Night Lords Land Raider Survival",
+		sbp_name = "night_lords_squad_land_raider_no_cap",
+		ebp_name = "night_lords_land_raider",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_heavy_bolter_twin",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_tank_right",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.9,8.2,8.1,5.7,5.7,6.1,8.2,8.0,7.7,5.9,4.8,4.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_lascannon_twin_tank_left",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_combi_bolter_rhino",
+				effectiveness = GenerateUnitEffectiveness(8.6,8.4,8.4,8.5,8.5,8.9,8.2,8.0,5.6,7.0,5.2,8.2,7.6,6.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Reaver titan",
+		sbp_name = "night_lords_squad_reaver_titan",
+		ebp_name = "night_lords_reaver_titan",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_reaver_titan_power_fist_l",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_reaver_titan_gatling_blaster_l",
+				effectiveness = GenerateUnitEffectiveness(9,9,9,9,9,5,5,5,9,9,3,9,5,9,0.0,5,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_reaver_titan_melta_cannon_r",
+				effectiveness = GenerateUnitEffectiveness(3,5,6,4,3,5,4,4,4,4,3,5,5,5,0.0,4,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_reaver_titan_laser_blaster_r",
+				effectiveness = GenerateUnitEffectiveness(5,5,5,5,5,9,9,9,5,5,9,6,9,6,0.0,5,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_reaver_titan_missile",
+				effectiveness = GenerateUnitEffectiveness(4,4,5,4,3,7,7,7,4,4,3,5,5,5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_reaver_titan_melee_default",
+				effectiveness = GenerateUnitEffectiveness(2,2,4,3,2,4,4,4,2,2,1,3,3,3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "The Dark Knight",
+		sbp_name = "night_lords_squad_imperial_knight_titan",
+		ebp_name = "night_lords_imperial_knight_titan",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "night_lords_autocannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knight_thermal_cannon_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knight_las_impolsor_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knight_volkite_chieorovile_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knight_chainsword_r",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_knight_chainsword_l",
+				effectiveness = GenerateUnitEffectiveness(7.7,7.4,7.4,6.9,8.8,6.2,5.9,7.3,6.7,6.0,6.4,6.1,5.7,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "night_lords_knight_chaingun_l",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knight_heavy_stubber",
+				effectiveness = GenerateUnitEffectiveness(4,4,5,4,3,7,7,7,4,4,3,5,5,5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "night_lords_knight_missile",
+				effectiveness = GenerateUnitEffectiveness(4,4,5,4,3,7,7,7,4,4,3,5,5,5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+}

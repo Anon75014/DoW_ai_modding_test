@@ -1,0 +1,486 @@
+----------------------------------------
+-- File: 'thirteenthcombuildbasestrategy.ai'
+-- Edited by Thudmeizer @ 21.12.2024
+
+class 'ThirteenthcomBuildBaseStrategy' (BuildBaseStrategy)
+
+function ThirteenthcomBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+
+	-- Add detector units (Best first, worst last)
+	self:AddDetectorUnit("thirteenthcom_squad_fenris_wolves")
+	self:AddDetectorUnit("thirteenthcom_squad_rune_priest")
+	self:AddDetectorUnit("thirteenthcom_squad_wolf_priest")
+	self:AddDetectorUnit("thirteenthcom_squad_wolf_lord")
+      --self:AddDetectorUnit("thirteenthcom_squad_terminator_lord")
+
+	CpuPrerequisites2.AddSpecialItem("0titan_building_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("0titans_tier_ii_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thirteenthcom_hq_addon_4", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("thirteenthcom_squad_dire_wolf_titan", CpuPrerequisites.BT_Squad)
+end
+
+function ThirteenthcomBuildBaseStrategy:ChooseBuildProgram()
+
+	-- Check build program count
+	if (table.getn(self.info.BuildPrograms) ~= 2) then
+		return BuildBaseStrategy.ChooseBuildProgram(self)
+	end
+
+	-- Set probabilities of the strategies according to the map size
+	local iBuildProgram1 = 50	-- Wolf Lord strategy
+	local iBuildProgram2 = 50	-- Terminator Lord strategy
+	
+	-- Modify probabilities according to the closest enemy player
+	local oEnemy = cpu_manager:FindClosestEnemyPlayer(false)
+	local sEnemy = oEnemy:GetPlayerRaceName()		
+	if (sEnemy == "ork_race" or sEnemy == "guard_race") then
+
+		iBuildProgram1 = iBuildProgram1 + 20
+		iBuildProgram2 = iBuildProgram2 - 20
+		
+	elseif (sEnemy == "chaos_marine_race" or sEnemy == "necron_race") then
+	
+		iBuildProgram1 = iBuildProgram1 - 20
+		iBuildProgram2 = iBuildProgram2 + 20
+	end
+		
+	-- Now choose a program
+	iBuildProgram2 = iBuildProgram1 + iBuildProgram2
+	local iRandom = math.random(1, 100)
+	if (iRandom <= iBuildProgram1) then
+		--g_iHarassingLeader = 1
+		return 1
+	elseif (iRandom <= iBuildProgram2) then
+		--g_iHarassingLeader = 2
+		return 2
+	end
+	return 1
+end
+
+function ThirteenthcomBuildBaseStrategy:EvaluateSquadCap()
+	
+	-- Check squad cap
+	if (self:CheckSquadCap(300, 0)) then
+		
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		
+		if (not cpu_manager.cpu_player:IsResearchComplete( "thirteenthcom_squad_cap_research" )) then
+			tBuildType.name = "thirteenthcom_squad_cap_research"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "thirteenthcom_squad_cap_research_1" ) then
+			tBuildType.name = "thirteenthcom_squad_cap_research_1"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "thirteenthcom_squad_cap_research_2" ) then
+			tBuildType.name = "thirteenthcom_squad_cap_research_2"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "thirteenthcom_squad_cap_research_3" ) then
+			tBuildType.name = "thirteenthcom_squad_cap_research_3"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "thirteenthcom_squad_cap_research_4" ) then
+			tBuildType.name = "thirteenthcom_squad_cap_research_4"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "thirteenthcom_squad_cap_research_5" ) then
+			tBuildType.name = "thirteenthcom_squad_cap_research_5"
+		else
+			return
+		end
+		
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+end
+
+function ThirteenthcomBuildBaseStrategy:GetBuildingName( sType )
+
+	-- Return race specific object string
+	if (sType == "HQ") then
+		return "thirteenthcom_hq"
+		
+	elseif (sType == "Generator") then
+		return "thirteenthcom_null_a"
+
+	elseif (sType == "BiggerGenerator") then
+		return "thirteenthcom_boobytrap_slag"
+
+	elseif (sType == "VehicleBuilding") then
+		return "thirteenthcom_barracks"
+		
+	elseif (sType == "ListeningPost") then
+		return "thirteenthcom_boobytrap"
+		
+	elseif (sType == "Turret") then
+		return "thirteenthcom_turret"
+		
+	elseif (sType == "Mine") then
+		return "thirteenthcom_mine_field"
+	end
+	return nil
+end
+
+function ThirteenthcomBuildBaseStrategy:GetAddonBuilding( sType )
+
+	if (sType == "thirteenthcom_hq_addon_1") then
+		return "thirteenthcom_hq"
+		
+	elseif (sType == "thirteenthcom_hq_addon_2") then
+		return "thirteenthcom_hq"
+
+	elseif (sType == "thirteenthcom_hq_addon_3") then
+		return "thirteenthcom_hq"
+
+	elseif (sType == "thirteenthcom_hq_addon_4") then
+		return "thirteenthcom_hq"
+
+	elseif (sType == "thirteenthcom_turret_grav_addon") then
+		return "thirteenthcom_turret"
+
+	elseif (sType == "thirteenthcom_turret_grav_addon") then
+		return "thirteenthcom_turret_bolter_no_limit"
+	end
+	return nil
+end
+
+-- Inherited method to check if an addon is a tier addon
+function ThirteenthcomBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+
+	-- Check addon name and target tier
+	if (sName == "thirteenthcom_hq_addon_1" and iTargetTier == 2) then
+		return true
+	elseif (sName == "thirteenthcom_hq_addon_2" and iTargetTier == 3) then
+		return true
+	elseif (sName == "thirteenthcom_hq_addon_3" and iTargetTier == 4) then
+		return true
+	end
+	return false
+end
+
+-- Returns the squad cap and support cap of the given squad
+function ThirteenthcomBuildBaseStrategy:GetUnitStats(sSquadName)
+
+	if (sSquadName == "thirteenthcom_squad_veteraners") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_grey_slayer") then
+		return 2, 0
+	elseif (sSquadName == "thirteenthcom_squad_fenris_wolves") then
+		return 2, 0
+	elseif (sSquadName == "thirteenthcom_squad_bike") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_long_fangs") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_storm_claws") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_wulfen_marine") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_deathsworn") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_terminator") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_terminator_storm_claws") then
+		return 3, 0
+	elseif (sSquadName == "thirteenthcom_squad_rhino") then
+		return 0, 1
+	end
+	return 0, 0
+end
+
+function ThirteenthcomBuildBaseStrategy:UpdateTierLevel()
+
+	-- Reset tier level
+	self.tierLevel = 1
+
+	-- Prepare
+	local iHQAddon1ID = cpu_manager.stats:GetAddOnID("thirteenthcom_hq_addon_1")
+	local iHQAddon2ID = cpu_manager.stats:GetAddOnID("thirteenthcom_hq_addon_2")
+	local iHQAddon3ID = cpu_manager.stats:GetAddOnID("thirteenthcom_hq_addon_3")
+	local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+	
+	-- Check HQ's for addons
+	for oBase in oStats:GetBases() do
+
+		-- Check for valid building
+		if (oBase:IsValid() and not oBase:IsListeningPost()) then
+
+			-- Check for HQ addon 3
+			if (oBase:HasAddOn(iHQAddon3ID)) then
+				self.tierLevel = 4
+				return
+
+			-- Check for HQ addon 2
+			elseif (oBase:HasAddOn(iHQAddon2ID)) then
+				self.tierLevel = 3
+				return
+			
+			-- Check for HQ addon 1 
+			elseif (oBase:HasAddOn(iHQAddon1ID)) then
+				self.tierLevel = 2
+				return
+			end
+		end
+	end
+end
+
+function ThirteenthcomBuildBaseStrategy:BuildFlexible()
+  
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	self:BuildFirstBuilder("thirteenthcom_squad_iron_priest")
+
+	-- Dynamic research item syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+	local iArmyStrength = cpu_manager:GetArmyStrength()
+	local iInfantrySquads = self:CountSquads("thirteenthcom_squad_grey_slayer") + self:CountSquads("thirteenthcom_squad_long_fangs") + self:CountSquads("thirteenthcom_squad_bike") + self:CountSquads("thirteenthcom_squad_storm_claws") + self:CountSquads("thirteenthcom_squad_wulfen_marine") + self:CountSquads("thirteenthcom_squad_terminator") + self:CountSquads("thirteenthcom_squad_terminator_storm_claws")
+	local iCommanderSquads = self:CountSquads("thirteenthcom_squad_wolf_lord") + self:CountSquads("thirteenthcom_squad_rune_priest") + self:CountSquads("thirteenthcom_squad_wolf_priest") + self:CountSquads("thirteenthcom_squad_terminator_lord")
+	
+	-- Compute tier 2 researches
+	if (self.tierLevel >= 2) then
+		
+		-- Compute infantry researches
+		if (self:CountSquads("thirteenthcom_squad_grey_slayer") >= 2 or self:CountSquads("thirteenthcom_squad_storm_claws") >= 2) then
+			self:DynamicResearch("thirteenthcom_frag_grenade_research", 2, 25, 75, 0, 0, nil, 0)
+			self:DynamicResearch("thirteenthcom_melta_bomb_research", 2, 100, 100, 0, 0, nil, 0)
+		end
+
+		-- Compute bonus researches
+		if (iArmyStrength >= 1250) then
+	
+			-- Compute infantry researches
+			if (iInfantrySquads >= 3) then
+				self:DynamicResearch("thirteenthcom_accuracy_upgrade_research", 2, 100, 50, 0, 0, nil, 0)
+				self:DynamicResearch("thirteenthcom_health_upgrade_research", 2, 100, 50, 0, 0, nil, 0)
+			end
+		end
+
+		-- Compute commander researches
+		if (iCommanderSquads >= 2) then
+			self:DynamicResearch("thirteenthcom_wolf_lord_health_research_1", 2, 100, 25, 0, 0, nil, 0)
+		end
+
+		-- Compute scrap researches
+		self:DynamicResearch("thirteenthcom_scrap_increase_research_1", 2, 75, 75, 0, 0, nil, 0)
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("thirteenthcom_turret_bolter_no_limit", 2, 2, 100, 100, 0, 0)
+	end
+
+	-- Compute tier 3 researches
+	if (self.tierLevel >= 3) then
+
+		-- Compute secondary researches
+		if (iArmyStrength >= 1750) then
+
+			-- Compute infantry researches
+			if (iInfantrySquads >= 3) then
+				self:DynamicResearch("thirteenthcom_accuracy_upgrade_research_2", 3, 150, 100, 0, 0, nil, 0)
+				self:DynamicResearch("thirteenthcom_health_upgrade_research_2", 3, 150, 100, 0, 0, nil, 0)
+			end
+		end
+
+		-- Compute commander researches
+		if (iCommanderSquads >= 2) then
+			self:DynamicResearch("thirteenthcom_wolf_lord_health_research_2", 3, 125, 50, 0, 0, nil, 0)
+		end
+
+		-- Compute sergeant ranged researches
+		if (iInfantrySquads >= 4) then
+			self:DynamicResearch("thirteenthcom_sergeant_ranged_upgrade", 3, 60, 45, 0, 0, nil, 0)
+		end
+
+		-- Compute sergeant close combat researches
+		if (iInfantrySquads >= 4) then
+			self:DynamicResearch("thirteenthcom_sergeant_melee_upgrade_1", 3, 55, 30, 0, 0, nil, 0)
+		end
+
+		-- Compute sergeant close combat researches
+		if (iInfantrySquads >= 5) then
+			self:DynamicResearch("thirteenthcom_sergeant_melee_upgrade_2", 3, 60, 35, 0, 0, nil, 0)
+		end
+
+		-- Compute Storm Claw researches
+		if (self:CountSquads("thirteenthcom_squad_storm_claws") >= 2) then
+			self:DynamicResearch("thirteenthcom_jump_pack_research", 3, 100, 75, 0, 0, nil, 0)
+		end
+
+		-- Compute scrap researches
+		self:DynamicResearch("thirteenthcom_scrap_increase_research_2", 3, 150, 150, 0, 0, nil, 0)
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("thirteenthcom_turret_bolter_no_limit", 4, 3, 200, 200, 0, 0)
+--[[
+		-- Compute Wulfen Lord researches
+		if (self:CountSquads("thirteenthcom_squad_wolf_lord") >= 1) then
+			self:DynamicResearch("thirteenthcom_upgrade_lord_wulfen_research", 3, 150, 150, 0, 0, nil, 0)
+		end
+]]
+	end
+
+	-- Compute tier 4 researches
+	if (self.tierLevel >= 4) then
+--[[
+		-- Compute Rune Priest researches
+		if (self:CountSquads("thirteenthcom_squad_rune_priest") >= 1) then
+			self:DynamicResearch("thirteenthcom_rune_priest_research_1", 4, 140, 150, 0, 0, nil, 0)
+			self:DynamicResearch("thirteenthcom_rune_priest_research_2", 4, 140, 150, 0, 0, nil, 0)
+		end
+]]
+		-- Compute Titan addons
+		self:DynamicAddon("thirteenthcom_hq_addon_4", 50, 4, 450, 400, 0, 0, nil, nil, false)
+
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+		-- Compute HQ Tier2 Addons for future HQs
+		if (self:GetBuildingCountByName("thirteenthcom_hq") > 1 and (iPower >= 500 and iRequisition >= 500)) then
+			self:DynamicAddon("thirteenthcom_hq_addon_1", 50, 4, 200, 100, 0, 0, nil, nil, false)
+		end
+
+		-- Compute HQ Tier3 Addons for future HQs
+		if (self:GetBuildingCountByName("thirteenthcom_hq") > 1 and (iPower >= 1000 and iRequisition >= 1000)) then
+			self:DynamicAddon("thirteenthcom_hq_addon_2", 50, 4, 300, 200, 0, 0, nil, nil, false)
+		end
+
+		-- Compute HQ Tier4 Addons for future HQs
+		if (self:GetBuildingCountByName("thirteenthcom_hq") > 1 and (iPower >= 1500 and iRequisition >= 1500)) then
+			self:DynamicAddon("thirteenthcom_hq_addon_3", 50, 4, 350, 250, 0, 0, nil, nil, false)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("thirteenthcom_turret_bolter_no_limit", 10, 4, 300, 300, 0, 0)
+	end
+
+	if (self.tierLevel == 1) then
+
+	-- Used from HQ to immediately deep-strike units around HQ rather than out into battlefield (necessary for early game)
+	for build_channel in build_manager:GetBuildChannelAIs() do
+	
+		if (build_channel:CanDeepStrike() and not build_channel:CanOnlyDeepStrikeToEntity() and build_channel:GetBlueprintID() == cpu_manager.stats:GetBuildingID("thirteenthcom_hq")) then
+
+			 -- Now deepstrike em around HQ!
+			    aitrace("Deepstriking miliary unit from HQ")
+				local pos = cpu_manager.start_pos
+ 				pos.x = pos.x + math.random(-5, 5)
+				pos.z = pos.z + math.random(-5, 5)
+				build_channel:DoDeepStrikeToPos(pos)
+			end 
+  	  	end
+	end
+
+	-- Restrict dynamic builds to hard difficulty or higher
+	if (CpuManager.AISettings.bMultiBuildings) then
+	
+		-- Dynamic buildings
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinPower, MinSquadCap, MinSupportCap
+		self:DynamicBuild("thirteenthcom_hq", 2, 3, 600, 200, 0, 0)
+		self:DynamicBuild("thirteenthcom_hq", 3, 4, 700, 300, 0, 0)
+		self:DynamicBuild("thirteenthcom_barracks", 2, 3, 400, 200, 0, 0)
+		self:DynamicBuild("thirteenthcom_barracks", 3, 4, 600, 400, 0, 0)
+		self:DynamicBuild("thirteenthcom_armoury", 2, 3, 200, 100, 0, 0)
+		self:DynamicBuild("thirteenthcom_armoury", 3, 4, 500, 200, 0, 0)
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function ThirteenthcomBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function ThirteenthcomBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+-- Arkhan 03.2006: Virtual method to check if a building is allowed to deepstrike military units
+function ThirteenthcomBuildBaseStrategy:MilitaryDeepStrike(iBuildingID)
+
+	-- Make sure that no builders are deepstriked from HQ
+	if (iBuildingID == cpu_manager.stats:GetBuildingID( "thirteenthcom_hq") or
+            iBuildingID == cpu_manager.stats:GetBuildingID( "thirteenthcom_barracks")) then 
+		return true
+	end
+	return false
+end
+
+-- Return placement type for buildings
+function ThirteenthcomBuildBaseStrategy:GetPlacementType(iBuildingID)
+	
+	-- Check building
+	if (cpu_manager:IsHQ(iBuildingID)) then
+        	local count = self:GetBuildingCountByName("thirteenthcom_hq", false)
+		local friend = cpu_manager:FindClosestFriendPlayer()
+		if friend == nil then
+			-- Lone Player
+                	if count == 0 and not cpu_manager:HQThreat() then
+                    		return "HQ"
+                	else
+                    		return "Safeplace"
+                	end
+        	else
+        		-- Has allies
+                	if count > 0 or cpu_manager:HQThreat() then
+ 				return "HQ"
+                	else
+				return "Safeplace"
+                	end
+		end
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("thirteenthcom_barracks") or
+		iBuildingID == cpu_manager.stats:GetBuildingID("thirteenthcom_armoury")) then
+		return "Military"	
+	elseif (cpu_manager:IsTurret(iBuildingID) or
+		iBuildingID == cpu_manager.stats:GetBuildingID("thirteenthcom_turret_bolter_no_limit") or
+		iBuildingID == cpu_manager.stats:GetBuildingID("thirteenthcom_razor_wire") or
+		iBuildingID == cpu_manager.stats:GetBuildingID("thirteenthcom_razor_wire_2") or
+          	iBuildingID == cpu_manager.stats:GetBuildingID("thirteenthcom_tank_trap")) then
+		return "Front2"
+	elseif (cpu_manager:IsMine(iBuildingID)) then
+		return "Mine"
+	end
+	return "Basic"
+end
+
+-- Arkhan 11.2006: Virtual method for checking out relic units
+function ThirteenthcomBuildBaseStrategy:RelicRequired(sName)
+
+	-- Check name
+	if (sName == "thirteenthcom_squad_leman_russ") then
+		return true
+	elseif (sName == "thirteenthcom_squad_land_raider_frosty") then
+		return true
+	elseif (sName == "thirteenthcom_squad_dire_wolf_titan") then
+		return true
+	end
+	return false
+end

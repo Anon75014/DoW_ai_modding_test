@@ -1,0 +1,39 @@
+----------------------------------------
+-- File: 'deathguardrhinotactic.ai'
+-- Edited by Thudmeizer @ 25.02.2023
+
+class 'DeathGuardRhinoTactic' (DeathGuardVehicleTactic)
+
+DeathGuardRhino = {}
+
+function DeathGuardRhinoTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Rhino Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+function DeathGuardRhinoTactic:InitAbilities()
+
+	if (DeathGuardRhino.smoke_id == nil) then
+		DeathGuardRhino.smoke_id = cpu_manager.stats:GetAbilityID( "death_guard_smoke_launchers" )	
+	end
+end
+
+function DeathGuardRhinoTactic:DoAbilities()
+
+	-- Check if we can launch poison
+	if (self.squad_ai:CanDoAbility(DeathGuardRhino.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(DeathGuardRhino.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(DeathGuardRhino.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	VehicleTactic.DoAbilities(self)
+end

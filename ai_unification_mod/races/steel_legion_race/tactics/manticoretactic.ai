@@ -1,0 +1,60 @@
+----------------------------------------
+-- File: 'manticoretactic.ai'
+-- Edited by Thudmeizer @ 23.04.2024
+
+class 'ManticoreTactic' (SteelLegionVehicleTactic)
+
+Manticore = {}
+
+function ManticoreTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Manticore Tactic")
+end
+
+function ManticoreTactic:InitAbilities()
+
+	if (Manticore.nuke_id == nil) then
+		Manticore.nuke_id = cpu_manager.stats:GetAbilityID( "steel_legion_manticore_nuke" )
+	end
+
+	if (Manticore.anthrax_id == nil) then
+		Manticore.anthrax_id = cpu_manager.stats:GetAbilityID( "steel_legion_manticore_anthrax" )
+	end
+end
+
+function ManticoreTactic:DoAbilities()
+
+	-- Activate nuke weapon loadout if possible and within range
+	if (self.squad_ai:CanDoAbility(Manticore.nuke_id)) then
+
+		local oUnit = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 90, 1)
+		if (oUnit ~= nil) then
+			self.squad_ai:DoSpecialAbility(Manticore.nuke_id)
+		end
+	end
+
+	-- Activate anthrax rounds when either enemy infantry or daemons are close by	
+	if (self.squad_ai:CanDoAbility(Manticore.anthrax_id)) then
+
+		-- Check our health first to determine tolerance
+ 		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityArea(self.squad_ai, Manticore.anthrax_id, Ability.Filters.CloseInfantryEnemy, 20, 2)
+			Ability.DoAbilityArea(self.squad_ai, Manticore.anthrax_id, Ability.Filters.CloseMonsterEnemy, 20, 2)
+		else
+			Ability.DoAbilityArea(self.squad_ai, Manticore.anthrax_id, Ability.Filters.CloseInfantryEnemy, 20, 6)
+			Ability.DoAbilityArea(self.squad_ai, Manticore.anthrax_id, Ability.Filters.CloseMonsterEnemy, 20, 4)
+		end
+	end
+end
+
+function ManticoreTactic:Update()
+
+	if self:IsComplete() then
+		return
+	end
+
+	--state machine
+   	if not VehicleTactic.Update( self ) then
+		return
+   	end
+end

@@ -1,0 +1,60 @@
+----------------------------------------
+-- File: 'TemplarDamoclestactic.ai'
+-- Edited by Thudmeizer  @ 27.02.2023
+
+class 'TemplarDamoclesTactic' (TemplarVehicleTactic)
+
+TemplarDamocles = {}
+
+function TemplarDamoclesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar Damocles Tactic")
+end
+
+function TemplarDamoclesTactic:InitAbilities()
+
+	if TemplarDamocles.sensor_id == nil then
+		TemplarDamocles.sensor_id = cpu_manager.stats:GetAbilityID( "templar_detection_field" )
+	end
+ 
+	if (TemplarDamocles.smoke_id == nil) then
+		TemplarDamocles.smoke_id = cpu_manager.stats:GetAbilityID( "templar_smoke_launchers" )	
+	end
+  
+	if (TemplarDamocles.orbital_b == nil) then
+		TemplarDamocles.orbital_b = cpu_manager.stats:GetAbilityID( "templar_orbital_bombardment" )
+	end
+end
+
+function TemplarDamoclesTactic:DoAbilities()
+
+	if (self.squad_ai:CanDoAbility(TemplarDamocles.sensor_id)) then
+	
+		local iRange = self.squad_ai:GetAbilityRange(TemplarDamocles.sensor_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbilitySquad(TemplarDamocles.sensor_id, oSquad:GetSquad())
+			end
+		end
+	end
+  
+  	-- If we are dying, lower requisites for attacks (Orbital Bombardement)
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+    		Ability.DoAbilityPos(self.squad_ai, TemplarDamocles.orbital_b, Ability.Filters.CloseEnemy, 8)
+    		Ability.DoAbilityPos(self.squad_ai, TemplarDamocles.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+    		Ability.DoAbilityTarget(self.squad_ai, TemplarDamocles.orbital_b, Templar_Ability.Filters.CloseVehicleHighEnemy, 1)  
+	else
+    		Ability.DoAbilityPos(self.squad_ai, TemplarDamocles.orbital_b, Ability.Filters.CloseEnemy, 16)
+    		Ability.DoAbilityPos(self.squad_ai, TemplarDamocles.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 5)
+	end
+
+	-- Call standard method
+	TemplarVehicleTactic.DoAbilities(self)
+end
+
+function TemplarDamoclesTactic:IsAttacker()
+	return (self.squad_ai:CanDoAbility(TemplarDamocles.orbital_b))
+end

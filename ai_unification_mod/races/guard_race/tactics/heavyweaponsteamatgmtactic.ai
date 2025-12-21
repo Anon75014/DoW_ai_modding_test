@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'heavyweaponsteamatgmtactic.ai'
+-- Edited by Thudmeizer @ 24.09.2023
+
+class 'HeavyWeaponsTeamAtgmTactic' (GuardInfantryTactic)
+
+HeavyWeaponsTeamAtgm = {}
+
+function HeavyWeaponsTeamAtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Heavy Weapons Team Atgm Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function HeavyWeaponsTeamAtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (HeavyWeaponsTeamAtgm.switch_id == nil) then
+		HeavyWeaponsTeamAtgm.switch_id = cpu_manager.stats:GetAbilityID( "guard_atgm_missile_switch" )
+	end
+end
+
+function HeavyWeaponsTeamAtgmTactic:DoAbilities()
+
+	-- Check if I can switch to Frag ordinance if enemy infantry are around
+	if self.squad_ai:IsInCombat() and self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(HeavyWeaponsTeamAtgm.switch_id) then
+		if  resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) > 50
+		and resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 50 then
+			local iRange = self.squad_ai:GetAbilityRange(HeavyWeaponsTeamAtgm.switch_id)
+			local iPos = self.squad_ai:GetPosition()
+			local oSquad = Ability.Filters.CloseInfantryEnemy( iPos , 60, 4 )
+			if oSquad == nil then
+				oSquad = Ability.Filters.CloseSquadEnemy( iPos , 60, 1 )
+			end
+			if oSquad ~= nil and oSquad:IsValid() then
+				self.squad_ai:DoSpecialAbility( HeavyWeaponsTeamAtgm.switch_id )
+				return
+			end
+		end
+	end
+end

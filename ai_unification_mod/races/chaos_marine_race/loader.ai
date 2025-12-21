@@ -1,0 +1,240 @@
+----------------------------------------
+-- File: 'chaosloader.ai'
+-- Edited by Arkhan	@ 23.10.2006
+-- Edited by Thudmeizer @ 17.03.2024
+
+class 'chaos_marine_race'
+
+-- Constructor
+function chaos_marine_race:__init()
+
+end
+
+-- Returns the name of the race
+function chaos_marine_race:GetRaceName()
+	return "chaos_marine_race"
+end
+
+-- This function is called if chaos are the race being played
+function chaos_marine_race:LoadRace( eDifficulty )
+	
+	-- Import strategies
+	import( 'Races/chaos_marine_race/Strategies/ChaosBuildBaseStrategy.ai' )
+	
+	-- Import strategy info
+	import( "Races/chaos_marine_race/Strategies/ChaosStrategyInfo.ai" )
+	
+	-- Import tactics
+	import( 'Races/chaos_marine_race/Tactics/ChaosMarineInfantryTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosMarineVehicleTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/SlaveTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/CultistTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/MarineSquadTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/RaptorSquadTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/SisterOfSlaughterTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/IconBearerTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/WarpsmithTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosLordTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/SorcererTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/IskandarTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ThornPrincessTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/AlphariusTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/DaemonPrinceTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/BloodThirsterTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosKeeperOfSecretsTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosRhinoTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/HellTalonTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/RaggedKnightTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosPredatorTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosPredatorVanillaTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosVindicatorTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/LandRaiderHadesTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosWarHoundTitanTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosRavagerTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/SacrificialCircleTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/GreaterSacrificialCircleTactic.ai' )
+	import( 'Races/chaos_marine_race/Tactics/ChaosMarineResearchKtgmTactic.ai' )
+
+ 	-- GAMBIT: New Method of returning a squad or base Tactic (from the CreateTactic function). Indexes.
+	-- Here follows a Global List with all the squad names as indexes, and their Tactics as values
+	-- The name of the Global List must be unique for each race.
+    	CSM_Race_Squad_Tactic =
+    	{
+        -- Insert here SQUAD_NAME or BASE_NAME and the TACTIC NAME (with the comma at the end!)
+        -- If a squad must NOT have a Tactic attached to it AT ALL, use "NONE" (with quotes, case sensitive).
+        -- Suggestion: Better put all in alphabetical order (sorted by squad names) for easier reference
+
+        chaos_squad_slave = SlaveTactic,
+        chaos_squad_warpsmith = WarpsmithTactic,
+        chaos_squad_cultist = CultistTactic,
+        chaos_marine_squad = MarineSquadTactic,
+        chaos_squad_renegade = MarineSquadTactic,
+        chaos_squad_chosen = MarineSquadTactic,
+	chaos_squad_havoc = MarineSquadTactic,
+        chaos_squad_terminator = MarineSquadTactic,
+        chaos_squad_raptor = RaptorSquadTactic,
+        chaos_squad_fallen_sister = SisterOfSlaughterTactic,
+        chaos_squad_icon_bearer_khorne = IconBearerTactic,
+        chaos_squad_icon_bearer_nurgle = IconBearerTactic,
+	chaos_squad_icon_bearer_slaanesh = IconBearerTactic,
+        chaos_squad_icon_bearer_tzeentch = IconBearerTactic,
+	chaos_squad_icon_bearer_undivided = IconBearerTactic,
+        chaos_squad_lord = ChaosLordTactic,
+        chaos_squad_lord_advance_sp_wg = ChaosLordTactic,
+	chaos_squad_lord_advance_sp = ChaosLordTactic,
+        chaos_squad_lord_ktgm = ChaosLordTactic,
+        chaos_squad_sorcerer = SorcererTactic,
+        chaos_squad_iskandar_khayon = IskandarTactic,
+        chaos_squad_yor_forger = ThornPrincessTactic,
+        chaos_squad_primarch_alpharius = AlphariusTactic,
+        chaos_squad_daemon_prince = DaemonPrinceTactic,
+        chaos_squad_daemon_prince_advance_sp = DaemonPrinceTactic,
+	chaos_squad_daemon_prince_ktgm = DaemonPrinceTactic,
+        chaos_squad_bloodthirster = BloodThirsterTactic,
+        chaos_squad_keeper_of_secrets = ChaosKeeperOfSecretsTactic,
+        chaos_squad_rhino = ChaosRhinoTactic,
+        chaos_squad_ragged_knight = RaggedKnightTactic,
+        chaos_squad_predator = ChaosPredatorTactic,
+        chaos_squad_predator_vanilla = ChaosPredatorVanillaTactic,
+        chaos_squad_vindicator = ChaosVindicatorTactic,
+        chaos_squad_hell_talon = HellTalonTactic,
+        chaos_squad_heldrake = HellTalonTactic,
+        chaos_squad_land_raider_hades = LandRaiderHadesTactic,
+        chaos_squad_warhound_titan = ChaosWarHoundTitanTactic,
+        chaos_squad_ravager_titan = ChaosRavagerTactic,
+	}
+
+    	CSM_Race_Base_Tactic =
+	{
+	chaos_sacrificial_circle = SacrificialCircleTactic,
+	chaos_greater_sacrificial_circle = GreaterSacrificialCircleTactic,
+	chaos_research_ktgm = ChaosMarineResearchKtgmTactic,
+	}
+	return true
+end
+
+-- This function is called even if this is not the race being played
+function chaos_marine_race:LoadGlobalInfo()
+		
+	-- Import info files
+	import( 'Races/chaos_marine_race/Info/chaosunitstats.ai' )
+	
+	-- Add chaos unit stats
+	table.insert(UnitStats, ChaosMarineUnitStats)
+	return true
+end
+
+-- Creates build base strategy
+function chaos_marine_race:CreateBuildBaseStrategy()
+	return ChaosBuildBaseStrategy(BuildBaseStrategyInfo)
+end
+
+-- Creates a special tactic for units
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function chaos_marine_race:CreateTactic(oSquadAI)
+
+    	-- Get unit name, and see if there is an attached tactic to it
+    	local sUnitName = oSquadAI:GetSquadName()    
+	if sUnitName ~= nil and CSM_Race_Squad_Tactic[sUnitName] ~= nil then
+		if CSM_Race_Squad_Tactic[sUnitName] == "NONE" then
+            		-- The squad must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return CSM_Race_Squad_Tactic[sUnitName](oSquadAI)
+        	end
+    	end
+
+	-- Get class
+	local eClass = oSquadAI:GetStats():GetClass()
+
+	-- Check if there is a special tactic for the unit available
+	local bVehicle = (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or eClass == UnitStatsAI.UC_VehicleHigh)
+	local bAirPlane = (eClass == UnitStatsAI.UC_AirLow or eClass == UnitStatsAI.UC_AirMed or eClass == UnitStatsAI.UC_AirHigh)
+
+	if (bVehicle or bAirPlane) then
+		return ChaosMarineVehicleTactic(oSquadAI)
+	end
+	return ChaosMarineInfantryTactic(oSquadAI)
+end
+
+-- Creates a special tactic for buildings
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function chaos_marine_race:CreateBaseTactic(oBuilding)
+
+	-- Get building name
+	local sBuildingName = oBuilding:GetBaseName()
+	if sBuildingName ~= nil and CSM_Race_Base_Tactic[sBuildingName] ~= nil then
+		if CSM_Race_Base_Tactic[sBuildingName] == "NONE" then
+            		-- The building must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return CSM_Race_Base_Tactic[sBuildingName](oBuilding)
+        	end
+    	end
+	return nil
+end
+
+-- Returns a specific information
+function chaos_marine_race:GetInfo(sType)
+
+	-- Check info type
+	if (sType == "TurretPower") then
+		return 400
+	elseif (sType == "SupportAllyFactor") then
+		return 8 / 4
+	elseif (sType == "AttackModifier") then
+		return 10
+	elseif (sType == "CriticalRangeIncreasePerTier") then
+		return 10
+	elseif (sType == "MinArmyStrengthPerTier") then
+		return 750
+	elseif (sType == "AttackRatio") then
+		return 4 / 5
+	elseif (sType == "RetreatRatio") then
+		return 3 / 5
+	elseif (sType == "InvisibleBuildings") then
+		return false
+	elseif (sType == "HarassingLeader") then
+		if ChaosBuildBaseStrategy:CountSquads("chaos_squad_lord") > 0 then
+			return "chaos_squad_lord"
+		elseif ChaosBuildBaseStrategy:CountSquads("chaos_squad_lord_advance_sp_wg") > 0 then
+			return "chaos_squad_lord_advance_sp_wg"
+		else
+			return nil
+		end
+	elseif (sType == "AutoConstructBuildings") then
+		return false
+	end
+	return nil
+end
+
+-- Returns the building type and threat
+function chaos_marine_race:GetBuildingType(sBuildingName)
+
+	-- Return race specific object string
+	if (sBuildingName == "chaos_hq") then
+		return "HQ", 0
+		
+	elseif (sBuildingName == "chaos_plasma_generator") then
+		return "Generator", 0
+		
+	elseif (sBuildingName == "chaos_thermo_plasma_generator") then
+		return "BiggerGenerator", 0
+		
+	elseif (sBuildingName == "chaos_machine_pit") then
+		return "VehicleBuilding", 0
+
+	elseif (sBuildingName == "chaos_armoury") then
+		return "Armoury", 0
+		
+	elseif (sBuildingName == "chaos_listening_post") then
+		return "ListeningPost", 0
+		
+	elseif (sBuildingName == "chaos_turret_bolter") then
+		return "Turret", 300
+		
+	elseif (sBuildingName == "chaos_mine_field") then
+		return "Mine", 100
+	end
+	return nil, 0
+end

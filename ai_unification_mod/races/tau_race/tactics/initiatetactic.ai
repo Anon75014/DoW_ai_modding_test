@@ -1,0 +1,189 @@
+----------------------------------------
+-- File: 'initiatetactic.ai'
+-- Created by Arkhan		@ 21.03.2008
+-- Edited by Thudmeizer		@ 22.04.2025
+
+class 'InitiateTactic' (TauInfantryTactic)
+
+Initiate = {}
+
+function InitiateTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Initiate Tactic")
+
+	self:InitAbilities()
+	self.lastused_ability_virus_time = g_iGMT
+	self.lastused_ability_virus_position = squad_ai:GetPosition()
+	self.min_virus_requisition = 300 -- amount of requisition to have before typical use
+	self.min_virus_time = 240 -- 30 seconds to wait between use, in possibly same location
+	self.min_virus_distance = squad_ai:GetAbilityRange(Initiate.virus_id) * 2 -- min distance between consecutive throws
+end
+
+function InitiateTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Initiate.iEMPGrenadeID == nil) then
+		Initiate.iEMPGrenadeID = cpu_manager.stats:GetAbilityID( "tau_emp_grenade" )	
+	end
+	if (Initiate.mark_id == nil) then
+		Initiate.mark_id = cpu_manager.stats:GetAbilityID( "tau_mark_squad" )	
+	end
+	if (Initiate.virus_id == nil) then
+		Initiate.virus_id = cpu_manager.stats:GetAbilityID( "tau_virus_agent_deploy" )	
+	end
+	if (Initiate.arrow_id == nil) then
+		Initiate.arrow_id = cpu_manager.stats:GetAbilityID( "tau_arrow_impact" )	
+	end
+end
+
+function InitiateTactic:DoAbilities()
+	
+	-- Check if we can use EMP grenade
+	Ability.DoAbilityTarget(self.squad_ai, Initiate.iEMPGrenadeID, Ability.Filters.CloseVehicleEnemy, 1)
+
+	-- If we are dying, lower prequisites for arrow attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos(self.squad_ai, Initiate.arrow_id, Ability.Filters.CloseInfantryEnemy, 4)
+		Ability.DoAbilityPos(self.squad_ai, Initiate.arrow_id, Ability.Filters.CloseVehicleEnemy, 1)
+	else
+		Ability.DoAbilityPos(self.squad_ai, Initiate.arrow_id, Ability.Filters.CloseInfantryEnemy, 8)
+		Ability.DoAbilityPos(self.squad_ai, Initiate.arrow_id, Ability.Filters.CloseVehicleEnemy, 2)
+	end
+
+	-- Check if we can use mark squad ability
+	if (self.squad_ai:CanDoAbility(Initiate.mark_id) and self.squad_ai:IsInCombat()) then
+	
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(Initiate.mark_id)
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+					eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+					eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+					-- Use mark ability on squad
+					self.squad_ai:DoSpecialAbilitySquad(Initiate.mark_id, oSquad:GetSquad())
+				end
+			end	
+		end
+	end
+
+	-- Check if we can use virus ability
+	if (self.squad_ai:CanDoAbility(Initiate.virus_id)) then
+	
+		-- Get ability range
+		local iRange = self.squad_ai:GetAbilityRange(Initiate.virus_id)
+	
+		-- If surrounded, try to use the virus
+		if (self.squad_ai:IsInCombat()) then
+	
+			local vSquadPos = self.squad_ai:GetPosition()
+			local fThrowFactor = 1 / 3
+			local oEnemy = Ability.Filters.CloseEnemy(vSquadPos, iRange, 4)
+			if (oEnemy ~= nil) then
+			
+				local vEnemyPos = oEnemy:GetPosition()
+				local vTargetPos = Vector3f(vSquadPos)
+				vTargetPos.x = vTargetPos.x + (vEnemyPos.x - vSquadPos.x) * fThrowFactor
+				vTargetPos.z = vTargetPos.z + (vEnemyPos.z - vSquadPos.z) * fThrowFactor
+				self:DoSpecialAbilityVirus(vTargetPos, true)
+			end
+		else
+
+			-- Check for close strategic point
+			local oTarget = Ability.Filters.CloseStrategicPoint(self.squad_ai:GetPosition(), iRange)
+			if (oTarget ~= nil) then
+			
+				-- Modify position
+				local vTargetPos = oTarget:GetPosition()
+				local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)
+				local iOffset = math.random(1, 5)		
+				vTargetPos.x = vTargetPos.x + vDir.x * iOffset
+				vTargetPos.z = vTargetPos.z + vDir.z * iOffset
+				local iDistanceSqr = distance_sqr(vTargetPos, self.squad_ai:GetPosition())
+				if (iDistanceSqr < sqr(iRange) and iDistanceSqr > 1) then
+					self:DoSpecialAbilityVirus(vTargetPos, false)
+				end
+			end
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function InitiateTactic:DoSpecialAbilityVirus(position,skip_prereqs)
+
+	local current_time = g_iGMT
+	local current_requisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	local last_time = self.lastused_ability_virus_time
+	local last_pos = self.lastused_ability_virus_position
+	local min_requisition = self.min_virus_requisition
+	local min_time = self.min_virus_time 
+	local min_distance = self.min_virus_distance
+	
+	-- Check situation
+	if (skip_prereqs or (current_requisition > min_requisition and current_time - last_time > min_time) or 
+		(current_requisition > min_requisition and distance(position,last_pos) > min_distance)) then
+
+		-- Use virus ability
+		self.squad_ai:DoSpecialAbilityPos(Initiate.virus_id, position)
+		self.lastused_ability_virus_time = current_time
+		self.lastused_ability_virus_position = position
+	end
+end
+
+function InitiateTactic:Reinforce()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- If there are no ressources available, don't upgrade!
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if (iRequisition < 700 and not Tactic.Options.can_reinforce) then
+		return
+	end
+
+	--always try for the actual leader first
+	if (not self.squad_ai:IsReinforcing()) then
+		if (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local droneIndex = 1
+		local shasuiIndex = 0
+	
+		local numDrone = self.squad_ai:GetLeaderCount( droneIndex )
+		local numShasui = self.squad_ai:GetLeaderCount( shasuiIndex )
+
+		-- Desired number of each leader type
+		local desiredDrone = 1 
+		local desiredShasui = 1
+
+		-- Desired order of reinforcing
+		if (numDrone < desiredDrone) then
+		
+			if (self.squad_ai:CanReinforce( true, droneIndex )) then
+				self.squad_ai:DoReinforce( true, droneIndex )
+			end
+		elseif (numShasui < desiredShasui) then
+		
+			if (self.squad_ai:CanReinforce( true, shasuiIndex )) then
+				self.squad_ai:DoReinforce( true, shasuiIndex )
+			end
+		end
+	end
+end

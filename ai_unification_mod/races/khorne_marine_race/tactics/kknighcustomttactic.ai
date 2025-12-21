@@ -1,0 +1,80 @@
+----------------------------------------
+-- File: 'kKnightcustomtactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 06.03.2023
+
+class 'kKnightCustomTactic' (kVehicleTactic)
+
+kKnightCustom = {}
+
+function kKnightCustomTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chaos Knight Custom Tactic")
+end
+
+function kKnightCustomTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannelkKnightCustom = build_manager:GetBuildChannelFromID(e:GetID())
+		if (buildChannelkKnightCustom ~= nil) then
+			local addOnID = buildChannelkKnightCustom:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannelkKnightCustom:IsBuilding() == 0 and buildChannelkKnightCustom:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then			
+				buildChannelkKnightCustom:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+function kKnightCustomTactic:InitAbilities()
+
+	if (kKnightCustom.ion_shield_id == nil) then
+		kKnightCustom.ion_shield_id = cpu_manager.stats:GetAbilityID( "khm_knight_ion_shield" )
+	end
+end
+
+function kKnightCustomTactic:DoAbilities()
+
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		if (self.squad_ai:CanDoAbility(kKnightCustom.ion_shield_id)) then
+			self.squad_ai:DoSpecialAbility(kKnightCustom.ion_shield_id)
+		end	  
+	end
+	kVehicleTactic.DoAbilities(self)
+end
+
+
+function kKnightCustomTactic:Upgrade()
+--[[
+self:AutoBuildAddOn(0)	-- khm_knight_chaingun_addon
+self:AutoBuildAddOn(1)	-- khm_knight_thermal_cannon_addon
+self:AutoBuildAddOn(2)	-- khm_knight_las_destructor_addon
+self:AutoBuildAddOn(3)	-- khm_knight_plasma_cannon_addon
+self:AutoBuildAddOn(4)	-- khm_knight_volkite_culverin_addon
+self:AutoBuildAddOn(5)	-- khm_knight_quad_autocannon_addon
+self:AutoBuildAddOn(6)	-- khm_knight_missile_launcher_addon
+]]
+
+	local standard_wargear_addons = math.random( 0,4 )
+	local heavy_wargear_addons = math.random( 0,1 )
+
+	-- Randomize between the Gatling, Thermal, Laser Cannon, Plasma Cannon, or Volkite.
+	if (standard_wargear_addons == 0) then
+		self:AutoBuildAddOn(0)	-- Chaingun
+	elseif (standard_wargear_addons == 1) then
+		self:AutoBuildAddOn(1)	-- Thermal Cannon
+	elseif (standard_wargear_addons == 2) then
+		self:AutoBuildAddOn(2)	-- Laser Destructor
+	elseif (standard_wargear_addons == 3) then
+		self:AutoBuildAddOn(3)	-- Plasma Cannon
+	elseif (standard_wargear_addons == 4) then
+		self:AutoBuildAddOn(4)	-- Volkite Culverin
+	end
+
+	-- Randomize between either the Autocannon or Missile Launcher
+	if (heavy_wargear_addons == 0) then
+		self:AutoBuildAddOn(5)	-- Quad Autocannon
+	elseif (heavy_wargear_addons == 1) then
+		self:AutoBuildAddOn(6)	-- Missile Launcher
+	end
+end

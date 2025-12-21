@@ -1,0 +1,39 @@
+----------------------------------------
+-- File: 'nightlordswhirlwindtactic.ai'
+-- Edited by Thudmeizer @ 21.06.2024
+
+class 'NightLordsWhirlwindTactic' (NightLordsVehicleTactic)
+
+NightLordsWhirlwind = {}
+
+function NightLordsWhirlwindTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Whirlwind Tactic")
+end
+
+function NightLordsWhirlwindTactic:InitAbilities()
+
+	if (NightLordsWhirlwind.barrage_id == nil) then
+	    NightLordsWhirlwind.barrage_id = cpu_manager.stats:GetAbilityID( "night_lords_whirlwind_terror" )	
+	end
+end
+
+function NightLordsWhirlwindTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(NightLordsWhirlwind.barrage_id) then
+		-- Enable Missile barrage only when attacking and with enough health
+		if self.squad_ai:IsUsingAbility(NightLordsWhirlwind.barrage_id) then
+			-- Turn barrage OFF if stopped attacking, OR if health < 50%
+			if not self.squad_ai:IsAttacking() or self.squad_ai:GetHealthPercentage() < 0.5 then
+				self.squad_ai:DoSpecialAbility(NightLordsWhirlwind.barrage_id)
+			end
+			-- Turn barrage ON only when attacking, AND when health > 50%
+		elseif self.squad_ai:IsAttacking() and self.squad_ai:GetHealthPercentage() > 0.5 then
+			self.squad_ai:DoSpecialAbility(NightLordsWhirlwind.barrage_id)
+		end
+	end
+
+	-- Do basic abilities
+	NightLordsVehicleTactic.DoAbilities(self)
+end
+

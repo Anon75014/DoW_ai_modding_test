@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'deathguardcultistactic.ai'
+-- Edited by Thudmeizer	@ 25.05.2022
+
+class 'DeathGuardCultistTactic' (DeathGuardInfantryTactic)
+
+DeathGuardCultist = {}
+
+function DeathGuardCultistTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Cultist Tactic")
+end
+
+function DeathGuardCultistTactic:InitAbilities()
+--[[
+	-- Init ability ID's
+	if (DeathGuardCultist.doom_id == nil) then
+		DeathGuardCultist.doom_id = cpu_manager.stats:GetAbilityID( "death_guard_doom_blast" )	
+	end
+]]
+end
+
+function DeathGuardCultistTactic:DoAbilities()
+--[[
+	-- Try to activate doom blast
+	if (self.squad_ai:CanDoAbility(DeathGuardCultist.doom_id)) then
+	
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), 5, 4)
+		if (oSquad ~= nil) then
+			
+			-- Try to use doom blast if enemy unit is very close
+			self.squad_ai:DoSpecialAbility(DeathGuardCultist.doom_id)
+		end
+	end
+]]	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function DeathGuardCultistTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+	
+	-- Set unit on ranged stance in tier 3+
+    	if (cpu_manager:GetTierLevel() >= 3 and self.squad_ai:GetMeleeStance() ~= SquadAI.MSTANCE_Ranged) then
+    		self.squad_ai:DoSetMeleeStance(SquadAI.MSTANCE_Ranged)
+   	end
+end

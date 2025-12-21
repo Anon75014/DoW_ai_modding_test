@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'firstbornpegasustactic.ai'
+-- Edited by Thudmeizer		@ 27.11.2024
+
+class 'FirstbornPegasusTactic' (FirstbornVehicleTactic)
+
+FirstbornPegasus = {}
+
+function FirstbornPegasusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Pegasus Tactic")
+
+	-- Vehicle is a medium transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 3
+end
+
+function FirstbornPegasusTactic:InitAbilities()
+
+	if (FirstbornPegasus.smoke_id == nil) then
+		FirstbornPegasus.smoke_id = cpu_manager.stats:GetAbilityID( "firstborn_smoke_grenade" )	
+	end
+
+	if (FirstbornPegasus.hkmissiles_id == nil) then
+		FirstbornPegasus.hkmissiles_id = cpu_manager.stats:GetAbilityID( "firstborn_hk_missile_tesla" )	
+	end
+end
+
+function FirstbornPegasusTactic:DoAbilities()
+
+	-- Check if we can launch poison
+	if (self.squad_ai:CanDoAbility(FirstbornPegasus.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(FirstbornPegasus.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(FirstbornPegasus.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	local hkChance = math.random(1,100)
+
+	-- Check if we are attacking and not in home base
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(FirstbornPegasus.hkmissiles_id)) then
+		if ( (cpu_manager.terrain_analyzer:HasThreat( self.squad_ai:GetPosition(), 35 ) and hkChance > 25) 
+		or (cpu_manager.terrain_analyzer:HasThreat( self.squad_ai:GetPosition(), 55 ) and hkChance > 75) ) then
+		
+			-- Launch HK Missiles at either Vehicles or Buildings
+			Ability.DoAbilityTarget(self.squad_ai, FirstbornPegasus.hkmissiles_id, Ability.Filters.CloseVehicleEnemy, 2)
+    			Ability.DoAbilityTargetEntity( self.squad_ai, FirstbornPegasus.hkmissiles_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+		end
+	end
+
+	VehicleTactic.DoAbilities(self)
+end

@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'lynxtactic.ai'
+-- Edited by Thudmeizer @ 29.12.2024
+
+class 'LynxTactic' (EldarVehicleTactic)
+
+Lynx = {}
+
+function LynxTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Lynx Medium Skimmer Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function LynxTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Lynx.missile_id == nil then
+		Lynx.missile_id = cpu_manager.stats:GetAbilityID( "eldar_holofield_lynx_missile" )
+	end
+end
+
+function LynxTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(Lynx.missile_id) then
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 20, 1) ~= nil then
+					self.squad_ai:DoSpecialAbility(Lynx.missile_id)
+				end
+			end
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

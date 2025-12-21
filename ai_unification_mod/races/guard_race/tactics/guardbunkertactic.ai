@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'guardbunkertactic.ai'
+-- Edited by Arkhan		@ 07.01.2007
+-- Edited by Thudmrizer		@ 11.10.2025
+
+class 'GuardBunkerTactic' (BaseTactic)
+
+GuardBunker = {}
+
+function GuardBunkerTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Guard Bunker Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
+
+function GuardBunkerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (GuardBunker.dangerclose_id == nil) then
+		GuardBunker.dangerclose_id = cpu_manager.stats:GetAbilityID("guard_buildings_dangerclose")
+	end
+
+	if (GuardBunker.dangerclose_barrack == nil) then
+		GuardBunker.dangerclose_barrack = cpu_manager.stats:GetAbilityID("guard_buildings_dangerclose_barrack")
+	end
+
+	if (GuardBunker.dangerclose_factory == nil) then
+		GuardBunker.dangerclose_factory = cpu_manager.stats:GetAbilityID("guard_buildings_dangerclose_factory")
+	end
+end
+
+function GuardBunkerTactic:DoAbilities()
+
+	-- Try to activate defensive measures (Listening Posts)
+	if (self.base_ai:CanDoAbility(GuardBunker.dangerclose_id)) then
+
+		-- Enable Danger Close Protocols to increase defensive capabilities when enemies are near
+		Ability.DoAbilityArea( self.base_ai, GuardBunker.dangerclose_id, Ability.Filters.CloseEnemy, 20, 1)
+	end
+
+	-- Try to activate defensive measures (Infantry)
+	if (self.base_ai:CanDoAbility(GuardBunker.dangerclose_barrack)) then
+
+		-- Enable Danger Close Protocols to increase defensive capabilities when enemies are near
+		Ability.DoAbilityArea( self.base_ai, GuardBunker.dangerclose_barrack, Ability.Filters.CloseEnemy, 20, 1)
+	end
+
+	-- Try to activate defensive measures (Factory)
+	if (self.base_ai:CanDoAbility(GuardBunker.dangerclose_factory)) then
+
+		-- Enable Danger Close Protocols to increase defensive capabilities when enemies are near
+		Ability.DoAbilityArea( self.base_ai, GuardBunker.dangerclose_factory, Ability.Filters.CloseEnemy, 20, 1)
+	end
+end

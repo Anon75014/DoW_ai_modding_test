@@ -1,0 +1,282 @@
+----------------------------------------
+-- File: 'taucommanderktgmtactic.ai'
+-- Edited by Thudmeizer @ 20.04.2024
+
+class 'TauCommanderKtgmTactic' (TauInfantryTactic)
+
+TauCommanderKtgm = {}
+
+function TauCommanderKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Tau Commander Kill Team Tactic")
+
+	self:InitAbilities()
+	self.lastused_ability_snaretrap_time = g_iGMT
+	self.lastused_ability_snaretrap_position = squad_ai:GetPosition()
+	self.min_snaretrap_time = 240 -- 30 seconds to wait between use, in possibly same location
+	self.min_snaretrap_distance = squad_ai:GetAbilityRange(TauCommanderKtgm.ability_snaretrap_id) * 2 -- min distance between consecutive throws
+	self.m_iRepairTime = g_iGMT
+end
+
+-- Assassinate win condition -- never attack
+function TauCommanderKtgmTactic:IsAttacker()	
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function TauCommanderKtgmTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+-- Tau Commander is allowed to retreat even directly after a jump
+function TauCommanderKtgmTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+-- Assassinate win condition -- never jump into combat
+function TauCommanderKtgmTactic:JumpAttack()
+	if (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+function TauCommanderKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TauCommanderKtgm.acquired == nil) then
+		TauCommanderKtgm.acquired = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_target_acquired_ktgm" )	
+	end
+	if (TauCommanderKtgm.ability_snaretrap_id == nil) then
+		TauCommanderKtgm.ability_snaretrap_id = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_snare_trap_ktgm" )	
+	end
+	if (TauCommanderKtgm.blast_id == nil) then
+		TauCommanderKtgm.blast_id = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_kinetic_energy_blast_ktgm" )	
+	end
+	if (TauCommanderKtgm.marker_id == nil) then
+		TauCommanderKtgm.marker_id = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_marker_light_ktgm" )	
+	end
+	if (TauCommanderKtgm.push_id == nil) then
+		TauCommanderKtgm.push_id = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_push_back_ktgm" )	
+	end
+	if (TauCommanderKtgm.repair_id == nil) then
+		TauCommanderKtgm.repair_id = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_repair_ktgm" )	
+	end
+	if (TauCommanderKtgm.shield_id == nil) then
+		TauCommanderKtgm.shield_id = cpu_manager.stats:GetAbilityID( "tau_ls_tau_commander_personal_shield" )	
+	end
+end
+
+function TauCommanderKtgmTactic:DoAbilities()
+
+	-- Check if we can use snare trap ability
+	if (self.squad_ai:CanDoAbility(TauCommanderKtgm.ability_snaretrap_id)) then
+	
+		-- Get ability range
+		local iRange = self.squad_ai:GetAbilityRange(TauCommanderKtgm.ability_snaretrap_id)
+	
+		-- If surrounded, try to use the snare trap
+		if (self.squad_ai:IsInCombat()) then
+	
+			local vSquadPos = self.squad_ai:GetPosition()
+			local fThrowFactor = 1 / 3
+			local oEnemy = Ability.Filters.CloseEnemy(vSquadPos, iRange, 4)
+			if (oEnemy ~= nil) then
+			
+				local vEnemyPos = oEnemy:GetPosition()
+				local vTargetPos = Vector3f(vSquadPos)
+				vTargetPos.x = vTargetPos.x + (vEnemyPos.x - vSquadPos.x) * fThrowFactor
+				vTargetPos.z = vTargetPos.z + (vEnemyPos.z - vSquadPos.z) * fThrowFactor
+				self:DoSpecialAbilitySnareTrap(vTargetPos, true)
+			end
+		else
+
+			-- Check for close strategic point
+			local oTarget = Ability.Filters.CloseStrategicPoint(self.squad_ai:GetPosition(), iRange)
+			if (oTarget ~= nil) then
+			
+				-- Modify position
+				local vTargetPos = oTarget:GetPosition()
+				local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)
+				local iOffset = math.random(1, 5)		
+				vTargetPos.x = vTargetPos.x + vDir.x * iOffset
+				vTargetPos.z = vTargetPos.z + vDir.z * iOffset
+				local iDistanceSqr = distance_sqr(vTargetPos, self.squad_ai:GetPosition())
+				if (iDistanceSqr < sqr(iRange) and iDistanceSqr > 1) then
+					self:DoSpecialAbilitySnareTrap(vTargetPos, false)
+				end
+			end
+		end
+	end
+
+	local was_recently_hurt = self.squad_ai:WasRecentlyHurt()
+	local health = self.squad_ai:GetHealthPercentage()
+	local pos = self.squad_ai:GetPosition()
+	local use_repair = (was_recently_hurt and health < 0.25 and cpu_manager.terrain_analyzer:HasThreat(pos, 100))
+
+	if self.squad_ai:IsUsingAbility(TauCommanderKtgm.repair_id) and g_iGMT > self.m_iRepairTime + 6 then
+		-- Stop repair if not injured or we have enough health, to keep ranged weapons online
+		if not use_repair then
+			self.squad_ai:DoSpecialAbility(TauCommanderKtgm.repair_id)
+			self.m_iRepairTime = g_iGMT
+		end
+	elseif use_repair and g_iGMT > self.m_iRepairTime + 6 then
+		-- Enable repair, to prevent further damage
+		self.squad_ai:DoSpecialAbility(TauCommanderKtgm.repair_id)
+		self.m_iRepairTime = g_iGMT
+		self:EmergencyRetreat()
+	end
+
+	-- See if we can and we must activate shields while in combat
+	if (self.squad_ai:CanDoAbility(TauCommanderKtgm.shield_id)) then
+		if self.squad_ai:WasRecentlyHurt() and (self.squad_ai:IsInCombat() or self.squad_ai:GetHealthPercentage() < 0.5) then
+			self.squad_ai:DoSpecialAbility(TauCommanderKtgm.shield_id)
+		end
+	end
+--[[
+	-- Launch a kinetic blast at close enemy
+	if self.squad_ai:CanDoAbility(TauCommanderKtgm.blast_id) then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.6) then
+			Ability.DoAbilityPos( self.squad_ai, TauCommanderKtgm.blast_id, Ability.Filters.CloseEnemy, 3 )
+		else
+			Ability.DoAbilityPos( self.squad_ai, TauCommanderKtgm.blast_id, Ability.Filters.CloseEnemy, 6 )
+		end
+	end
+]]
+	-- Target generic enemy 
+	--Ability.DoAbilityTarget( self.squad_ai, TauCommanderKtgm.acquired, Ability.Filters.CloseEnemy, 1 )
+
+	-- Target generic enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(TauCommanderKtgm.acquired)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TauCommanderKtgm.acquired)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Target Acquired Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TauCommanderKtgm.acquired, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Launch a kinetic blast at close enemy (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(TauCommanderKtgm.blast_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TauCommanderKtgm.blast_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		if (oUnit ~= nil) then
+			--print("Using Kinetic Blast Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TauCommanderKtgm.blast_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Try to activate marker light if enemy is in range -- makes all enemies on the map more suseptible to range damage
+	if (self.squad_ai:CanDoAbility(TauCommanderKtgm.marker_id)) then
+    
+    		-- Check for close enemy
+		--local oEnemy = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 60, 1)
+		local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 60, 1)
+		if (oEnemy ~= nil) then
+			self.squad_ai:DoSpecialAbility(TauCommanderKtgm.marker_id)
+			return
+    		end
+	end
+
+	-- Try to enable push back to stun nearby enemies preventing them to engage in melee
+	if (self.squad_ai:IsInCombat()) then
+		if (self.squad_ai:CanDoAbility(TauCommanderKtgm.push_id)) then
+    
+    			-- Check for close enemy
+			--local oEnemy = Ability.Filters.CloseSquadEnemy(self.squad_ai:GetPosition(), 25, 1)
+			local oEnemy = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), 25, 1)
+			if (oEnemy ~= nil) then
+				self.squad_ai:DoSpecialAbility(TauCommanderKtgm.push_id)
+				return
+    			end
+		end
+	end
+end
+
+function TauCommanderKtgmTactic:Upgrade()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Force upgrade
+	if (not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetHealthPercentage() > 0.5) then
+		self.squad_ai:DoBestUpgrade(UnitStatsAI.UC_VehicleMed)
+	end
+end
+
+function TauCommanderKtgmTactic:DoSpecialAbilitySnareTrap(position,skip_prereqs)
+
+	local current_time = g_iGMT
+	local last_time = self.lastused_ability_snaretrap_time
+	local last_pos = self.lastused_ability_snaretrap_position
+	local min_time = self.min_snaretrap_time 
+	local min_distance = self.min_snaretrap_distance
+	
+	-- Check situation
+	if (skip_prereqs or (current_time - last_time > min_time) or (distance(position,last_pos) > min_distance)) then
+
+		-- Use snare trap ability
+		self.squad_ai:DoSpecialAbilityPos(TauCommanderKtgm.ability_snaretrap_id, position)
+		self.lastused_ability_snaretrap_time = current_time
+		self.lastused_ability_snaretrap_position = position
+	end
+end
+
+function TauCommanderKtgmTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local shieldIndex = 0
+		local droneIndex = 1
+
+		local numShields = self.squad_ai:GetLeaderCount( shieldIndex )
+		local numDrones = self.squad_ai:GetLeaderCount( droneIndex )	
+
+		-- Desired number of each leader type
+		local desiredShields = math.random(0,1)
+		local desiredDrones = math.random(0,1) 
+
+		-- Desired order of reinforcing
+		if (numShields < desiredShields) then
+			if (self.squad_ai:CanReinforce( true, shieldIndex )) then
+				self.squad_ai:DoReinforce( true, shieldIndex )
+			end
+		elseif (numDrones < desiredDrones) then
+			if (self.squad_ai:CanReinforce( true, droneIndex )) then
+				self.squad_ai:DoReinforce( true, droneIndex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end
+
+function TauCommanderKtgmTactic:Update()
+
+	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

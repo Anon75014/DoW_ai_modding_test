@@ -1,0 +1,91 @@
+----------------------------------------
+-- File: 'nightlordspredatortactic.ai'
+-- Edited by Thudmeizer 	@ 11.11.2024
+
+class 'NightLordsPredatorTactic' (NightLordsVehicleTactic)
+
+NightLordsPredator = {}
+
+function NightLordsPredatorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("NightLords Predator Tactic")
+end
+
+function NightLordsPredatorTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+function NightLordsPredatorTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (NightLordsPredator.missile_id == nil) then
+		NightLordsPredator.missile_id = cpu_manager.stats:GetAbilityID( "night_lords_predator_blackout_missile" )	
+	end
+end
+
+function NightLordsPredatorTactic:DoAbilities()
+
+	-- Try to launch a blackout missile
+	if self.squad_ai:CanDoAbility(NightLordsPredator.missile_id) then
+
+		-- We are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			if Ability.DoAbilityPos(self.squad_ai, NightLordsPredator.missile_id, Ability.Filters.CloseVehicleEnemy, 1)
+				or Ability.DoAbilityPos(self.squad_ai, NightLordsPredator.missile_id, Ability.Filters.CloseMonsterEnemy, 2)
+				or Ability.DoAbilityPos(self.squad_ai, NightLordsPredator.missile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2) then
+				return
+			end
+		else
+			if Ability.DoAbilityPos(self.squad_ai, NightLordsPredator.missile_id, Ability.Filters.CloseVehicleEnemy, 1)
+				or Ability.DoAbilityPos(self.squad_ai, NightLordsPredator.missile_id, Ability.Filters.CloseMonsterEnemy, 3)
+				or Ability.DoAbilityPos(self.squad_ai, NightLordsPredator.missile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+	end
+
+	-- Figure out my enemy's favourite class
+	local enemy = cpu_manager:FindClosestEnemyPlayer()
+	if (enemy == nil) then
+		return
+	end
+	
+	local class_type = enemy:GetMajorityClassType()
+
+	-- Larkins hard counter upgrade for Vehicles
+	if (class_type == UnitStatsAI.UC_HeavyInfantryHigh) or
+		(class_type == UnitStatsAI.UC_VehicleLow) or 
+		(class_type == UnitStatsAI.UC_VehicleMed) or
+		(class_type == UnitStatsAI.UC_VehicleHigh) or
+		(class_type == UnitStatsAI.UC_MonsterHigh) then
+
+		-- Check available resources and health, before performing any upgrade
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if iReq > 100 and iPow > 100 and self.squad_ai:GetHealthPercentage() > 0.35 then
+			local Chosen_Upgrade = math.random( 0, 3 )	  -- Choose randomly among the main anti-vehicle weapon addons
+			self:AutoBuildAddOn(Chosen_Upgrade)
+		end
+	end
+
+	-- Call standard method
+	NightLordsVehicleTactic.DoAbilities(self)
+end
+
+--[[
+function NightLordsPredatorTactic:Upgrade()
+
+	local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+		self.squad_ai:DoBestUpgrade( class_type )
+end
+]]

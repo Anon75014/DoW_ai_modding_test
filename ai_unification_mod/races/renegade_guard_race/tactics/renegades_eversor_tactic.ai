@@ -1,0 +1,62 @@
+----------------------------------------
+-- File: 'renegades_eversor_tactic.ai'
+-- Edited by Thudmeizer @ 05.05.2023
+
+class 'Renegades_Eversor_Tactic' (Renegades_Infantry_Tactic)
+
+Eversor = {}
+
+function Renegades_Eversor_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Eversor Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Eversor_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Eversor_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Eversor_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Eversor.berserk_id == nil) then
+		Eversor.berserk_id = cpu_manager.stats:GetAbilityID( "renegade_guard_eversor_berserk" )
+		Eversor.bomb_id = cpu_manager.stats:GetAbilityID( "renegade_guard_eversor_melta_bombs" )
+	end
+end
+
+function Renegades_Eversor_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Try to Berzerk
+		if self.squad_ai:CanDoAbility(Eversor.berserk_id) then
+			if Ability.DoAbilityArea(self.squad_ai, Eversor.berserk_id, Ability.Filters.CloseVehicleEnemy, 5, 1)
+			or Ability.DoAbilityArea(self.squad_ai, Eversor.berserk_id, Ability.Filters.CloseCommanderEnemy, 5, 1) then
+				return
+			end
+		end
+
+		-- Search a building
+		local iRange = self.squad_ai:GetAbilityRange(Eversor.berserk_id)
+		local oBuilding = Ability.EntityFilters.CloseBaseEntityEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oBuilding ~= nil) then
+			--  Try to Berzerk!
+			self.squad_ai:DoSpecialAbilityEntity(Eversor.berserk_id, oBuilding) 
+		end
+
+		-- Try to use Melta Bombs
+		if self.squad_ai:CanDoAbility(Eversor.bomb_id) then
+			if Ability.DoAbilityTarget(self.squad_ai, Eversor.bomb_id, Ability.Filters.CloseVehicleEnemy, 1)
+			or Ability.DoAbilityTargetEntity(self.squad_ai, Eversor.bomb_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+				return
+			end
+		end
+	end
+end
+

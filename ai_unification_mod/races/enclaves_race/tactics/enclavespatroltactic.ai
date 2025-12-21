@@ -1,0 +1,163 @@
+----------------------------------------
+-- File: 'enclavespatroltactic.ai'
+-- Created by Arkhan			@ 21.03.2008
+-- Edited by CaptJoJo (meatshi3ld)	@ 03.09.2021
+-- Edited by Thudmeizer			@ 26.02.2024
+
+class 'EnclavesPatrolTactic' (EnclavesInfantryTactic)
+
+EnclavesPatrol = {}
+
+function EnclavesPatrolTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Patrol Tactic")
+	self.lastAbilityTry = g_iGMT
+	self:InitAbilities()
+end
+
+function EnclavesPatrolTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesPatrol.spotter_id == nil) then
+		EnclavesPatrol.spotter_id = cpu_manager.stats:GetAbilityID( "enclaves_mark_squad" )	
+	end
+
+	if (EnclavesPatrol.seeker_id == nil) then
+		EnclavesPatrol.seeker_id = cpu_manager.stats:GetAbilityID( "enclaves_seeker_missile" )	
+	end
+
+	if (EnclavesPatrol.ping_id == nil) then
+		EnclavesPatrol.ping_id = cpu_manager.stats:GetAbilityID( "enclaves_ping_trap" )	
+	end
+--[[
+	if (EnclavesPatrol.shockwave_id == nil) then
+		EnclavesPatrol.shockwave_id = cpu_manager.stats:GetAbilityID( "enclaves_antigrav_shockwave" )	
+	end
+]]
+end
+
+function EnclavesPatrolTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+ 		Ability.DoAbilityPos( self.squad_ai, EnclavesPatrol.seeker_id, Ability.Filters.CloseEnemy, 4 )
+ 		--Ability.DoAbilityArea( self.squad_ai, EnclavesPatrol.shockwave_id, Ability.Filters.CloseEnemy, 2 )
+	else
+ 		Ability.DoAbilityPos( self.squad_ai, EnclavesPatrol.seeker_id, Ability.Filters.CloseEnemy, 8 )
+ 		--Ability.DoAbilityArea( self.squad_ai, EnclavesPatrol.shockwave_id, Ability.Filters.CloseEnemy, 6 )
+	end
+
+	if (self.squad_ai:CanDoAbility(EnclavesPatrol.spotter_id)) then
+
+		if self.squad_ai:IsInCombat() then
+	
+			-- Get closest squad in range
+			local iRange = self.squad_ai:GetAbilityRange(EnclavesPatrol.spotter_id)
+			local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oSquad ~= nil) then
+		
+				-- Get stats
+				local oStats = oSquad:GetStats()
+				if (oStats ~= nil) then
+			
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+						eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+						eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+						-- Use mark ability on squad
+						--print("Using Patrol Team Mark Target for player "..tostring(cpu_manager.player_id).."")
+						self.squad_ai:DoSpecialAbilitySquad(EnclavesPatrol.spotter_id, oSquad:GetSquad())
+					end
+				end
+			end	
+		end
+	end
+
+	-- Check if we can use ping trap ability but outside of combat, in later tiers, and only within an interval
+	if (self.squad_ai:CanDoAbility(EnclavesPatrol.ping_id) and cpu_manager:GetTierLevel() >= 3) then
+
+		if not (self.squad_ai:IsInCombat()) then
+
+			-- Check to use ability every 90+ secs
+			if g_iGMT > self.lastAbilityTry + 90 then
+				self.lastAbilityTry = g_iGMT
+
+	 			local selfPos = self.squad_ai:GetPosition()
+	 			local oEnemy = Ability.Filters.CloseEnemy(selfPos, 60, 1)
+	 			if oEnemy ~= nil then
+	 				local oEnemyPos = oEnemy:GetPosition()
+	 				selfPos.x = selfPos.x + 2*(oEnemyPos.x - selfPos.x)
+	 				selfPos.z = selfPos.z + 2*(oEnemyPos.z - selfPos.z)
+	 				self.squad_ai:DoMove(selfPos)
+	 				self.squad_ai:DoSpecialAbility(EnclavesPatrol.ping_id)
+	 				--print("Using Patrol Team Close Enemy Ping Trap for player "..tostring(cpu_manager.player_id).."")
+	 			end
+	 		end
+	 	end
+	end
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function EnclavesPatrolTactic:Upgrade()
+
+	-- Check if we have free resources
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+
+	if (not self.squad_ai:IsReinforcing()) then
+	
+		-- Upgrade if possible
+		if (self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 0) then
+			local class_type = cpu_manager:GetFirstEnemyPlayer():GetMajorityClassType()
+			self.squad_ai:DoBestUpgrade( class_type )
+		end
+	end
+end
+
+function EnclavesPatrolTactic:Reinforce()
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local SpotterIndex = 0
+		local GravIndex = 1
+		local PulseIndex = 2
+	
+		-- Get current leader count
+		local numSpotter = self.squad_ai:GetLeaderCount( SpotterIndex )
+		local numGrav = self.squad_ai:GetLeaderCount( GravIndex )
+		local numPulse = self.squad_ai:GetLeaderCount( PulseIndex )
+
+		-- Desired number of each leader type
+		local desiredSpotter = math.random(0,1)
+		local desiredGrav = math.random(0,1)
+		local desiredPulse = math.random(0,1)
+
+		-- Desired order of reinforcing
+		if numSpotter < desiredSpotter then
+			if self.squad_ai:CanReinforce( true, SpotterIndex ) then
+				self.squad_ai:DoReinforce( true, SpotterIndex )
+			end
+
+		elseif numGrav < desiredGrav then
+			if self.squad_ai:CanReinforce( true, GravIndex ) then
+				self.squad_ai:DoReinforce( true, GravIndex )
+			end
+
+		elseif numPulse < desiredPulse then
+			if self.squad_ai:CanReinforce( true, PulseIndex ) then
+				self.squad_ai:DoReinforce( true, PulseIndex )
+			end
+		end
+	end
+end

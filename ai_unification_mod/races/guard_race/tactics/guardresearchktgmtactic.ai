@@ -1,0 +1,132 @@
+----------------------------------------
+-- File: 'guardesearchktgmtactic.ai'
+-- Edited by Thudmeizer		@ 28.10.2023
+
+class 'GuardResearchKtgmTactic' (BaseTactic)
+
+GuardResearchKtgm = {}
+
+function GuardResearchKtgmTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Guard Research Kill Team Tactic")
+
+	-- The name of the squad to target
+	self.squad1_name = "guard_squad_command_squad_ktgm"
+	self.squad2_name = "guard_squad_general_castor_ktgm"
+end
+
+function GuardResearchKtgmTactic:InitAbilities()
+	
+	-- Init abilities
+	if (GuardResearchKtgm.StronghealCommandSquad_id == nil) then
+		GuardResearchKtgm.StronghealCommandSquad_id = cpu_manager.stats:GetAbilityID( "ls_healing_1000" )
+	end
+
+	if (GuardResearchKtgm.StronghealGeneralCastor_id == nil) then
+		GuardResearchKtgm.StronghealGeneralCastor_id = cpu_manager.stats:GetAbilityID( "guard_ls_command_squad_healing_1000" )
+	end
+
+	if (GuardResearchKtgm.LighthealCommandSquad_id == nil) then
+		GuardResearchKtgm.LighthealCommandSquad_id = cpu_manager.stats:GetAbilityID( "ls_healing_500" )
+	end
+
+	if (GuardResearchKtgm.LighthealGeneralCastor_id == nil) then
+		GuardResearchKtgm.LighthealGeneralCastor_id = cpu_manager.stats:GetAbilityID( "guard_ls_command_squad_healing_500" )
+	end
+end
+
+function GuardResearchKtgmTactic:DoAbilities()
+	
+	aitrace("GuardResearchKtgmTactic: Do abilities...")
+
+	-- Check if squad is valid
+    	for oSquad in military_manager:GetSquads() do
+        	if oSquad:IsValid() then
+            		if oSquad:GetSquadName() == self.squad1_name then
+
+				-- Try to use Strong Heal ability on squad (restores target's health by 1000 HP)
+				if (self.base_ai:CanDoAbility(GuardResearchKtgm.StronghealCommandSquad_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() < 0.3) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 100 and iPower >= 100 then		
+		
+							-- Use strong heal ability on commander
+							self.base_ai:DoSpecialAbility(GuardResearchKtgm.StronghealCommandSquad_id)
+							--print("Using CommandSquad Heavy Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+-- Disabled light health to save on resources
+--[[
+				-- Try to use Light Heal ability on commander1 (restores target's health by 500 HP)
+				if (self.base_ai:CanDoAbility(GuardResearchKtgm.LighthealCommandSquad_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() > 0.7) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 50 and iPower >= 50 then	
+				
+							-- Use light heal ability on commander
+							self.base_ai:DoSpecialAbility(GuardResearchKtgm.LighthealCommandSquad_id)
+							--print("Using CommandSquad Light Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+]]
+			end
+		end
+	end
+	-- Check if squad is valid
+    	for oSquad in military_manager:GetSquads() do
+        	if oSquad:IsValid() then
+            		if oSquad:GetSquadName() == self.squad2_name then
+
+				-- Try to use Strong Heal ability on squad (restores target's health by 1000 HP)
+				if (self.base_ai:CanDoAbility(GuardResearchKtgm.StronghealGeneralCastor_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() < 0.3) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 100 and iPower >= 100 then		
+		
+							-- Use strong heal ability on commander
+							self.base_ai:DoSpecialAbility(GuardResearchKtgm.StronghealGeneralCastor_id)
+							--print("Using GeneralCastor Heavy Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+-- Disabled light health to save on resources
+--[[
+				-- Try to use Light Heal ability on commander1 (restores target's health by 500 HP)
+				if (self.base_ai:CanDoAbility(GuardResearchKtgm.LighthealGeneralCastor_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() > 0.7) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 50 and iPower >= 50 then	
+				
+							-- Use light heal ability on commander
+							self.base_ai:DoSpecialAbility(GuardResearchKtgm.LighthealGeneralCastor_id)
+							--print("Using GeneralCastor Light Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+]]
+			end
+		end
+	end
+end

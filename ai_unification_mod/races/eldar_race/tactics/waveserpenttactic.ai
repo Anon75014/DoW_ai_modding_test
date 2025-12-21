@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'waveserpenttactic.ai'
+-- Edited by Thudmeizer		@ 11.08.2024
+
+class 'WaveSerpentTactic' (EldarVehicleTactic)
+
+WaveSerpent = {}
+
+function WaveSerpentTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Wave Serpent Grav Tank Tactic")
+	
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 4
+end
+
+function WaveSerpentTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (WaveSerpent.discharge_id == nil) then
+		WaveSerpent.discharge_id = cpu_manager.stats:GetAbilityID( "eldar_wave_serpent_discharge" )
+	end
+end
+
+function WaveSerpentTactic:DoAbilities()
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		Ability.DoAbilityTarget( self.squad_ai, WaveSerpent.discharge_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, WaveSerpent.discharge_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, WaveSerpent.discharge_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, WaveSerpent.discharge_id, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityTarget( self.squad_ai, WaveSerpent.discharge_id, Ability.Filters.CloseMonsterEnemy, 3 )
+		Ability.DoAbilityTarget( self.squad_ai, WaveSerpent.discharge_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

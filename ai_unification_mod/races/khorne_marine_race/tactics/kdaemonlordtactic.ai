@@ -1,0 +1,26 @@
+----------------------------------------
+-- File: 'daemonprincetactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kDaemonLordTactic' (kInfantryTactic)
+
+DaemonLord = {}
+
+function kDaemonLordTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemon Lord Tactic")
+end
+
+function kDaemonLordTactic:InitAbilities()
+
+	if (DaemonLord.roar_id == nil) then
+		DaemonLord.roar_id = cpu_manager.stats:GetAbilityID( "khm_warpfire_lord" )	
+	end
+end
+
+function kDaemonLordTactic:DoAbilities()
+
+	Ability.DoAbilityTarget(self.squad_ai, DaemonLord.roar_id, Ability.Filters.CloseInfantryEnemy, 5)
+	Ability.DoAbilityTarget(self.squad_ai, DaemonLord.roar_id, Ability.Filters.CloseMonsterEnemy, 5)
+end

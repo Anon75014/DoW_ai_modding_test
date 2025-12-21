@@ -1,0 +1,15 @@
+----------------------------------------
+-- File: 'NightLordsserftactic.ai'
+-- Edited by Torzel   @ 18.05.2013
+
+class 'NightLordsSerfTactic' (EngineerTactic)
+
+function NightLordsSerfTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Serf Tactic")
+end
+
+function NightLordsSerfTactic:IsAffectedByMorale()
+	return false
+end
+

@@ -1,0 +1,75 @@
+----------------------------------------
+-- File: 'purgatorsptactic.ai'
+-- Edited by Thudmeizer @ 11.03.2024
+
+class 'PurgatorSPTactic' (DaemonhuntInfantryGKTactic)
+
+PurgatorSP = {}
+
+function PurgatorSPTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Purgator Campaign Tactic")
+end
+
+function PurgatorSPTactic:InitAbilities()
+
+	if (PurgatorSP.frag_id == nil) then
+	    PurgatorSP.frag_id = cpu_manager.stats:GetAbilityID( "inquisition_frag_grenades_purgator" )	
+	end
+
+	if (PurgatorSP.frag_adv == nil) then
+	    PurgatorSP.frag_adv = cpu_manager.stats:GetAbilityID( "inquisition_frag_grenades_purgator_advance" )	
+	end
+
+	if (PurgatorSP.astral_aim == nil) then
+	    PurgatorSP.astral_aim = cpu_manager.stats:GetAbilityID( "inquisition_astral_aim" )	
+	end
+end
+
+function PurgatorSPTactic:DoAbilities()
+	
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(PurgatorSP.frag_id) then
+			Ability.DoAbilityTarget( self.squad_ai, PurgatorSP.frag_id, Ability.Filters.CloseSquadEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, PurgatorSP.frag_id, Ability.Filters.CloseCommanderEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, PurgatorSP.frag_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		end
+
+		if self.squad_ai:CanDoAbility(PurgatorSP.frag_adv) then
+			Ability.DoAbilityTarget( self.squad_ai, PurgatorSP.frag_adv, Ability.Filters.CloseSquadEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, PurgatorSP.frag_adv, Ability.Filters.CloseCommanderEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, PurgatorSP.frag_adv, Ability.Filters.CloseMonsterEnemy, 1 )
+		end
+	end
+
+	-- Casting Astral Aim for Purgators
+	if self.squad_ai:CanDoAbility(PurgatorSP.astral_aim) and self.squad_ai:IsAttacking() then
+		if Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 18, 1) == nil
+		and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Ranged then
+			self.squad_ai:DoSpecialAbility(PurgatorSP.astral_aim)
+		end
+	end
+end
+
+function PurgatorSPTactic:Upgrade()
+
+ 	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+
+	-- If there are no resources available, don't upgrade!
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+
+	if (not self.squad_ai:IsReinforcing() and cpu_manager:GetTierLevel() >= 2) then
+	  
+		-- Try for upgrade if we've a leader and more than 6 troopers
+		if self.squad_ai:HasUpgradableTrooper() and (self.squad_ai:GetLeaderCount(0) == 1 or self.squad_ai:GetLeaderCount(1) == 1) then
+			local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+			self.squad_ai:DoBestUpgrade( class_type )
+		end
+	end
+end

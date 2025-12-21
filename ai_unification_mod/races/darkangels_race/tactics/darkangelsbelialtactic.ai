@@ -1,0 +1,109 @@
+----------------------------------------
+-- File: 'darkangelsbelialtactic.ai'
+-- Edited by Thudmeizer @ 06.06.2018
+
+class 'DarkAngelsBelialTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsBelial = {}
+
+DarkAngelsBelialAbility =
+{
+    BattlecryID = cpu_manager.stats:GetAbilityID("darkangels_battlecry_belial")
+    ,HuntFallenID = cpu_manager.stats:GetAbilityID("darkangels_hunt_the_fallen_commander")
+    ,OrbitalID = cpu_manager.stats:GetAbilityID("darkangels_orbital_bombardment")
+}
+
+function DarkAngelsBelialTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Belial Tactic")
+
+    self.battlecryLastUse = g_iGMT
+    self.huntFallenLastUse = g_iGMT
+    self.orbitalLastUse = g_iGMT
+end
+
+function DarkAngelsBelialTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkAngelsBelialTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkAngelsBelialTactic:InitAbilities()
+
+   self.battlecryLastUse = g_iGMT
+   self.huntFallenLastUse = g_iGMT
+   self.orbitalLastUse = g_iGMT
+	
+	if (DarkAngelsBelial.battlecry_id == nil) then
+		DarkAngelsBelial.battlecry_id = cpu_manager.stats:GetAbilityID( "darkangels_battlecry" )
+	end
+
+	if (DarkAngelsBelial.fallen_id == nil) then
+		DarkAngelsBelial.fallen_id = cpu_manager.stats:GetAbilityID( "darkangels_hunt_the_fallen_commander" )
+	end
+
+	if (DarkAngelsBelial.orbital_id == nil) then
+		DarkAngelsBelial.orbital_id = cpu_manager.stats:GetAbilityID( "darkangels_orbital_bombardment" )
+	end
+end
+
+function DarkAngelsBelialTactic:DoAbilities()
+	
+	Ability.DoAbilityArea( self.squad_ai, DarkAngelsBelial.fallen_id, Ability.Filters.CloseInCombat, 10, 1 )
+
+	Ability.DoAbilityArea( self.squad_ai, DarkAngelsBelial.battlecry_id, Ability.Filters.CloseInCombat, 10, 5 )
+
+	Ability.DoAbilityPos(self.squad_ai, DarkAngelsBelial.orbital_id, Ability.Filters.CloseEnemy, 24)
+	Ability.DoAbilityPos(self.squad_ai, DarkAngelsBelial.orbital_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+
+    if self.squad_ai:IsInCombat() then
+
+        if ( g_iGMT > self.battlecryLastUse + 30 ) then
+            if Ability.DoAbilityArea( self.squad_ai, DarkAngelsBelialAbility.BattlecryID, Ability.Filters.CloseEnemy, 10, 1 )
+            then
+                self.battlecryLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.huntFallenLastUse + 30 ) then
+            if Ability.DoAbilityArea( self.squad_ai, DarkAngelsBelialAbility.HuntFallenID, Ability.Filters.CloseEnemy, 10, 5 )
+            then
+                self.huntFallenLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.orbitalLastUse + 30 ) then
+            if Ability.DoAbilityPos(self.squad_ai, DarkAngelsBelial.orbital_id, Ability.Filters.CloseEnemy, 24)
+            then
+                self.orbitalLastUse = g_iGMT 
+            end
+        end
+    end
+end
+
+
+function DarkAngelsBelialTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+	if (cpu_manager:GetTierLevel() > 1) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end
+

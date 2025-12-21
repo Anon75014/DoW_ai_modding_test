@@ -1,0 +1,72 @@
+----------------------------------------
+-- File: 'Psykertactic.ai'
+-- Edited by Thudmeizer @ 26.10.2008
+
+class 'PsykerTactic' (GuardInfantryTactic)
+
+Psyker = {}
+
+function PsykerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Psyker Tactic")
+end
+
+function PsykerTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function PsykerTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function PsykerTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Psyker.lightning_id == nil) then
+		Psyker.lightning_id = cpu_manager.stats:GetAbilityID( "guard_psyker_lightning_arc" )
+		Psyker.lightning_camp_id = cpu_manager.stats:GetAbilityID( "guard_psyker_lightning_arc_advance_sp" )
+		Psyker.strip_id = cpu_manager.stats:GetAbilityID( "guard_psyker_strip_soul" )
+		Psyker.curse_id = cpu_manager.stats:GetAbilityID( "guard_curse_machine_spirits" )
+		Psyker.curse_camp_id = cpu_manager.stats:GetAbilityID( "guard_curse_machine_spirits_advance_sp" )
+	end
+end
+
+function PsykerTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Target infantry
+		if self.squad_ai:CanDoAbility(Psyker.lightning_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Psyker.lightning_id, Ability.Filters.CloseSquadEnemy, 1 )
+		elseif self.squad_ai:CanDoAbility(Psyker.lightning_camp_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Psyker.lightning_camp_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		-- Target commanders
+		if self.squad_ai:CanDoAbility(Psyker.strip_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Psyker.strip_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		-- Target vehicles
+		if self.squad_ai:CanDoAbility(Psyker.curse_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Psyker.curse_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		elseif self.squad_ai:CanDoAbility(Psyker.curse_camp_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Psyker.curse_camp_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		end
+	end
+end
+
+function PsykerTactic:Update()
+
+   if self:IsComplete() then
+      return
+   end
+
+   --state machine
+   if not InfantryTactic.Update( self ) then
+      return
+   end
+
+   --attach to squad
+   self:TryAttachSquad( false, false, 1000, 100, nil )
+end
+

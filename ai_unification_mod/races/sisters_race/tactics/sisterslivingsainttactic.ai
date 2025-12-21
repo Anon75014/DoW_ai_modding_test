@@ -1,0 +1,51 @@
+----------------------------------------
+-- File: 'SistersLivingSainttactic.ai'
+-- Edited by Thudmeizer @ 22.03.2008
+
+class 'SistersLivingSaintTactic' (SistersInfantryTactic)
+
+SistersLivingSaint = {}
+
+function SistersLivingSaintTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Sisters Living Saint Tactic")
+end
+
+function SistersLivingSaintTactic:AlwaysAttack()
+	return true
+end
+
+function SistersLivingSaintTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SistersLivingSaint.flame_id == nil or SistersLivingSaint.hammer_id == nil then
+		SistersLivingSaint.flame_id = cpu_manager.stats:GetAbilityID( "sisters_ardent_flame" )
+		SistersLivingSaint.hammer_id = cpu_manager.stats:GetAbilityID( "sisters_fiendbane_strike" )
+	end
+end
+
+function SistersLivingSaintTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(SistersLivingSaint.flame_id) then
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				-- We are dying, lower requisites for attacks
+				Ability.DoAbilityPos( self.squad_ai, SistersLivingSaint.flame_id, Ability.Filters.CloseEnemy, 6 )
+			else
+				Ability.DoAbilityPos( self.squad_ai, SistersLivingSaint.flame_id, Ability.Filters.CloseEnemy, 12 )
+			end
+
+		elseif self.squad_ai:CanDoAbility(SistersLivingSaint.hammer_id) then
+			if Ability.DoAbilityPos( self.squad_ai, SistersLivingSaint.hammer_id, Ability.Filters.CloseEnemy, 10 )
+			or Ability.DoAbilityPos( self.squad_ai, SistersLivingSaint.hammer_id, Ability.Filters.CloseMonsterEnemy, 6 )
+			or Ability.DoAbilityPos( self.squad_ai, SistersLivingSaint.hammer_id, Ability.Filters.CloseMonsterHighEnemy, 1 )
+			then end
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end
+

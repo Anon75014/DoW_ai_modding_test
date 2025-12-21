@@ -1,0 +1,93 @@
+----------------------------------------
+-- File: 'landraidertactic.ai'
+
+class 'LandRaiderTactic' (ImperialFistsVehicleTactic)
+
+LandRaider = {}
+
+function LandRaiderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Imperial Fists Land Raider Tactic")
+
+	-- For the Achilles, upgrade to Volkites 50% of the time, on spawn, or each time the AI re-initiates
+	if math.random(1,2) == 1 then
+		if self.squad_ai:GetSquadName() == "imperial_fists_squad_land_raider_achilles" then
+			self:AutoBuildAddOn(0)
+		end
+	end
+	
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+
+function LandRaiderTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then			
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+
+function LandRaiderTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (LandRaider.spirit_id == nil) then
+		LandRaider.spirit_id = cpu_manager.stats:GetAbilityID( "imperial_fists_machine_spirit" )
+	end
+
+	if (LandRaider.smoke_id == nil) then
+		LandRaider.smoke_id = cpu_manager.stats:GetAbilityID( "imperial_fists_smoke_launchers" )	
+	end
+
+	if (LandRaider.detection_id == nil) then
+		LandRaider.detection_id = cpu_manager.stats:GetAbilityID( "imperial_fists_detection_field" )	
+	end
+end
+
+function LandRaiderTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(LandRaider.spirit_id)) then
+			self.squad_ai:DoSpecialAbility(LandRaider.spirit_id)
+		end	  
+	end
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(LandRaider.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(LandRaider.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(LandRaider.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Try to activate detection field
+	if (self.squad_ai:CanDoAbility(LandRaider.detection_id)) then
+	
+		local iRange = self.squad_ai:GetAbilityRange(LandRaider.detection_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbilitySquad(LandRaider.detection_id, oSquad:GetSquad())
+			end
+		end
+	end
+	
+	-- Do basic abilities
+	ImperialFistsVehicleTactic.DoAbilities(self)
+end

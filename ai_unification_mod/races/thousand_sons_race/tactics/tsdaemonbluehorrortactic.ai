@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'tsdaemonbluehorrortactic.ai'
+-- Created by Gambit @ 4.1.2016
+
+class 'TSDaemonBlueHorrorTactic' (TSInfantryTactic)
+
+TSDaemonAbility = {}
+
+function TSDaemonBlueHorrorTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("TS Blue Horror Tactic")
+end
+
+function TSDaemonBlueHorrorTactic:AlwaysAttack()
+	return true
+end

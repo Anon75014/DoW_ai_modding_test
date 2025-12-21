@@ -1,0 +1,108 @@
+----------------------------------------
+-- File: 'daemonsangrontactic.ai'
+-- Created by Gambit 20/04/2018
+
+class 'DaemonsAngronTactic' (DaemonsInfantryTactic)
+
+DaemonsAngron = {}
+
+function DaemonsAngronTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Primarch Angron Tactic")
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+	--self.checkTime = g_iGMT
+	self.isStuck = false
+end
+
+
+function DaemonsAngronTactic:AlwaysAttack()
+	return true
+end
+
+
+function DaemonsAngronTactic:InitAbilities()
+	if (DaemonsAngron.storm_id == nil) then
+		DaemonsAngron.storm_id = cpu_manager.stats:GetAbilityID( "daemons_angron_warp_storm" )
+		DaemonsAngron.force_throw_id = cpu_manager.stats:GetAbilityID( "daemons_angron_force_throw" )
+		DaemonsAngron.shroud_id = cpu_manager.stats:GetAbilityID( "daemons_angron_daemonic_shroud" )
+		DaemonsAngron.throw_firebolt_id = cpu_manager.stats:GetAbilityID( "daemons_angron_firebolt" )
+	end
+end
+
+
+function DaemonsAngronTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		if iPow > 3200 and self.squad_ai:CanDoAbility( DaemonsAngron.storm_id ) then
+			if Ability.DoAbilityPos(self.squad_ai, DaemonsAngron.storm_id, Ability.Filters.CloseEnemy, 24)
+			or Ability.DoAbilityPos(self.squad_ai, DaemonsAngron.storm_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+		if iPow > 200 and self.squad_ai:CanDoAbility( DaemonsAngron.throw_firebolt_id ) then
+			if Ability.DoAbilityTarget(self.squad_ai, DaemonsAngron.throw_firebolt_id, Ability.Filters.CloseCommanderEnemy, 1)
+			or Ability.DoAbilityTarget(self.squad_ai, DaemonsAngron.throw_firebolt_id, Ability.Filters.CloseSquadEnemy, 4) then
+				return
+			end
+		end
+		if iPow > 200 and self.squad_ai:CanDoAbility( DaemonsAngron.force_throw_id ) then
+			local oTarget = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 12, 1)
+			if oTarget ~= nil and oTarget:IsValid() then
+				if self.squad_ai:DoSpecialAbilityPos(DaemonsAngron.force_throw_id, oTarget:GetPosition()) then
+					return
+				end
+			end
+		end
+		if iPow > 200 and self.squad_ai:CanDoAbility( DaemonsAngron.shroud_id ) then
+			if Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 15, 1) ~= nil then
+				self.squad_ai:DoSpecialAbility( DaemonsAngron.shroud_id )
+				return
+			end
+		end
+	end
+
+    -- Jump squads' unstuck code call. Put ANYWHERE in the DoAbilities() function
+    -- Checks jump-able stuck squads, and force them to jump nearby
+	if self.squad_ai:CanJump() then
+		self:SolveStuckCase()
+	end
+end
+
+
+-- Unstuck Code
+function DaemonsAngronTactic:SolveStuckCase()
+	local iPosition = self.squad_ai:GetPosition()
+	if iPosition.x ~= self.initialPosition.x or iPosition.z ~= self.initialPosition.z then
+		self.isStuck = false
+	elseif (self.squad_ai:IsInStateMove() or self.squad_ai:IsInStateAttackMove()) and not self.squad_ai:IsInCombat()
+	and iPosition.x == self.initialPosition.x and iPosition.z == self.initialPosition.z then
+		self.isStuck = true
+	end
+	if self.isStuck then
+		self:ForceSquadJumpNear(iPosition)
+	end
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function DaemonsAngronTactic:ForceSquadJumpNear(pos)
+	-- Try to jump somewhere near, perform 16 checks for a viable position
+	local jumpDisSqr = 5000
+	for iLoop1 = 1, 16 do
+		-- Create a jump position
+		local vJumpPosition = pos
+		local vDir = cpu_manager:GetDirectionToEnemy(pos)
+		vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(-20, 60)
+		vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(-20, 60)
+		-- Check if target position is in range and if unit is able to jump to target position
+		local iDistance = distance_sqr(vJumpPosition, pos)
+		if iDistance < jumpDisSqr and self.squad_ai:CanJumpToPosition(vJumpPosition) then
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			self.m_iLastGatherMove = self.last_jump - 10
+			return
+		end
+	end
+end

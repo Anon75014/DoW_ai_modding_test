@@ -1,0 +1,33 @@
+----------------------------------------
+-- File: 'kriegqilintactic.ai'
+-- Edited by Thudmeizer @ 12.09.2023
+
+class 'KriegQilinTactic' (KriegVehicleTactic)
+
+KriegQilin = {}
+
+function KriegQilinTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Qilin Tactic")
+end
+
+function KriegQilinTactic:InitAbilities()
+
+	-- Init ability ID's
+	if KriegQilin.autoloader_id == nil then
+		KriegQilin.autoloader_id = cpu_manager.stats:GetAbilityID( "krieg_autoloader_qilin" )
+	end
+end
+
+function KriegQilinTactic:DoAbilities()
+
+	-- Try to use autoloader when engaged and attacking
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(KriegQilin.autoloader_id) then
+			Ability.DoAbilityArea(self.squad_ai, KriegQilin.autoloader_id, Ability.Filters.CloseEnemy, 50, 1)
+		end
+	end
+
+	-- Call standard method
+	KriegVehicleTactic.DoAbilities(self)
+end

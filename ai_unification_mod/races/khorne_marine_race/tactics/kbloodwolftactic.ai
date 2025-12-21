@@ -1,0 +1,69 @@
+----------------------------------------
+-- File: 'kinfantrytactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kBloodWolfTactic' (kInfantryTactic)
+
+BloodWolf = {}
+
+function kBloodWolfTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("k Blood Wolf Tactic")
+end
+
+function kBloodWolfTactic:InitAbilities()
+
+	if (BloodWolf.batte_roar_id == nil) then
+		BloodWolf.batte_roar_id = cpu_manager.stats:GetAbilityID( "khm_batte_roar" )	
+	end
+
+	if (BloodWolf.missiles_id == nil) then
+		BloodWolf.missiles_id = cpu_manager.stats:GetAbilityID( "khm_pod_missiles" )	
+	end
+end
+
+function kBloodWolfTactic:DoAbilities()
+
+	Ability.DoAbilityPos(self.squad_ai, BloodWolf.missiles_id, Ability.Filters.CloseEnemy, 8)
+
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+		if (not self:IsMoving()) then
+			if (self.squad_ai:CanDoAbility( BloodWolf.batte_roar_id )) then
+				self.squad_ai:DoSpecialAbility( BloodWolf.batte_roar_id )
+			end
+		end		
+	end
+	kInfantryTactic.DoAbilities(self)
+end
+
+function kBloodWolfTactic:Reinforce()
+
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+
+	if (self.squad_ai:GetSquadName() == "khm_squad_blood_wolf" and self.squad_ai:GetNumTroopers() < 6) then
+		return
+	end
+
+	if (not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 3) then
+		local enemy = cpu_manager:FindClosestEnemyPlayer()
+		if (enemy == nil) then
+			return
+		end
+
+		local class_type = enemy:GetMajorityClassType() 
+		if (class_type < UnitStatsAI.UC_HeavyInfantryMed) then	  
+			local enemy_race = enemy:GetPlayerRaceName()
+			if (enemy_race == "space_marine_race" or enemy_race == "chaos_marine_race" or enemy_race == "necron_race") then
+		    	class_type = UnitStatsAI.UC_HeavyInfantryMed
+		  	end
+		end
+		self.squad_ai:DoBestUpgrade(class_type)
+	end
+end

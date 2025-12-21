@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'Praetorian_StompaTactic.ai'
+-- Edited by Thudmeizer		@ 05.01.2023
+
+class 'Praetorian_StompaTactic' (Praetorian_VehicleTactic)
+
+function Praetorian_StompaTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorian_Stompa Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end

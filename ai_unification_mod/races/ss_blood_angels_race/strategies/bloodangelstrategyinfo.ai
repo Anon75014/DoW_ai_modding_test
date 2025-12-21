@@ -1,0 +1,249 @@
+----------------------------------------
+-- File: 'bloodangelstrategyinfo.ai'
+-- Edited by Thudmeizer    @ 13.02.2025
+
+BuildBaseStrategyInfo = 
+{
+	ss_blood_angels_race =
+	{
+		post_builder = 1,
+		flag_capture = 2,
+
+		--reserve this amount for building units/buildings (not for use in upgrading/ reinforcing)
+		req_reserve = 100,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+                -- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Research Count: 29
+			-- Might Of Sanguinius path
+			{
+				{ 1, 0, 0, 0, 1,		"Research",		"blood_angel_doctrine_might_of_sanguinus" },
+				{ 1, 220, 50, 0, 1,		"Unit",			"blood_angel_squad_commander_tycho" },
+				{ 1, 190, 0, 0, 2,		"Unit",			"blood_angel_squad_tactical" },
+				{ 1, 190, 0, 0, 1,		"Unit",			"blood_angel_squad_tactical" },
+				{ 1, 450, 0, 0, 1,		"Building",		"blood_angel_hq" },
+				{ 1, 250, 0, 0, 1,		"Building",		"blood_angel_barracks" },
+				{ 1, 175, 50, 600, 1,		"Building",		"blood_angel_armoury" },
+				{ 1, 135, 0, 0, 2,		"Building",		"blood_angel_generator" },
+				{ 1, 110, 80, 250, 100,		"TurretAddon",		"blood_angel_list_post_addon_1" },
+				{ 1, 135, 0, 0, 2,		"Building",		"blood_angel_generator" },
+				{ 1, 350, 100, 800, 100,	"Addon",		"blood_angel_hq_addon_1" },
+				{ 1, 135, 0, 900, 4,		"Building",		"blood_angel_generator" },
+				{ 1, 90, 45, 500, 1,		"Building",		"blood_angel_turret_bolter" },
+				{ 1, 50, 50, 500, 1,		"Building",		"blood_angel_mine_field" },
+
+				{ 2, 170, 305, 0, 1,		"Unit",			"blood_angel_squad_dreadnought" },
+				{ 2, 240, 50, 0, 1,		"Unit",			"blood_angel_squad_veteran" },
+				{ 2, 200, 40, 0, 1,		"Unit",			"blood_angel_squad_devastator" },
+				{ 2, 200, 100, 250, 1,		"Building",		"blood_angel_vehicle_building" },
+			 	{ 2, 75, 75, 500, 1,		"Research",		"blood_angel_heavy_weapons_research" },
+				{ 2, 75, 250, 600, 1,		"Research",		"blood_angel_requisition_research_1" },
+				{ 2, 135, 0, 1000, 6,		"Building",		"blood_angel_generator" },
+				{ 2, 125, 50, 1000, 1,		"Building",		"blood_angel_ability_building" },
+				{ 2, 90, 45, 1500, 3,		"Building",		"blood_angel_turret_bolter" },
+				{ 2, 50, 50, 1500, 3,		"Building",		"blood_angel_mine_field" },
+				{ 2, 275, 160, 1500, 1, 	"TurretAddon",		"blood_angel_list_post_addon_2" },
+				{ 2, 50, 0, 1500, 50,		"TurretAddon",		"blood_angel_turret_addon" },
+				{ 2, 200, 40, 1500, 1,		"Research",		"blood_angel_power_research_1" },
+				{ 2, 400, 300, 1500, 50,	"Addon",		"blood_angel_hq_addon_2" },
+
+				{ 3, 100, 80, 0, 1,		"Unit",			"blood_angel_squad_death_company_rhino" },
+				{ 3, 165, 300, 0, 1,		"Unit",			"blood_angel_squad_baal_predator" },
+				{ 3, 200, 400, 0, 1,		"Unit",			"blood_angel_squad_dreadnought_librarian" },
+				{ 3, 150, 50, 1500, 1,		"Building",		"blood_angel_orbital_relay" },
+				{ 3, 100, 350, 2000, 1,		"Research",		"blood_angel_requisition_research_2" },
+				{ 3, 200, 100, 2000, 2,		"Building",		"blood_angel_vehicle_building" },
+				{ 3, 350, 0, 2000, 1,		"Research",		"blood_angel_power_research_2" },
+				{ 3, 275, 160, 1500, 50,	"TurretAddon",		"blood_angel_list_post_addon_2" },
+				{ 3, 125, 50, 2000, 2,		"Building",		"blood_angel_ability_building" },
+				{ 3, 400, 400, 2000, 1,		"Research",		"blood_angel_strength_of_primach_research" },
+				{ 3, 90, 45, 2500, 6,		"Building",		"blood_angel_turret_bolter" },
+				{ 3, 50, 50, 2500, 6,		"Building",		"blood_angel_mine_field" },
+
+				{ 4, 110, 335, 0, 1,		"Unit",			"blood_angel_squad_vindicator" },
+				{ 4, 200, 400, 0, 1,		"Unit",			"blood_angel_squad_dreadnought_moriar" },
+				{ 4, 275, 160, 2000, 100,	"TurretAddon",		"blood_angel_list_post_addon_2" },
+				{ 4, 1000, 0, 3500, 1,		"Building",		"blood_angel_hq" },
+				{ 4, 90, 45, 2500, 18,		"Building",		"blood_angel_turret_bolter" },
+				{ 4, 135, 0, 1000, 18,		"Building",		"blood_angel_generator" }
+			},
+
+			-- Wings Of Sanguinius path
+			{
+				{ 1, 0, 0, 0, 1,		"Research",		"blood_angel_doctrine_wings_of_sanguinus" },
+				{ 1, 220, 50, 0, 1,		"Unit",			"blood_angel_squad_commander_tycho" },
+				{ 1, 220, 0, 0, 2,		"Unit",			"blood_angel_squad_tactical" },
+				{ 1, 220, 0, 0, 1,		"Unit",			"blood_angel_squad_assault" },
+				{ 1, 450, 0, 0, 1,		"Building",		"blood_angel_hq" },
+				{ 1, 250, 0, 0, 1,		"Building",		"blood_angel_barracks" },
+				{ 1, 175, 50, 600, 1,		"Building",		"blood_angel_armoury" },
+				{ 1, 135, 0, 0, 2,		"Building",		"blood_angel_generator" },
+				{ 1, 110, 80, 250, 100,		"TurretAddon",		"blood_angel_list_post_addon_1" },
+				{ 1, 350, 100, 800, 100,	"Addon",		"blood_angel_hq_addon_1" },
+				{ 1, 135, 0, 900, 4,		"Building",		"blood_angel_generator" },
+				{ 1, 90, 45, 500, 1,		"Building",		"blood_angel_turret_bolter" },
+				{ 1, 50, 50, 500, 1,		"Building",		"blood_angel_mine_field" },
+
+				{ 2, 170, 305, 0, 1,		"Unit",			"blood_angel_squad_dreadnought" },
+				{ 2, 250, 50, 0, 1,		"Unit",			"blood_angel_squad_assault_veteran" },
+				{ 2, 200, 40, 0, 1,		"Unit",			"blood_angel_squad_devastator" },
+				{ 2, 200, 100, 250, 1,		"Building",		"blood_angel_vehicle_building" },
+				{ 2, 75, 75, 500, 1,		"Research",		"blood_angel_heavy_weapons_research" },
+				{ 2, 75, 250, 600, 1,		"Research",		"blood_angel_requisition_research_1" },
+				{ 2, 135, 0, 1000, 6,		"Building",		"blood_angel_generator" },
+				{ 2, 125, 50, 1000, 1,		"Building",		"blood_angel_ability_building" },
+				{ 2, 90, 45, 1500, 3,		"Building",		"blood_angel_turret_bolter" },
+				{ 2, 50, 50, 1500, 3,		"Building",		"blood_angel_mine_field" },
+				{ 2, 275, 160, 1500, 1, 	"TurretAddon",		"blood_angel_list_post_addon_2" },
+				{ 2, 50, 0, 1500, 50,		"TurretAddon",		"blood_angel_turret_addon" },
+				{ 2, 200, 40, 1500, 1,		"Research",		"blood_angel_power_research_1" },
+				{ 2, 400, 300, 1500, 50,	"Addon",		"blood_angel_hq_addon_2" },
+
+				{ 3, 260, 100, 0, 1,		"Unit",			"blood_angel_squad_assault_death_company" },
+				{ 3, 165, 300, 0, 1,		"Unit",			"blood_angel_squad_predator" },
+				{ 3, 240, 100, 0, 1,		"Unit",			"blood_angel_squad_terminator_assault" },
+				{ 3, 150, 50, 1500, 1,		"Building",		"blood_angel_orbital_relay" },
+				{ 3, 100, 350, 2000, 1,		"Research",		"blood_angel_requisition_research_2" },
+				{ 3, 200, 100, 2000, 2,		"Building",		"blood_angel_vehicle_building" },
+				{ 3, 350, 0, 1500, 1,		"Research",		"blood_angel_power_research_2" },
+				{ 3, 275, 160, 2000, 50,	"TurretAddon",		"blood_angel_list_post_addon_2" },
+				{ 3, 125, 50, 2000, 2,		"Building",		"blood_angel_ability_building" },
+				{ 3, 400, 400, 2000, 1,		"Research",		"blood_angel_strength_of_primach_research" },
+				{ 3, 90, 45, 2500, 6,		"Building",		"blood_angel_turret_bolter" },
+				{ 3, 50, 50, 2500, 6,		"Building",		"blood_angel_mine_field" },
+
+				{ 4, 200, 400, 0, 1,		"Unit",			"blood_angel_squad_dreadnought_moriar" },
+				{ 4, 190, 300, 0, 1,		"Unit",			"blood_angel_squad_whirlwind" },
+				{ 4, 275, 160, 2000, 100,	"TurretAddon",		"blood_angel_list_post_addon_2" },
+				{ 4, 1000, 0, 3500, 1,		"Building",		"blood_angel_hq" },
+				{ 4, 90, 45, 2500, 18,		"Building",		"blood_angel_turret_bolter" },
+				{ 4, 135, 0, 1000, 18,		"Building",		"blood_angel_generator" }
+			}
+		},
+
+		SquadLimits =
+		{
+			standard =
+			{
+				blood_angel_squad_servitor = 0,
+				blood_angel_squad_skull_probe = 4,
+				blood_angel_squad_scout_assault = math.random( 1,2 ),
+				blood_angel_squad_tactical = math.random( 2,3 ),
+				blood_angel_squad_assault = math.random( 1,2 ),
+				blood_angel_squad_devastator = math.random( 2,3 ),
+				blood_angel_squad_veteran = 2,						--might
+				blood_angel_squad_assault_veteran = 2,					--wings
+				blood_angel_squad_death_company = 1,				 	--might
+				blood_angel_squad_assault_death_company = 1,				--wings
+				blood_angel_squad_terminator = 1,
+				blood_angel_squad_terminator_assault = 1,
+				blood_angel_squad_terminator_honour_guard = 1,				--might
+				blood_angel_squad_primaris_suppressor = 1,				--wings
+				blood_angel_squad_primaris_assault_intercessor = 1,			--wings
+				blood_angel_squad_primaris_heavy_intercessor = 1,			--might
+				blood_angel_squad_daniel = 1,
+				blood_angel_squad_highpriest = 1,
+				blood_angel_squad_mephiston = 1,
+				blood_angel_squad_hg_mephiston = 1,					--might
+				blood_angel_squad_commander_tycho = 1,
+				blood_angel_squad_commander_tycho_dc = 1,
+				blood_angel_squad_dante = 1,
+				blood_angel_squad_hg_dante = 1,						--wings
+				blood_angel_squad_sanguinor = 1,
+				blood_angel_squad_rhino = 1,
+				blood_angel_squad_death_company_rhino = 1,				--might
+				blood_angel_squad_razorback = math.random( 1,2 ),			--might
+				blood_angel_squad_land_speeder = math.random( 2,3 ),			--wings
+				blood_angel_squad_tempest = math.random( 2,3 ),				--wings
+				blood_angel_squad_damocles = 1,
+				blood_angel_squad_dreadnought = math.random( 2,3 ),
+				blood_angel_squad_dreadnought_furioso = math.random( 2,3 ),
+				blood_angel_squad_dreadnought_moriar = 1,
+				blood_angel_squad_dreadnought_librarian = 1,
+				blood_angel_squad_baal_predator = math.random( 1,2 ),
+				blood_angel_squad_predator = math.random( 1,2 ),
+				blood_angel_squad_vindicator = math.random( 1,2 ),			--might
+				blood_angel_squad_whirlwind = 1,					--wings
+				blood_angel_squad_land_raider = 1,					--might
+				blood_angel_squad_land_raider_infernus = 1,				--might
+				blood_angel_squad_stormraven = 1,					--wings
+				blood_angel_squad_stormraven_landed= 1,					--wings
+				blood_angel_squad_sicaran = 1,
+			}
+		}
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	ss_blood_angels_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, 
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_servitor" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "blood_angel_barracks", true },
+			{ "building", "blood_angel_generator" }
+		},
+		 
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, 
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_servitor" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_servitor" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "blood_angel_barracks", true },
+			{ "building", "blood_angel_barracks", true },
+			{ "building", "blood_angel_generator" }
+		},
+		 
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_scout_assault" },
+			{ "squad", "blood_angel_squad_servitor" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "blood_angel_barracks", true },
+			{ "building", "blood_angel_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	ss_blood_angels_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

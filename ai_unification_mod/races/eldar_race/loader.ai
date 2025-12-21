@@ -1,0 +1,259 @@
+----------------------------------------
+-- File: 'eldarloader.ai'
+-- Edited by Arkhan	@ 23.10.2006
+-- Edited by Thudmeizer @ 23.04.2025
+
+class 'eldar_race'
+
+-- Constructor
+function eldar_race:__init()
+
+end
+
+-- Returns the name of the race
+function eldar_race:GetRaceName()
+	return "eldar_race"
+end
+
+-- This function is called if eldar are the race being played
+function eldar_race:LoadRace( eDifficulty )
+
+	-- Import strategies
+	import( 'Races/eldar_race/Strategies/EldarBuildBaseStrategy.ai' )
+
+	-- Import strategy info
+	import( "Races/eldar_race/Strategies/EldarStrategyInfo.ai" )
+
+	-- Import tactics
+	import( 'Races/eldar_race/Tactics/EldarInfantryTactic.ai' )
+	import( 'Races/eldar_race/Tactics/EldarVehicleTactic.ai' )
+	import( 'Races/eldar_race/Tactics/BonesingerTactic.ai' )
+	import( 'Races/eldar_race/Tactics/GuardianTactic.ai' )
+	import( 'Races/eldar_race/Tactics/BansheeTactic.ai' )
+	import( 'Races/eldar_race/Tactics/DarkReaperKtgmTactic.ai' )
+	import( 'Races/eldar_race/Tactics/JetbikeTactic.ai' )
+	import( 'Races/eldar_race/Tactics/StrikingScorpionTactic.ai' )
+	import( 'Races/eldar_race/Tactics/ShadowSpectreTactic.ai' )
+	import( 'Races/eldar_race/Tactics/WraithTactic.ai' )
+	import( 'Races/eldar_race/Tactics/HarlequinTactic.ai' )
+	import( 'Races/eldar_race/Tactics/SeerCouncilTactic.ai' )
+	import( 'Races/eldar_race/Tactics/AutarchKaylethTactic.ai' )
+	import( 'Races/eldar_race/Tactics/MachaTactic.ai' )
+	import( 'Races/eldar_race/Tactics/JainZarTactic.ai' )
+	import( 'Races/eldar_race/Tactics/MauganRaTactic.ai' )
+	import( 'Races/eldar_race/Tactics/MournsongTactic.ai' )
+	import( 'Races/eldar_race/Tactics/AutarchTactic.ai' )
+	import( 'Races/eldar_race/Tactics/FarSeerTactic.ai' )
+	import( 'Races/eldar_race/Tactics/FarSeerKtgmTactic.ai' )
+	import( 'Races/eldar_race/Tactics/EldradTactic.ai' )
+	import( 'Races/eldar_race/Tactics/EldradAstralTactic.ai' )
+	import( 'Races/eldar_race/Tactics/FalconTactic.ai' )
+	import( 'Races/eldar_race/Tactics/WaveSerpentTactic.ai' )
+	import( 'Races/eldar_race/Tactics/FirestormTactic.ai' )
+	import( 'Races/eldar_race/Tactics/NightwingTactic.ai' )
+	import( 'Races/eldar_race/Tactics/HemlockTactic.ai' )
+	import( 'Races/eldar_race/Tactics/LynxTactic.ai' )
+	import( 'Races/eldar_race/Tactics/WarWalkerTactic.ai' )
+	import( 'Races/eldar_race/Tactics/SkimmerTactic.ai' )
+	import( 'Races/eldar_race/Tactics/StormSerpentTactic.ai' )
+	import( 'Races/eldar_race/Tactics/WraithknightTactic.ai' )
+	import( 'Races/eldar_race/Tactics/RevenantTactic.ai' )
+	import( 'Races/eldar_race/Tactics/PhantomTactic.ai' )
+	import( 'Races/eldar_race/Tactics/WebwayGateTactic.ai' )
+	import( 'Races/eldar_race/Tactics/EldarResearchFarseerKtgmTactic.ai' )
+	import( 'Races/eldar_race/Tactics/EldarResearchAutarchKtgmTactic.ai' )
+
+ 	-- GAMBIT: New Method of returning a squad or base Tactic (from the CreateTactic function). Indexes.
+	-- Here follows a Global List with all the squad names as indexes, and their Tactics as values
+	-- The name of the Global List must be unique for each race.
+    	ELDAR_Race_Squad_Tactic =
+    	{
+        -- Insert here SQUAD_NAME or BASE_NAME and the TACTIC NAME (with the comma at the end!)
+        -- If a squad must NOT have a Tactic attached to it AT ALL, use "NONE" (with quotes, case sensitive).
+        -- Suggestion: Better put all in alphabetical order (sorted by squad names) for easier reference
+
+        eldar_squad_bonesinger = BonesingerTactic,
+        eldar_guardian_squad = GuardianTactic,
+        eldar_dire_avenger_squad = GuardianTactic,
+        eldar_squad_banshees = BansheeTactic,
+        eldar_squad_banshees_ktgm = BansheeTactic,
+        eldar_squad_dark_reapers_ktgm = DarkReaperKtgmTactic,
+        eldar_squad_jetbike = JetbikeTactic,
+        eldar_squad_shroud_runner = JetbikeTactic,
+        eldar_harlequin_squad = HarlequinTactic,
+        eldar_squad_striking_scorpion = StrikingScorpionTactic,
+        eldar_squad_shadow_spectres = ShadowSpectreTactic,
+        eldar_squad_wraithblade = WraithTactic,
+        eldar_squad_wraithguard = WraithTactic,
+        eldar_squad_seer_council = SeerCouncilTactic,
+        eldar_squad_seer_council_ktgm = SeerCouncilTactic,
+        eldar_squad_autarch_kayleth_ktgm = AutarchKaylethTactic,
+        eldar_squad_jain_zar = JainZarTactic,
+        eldar_squad_maugan_ra = MauganRaTactic,
+        eldar_squad_yrrthilien_mournsong_jetbike = MournsongTactic,
+        eldar_autarch_squad = AutarchTactic,
+        eldar_squad_farseer = FarSeerTactic,
+        eldar_squad_farseer_advance_sp_wg = FarSeerTactic,
+        eldar_squad_farseer_ktgm = FarSeerKtgmTactic,
+        eldar_squad_farseer_macha = MachaTactic,
+        eldar_squad_farseer_eldrad = EldradTactic,
+        eldar_squad_farseer_eldrad_astral = EldradAstralTactic,
+        eldar_squad_falcon_grav_tank = FalconTactic,
+        eldar_squad_wave_serpent = WaveSerpentTactic,
+        eldar_squad_firestorm = FirestormTactic,
+        eldar_squad_lynx = LynxTactic,
+        eldar_squad_fire_prism = SkimmerTactic,
+        eldar_squad_warp_hunter = SkimmerTactic,
+        eldar_squad_cobra = SkimmerTactic,
+	eldar_squad_deathstalker = SkimmerTactic,
+        eldar_squad_scorpion = SkimmerTactic,
+	eldar_squad_void_spinner = SkimmerTactic,
+        eldar_squad_storm_serpent = StormSerpentTactic,
+        eldar_squad_nightwing = NightwingTactic,
+        eldar_squad_nightshade_interceptor = NightwingTactic,
+        eldar_squad_hemlock_wraithfighter = HemlockTactic,
+        eldar_squad_war_walker = WarWalkerTactic,
+        eldar_squad_wraithknight = WraithknightTactic,
+        eldar_squad_revenant_titan = RevenantTactic,
+        eldar_squad_phantom_titan = PhantomTactic,
+	}
+
+    	ELDAR_Race_Base_Tactic =
+	{
+	eldar_webway_gate = WebwayGateTactic,
+	eldar_research_farseer_ktgm = EldarResearchFarseerKtgmTactic,
+	eldar_research_autarch_ktgm = EldarResearchAutarchKtgmTactic,
+	}
+	return true
+end
+
+-- This function is called even if eldar are not the race being played
+function eldar_race:LoadGlobalInfo()
+
+	-- Import info files
+	import( 'Races/eldar_race/Info/eldarunitstats.ai' )
+		
+	-- Add eldar unit stats
+	table.insert(UnitStats, EldarUnitStats)
+	return true
+end
+
+-- Creates build base strategy
+function eldar_race:CreateBuildBaseStrategy()
+	return EldarBuildBaseStrategy(BuildBaseStrategyInfo)
+end
+
+-- Creates a special tactic for units
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function eldar_race:CreateTactic(oSquadAI)
+
+    	-- Get unit name, and see if there is an attached tactic to it
+    	local sUnitName = oSquadAI:GetSquadName()    
+	if sUnitName ~= nil and ELDAR_Race_Squad_Tactic[sUnitName] ~= nil then
+		if ELDAR_Race_Squad_Tactic[sUnitName] == "NONE" then
+            		-- The squad must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return ELDAR_Race_Squad_Tactic[sUnitName](oSquadAI)
+        	end
+    	end
+
+	-- Get class
+	local eClass = oSquadAI:GetStats():GetClass()
+
+	-- Check if there is a special tactic for the unit available
+	local bVehicle = (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or eClass == UnitStatsAI.UC_VehicleHigh)
+	local bAirPlane = (eClass == UnitStatsAI.UC_AirLow or eClass == UnitStatsAI.UC_AirMed or eClass == UnitStatsAI.UC_AirHigh)
+
+	if (bVehicle or bAirPlane) then
+		return EldarVehicleTactic(oSquadAI)
+	end
+	return EldarInfantryTactic(oSquadAI)
+end
+
+-- Creates a special tactic for buildings
+-- GAMBIT: Updated version, with no IFs at all, much faster and reliable. CPU utilization nigh zero
+function eldar_race:CreateBaseTactic(oBuilding)
+
+	-- Get building name
+	local sBuildingName = oBuilding:GetBaseName()
+	if sBuildingName ~= nil and ELDAR_Race_Base_Tactic[sBuildingName] ~= nil then
+		if ELDAR_Race_Base_Tactic[sBuildingName] == "NONE" then
+            		-- The building must have NO tactic. Return nil.
+            		return nil
+        	else
+            		return ELDAR_Race_Base_Tactic[sBuildingName](oBuilding)
+        	end
+    	end
+	return nil
+end
+
+-- Returns a specific information
+function eldar_race:GetInfo(sType)
+
+	-- Check info type
+	if (sType == "TurretPower") then
+		return 400
+	elseif (sType == "SupportAllyFactor") then
+		return 10 / 4
+	elseif (sType == "AttackModifier") then
+		return -10
+	elseif (sType == "CriticalRangeIncreasePerTier") then
+		return 10
+	elseif (sType == "MinArmyStrengthPerTier") then
+		return 750
+	elseif (sType == "AttackRatio") then
+		return 4 / 5
+	elseif (sType == "RetreatRatio") then
+		return 3 / 5
+	elseif (sType == "InvisibleBuildings") then
+		return true
+	elseif (sType == "HarassingLeader") then
+
+		if EldarBuildBaseStrategy:CountSquads("eldar_squad_jain_zar") > 0 then
+			return "eldar_squad_jain_zar"
+		elseif EldarBuildBaseStrategy:CountSquads("eldar_squad_farseer_macha") > 0 then
+			return "eldar_squad_farseer_macha"
+		elseif EldarBuildBaseStrategy:CountSquads("eldar_squad_farseer") > 0 then
+			return "eldar_squad_farseer"
+		elseif EldarBuildBaseStrategy:CountSquads("eldar_squad_farseer_advance_sp_wg") > 0 then
+			return "eldar_squad_farseer_advance_sp_wg"
+		else
+			return nil
+		end
+	elseif (sType == "AutoConstructBuildings") then
+		return false
+	end
+	return nil
+end
+
+-- Returns the building type and threat
+function eldar_race:GetBuildingType(sBuildingName)
+
+	-- Return race specific object string
+	if (sBuildingName == "eldar_hq") then
+		return "HQ", 0
+		
+	elseif (sBuildingName == "eldar_warp_generator") then
+		return "Generator", 0
+		
+	elseif (sBuildingName == "eldar_advanced_warp_generator") then
+		return "BiggerGenerator", 0
+		
+	elseif (sBuildingName == "eldar_support_portal") then
+		return "VehicleBuilding", 0
+		
+	elseif (sBuildingName == "eldar_soul_shrine") then
+		return "Armoury", 0
+		
+	elseif (sBuildingName == "eldar_listening_post") then
+		return "ListeningPost", 0
+		
+	elseif (sBuildingName == "eldar_support_platform_scatterlaser") then
+		return "Turret", 300
+		
+	elseif (sBuildingName == "eldar_mine_field") then
+		return "Mine", 100
+	end
+	return nil, 0
+end

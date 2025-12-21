@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'thunderertactic.ai'
+-- Edited by Thudmeizer @ 27.03.2025
+
+class 'ThundererTactic' (SteelLegionVehicleTactic)
+
+Thunderer = {}
+
+function ThundererTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thunderer Tactic")
+end
+
+function ThundererTactic:InitAbilities()
+
+	if (Thunderer.bomb_id == nil) then
+	    Thunderer.bomb_id = cpu_manager.stats:GetAbilityID( "steel_legion_thunderer_bomb" )
+	end
+end
+
+function ThundererTactic:DoAbilities()
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, Thunderer.bomb_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Thunderer.bomb_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Thunderer.bomb_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, Thunderer.bomb_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+	else
+		Ability.DoAbilityTarget( self.squad_ai, Thunderer.bomb_id, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityTarget( self.squad_ai, Thunderer.bomb_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Thunderer.bomb_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, Thunderer.bomb_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+	end
+end
+
+function ThundererTactic:Update()
+
+   if self:IsComplete() then
+      return
+   end
+
+   --state machine
+   if not VehicleTactic.Update( self ) then
+	  return
+   end
+
+end

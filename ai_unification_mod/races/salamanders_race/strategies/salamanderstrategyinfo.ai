@@ -1,0 +1,192 @@
+----------------------------------------
+-- File: 'marinestrategyinfo.ai'
+-- Edited by Thudmeizer  @ 08.02.2025
+
+BuildBaseStrategyInfo = 
+{
+	salamanders_race =
+	{
+		post_builder = 1,
+		flag_capture = 1,
+
+		-- Reserve this amount for building units, reinforcing and upgrading
+		req_reserve = 150,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+		
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Research Total: 33
+			-- Allround strategy
+			{
+				{ 1, 220, 50, 0, 1,	"Unit",		"salamander_squad_force_commander" },
+				{ 1, 100, 0, 0, 1,	"Unit",		"salamander_squad_scout" }, -- Force a capturing squad
+				{ 1, 190, 0, 0, 2,	"Unit",		"salamander_squad_tactical" },
+				{ 1, 100, 50, 0, 1,	"Unit",		"salamander_squad_thundercannon" },
+				{ 1, 220, 0, 0, 1,	"Unit",		"salamander_squad_tactical_assault" },
+				{ 1, 135, 0, 0, 1,	"Building",	"salamander_generator" },
+				{ 1, 175, 50, 500, 1,	"Building",	"salamander_armoury" },
+				{ 1, 100, 75, 700, 60,	"TurretAddon",	"salamander_list_post_addon_1" },
+				{ 1, 135, 0, 750, 2,	"Building",	"salamander_generator" },
+				{ 1, 50, 50, 800, 1,	"Building",	"salamander_mines" },
+				{ 1, 300, 125, 900, 1,	"Addon",	"salamander_hq_addon_1" },
+				{ 1, 135, 0, 950, 4,	"Building",	"salamander_generator" },
+				{ 1, 100, 75, 1000, 100,"TurretAddon",	"salamander_list_post_addon_1" },
+
+				{ 2, 100, 85, 0, 1,	"Unit",		"salamander_squad_razorback" },
+				{ 2, 120, 95, 0, 1,	"Unit",		"salamander_squad_land_speeder_variant" },
+				{ 2, 170, 305, 0, 1,	"Unit",		"salamander_squad_dreadnought_codex" },
+				{ 2, 200, 125, 250, 1,	"Building",	"salamander_vehicle_building" },
+				{ 2, 125, 0, 500, 1,	"Research",	"salamander_support_cap_research" },
+				{ 2, 135, 0, 1000, 6,	"Building",	"salamander_generator" },
+				{ 2, 50, 50, 1000, 2,	"Building",	"salamander_mines" },
+				{ 2, 200, 40, 1000, 1,	"Research",	"salamander_power_research_1" },
+				{ 2, 75, 250, 1000, 1,	"Research",	"salamander_requisition_research_1" },
+				{ 2, 150, 0, 1500, 1,	"Research",	"salamander_support_cap_research_1" },
+				{ 2, 340, 340, 1500, 1,	"Addon",	"salamander_hq_addon_2" },
+				{ 2, 125, 50, 1500, 1,	"Building",	"salamander_ability_building" },
+				{ 2, 260, 150, 2000, 50,"TurretAddon",	"salamander_list_post_addon_2" },
+				{ 2, 50, 50, 2000, 3,	"Building",	"salamander_mines" },
+
+				{ 3, 240, 100, 0, 1,	"Unit",		"salamander_squad_terminator" },
+				{ 3, 240, 100, 0, 1,	"Unit",		"salamander_squad_terminator_assault" },
+				{ 3, 165, 300, 0, 1,	"Unit",		"salamander_squad_predator" },
+				{ 3, 150, 50, 2000, 1,	"Building",	"salamander_orbital_relay" },
+				{ 3, 50, 50, 2000, 4,	"Building",	"salamander_mines" },
+				{ 3, 125, 50, 2000, 2,	"Building",	"salamander_ability_building" },
+				{ 3, 350, 0, 2000, 1,	"Research",	"salamander_power_research_2" },
+				{ 3, 100, 350, 2000, 1,	"Research",	"salamander_requisition_research_2" },
+				{ 3, 50, 50, 2000, 5,	"Building",	"salamander_mines" },
+				{ 3, 450, 450, 2500, 1,	"Addon",	"salamander_hq_addon_3" },
+
+				{ 4, 325, 225, 0, 1,	"Unit",		"salamander_squad_terminator_fire_drakes" },
+				{ 4, 50, 50, 2000, 6,	"Building",	"salamander_mines" },
+				{ 4, 260, 150, 3000, 100,"TurretAddon",	"salamander_list_post_addon_2" },
+				{ 4, 700, 150, 4000, 2,	"Building",	"salamander_hq" }
+			}
+		},
+				
+		SquadLimits = 
+		{
+			standard = 
+			{
+				salamander_squad_techmarine = 0,
+				salamander_squad_scout = math.random( 2,4 ),
+				salamander_squad_skull_probe = 4,
+				salamander_squad_salamander = 2,
+				salamander_squad_daemonette = 1,
+				salamander_squad_tactical = math.random( 4,6 ),
+				salamander_squad_tactical_assault = math.random( 2,3 ),
+				salamander_squad_sisters = 1,
+				salamander_squad_sternguard_veterans = 1,
+				salamander_squad_vanguard_veterans = 2,
+				salamander_squad_primaris_aggressor = 1,
+				salamander_squad_primaris_eradicator = 1,
+				salamander_squad_primaris_infernus = 1,
+				salamander_squad_terminator = 1,
+				salamander_squad_terminator_assault = 1,
+				salamander_squad_terminator_fire_drakes = 1,
+				salamander_squad_apothecary = math.random( 1,2 ),
+				salamander_squad_sister_hospitaller = math.random( 1,2 ),
+				salamander_squad_banner_bearer = 1,
+				salamander_squad_librarian = 1,
+				salamander_squad_librarian_survival = 1,
+				salamander_squad_chaplain = 1,
+				salamander_squad_deathwatch_vanguard_veteran = 1,
+				salamander_squad_force_commander = 1,
+				salamander_squad_force_commander_terminator = 1,
+				salamander_squad_force_commander_primaris = 1,
+				salamander_squad_vulkan_primarch = 1,
+				salamander_squad_thundercannon = math.random( 2,3 ),
+				salamander_squad_rapier = math.random( 2,3 ),
+				salamander_squad_rhino = 2,
+				salamander_squad_razorback = 2,
+				salamander_squad_land_speeder_variant = 2,
+				salamander_squad_lighting = math.random( 2,3 ),
+				salamander_squad_dreadnought_codex = math.random( 4,6 ),
+				salamander_squad_dreadnought_ironclad_ven = 1,
+				salamander_squad_predator = 2,
+				salamander_squad_vindicator = 1,
+				salamander_squad_whirlwind = 1,
+				salamander_squad_sicaran_punisher = 1,
+				salamander_squad_sicaran_venator = 1,
+				salamander_squad_land_raider_prometheus = 1,
+				salamander_squad_land_raider_redeemer = 1,
+				salamander_squad_stormraven = 1,
+				salamander_squad_stormraven_landed = 1,
+			}
+		}
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	salamanders_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_techmarine" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_scout" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "salamander_barracks", true },
+			{ "building", "salamander_generator" }
+		},
+		 
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_techmarine" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_techmarine" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "salamander_barracks", true },
+			{ "building", "salamander_barracks", true },
+			{ "building", "salamander_generator" }
+		},
+		 
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_scout" },
+			{ "squad", "salamander_squad_techmarine" },
+			{ "squad", "salamander_squad_scout" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "salamander_barracks", true },
+			{ "building", "salamander_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	salamanders_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

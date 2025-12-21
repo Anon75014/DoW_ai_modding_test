@@ -1,0 +1,30 @@
+----------------------------------------
+-- File: '13thcomvehicletactic.ai'
+-- Edited by Thudmeizer         @ 21.06.2023
+
+class 'ThirteenthcomVehicleTactic' (VehicleTactic)
+
+function ThirteenthcomVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thirteenthcom Vehicle Tactic")
+
+	-- Dreadnoughts can enter deepstrike buildings
+	local sName = squad_ai:GetSquadName()
+	if (sName == "thirteenthcom_squad_dreadnought") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("thirteenthcom_hq")
+	end
+end
+
+-- Check if the vehicle should dance away in melee
+function ThirteenthcomVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "thirteenthcom_squad_rhino" or
+		sName == "thirteenthcom_squad_dreadnought" or
+		sName == "thirteenthcom_squad_predator" or
+		sName == "thirteenthcom_squad_exterminator" or
+		sName == "thirteenthcom_squad_land_raider_frosty" or
+		sName == "thirteenthcom_squad_dire_wolf_titan") then
+		return true
+	end
+	return false
+end

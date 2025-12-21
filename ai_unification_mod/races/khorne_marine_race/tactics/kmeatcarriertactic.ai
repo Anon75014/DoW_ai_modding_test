@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'kmeatcarriertactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kMeatCarrierTactic' (kVehicleTactic)
+
+MCarrier = {}
+
+function kMeatCarrierTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Meat Carrier Tactic")
+
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 1
+end
+
+function kMeatCarrierTactic:InitAbilities()
+
+	if (MCarrier.smoke_id == nil) then
+		MCarrier.smoke_id = cpu_manager.stats:GetAbilityID( "khm_smoke_launchers_meat_carrier" )	
+	end
+end
+
+function kMeatCarrierTactic:DoAbilities()
+
+	if (self.squad_ai:CanDoAbility(Sicaran.smoke_id)) then
+		local iRange = self.squad_ai:GetAbilityRange(MCarrier.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(MCarrier.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	kVehicleTactic.DoAbilities(self)
+end

@@ -1,0 +1,21 @@
+----------------------------------------
+-- File: 'raggedknighttactic.ai'
+-- Edited by Thudmeizer	@ 19.09.2023
+
+class 'RaggedKnightTactic' (ChaosMarineInfantryTactic)
+
+function RaggedKnightTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chaos Ragged Knight Tactic")
+end
+
+function RaggedKnightTactic:AlwaysAttack()
+	return true
+end
+
+function RaggedKnightTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

@@ -1,0 +1,242 @@
+-------------------------------------
+-- File: 'harlequininfantrytactic.ai'
+-- Created by Thudmeizer @ 01.09.2025
+
+class 'HarlequinInfantryTactic' (InfantryTactic)
+
+HarlequinInfantryAbility =
+{
+    DisruptionID = cpu_manager.stats:GetAbilityID("harlequin_disruption")
+    ,ShriekerID = cpu_manager.stats:GetAbilityID("harlequin_shrieker_shot")
+	,HallucinogenID = cpu_manager.stats:GetAbilityID("harlequin_troupe_grenades")
+}
+
+function HarlequinInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Harlequin Infantry Tactic")
+
+	-- Set infantry options
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "harlequin_squad_troupe" or
+	    	sSquadName == "harlequin_squad_library_guardians" or
+		sSquadName == "harlequin_squad_mime" or
+		sSquadName == "harlequin_squad_death_jesters" or
+		sSquadName == "harlequin_squad_troubadur" or
+		sSquadName == "harlequin_squad_white_seers" or
+		sSquadName == "harlequin_squad_shadowseer" or
+		sSquadName == "harlequin_squad_great_harlequin" or
+		sSquadName == "harlequin_squad_solitaire") then
+		
+		-- Squads are transportable
+		self.m_iTransportable = 1
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("harlequin_dark_veil")
+	end
+
+	-- Set FoF range (White Seers only)
+    	self.m_iFoFRange = 15
+
+	self.disruptionLastUse = g_iGMT
+    	self.shriekerLastUse = g_iGMT
+	self.hallucinogenLastUse = g_iGMT
+end
+
+function HarlequinInfantryTactic:AddTargetAbilities()
+
+end
+
+function HarlequinInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "harlequin_squad_great_harlequin", true })
+	table.insert(self.commander, { "harlequin_squad_shadowseer", false })
+	table.insert(self.commander, { "harlequin_squad_troubadur", false })
+	table.insert(self.commander, { "harlequin_squad_solitaire", false })
+end
+
+function HarlequinInfantryTactic:DoAbilities()
+
+	-- Check if I should enable/disable fleet of foot
+	self:DoAbilityFoF()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+
+		if (self.squad_ai:HasSquadAttached("harlequin_squad_great_harlequin")) then
+			GreatHarlequinTactic.InitAbilities( self )
+			GreatHarlequinTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("harlequin_squad_shadowseer")) then
+			ShadowSeerTactic.InitAbilities( self )
+			ShadowSeerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("harlequin_squad_troubadur")) then
+			TroubadourTactic.InitAbilities( self )
+			TroubadourTactic.DoAbilities( self )
+		end
+	end
+
+	self:DoThrowGrenades()
+	
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function HarlequinInfantryTactic:DoThrowGrenades()
+
+   if self.squad_ai:IsInCombat() then
+        
+        if ( g_iGMT > self.disruptionLastUse + 90 ) then        
+            if Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.DisruptionID, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTargetEntity( self.squad_ai, HarlequinInfantryAbility.DisruptionID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            then
+                self.disruptionLastUse = g_iGMT
+            end
+        end 
+
+		if ( g_iGMT > self.hallucinogenLastUse + 90 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.HallucinogenID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.HallucinogenID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.HallucinogenID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.plasmaLastUse = g_iGMT 
+            end
+        end
+		
+        if ( g_iGMT > self.shriekerLastUse + 120 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.ShriekerID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.ShriekerID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, HarlequinInfantryAbility.ShriekerID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.shriekerLastUse = g_iGMT 
+            end
+        end
+    end
+end
+
+function HarlequinInfantryTactic:CheckForBroken()
+
+	-- Detach commander from broken/capturing
+	if ((self.squad_ai:IsBroken() or self.squad_ai:IsCapturing()) and
+		(self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt())) then 
+		
+		self.squad_ai:DoDetachSquad()
+		self.squad_ai:DoSetDefaultMeleeStance()
+	end
+
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end
+
+function HarlequinInfantryTactic:TryAttachSquadMelee()
+
+   --if I'm in combat
+   local bInfiltrator = self.squad_ai:IsInfiltrating()
+   if not self.squad_ai:IsBroken() and self.squad_ai:IsInCombat() then
+	  
+	  if self.squad_ai:GetHealthPercentage() < 0.3 then
+		 
+		 local attachable_filter = function( squad_ai )
+		 local oTactic = squad_ai:GetTactic()
+		 	return self.squad_ai:CanAttachTo( squad_ai ) and not squad_ai:IsBroken() and
+			   not squad_ai:IsCapturing() and not oTactic:IsInSubState() and
+			   (not squad_ai:IsInfiltrating() or bInfiltrator) and oTactic:IsAttacker()
+		 	end
+		 
+		 --find close by squads
+		 local attach_to = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 10, attachable_filter )
+		 if attach_to ~= nil then 
+			
+			--sync FoF
+			self:ToggleFoF( self.squad_ai, false )
+			self:ToggleFoF( attach_to, false )  
+			
+			self.squad_ai:DoAttachSquad( attach_to )
+			attach_to:DoSetMeleeStance( SquadAI.MSTANCE_Assault )
+		 end
+	  else
+		local melee_filter = function( squad_ai )
+		local oTactic = squad_ai:GetTactic()
+	        	return self.squad_ai:CanAttachTo( squad_ai ) and not squad_ai:IsRanged() and 
+			   not squad_ai:IsBroken() and not squad_ai:IsCapturing() and not oTactic:IsInSubState() and
+			   (not squad_ai:IsInfiltrating() or bInfiltrator) and oTactic:IsAttacker()
+			end
+		 
+		 	local attach_to = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 10, melee_filter )
+			if attach_to ~= nil then 
+			
+				--sync FoF
+				self:ToggleFoF( self.squad_ai, false )
+				self:ToggleFoF( attach_to, false )  
+			
+				self.squad_ai:DoAttachSquad( attach_to )
+				attach_to:DoSetMeleeStance( SquadAI.MSTANCE_Assault )
+		 	end
+	  	end	  
+	end
+end
+
+function HarlequinInfantryTactic:DoMoveAttach( attach_to )
+   
+	-- Sync FoF
+	self:ToggleFoF( self.squad_ai, fof )
+	self:ToggleFoF( attach_to, fof )
+
+	-- Call standard method
+	Tactic.DoMoveAttach(self, attach_to)
+end
+
+function HarlequinInfantryTactic:ToggleFoF( squad_ai, state )
+
+	-- Check if the squad can handle fleet of foot
+	local id = cpu_manager.stats:GetAbilityID( "harlequin_fleetoffoot" )
+	if (not squad_ai:CanDoAbility(id)) then
+		return
+	end
+	
+	-- Check if it's already in desired state
+	if (squad_ai:IsUsingAbility(id) == state) then
+		return 
+	end
+	
+	-- Activate fleet of foot
+	squad_ai:DoSpecialAbility(id)
+end
+
+-- Dreddnott edit (April 16th)
+function HarlequinInfantryTactic:DoAbilityFoF()
+
+    	-- Check if we should toggle FoF
+    	local iFoFID = cpu_manager.stats:GetAbilityID("harlequin_fleetoffoot")
+    	local bToggleFoF = false
+
+   	 -- Check whether we're using the ability
+    	local bIsUsing = self.squad_ai:IsUsingAbility(iFoFID)
+
+   	 -- Check if we're attacking
+    	local bIsAttacking = self.squad_ai:IsInStateAttackMove()
+    
+    	-- Check if we are shooting or fighting in melee
+    	local bIsFighting = self.squad_ai:IsAttacking()
+    
+    	-- Check if we're moving normally
+    	local bIsMoving = (self.squad_ai:IsInStateMove() and not bIsAttacking)
+
+    	-- Check if we're in a state that should FoF regardless of enemy presence
+    	local bAvoidCombat = (self.squad_ai:IsBroken() or self:IsInSubState() or self.squad_ai:IsCapturing() or bIsMoving)
+
+    	-- Check if we should slow down for enemies nearing range
+    	local vSquadPos = self.squad_ai:GetPosition()
+    	local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(vSquadPos, self.m_iFoFRange, 1)
+   	local bCloseEnemy = (oEnemy ~= nil)
+    
+    	-- Helper flags
+    	local bIsCharging = (bIsAttacking and bCloseEnemy)
+    	local bIsDefending = (not bIsMoving and bCloseEnemy)
+    	local bIsInCombat = (bIsFighting or bIsCharging or bIsDefending)
+
+    	-- Check if FoF should be toggled
+    	if ((bIsUsing and bIsInCombat and not bAvoidCombat) or (not bIsUsing and (not bIsInCombat or bAvoidCombat))) then        
+        	bToggleFoF = true
+    	end
+
+    	-- Toggle FoF
+    	if (bToggleFoF and self.squad_ai:CanDoAbility(iFoFID)) then
+        	self.squad_ai:DoSpecialAbility(iFoFID)
+    	end
+end

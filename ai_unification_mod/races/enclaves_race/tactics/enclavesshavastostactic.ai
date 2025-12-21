@@ -1,0 +1,298 @@
+----------------------------------------
+-- File: 'enclavesshavastostactic.ai'
+-- Edited by CaptJoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer 		@ 07.03.2024
+
+class 'EnclavesShavastosTactic' (EnclavesInfantryTactic)
+
+EnclavesShavastos = {}
+
+function EnclavesShavastosTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Shavastos Tactic")
+
+	self:InitAbilities()
+end
+
+-- Enclaves Shavastos is allowed to retreat even directly after a jump
+function EnclavesShavastosTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function EnclavesShavastosTactic:IsAttacker()	
+	return self:IsCommanderAttacker()
+end
+
+function EnclavesShavastosTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function EnclavesShavastosTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function EnclavesShavastosTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesShavastos.summon_id == nil) then
+		EnclavesShavastos.summon_id = cpu_manager.stats:GetAbilityID( "enclaves_beacon_summon" )	
+	end
+
+	if (EnclavesShavastos.summon_ktgm == nil) then
+		EnclavesShavastos.summon_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon" )	
+	end
+
+	if (EnclavesShavastos.summon1_ktgm == nil) then
+		EnclavesShavastos.summon1_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon1" )	
+	end
+
+	if (EnclavesShavastos.summon2_ktgm == nil) then
+		EnclavesShavastos.summon2_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon2" )	
+	end
+
+	if (EnclavesShavastos.summon3_ktgm == nil) then
+		EnclavesShavastos.summon3_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_beacon_summon3" )	
+	end
+
+	if (EnclavesShavastos.montka_id == nil) then
+		EnclavesShavastos.montka_id = cpu_manager.stats:GetAbilityID( "enclaves_puretide_montka" )	
+	end
+
+	if (EnclavesShavastos.montka_ktgm == nil) then
+		EnclavesShavastos.montka_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_puretide_montka" )	
+	end
+
+	if (EnclavesShavastos.kauyon_id == nil) then
+		EnclavesShavastos.kauyon_id = cpu_manager.stats:GetAbilityID( "enclaves_puretide_kauyon" )	
+	end
+
+	if (EnclavesShavastos.kauyon_ktgm == nil) then
+		EnclavesShavastos.kauyon_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_puretide_kauyon" )	
+	end
+
+	if (EnclavesShavastos.monat_id == nil) then
+		EnclavesShavastos.monat_id = cpu_manager.stats:GetAbilityID( "enclaves_puretide_monat" )	
+	end
+
+	if (EnclavesShavastos.monat_ktgm == nil) then
+		EnclavesShavastos.monat_ktgm = cpu_manager.stats:GetAbilityID( "enclaves_ls_the_eight_puretide_monat" )	
+	end
+end
+
+function EnclavesShavastosTactic:DoAbilities()
+
+	-- Engage increase combat effectiveness and keen sight tactics in close combat
+    	if self.squad_ai:CanDoAbility(EnclavesShavastos.montka_id) then
+		Ability.DoAbilityArea(self.squad_ai, EnclavesShavastos.montka_id, Ability.Filters.CloseInCombat, 10, 2)
+	end
+
+	-- Engage increase combat effectiveness and keen sight tactics in close combat -- Killteam
+    	if self.squad_ai:CanDoAbility(EnclavesShavastos.montka_ktgm) then
+		Ability.DoAbilityArea(self.squad_ai, EnclavesShavastos.montka_ktgm, Ability.Filters.CloseInCombat, 10, 2)
+	end
+
+	-- Engage infiltration and increased speed tactics in close combat
+    	if self.squad_ai:CanDoAbility(EnclavesShavastos.kauyon_id) then
+		Ability.DoAbilityArea(self.squad_ai, EnclavesShavastos.kauyon_id, Ability.Filters.CloseInCombat, 20, 1)
+	end
+
+	-- Engage infiltration and increased speed tactics in close combat -- Killteam
+    	if self.squad_ai:CanDoAbility(EnclavesShavastos.kauyon_ktgm) then
+		Ability.DoAbilityArea(self.squad_ai, EnclavesShavastos.kauyon_ktgm, Ability.Filters.CloseInCombat, 20, 1)
+	end
+
+	-- Engage increase combat effectiveness and keen sight tactics in close combat
+    	if self.squad_ai:CanDoAbility(EnclavesShavastos.monat_id) then
+		Ability.DoAbilityArea(self.squad_ai, EnclavesShavastos.monat_id, Ability.Filters.CloseInCombat, 15, 3)
+	end
+
+	-- Engage increase combat effectiveness and keen sight tactics in close combat -- Killteam
+    	if self.squad_ai:CanDoAbility(EnclavesShavastos.monat_ktgm) then
+		Ability.DoAbilityArea(self.squad_ai, EnclavesShavastos.monat_ktgm, Ability.Filters.CloseInCombat, 15, 3)
+	end
+
+	-- Try to summon an Orca if we have the needed resources 
+	if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 350 then
+
+		-- Try to summon an Orca
+    		if self.squad_ai:CanDoAbility(EnclavesShavastos.summon_id) then
+
+			-- Condition 1: Search for a nearby hurt squad
+        		local iRange = self.squad_ai:GetAbilityRange(EnclavesShavastos.summon_id)
+        		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+        		if (oUnit ~= nil) then
+				--print("Using Shavastos Close Hurt Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilitySquad(EnclavesShavastos.summon_id, oUnit:GetSquad()) then
+                			return
+            			end
+        		end
+
+        		-- Condition 2: Check for low Power (lower than 250, for example)
+        		if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) < 250 then
+				--print("Using Shavastos Low Power Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+       			end
+
+        		-- Condition 3: Random calling, just for the sake of creating new squads
+        		if math.random(1,30) == 1 then
+				--print("Using Shavastos Random Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon_id, self.squad_ai:GetPosition()) then
+                			return
+            			end
+			end
+        	end
+    	end
+
+	-- Try to summon an Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesShavastos.summon_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesShavastos.summon_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Shavastos Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesShavastos.summon_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Shavastos Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Shavastos Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 2nd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesShavastos.summon1_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesShavastos.summon1_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Shavastos Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesShavastos.summon1_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Shavastos Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon1_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Shavastos Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon1_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 3rd stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesShavastos.summon2_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesShavastos.summon2_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Shavastos Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesShavastos.summon2_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Shavastos Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon2_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Shavastos Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon2_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- Try to summon a 4th stage Orca for unit drops -- Killteam
+	if self.squad_ai:CanDoAbility(EnclavesShavastos.summon3_ktgm) then
+
+		-- Condition 1: Search for a nearby hurt squad
+       		local iRange = self.squad_ai:GetAbilityRange(EnclavesShavastos.summon3_ktgm)
+       		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+       		if (oUnit ~= nil) then
+			--print("Using Shavastos Close Hurt Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilitySquad(EnclavesShavastos.summon3_ktgm, oUnit:GetSquad()) then
+            			return
+       			end
+       		end
+
+       		-- Condition 2: Check for health below a certain percentage
+       		if (self.squad_ai:GetHealthPercentage() < 0.9) then
+			--print("Using Shavastos Health Based Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon3_ktgm, self.squad_ai:GetPosition()) then
+               			return
+       			end
+		end
+
+       		-- Condition 3: Random calling, just for the sake of creating new squads
+       		if math.random(1,10) == 1 then
+			--print("Using Shavastos Random Orca Drone Drop for player "..tostring(cpu_manager.player_id).."")
+       			if self.squad_ai:DoSpecialAbilityPos(EnclavesShavastos.summon3_ktgm, self.squad_ai:GetPosition()) then
+              			return
+       			end
+		end
+       	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end
+
+function EnclavesShavastosTactic:Upgrade()
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+end
+
+function EnclavesShavastosTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'slaaneshwarptalontactic.ai'
+-- Edited by Thudmeizer	@ 24.07.2018
+
+class 'SlaaneshWarpTalonTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshWarpTalon = {}
+
+function SlaaneshWarpTalonTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Warp Talon Tactic")
+end
+
+function SlaaneshWarpTalonTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshWarpTalon.combatdrugs_id == nil) then
+		SlaaneshWarpTalon.combatdrugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )
+		SlaaneshWarpTalon.krakgrenades_id = cpu_manager.stats:GetAbilityID( "emperors_children_krak_grenades" )
+		SlaaneshWarpTalon.hunting_id = cpu_manager.stats:GetAbilityID( "emperors_children_talon_hunting" )
+		SlaaneshWarpTalon.doomsiren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren_warp_talons" )
+		SlaaneshWarpTalon.speed_id = cpu_manager.stats:GetAbilityID( "emperors_children_speed_fiend" )
+	end
+end
+
+function SlaaneshWarpTalonTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(SlaaneshWarpTalon.speed_id) then
+		if (not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState then
+			self.squad_ai:DoSpecialAbility(SlaaneshWarpTalon.speed_id)
+		end
+	end
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SlaaneshWarpTalon.combatdrugs_id) then
+			self.squad_ai:DoSpecialAbility(SlaaneshWarpTalon.combatdrugs_id)
+			return
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshWarpTalon.krakgrenades_id) then
+			if Ability.DoAbilityTarget(self.squad_ai, SlaaneshWarpTalon.krakgrenades_id, Ability.Filters.CloseVehicleEnemy, 1)
+            or Ability.DoAbilityTargetEntity(self.squad_ai, SlaaneshWarpTalon.krakgrenades_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshWarpTalon.hunting_id) then
+            if Ability.DoAbilityTarget(self.squad_ai, SlaaneshWarpTalon.hunting_id, Ability.Filters.CloseInfantryEnemy, 1)
+            or Ability.DoAbilityTarget(self.squad_ai, SlaaneshWarpTalon.hunting_id, Ability.Filters.CloseCommanderEnemy, 1)
+            or Ability.DoAbilityTarget(self.squad_ai, SlaaneshWarpTalon.hunting_id, Ability.Filters.CloseMonsterEnemy, 1) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshWarpTalon.doomsiren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshWarpTalon.doomsiren_id, Ability.Filters.CloseEnemy, 10, 4)
+		end
+	end
+end

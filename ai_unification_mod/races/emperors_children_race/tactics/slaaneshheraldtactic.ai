@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'slaaneshheraldtactic.ai'
+-- Edited by Thudmeizer @ 24.07.2018
+
+class 'SlaaneshHeraldTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshHerald = {}
+
+function SlaaneshHeraldTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Herald Tactic")
+end
+
+function SlaaneshHeraldTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshHerald.allure_id == nil) then
+		SlaaneshHerald.allure_id = cpu_manager.stats:GetAbilityID( "emperors_children_slaanesh_allure" )
+	end
+end
+
+function SlaaneshHeraldTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(SlaaneshHerald.allure_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, SlaaneshHerald.allure_id, Ability.Filters.CloseInfantryEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshHerald.allure_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshHerald.allure_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+	end
+end
+
+function SlaaneshHeraldTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Attach to melee
+	if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+		return
+	end
+	if (self:TryAttachSquad(false, true, 50, nil, nil) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

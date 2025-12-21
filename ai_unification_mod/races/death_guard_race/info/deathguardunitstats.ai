@@ -1,0 +1,1401 @@
+----------------------------------------
+-- File: 'deathguardunitstats.ai'
+-- Edited by Thudmeizer	@ 07.10.2025
+
+UnitStrengths.death_guard_squad_gut = 0
+UnitStrengths.death_guard_squad_slave = 0
+UnitStrengths.death_guard_squad_zombie_spawner = 5
+UnitStrengths.death_guard_squad_flies = 5
+UnitStrengths.death_guard_squad_cultist = 50
+UnitStrengths.death_guard_squad_zombie = 55
+UnitStrengths.death_guard_squad_nurgling = 55
+UnitStrengths.death_guard_squad_glitchling = 65
+UnitStrengths.death_guard_squad_plague_marine_ranged = 60
+UnitStrengths.death_guard_squad_plague_marine_melee = 65
+UnitStrengths.death_guard_squad_plaguebearer = 70
+UnitStrengths.death_guard_squad_plague_havoc = 70
+UnitStrengths.death_guard_squad_plague_poisoner = 75
+UnitStrengths.death_guard_squad_possessed = 80
+UnitStrengths.death_guard_squad_chosen = 80
+UnitStrengths.death_guard_squad_terminator_deathshroud = 150
+UnitStrengths.death_guard_squad_terminator_blightlord = 100
+UnitStrengths.death_guard_squad_blight_drone = 100
+UnitStrengths.death_guard_squad_blightbringer = 140
+UnitStrengths.death_guard_squad_blightspawn = 140
+UnitStrengths.death_guard_squad_putrifier = 140
+UnitStrengths.death_guard_squad_tallyman = 140
+UnitStrengths.death_guard_squad_surgeon = 140
+UnitStrengths.death_guard_squad_sigil= 120
+UnitStrengths.death_guard_squad_icon = 120
+UnitStrengths.death_guard_squad_herald = 300
+UnitStrengths.death_guard_squad_sorcerer = 300
+UnitStrengths.death_guard_squad_sorcerer_2 = 350
+UnitStrengths.death_guard_squad_sorcerer_terminator = 400
+UnitStrengths.death_guard_squad_daemon_prince = 800
+UnitStrengths.death_guard_squad_daemon_prince_2 = 800
+UnitStrengths.death_guard_squad_guo = 1000
+UnitStrengths.death_guard_squad_lord = 300
+UnitStrengths.death_guard_squad_lord_2 = 350
+UnitStrengths.death_guard_squad_lord_terminator = 400
+UnitStrengths.death_guard_squad_typhus = 1000
+UnitStrengths.death_guard_squad_mortarion = 1000
+UnitStrengths.death_guard_squad_rhino = 180
+UnitStrengths.death_guard_squad_tempest = 300
+UnitStrengths.death_guard_squad_dreadnought = 400
+UnitStrengths.death_guard_squad_dreadnought_hellfire = 400
+UnitStrengths.death_guard_squad_defiler = 450
+UnitStrengths.death_guard_squad_plagueburst_crawler = 450
+UnitStrengths.death_guard_squad_predator = 450
+UnitStrengths.death_guard_squad_whirlwind = 1000
+UnitStrengths.death_guard_squad_plague_tower = 1000
+UnitStrengths.death_guard_squad_plague_reaper = 1000
+UnitStrengths.death_guard_squad_plague_reaper_7th = 1000
+UnitStrengths.death_guard_squad_land_raider_helios = 1000
+UnitStrengths.death_guard_squad_land_raider = 1000
+UnitStrengths.death_guard_squad_warhound_titan = 1100
+
+-- Kill-Team
+UnitStrengths.death_guard_squad_zombie_ktgm  = 55
+UnitStrengths.death_guard_squad_typhus_ktgm = 1000
+
+LeaderStrengths.death_guard_squad_cultist = 25
+LeaderStrengths.death_guard_squad_plague_marine_ranged = 50
+LeaderStrengths.death_guard_squad_plague_marine_melee = 50
+LeaderStrengths.death_guard_squad_plague_havoc = 25
+LeaderStrengths.death_guard_squad_plague_poisoner = 25
+LeaderStrengths.death_guard_squad_chosen = 25
+LeaderStrengths.death_guard_squad_possessed = 25
+LeaderStrengths.death_guard_squad_terminator_blightlord = 25
+
+Attachments.death_guard_squad_nurgling = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_glitchling = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_plaguebearer = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_cultist = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_plague_marine_ranged = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_plague_marine_melee = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_plague_havoc = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_plague_poisoner = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_chosen = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_possessed = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_terminator_blightlord = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+Attachments.death_guard_squad_terminator_deathshroud = { "death_guard_squad_blightbringer", "death_guard_squad_blightspawn", "death_guard_squad_icon", "death_guard_squad_putrifier", "death_guard_squad_sigil", "death_guard_squad_surgeon", "death_guard_squad_tallyman", "death_guard_squad_lord", "death_guard_squad_lord_2", "death_guard_squad_lord_terminator", "death_guard_squad_sorcerer", "death_guard_squad_sorcerer_2", "death_guard_squad_sorcerer_terminator", "death_guard_squad_typhus", "death_guard_squad_herald" }
+
+DeathGuardUnitStats =
+{
+	race = "death_guard_race",
+		{
+			name = "Slave",
+			sbp_name = "death_guard_squad_slave",
+			ebp_name = "death_guard_builder_slave",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Flies",
+			sbp_name = "death_guard_squad_flies",
+			ebp_name = "death_guard_support_flies",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Gut",
+			sbp_name = "death_guard_squad_gut",
+			ebp_name = "death_guard_gut",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 0,
+			potential =
+			{
+				{
+					name = "none",
+					effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+					range = UnitStatsAI.RT_None,
+				},
+			}
+		},
+		{
+			name = "Cultist",
+			sbp_name = "death_guard_squad_cultist",
+			ebp_name = "death_guard_infantry_cultist",
+			class = UnitStatsAI.UC_LightInfantryLow,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_shotgun_cultist",
+					effectiveness = GenerateUnitEffectiveness(3,4,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_grenade_launcher_cultist",
+					effectiveness = GenerateUnitEffectiveness(4,3,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_melta_gun_cultist",
+					effectiveness = GenerateUnitEffectiveness(4,3,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},				
+				{
+					name = "death_guard_knife_cultist",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Nurgling",
+			sbp_name = "death_guard_squad_nurgling",
+			ebp_name = "death_guard_infantry_nurgling",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_nurgling_melee",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,1,1,1,1,1,3,3,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Glitchling",
+			sbp_name = "death_guard_squad_glitchling",
+			ebp_name = "death_guard_infantry_glitchling",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_glitchling_melee",
+					effectiveness = GenerateUnitEffectiveness(3,3,3,1,1,1,1,1,3,3,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Zombie",
+			sbp_name = "death_guard_squad_zombie",
+			ebp_name = "death_guard_infantry_zombie",
+			class = UnitStatsAI.UC_LightInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_zombie_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_zombie_melee_typhus",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Zombie Spawner",
+			sbp_name = "death_guard_squad_zombie_spawner",
+			ebp_name = "death_guard_infantry_zombie",
+			class = UnitStatsAI.UC_LightInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_zombie_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_zombie_melee_typhus",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Zombie (Kill Team)",
+			sbp_name = "death_guard_squad_zombie_ktgm",
+			ebp_name = "death_guard_infantry_zombie_ktgm",
+			class = UnitStatsAI.UC_LightInfantryHigh,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_zombie_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_zombie_melee_typhus",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Marine Bolter Ranged",
+			sbp_name = "death_guard_squad_plague_marine_ranged",
+			ebp_name = "death_guard_infantry_marine_ranged",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "death_guard_bolter_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_belcher_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,6.5*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plasma_gun_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,6.5*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(4.5*10,5.5*10)/10,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_melta_gun_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(3.5*10,5.5*10)/10,math.random(3.5*10,5.5*10)/10,math.random(3.5*10,5.5*10)/10,math.random(4.5*10,5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(5.5*10,6.5*10)/10,math.random(5.5*10,6.5*10)/10,math.random(5.5*10,6.5*10)/10,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_blight_launcher_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(3.5*10,5.5*10)/10,math.random(3.5*10,5.5*10)/10,math.random(3.5*10,5.5*10)/10,math.random(4.5*10,5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(5.5*10,6.5*10)/10,math.random(5.5*10,6.5*10)/10,math.random(5.5*10,6.5*10)/10,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_spewer_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(3.5*10,5.5*10)/10,math.random(3.5*10,5.5*10)/10,math.random(3.5*10,5.5*10)/10,math.random(4.5*10,5*10)/10,math.random(4.5*10,5.5*10)/10,math.random(5.5*10,6.5*10)/10,math.random(5.5*10,6.5*10)/10,math.random(5.5*10,6.5*10)/10,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plague_knife_marine",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Marine Bolter Melee",
+			sbp_name = "death_guard_squad_plague_marine_melee",
+			ebp_name = "death_guard_infantry_marine_melee",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "death_guard_plague_knife_marine_double",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_bubotic_axe_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,6.5*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,1.7,1.1,0.0,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_mace_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,6.5*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,1.7,1.1,0.0,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_great_cleaver_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,6.5*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,1.7,1.1,0.0,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Bearer",
+			sbp_name = "death_guard_squad_plaguebearer",
+			ebp_name = "death_guard_infantry_plaguebearer",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "death_guard_plaguebearer_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_plaguebearer_melee_2",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Havoc",
+			sbp_name = "death_guard_squad_plague_havoc",
+			ebp_name = "death_guard_infantry_havoc",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "death_guard_missile_launcher_havoc",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_missile_launcher_plague_havoc",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_knife_marine",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Chosen Marine",
+			sbp_name = "death_guard_squad_chosen",
+			ebp_name = "death_guard_infantry_chosen",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "death_guard_bolter_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_belcher_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plasma_gun_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_melta_gun_marine",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_missile_launcher_plague_havoc",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_zombie_melee",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Possessed Marine",
+			sbp_name = "death_guard_squad_possessed",
+			ebp_name = "death_guard_infantry_possessed",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "death_guard_possessed_melee",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Poisoner",
+			sbp_name = "death_guard_squad_plague_poisoner",
+			ebp_name = "death_guard_infantry_poisoner",
+			class = UnitStatsAI.UC_HeavyInfantryMed,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_chemical_flamer",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_knife_marine",
+					effectiveness = GenerateUnitEffectiveness(4.1,4.1,0.2,3.1,2.1,0.7,0.4,0.2,2.1,1.1,2.1,0.7,0.4,0.2,0.0,0.7,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Terminator Blightlord",
+			sbp_name = "death_guard_squad_terminator_blightlord",
+			ebp_name = "death_guard_infantry_terminator_blightlord",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_combi_bolter_terminator",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_spewer_terminator",
+					effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_autocannon_terminator",
+					effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_blight_launcher_terminator",
+					effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_bubotic_axe_marine",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Terminator Deathshroud",
+			sbp_name = "death_guard_squad_terminator_deathshroud",
+			ebp_name = "death_guard_infantry_terminator_deathshroud",
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_plaguespurt_gauntlet",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_manreaper_terminator",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}	
+		},
+		{
+			name = "Foetid Virion Blightspawn",
+			sbp_name = "death_guard_squad_blightspawn",
+			ebp_name = "death_guard_support_blightspawn",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_plague_sprayer",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Foetid Virion Blightbringer",
+			sbp_name = "death_guard_squad_blightbringer",
+			ebp_name = "death_guard_support_blightbringer",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_plasma_pistol_hero",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_bell",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Foetid Virion Plague Surgeon",
+			sbp_name = "death_guard_squad_surgeon",
+			ebp_name = "death_guard_support_surgeon",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_plague_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_plague_sword_champion",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Foetid Virion Tallyman",
+			sbp_name = "death_guard_squad_tallyman",
+			ebp_name = "death_guard_support_tallyman",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_plasma_pistol_hero",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Foetid Virion Putrifier",
+			sbp_name = "death_guard_squad_putrifier",
+			ebp_name = "death_guard_support_putrifier",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_injector_pistol",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_knife_marine",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Marine Sigil Bearer",
+			sbp_name = "death_guard_squad_sigil",
+			ebp_name = "death_guard_infantry_marine_sigil",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_bolter_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_knife_marine",
+					effectiveness = GenerateUnitEffectiveness(6,6,6,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Plague Marine Icon Bearer",
+			sbp_name = "death_guard_squad_icon",
+			ebp_name = "death_guard_infantry_marine_icon",  
+			class = UnitStatsAI.UC_HeavyInfantryHigh,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_plague_knife_marine",
+					effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Nurgle Herald",
+			sbp_name = "death_guard_squad_herald",
+			ebp_name = "death_guard_commander_herald",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "death_guard_plague_sword_herald",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Sorcerer",
+			sbp_name = "death_guard_squad_sorcerer",
+			ebp_name = "death_guard_commander_sorcerer",
+			class = UnitStatsAI.UC_Commander,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_sorcerer_cast",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_corrupted_staff",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Sorcerer Secondary",
+			sbp_name = "death_guard_squad_sorcerer_2",
+			ebp_name = "death_guard_commander_sorcerer_2",
+			class = UnitStatsAI.UC_Commander,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_sorcerer_cast",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_corrupted_staff",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Sorcerer Terminator",
+			sbp_name = "death_guard_squad_sorcerer_terminator",
+			ebp_name = "death_guard_commander_sorcerer_terminator",
+			class = UnitStatsAI.UC_Commander,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_combi_bolter_sorcerer",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_corrupted_staff",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Lord",
+			sbp_name = "death_guard_squad_lord",
+			ebp_name = "death_guard_commander_lord",
+			class = UnitStatsAI.UC_Commander,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_bolt_pistol_hero",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_combi_bolter_hero",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_sword_hero",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_manreaper_hero",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,8,8,7,7,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Lord Secondary",
+			sbp_name = "death_guard_squad_lord_2",
+			ebp_name = "death_guard_commander_lord_2",
+			class = UnitStatsAI.UC_Commander,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_bolt_pistol_hero",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_combi_bolter_hero",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_sword_hero",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_manreaper_hero",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,8,8,7,7,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Lord Terminator",
+			sbp_name = "death_guard_squad_lord_terminator",
+			ebp_name = "death_guard_commander_lord_terminator",
+			class = UnitStatsAI.UC_Commander,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_combi_bolter_hero",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_combi_plasma_hero",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plague_sword_hero",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_manreaper_hero",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,8,8,7,7,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Daemon Prince",
+			sbp_name = "death_guard_squad_daemon_prince",
+			ebp_name = "death_guard_commander_daemon_prince",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "death_guard_plague_sprayer_daemonprince",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_daemon_prince_sword",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,7,7,7,7,7,7,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Daemon Prince Sorcerer",
+			sbp_name = "death_guard_squad_daemon_prince_2",
+			ebp_name = "death_guard_commander_daemon_prince2",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "death_guard_plague_sprayer_eater_of_lies",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_daemon_prince_sword",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,7,7,7,7,7,7,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Typhus",
+			sbp_name = "death_guard_squad_typhus",
+			ebp_name = "death_guard_hero_typhus",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "death_guard_manreaper_typhus",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Typhus (Kill Team)",
+			sbp_name = "death_guard_squad_typhus_ktgm",
+			ebp_name = "death_guard_hero_typhus_ktgm",
+			class = UnitStatsAI.UC_Commander,
+			rating = 9,
+			potential =
+			{
+				{
+					name = "death_guard_manreaper_nerf_typhus_ktgm",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+				{
+					name = "death_guard_manreaper_typhus",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,7,7,7,7,7,7,7,7,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Rhino",
+			sbp_name = "death_guard_squad_rhino",
+			ebp_name = "death_guard_vehicle_rhino",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 3,
+			potential =
+			{
+				{
+					name = "death_guard_combi_bolter_rhino",
+					effectiveness = GenerateUnitEffectiveness(math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,math.random(3*10,4.5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_missile_launcher_rhino",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_combi_flamer_rhino",
+					effectiveness = GenerateUnitEffectiveness(5,5,5,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_combi_melta_rhino",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+		{
+			name = "Tempest",
+			sbp_name = "death_guard_squad_tempest",
+			ebp_name = "death_guard_vehicle_tempest",
+			class = UnitStatsAI.UC_VehicleLow,
+			rating = 4,
+			potential =
+			{
+				{
+					name = "death_guard_blight_thrower_botflyer",
+					effectiveness = GenerateUnitEffectiveness(math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,math.random(4*10,5.5*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_tempest_l",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,4,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_tempest_r",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,4,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Blight Drone",
+			sbp_name = "death_guard_squad_blight_drone",
+			ebp_name = "death_guard_vehicle_blight_drone",
+			class = UnitStatsAI.UC_MonsterMed,
+			rating = 5,
+			potential =
+			{
+				{
+					name = "death_guard_autocannon_blight_drone",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_blight_drone_ranged",
+					effectiveness = GenerateUnitEffectiveness(4,4,4,1,1,1,1,1,1,1,1,4,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+		{
+			name = "Dreadnought",
+			sbp_name = "death_guard_squad_dreadnought",
+			ebp_name = "death_guard_vehicle_dreadnought",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "death_guard_dreadnought_fist",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_multi_melta_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plasma_cannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,8.5*10)/10,math.random(5.5*10,8.5*10)/10,math.random(5.5*10,8.5*10)/10,math.random(5.5*10,8.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(5.5*10,8.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plague_belcher_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(5.7,4.8,4.3,4.3,5.2,6.9,6.5,6.8,4.3,4.7,0.0,4.8,4.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Hellfire Dreadnought",
+			sbp_name = "death_guard_squad_dreadnought_hellfire",
+			ebp_name = "death_guard_vehicle_dreadnought_hellfire_variant",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 6,
+			potential =
+			{
+				{
+					name = "death_guard_autocannon_reaper_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_multi_melta_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_lascannon_twin_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plasma_cannon_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(math.random(5.5*10,8.5*10)/10,math.random(5.5*10,8.5*10)/10,math.random(5.5*10,8.5*10)/10,math.random(5.5*10,8.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(5.5*10,8.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_missile_launcher_hellfire",
+					effectiveness = GenerateUnitEffectiveness(5.7,4.8,4.3,4.3,5.2,6.9,6.5,6.8,4.3,4.7,0.0,4.8,4.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_flamer_dreadnought",
+					effectiveness = GenerateUnitEffectiveness(5.7,4.8,4.3,4.3,5.2,6.9,6.5,6.8,4.3,4.7,0.0,4.8,4.3,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				}
+			}
+		},
+		{
+			name = "Defiler",
+			sbp_name = "death_guard_squad_defiler",
+			ebp_name = "death_guard_vehicle_defiler",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "death_guard_battlecannon",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_autocannon_twin_defiler",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,7,7,7,1,1,1,1,1,7,1,1,7,7,7),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_twin_defiler",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_missile_launcher_defiler",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,7,7,7,1,1,1,7,7,7,7,7,7),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_defiler_melee",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,7,7,7,1,1,1,7,7,7,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Gift Giver",
+			sbp_name = "death_guard_squad_whirlwind",
+			ebp_name = "death_guard_vehicle_whirlwind",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "death_guard_plague_battery",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Plagueburst Crawler",
+			sbp_name = "death_guard_squad_plagueburst_crawler",
+			ebp_name = "death_guard_vehicle_plagueburst_crawler",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 7,
+			potential =
+			{
+				{
+					name = "death_guard_plagueburst_mortar",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plaguespitter_r",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_entropy_cannon_r",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_plaguespitter_l",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_entropy_cannon_l",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_slugger",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_rothail_volley_gun",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Predator",
+			sbp_name = "death_guard_squad_predator",
+			ebp_name = "death_guard_vehicle_predator",
+			class = UnitStatsAI.UC_VehicleMed,
+			rating = 8,
+			potential =
+			{
+				{
+					name = "death_guard_autocannon_predator",
+					effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_twin_predator",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_predator_r",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_predator_r",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_blight_launcher_predator_r",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_predator_l",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_predator_l",
+					effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(4.5*10,7.5*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_blight_launcher_predator_l",
+					effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Plague Tower",
+			sbp_name = "death_guard_squad_plague_tower",
+			ebp_name = "death_guard_vehicle_plague_tower",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_demolisher_cannon_main",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_demolisher_cannon_baneblade",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,10,10,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plague_spewer_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,10,10,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_plague_spewer_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,10,10,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+			}
+		},
+		{
+			name = "Plague Reaper",
+			sbp_name = "death_guard_squad_plague_reaper",
+			ebp_name = "death_guard_vehicle_plague_reaper",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_pus_cannon",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_demolisher_cannon_baneblade",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_baneblade_3",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_missile_launcher_reaper",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Plague Reaper 7th",
+			sbp_name = "death_guard_squad_plague_reaper_7th",
+			ebp_name = "death_guard_vehicle_plague_reaper",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_pus_cannon",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_demolisher_cannon_baneblade",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_heavy_bolter_baneblade_3",
+					effectiveness = GenerateUnitEffectiveness(10,10,10,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_baneblade_1",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_baneblade_2",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_missile_launcher_reaper",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Land Raider Helios",
+			sbp_name = "death_guard_squad_land_raider_helios",
+			ebp_name = "death_guard_vehicle_land_raider_helios",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_plague_battery_helios",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_twin_tank_right",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_twin_tank_left",
+					effectiveness = GenerateUnitEffectiveness(1,1,1,1,1,10,10,10,1,1,1,10,10,10,0,0,0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Land Raider",
+			sbp_name = "death_guard_squad_land_raider",
+			ebp_name = "death_guard_vehicle_land_raider",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_heavy_bolter_twin",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_twin_tank_right",
+					effectiveness = GenerateUnitEffectiveness(3.9,1.3,1.3,8.0,5.2,8.0,8.0,4.4,1.3,1.3,1.3,5.0,2.5,4.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_lascannon_twin_tank_left",
+					effectiveness = GenerateUnitEffectiveness(3.1,1.3,1.3,8.0,5.2,8.0,8.0,4.4,1.3,1.3,1.3,5.0,2.5,4.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+		{
+			name = "Great Unclean One",
+			sbp_name = "death_guard_squad_guo",
+			ebp_name = "death_guard_guo",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_guo_sword",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Mortarion",
+			sbp_name = "death_guard_squad_mortarion",
+			ebp_name = "death_guard_hero_mortarion",
+			class = UnitStatsAI.UC_MonsterHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_mortarion_volkite",
+					effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_silence",
+					effectiveness = GenerateUnitEffectiveness(7,7,7,8,9,9,9,7,7,8,8,8,1,1,0,0,0),
+					range = UnitStatsAI.RT_Melee,
+				},
+			}
+		},
+		{
+			name = "Warhound Titan",
+			sbp_name = "death_guard_squad_warhound_titan",
+			ebp_name = "death_guard_warhound_titan",
+			class = UnitStatsAI.UC_VehicleHigh,
+			rating = 10,
+			potential =
+			{
+				{
+					name = "death_guard_wh_titan_inferno_cannon_l",
+					effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_wh_titan_plasma_blastgun_l",
+					effectiveness = GenerateUnitEffectiveness(math.random(6.5*10,7.5*10)/10,math.random(6.5*10,7.5*10)/10,math.random(6.5*10,7.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,7.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+				{
+					name = "death_guard_wh_titan_inferno_cannon_r",
+					effectiveness = GenerateUnitEffectiveness(6.2,6.0,5.7,5.3,4.9,4.5,3.8,0.0,5.3,0.0,5.3,4.7,4.2,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_ShortRanged,
+				},
+				{
+					name = "death_guard_wh_titan_plasma_blastgun_r",
+					effectiveness = GenerateUnitEffectiveness(math.random(6.5*10,7.5*10)/10,math.random(6.5*10,7.5*10)/10,math.random(6.5*10,7.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,7.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0,0.0),
+					range = UnitStatsAI.RT_Ranged,
+				},
+			}
+		},
+}

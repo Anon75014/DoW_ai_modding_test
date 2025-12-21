@@ -1,0 +1,172 @@
+----------------------------------------
+-- File: 'riptidetactic.ai'
+-- Edited by Thudmeizer @ 28.10.2023
+
+class 'CrisisHonorGuardKtgmTactic' (TauInfantryTactic)
+
+CrisisHonorGuardKtgm = {}
+
+function CrisisHonorGuardKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Crisis Honor Guard Kill Team Tactic")
+	self.lastAddonTry = g_iGMT
+	self.DoDance = false
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function CrisisHonorGuardKtgmTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function CrisisHonorGuardKtgmTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function CrisisHonorGuardKtgmTactic:CheckDance(oSquad)
+	return self.DoDance
+end
+
+function CrisisHonorGuardKtgmTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannel = build_manager:GetBuildChannelFromID(e:GetID())
+		if buildChannel ~= nil then
+			local addOnID = buildChannel:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannel:IsBuilding() == 0 and buildChannel:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannel:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+function CrisisHonorGuardKtgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if CrisisHonorGuardKtgm.ai == nil then
+		CrisisHonorGuardKtgm.ai = cpu_manager.stats:GetAbilityID( "tau_ls_crisis_suit_honor_guard_ai" )
+		CrisisHonorGuardKtgm.target = cpu_manager.stats:GetAbilityID( "tau_ls_crisis_suit_honor_guard_invaluable_target" )
+		CrisisHonorGuardKtgm.mine = cpu_manager.stats:GetAbilityID( "tau_ls_crisis_suit_honor_guard_mine" )
+		CrisisHonorGuardKtgm.orca = cpu_manager.stats:GetAbilityID( "tau_ls_crisis_suit_honor_guard_orca" )
+		CrisisHonorGuardKtgm.silence = cpu_manager.stats:GetAbilityID( "tau_ls_crisis_suit_honor_guard_radio_silence" )
+		CrisisHonorGuardKtgm.reinitialize = cpu_manager.stats:GetAbilityID( "tau_ls_crisis_suit_honor_guard_reinitialize_protocol" )
+	end
+end
+
+function CrisisHonorGuardKtgmTactic:DoAbilities()
+
+	-- Check if we can use AI if health is low while in combat
+	if self.squad_ai:IsInCombat() then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.3) then
+			if (self.squad_ai:CanDoAbility(CrisisHonorGuardKtgm.ai)) then
+				self.squad_ai:DoSpecialAbility(CrisisHonorGuardKtgm.ai)
+			end
+		end
+	end
+
+	-- Check if we can target a high value enemy
+	if self.squad_ai:CanDoAbility(CrisisHonorGuardKtgm.target) and self.squad_ai:IsInCombat() then
+	
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(CrisisHonorGuardKtgm.target)
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+					eClass == UnitStatsAI.UC_MonsterHigh) then
+					
+					-- Use target ability on squad
+					self.squad_ai:DoSpecialAbilitySquad(CrisisHonorGuardKtgm.target, oSquad:GetSquad())
+				end
+			end	
+		end
+	end
+
+	-- Try to call an Orca Drop to deploy drones if enemy is in range
+	if (self.squad_ai:CanDoAbility(CrisisHonorGuardKtgm.orca)) then
+    
+    		-- Check for close enemy
+		--local oEnemy = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 40, 1)
+		local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 40, 1)
+		if (oEnemy ~= nil) then
+			self.squad_ai:DoSpecialAbilityPos(CrisisHonorGuardKtgm.orca, self.squad_ai:GetPosition())
+    		end
+	end
+
+	-- Check if we can use infiltration if health is sufficient while in combat
+	if self.squad_ai:IsInCombat() then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() > 0.4) then
+			if (self.squad_ai:CanDoAbility(CrisisHonorGuardKtgm.silence)) then
+				self.squad_ai:DoSpecialAbility(CrisisHonorGuardKtgm.silence)
+			end
+		end
+	end
+
+	-- Check if we can reinitialize hardpoints and reset state outside of combat if very low on health
+	if not self.squad_ai:IsInCombat() then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.3) then
+			if (self.squad_ai:CanDoAbility(CrisisHonorGuardKtgm.reinitialize)) then
+				self.squad_ai:DoSpecialAbility(CrisisHonorGuardKtgm.reinitialize)
+			end
+		end
+	end
+
+	-- Try to deploy a mine if enemy is in range
+	if (self.squad_ai:CanDoAbility(CrisisHonorGuardKtgm.mine)) then
+    
+    		-- Check for close enemy
+		--local oEnemy = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 35, 1)
+		local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 35, 1)
+		if (oEnemy ~= nil) then
+			self.squad_ai:DoSpecialAbility(CrisisHonorGuardKtgm.mine)
+			return
+    		end
+	end
+
+	-- Randomize Right Side Addons
+	local myTable1 = {0, 3, 5, 7}
+	local num1 = math.random(1, table.getn(myTable1))
+	local result1 = myTable1[num1]
+
+	-- Randomize Left Side Addons 
+	local myTable2 = {1, 2, 4, 6}
+	local num2 = math.random(1, table.getn(myTable2))
+	local result2 = myTable2[num2]
+
+	-- Check to addon every 6+ secs
+	if g_iGMT > self.lastAddonTry + 6 then
+		self.lastAddonTry = g_iGMT
+		self:AutoBuildAddOn(result1)	-- Choose one of the four main right weapon upgrades (addons 0, 3, 5, 7)
+		self:AutoBuildAddOn(result2)	-- Choose one of the four main left weapon upgrades (addons 1, 2, 4, 6)
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end
+
+function CrisisHonorGuardKtgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+

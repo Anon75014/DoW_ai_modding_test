@@ -1,0 +1,233 @@
+----------------------------------------
+-- File: 'sisterscanonesstactic.ai'
+-- Edited by Thudmeizer @ 29.10.2023
+
+class 'SistersCanonessTactic' (SistersInfantryTactic)
+
+SistersCanoness = {}
+
+function SistersCanonessTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Sisters Canoness Tactic")
+end
+
+-- Assassinate win condition -- never attack
+function SistersCanonessTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function SistersCanonessTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function SistersCanonessTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SistersCanoness.divinelight_id == nil) then
+		SistersCanoness.divinelight_id = cpu_manager.stats:GetAbilityID( "sisters_act_of_faith_divine_light" )
+	end
+
+	if (SistersCanoness.divinelight_ktgm == nil) then
+		SistersCanoness.divinelight_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_act_of_faith_divine_light" )
+	end
+
+	if (SistersCanoness.ascension_id == nil) then
+		SistersCanoness.ascension_id = cpu_manager.stats:GetAbilityID( "sisters_act_of_faith_ascension" )
+	end
+
+	if (SistersCanoness.ascension_ktgm == nil) then
+		SistersCanoness.ascension_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_act_of_faith_ascension" )
+	end
+
+	if (SistersCanoness.rosarius_id == nil) then
+		SistersCanoness.rosarius_id = cpu_manager.stats:GetAbilityID( "sisters_rosarius_wargear_skirmish" )
+	end
+
+	if (SistersCanoness.rosarius_ktgm == nil) then
+		SistersCanoness.rosarius_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_rosarius_wargear_skirmish" )
+	end
+
+	if (SistersCanoness.visage_ktgm == nil) then
+		SistersCanoness.visage_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_angelic_visage" )
+	end
+
+	if (SistersCanoness.renaissance_ktgm == nil) then
+		SistersCanoness.renaissance_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_pious_renaissance" )
+	end
+
+	if (SistersCanoness.pray_ktgm == nil) then
+		SistersCanoness.pray_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_pray" )
+	end
+
+	if (SistersCanoness.fury_ktgm == nil) then
+		SistersCanoness.fury_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_righteous_fury" )
+	end
+
+	if (SistersCanoness.spawn_ktgm == nil) then
+		SistersCanoness.spawn_ktgm = cpu_manager.stats:GetAbilityID( "sisters_ls_canoness_sacred_battlefield_spawn" )
+	end
+end
+
+function SistersCanonessTactic:DoAbilities()
+
+	-- Check if we can turn into the Abbess
+	if self.squad_ai:CanPossess() then
+		self.squad_ai:DoPossess()
+		return
+	end
+
+	-- Spawn Ascension Angel Squads (Last Stand / Kill Team)
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+
+	-- We are dying, lower requisites for attacks and use life drain!
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5) then
+
+		-- reduces enemy weapon accuracy and increases own weapon damage (Faith cost: 30)
+		if self.squad_ai:CanDoAbility(SistersCanoness.divinelight_id) then
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_id, Ability.Filters.CloseSquadEnemy, 2)
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_id, Ability.Filters.CloseCommanderEnemy, 1)
+		end
+--[[		-- reduces enemy weapon accuracy and increases own weapon damage (Last Stand / Kill Team)
+		if self.squad_ai:CanDoAbility(SistersCanoness.divinelight_ktgm) then
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_ktgm, Ability.Filters.CloseSquadEnemy, 2)
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_ktgm, Ability.Filters.CloseCommanderEnemy, 1)
+		end
+]]
+	else
+		-- reduces enemy weapon accuracy and increases own weapon damage (Faith cost: 30)
+		if self.squad_ai:CanDoAbility(SistersCanoness.divinelight_id) then
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_id, Ability.Filters.CloseSquadEnemy, 4)
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_id, Ability.Filters.CloseCommanderEnemy, 1)
+		end
+--[[		-- reduces enemy weapon accuracy and increases own weapon damage (Last Stand / Kill Team)
+		if self.squad_ai:CanDoAbility(SistersCanoness.divinelight_ktgm) then
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_ktgm, Ability.Filters.CloseSquadEnemy, 4)
+			Ability.DoAbilityTarget(self.squad_ai, SistersCanoness.divinelight_ktgm, Ability.Filters.CloseCommanderEnemy, 1)
+		end
+]]
+	end
+
+	-- summons non-player controlled angels to fight for a short period (Faith cost: 90)
+	if self.squad_ai:CanDoAbility(SistersCanoness.ascension_id) then
+		Ability.DoAbilityArea( self.squad_ai, SistersCanoness.ascension_id, Ability.Filters.CloseEnemy, 10, 1)
+	end
+
+	-- summons non-player controlled angels to fight for a short period (Last Stand / Kill Team)
+	if self.squad_ai:CanDoAbility(SistersCanoness.ascension_ktgm) then
+		Ability.DoAbilityArea( self.squad_ai, SistersCanoness.ascension_ktgm, Ability.Filters.CloseInCombat, 10, 1)
+	end
+
+	-- protects from damage offering invulnerability (Faith cost: 0)
+	if self.squad_ai:CanDoAbility(SistersCanoness.rosarius_id) then
+		local health = self.squad_ai:GetHealthPercentage()
+		if (self.squad_ai:IsInCombat() and health < 0.4) or (self.squad_ai:WasRecentlyHurt() and health < 0.25) then
+			self.squad_ai:DoSpecialAbility(SistersCanoness.rosarius_id)
+		end
+	end
+
+	-- protects from damage offering invulnerability (Last Stand / Kill Team)
+	if self.squad_ai:CanDoAbility(SistersCanoness.rosarius_ktgm) then
+		local health = self.squad_ai:GetHealthPercentage()
+		if (self.squad_ai:IsInCombat() and health < 0.4) or (self.squad_ai:WasRecentlyHurt() and health < 0.25) then
+			self.squad_ai:DoSpecialAbility(SistersCanoness.rosarius_ktgm)
+		end
+	end
+
+	-- Use Angelic Visage if low morale or broken (Last Stand / Kill Team)
+	if self.squad_ai:CanDoAbility(SistersCanoness.visage_ktgm) then
+		if (self.squad_ai:GetMoralePercentage() < 0.6) or (self.squad_ai:IsBroken()) then
+			self.squad_ai:DoSpecialAbility(SistersCanoness.visage_ktgm)
+		end
+	end
+
+	-- Use Pious Renaissance to temporarily become an invulnerable avenging angel (Last Stand / Kill Team)
+	if self.squad_ai:CanDoAbility(SistersCanoness.renaissance_ktgm) then
+		local health = self.squad_ai:GetHealthPercentage()
+		if (self.squad_ai:IsInCombat() and health < 0.6) or (self.squad_ai:WasRecentlyHurt() and health < 0.45) then
+			self.squad_ai:DoSpecialAbility(SistersCanoness.renaissance_ktgm)
+		end
+	end
+
+	-- Use Faithful Pray to temporarily recharge ability times but only outside of combat with no enemies nearby (Last Stand / Kill Team)
+	if self.squad_ai:CanDoAbility(SistersCanoness.pray_ktgm) then
+
+    		-- Check for enemy in range
+		local pos = self.squad_ai:GetPosition()
+		if (not cpu_manager.terrain_analyzer:HasThreat(pos, 60)) then
+
+			if (not self.squad_ai:IsInCombat() and self.squad_ai:GetHealthPercentage() < 0.6) then
+				self.squad_ai:DoSpecialAbility(SistersCanoness.pray_ktgm)
+			end
+		end
+	end
+
+	-- Use Speed only in combat and with enough health otherwise turn off (Last Stand / Kill Team)
+	local in_combat = (self.squad_ai:IsInCombat() and self.squad_ai:GetHealthPercentage() > 0.4)
+	if self.squad_ai:IsUsingAbility(SistersCanoness.fury_ktgm) then
+		-- Stop Speed as not in combat and health has dropped
+		if not in_combat then
+			self.squad_ai:DoSpecialAbility(SistersCanoness.fury_ktgm)
+		end
+	elseif in_combat then
+		-- Enable Speed as in combat with enough health
+		self.squad_ai:DoSpecialAbility(SistersCanoness.fury_ktgm)
+	end
+
+	-- Use Divine Light against either close standard or commander enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(SistersCanoness.divinelight_ktgm)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(SistersCanoness.divinelight_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Divine Light against normal enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SistersCanoness.divinelight_ktgm, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Divine Light against Commanders for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SistersCanoness.divinelight_ktgm, oUnitB:GetSquad())
+			return
+		end
+	end
+
+	-- Try to deploy a Sacred Standard Bearer if enemy is in range (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(SistersCanoness.spawn_ktgm)) then
+    
+    		-- Check for close enemy
+		--local oEnemy = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 35, 1)
+		local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 35, 1)
+		if (oEnemy ~= nil) then
+			self.squad_ai:DoSpecialAbilityPos(SistersCanoness.spawn_ktgm, self.squad_ai:GetPosition())
+			--print("Summon Sacred Banner Bearer for player "..tostring(cpu_manager.player_id).."")
+			return
+    		end
+	end
+end
+
+function SistersCanonessTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Assassinate win condition -- never attach to a squad
+    	if (not cpu_manager.assassinate and self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+    	end
+end
+

@@ -1,0 +1,62 @@
+----------------------------------------
+-- File: 'templarchaplainTactic.ai'
+-- Edited by Melooo @ 02.01.2008
+-- Edited by Thudmeizer @ 06.08.2024
+
+class 'TemplarChaplainTactic' (TemplarInfantryTactic)
+
+TemplarChaplain = {}
+
+function TemplarChaplainTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar Chaplain Tactic")
+end
+
+function TemplarChaplainTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function TemplarChaplainTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function TemplarChaplainTactic:IsAffectedByMorale()
+	return false
+end
+
+function TemplarChaplainTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TemplarChaplain.zeal_id == nil) then
+		TemplarChaplain.zeal_id = cpu_manager.stats:GetAbilityID( "templar_righteous_zeal_chaplain" )
+	end
+end
+
+function TemplarChaplainTactic:DoAbilities()
+
+	if (self.squad_ai:IsAttached() and self.squad_ai:IsInCombat()) then
+
+ 	 	-- If we are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityArea( self.squad_ai, TemplarChaplain.zeal_id, Ability.Filters.CloseInCombat, 5 )
+		else
+			Ability.DoAbilityArea( self.squad_ai, TemplarChaplain.zeal_id, Ability.Filters.CloseInCombat, 10 )
+		end
+	end
+ end
+
+function TemplarChaplainTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

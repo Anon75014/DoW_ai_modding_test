@@ -1,0 +1,52 @@
+------------------------------------
+-- File: 'darkeldarsylvannastactic.ai'
+-- Edited by Thudmeizer @ 21.01.2025
+
+class 'DarkEldarSylvannasTactic' (DarkEldarInfantryTactic)
+
+DarkEldarSylvannas = {}
+
+function DarkEldarSylvannasTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Eldar Sylvannas Tactic")
+end
+
+function DarkEldarSylvannasTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkEldarSylvannasTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkEldarSylvannasTactic:InitAbilities()
+
+	-- Init ability ID's
+	if DarkEldarSylvannas.silence_id == nil then
+		DarkEldarSylvannas.silence_id = cpu_manager.stats:GetAbilityID( "dark_eldar_sylvanas_silence" )
+	end
+end
+
+function DarkEldarSylvannasTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Try to use silence
+		if self.squad_ai:CanDoAbility(DarkEldarSylvannas.silence_id) then
+
+			-- We are dying, lower requisites for attacks
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.DoAbilityPos(self.squad_ai, DarkEldarSylvannas.silence_id, Ability.Filters.CloseVehicleEnemy, 1)
+					or Ability.DoAbilityPos(self.squad_ai, DarkEldarSylvannas.silence_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2) then
+					return
+				end
+			else
+				if Ability.DoAbilityPos(self.squad_ai, DarkEldarSylvannas.silence_id, Ability.Filters.CloseVehicleEnemy, 2)
+					or Ability.DoAbilityPos(self.squad_ai, DarkEldarSylvannas.silence_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+					return
+				end
+			end
+		end
+	end
+end
+

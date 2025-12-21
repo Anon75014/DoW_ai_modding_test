@@ -1,0 +1,37 @@
+-----------------------------------
+-- File: 'kommandoztactic.ai'
+-- Edited by Gambit   @ 9.11.2020
+
+class 'KommandozTactic' (OrkInfantryTactic)
+
+Kommandoz = {}
+
+function KommandozTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Kommandoz Tactic")
+end
+
+
+function KommandozTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Kommandoz.stikkbombs_id == nil then
+		Kommandoz.stikkbombs_id = cpu_manager.stats:GetAbilityID("ork_stikkbombs")
+		Kommandoz.tankbombs_id = cpu_manager.stats:GetAbilityID("ork_tankbusta_bombs_kommandos")
+	end
+end
+
+
+function KommandozTactic:DoAbilities()
+
+	-- Try to use bombs
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(Kommandoz.stikkbombs_id) then
+			Ability.DoAbilityTarget(self.squad_ai, Kommandoz.stikkbombs_id, Ability.Filters.CloseSquadEnemy, 1)
+		end
+		if self.squad_ai:CanDoAbility(Kommandoz.tankbombs_id) then
+			Ability.DoAbilityTarget(self.squad_ai, Kommandoz.tankbombs_id, Ability.Filters.CloseVehicleEnemy, 1)
+		end
+	end
+end
+

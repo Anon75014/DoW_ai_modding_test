@@ -1,0 +1,35 @@
+----------------------------------------
+-- File: 'chaosvindicatortactic.ai'
+-- Edited by Thudmeizer @ 19.09.2023
+
+class 'ChaosVindicatorTactic' (ChaosMarineVehicleTactic)
+
+ChaosVindicator = {}
+
+function ChaosVindicatorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chaos Vindicator Tactic")
+end
+
+function ChaosVindicatorTactic:InitAbilities()
+
+	if (ChaosVindicator.smoke_id == nil) then
+		ChaosVindicator.smoke_id = cpu_manager.stats:GetAbilityID( "chaos_smoke_launchers" )	
+	end
+end
+
+function ChaosVindicatorTactic:DoAbilities()
+
+	-- Check if we can launch poison
+	if (self.squad_ai:CanDoAbility(ChaosVindicator.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(ChaosVindicator.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(ChaosVindicator.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	ChaosMarineVehicleTactic.DoAbilities(self)
+end

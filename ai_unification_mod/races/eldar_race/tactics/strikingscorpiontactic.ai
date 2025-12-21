@@ -1,0 +1,39 @@
+----------------------------------------
+-- File: 'strikingscorpiontactic.ai'
+-- Edited by Gambit	@ 21.2.2022
+
+class 'StrikingScorpionTactic' (EldarInfantryTactic)
+
+StrikingScorpion = {}
+
+function StrikingScorpionTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Striking Scorpion Tactic")
+end
+
+
+function StrikingScorpionTactic:InitAbilities()
+
+	-- Init ability ID's
+	if StrikingScorpion.shadowstrike_id == nil then
+		StrikingScorpion.shadowstrike_id = cpu_manager.stats:GetAbilityID( "eldar_shadowstrike" )
+		StrikingScorpion.grenades_id = cpu_manager.stats:GetAbilityID( "eldar_plasma_grenades" )
+	end
+end
+
+
+function StrikingScorpionTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(StrikingScorpion.grenades_id) then
+			Ability.DoAbilityTarget( self.squad_ai, StrikingScorpion.grenades_id, Ability.Filters.CloseSquadEnemy, 1 ) 
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(StrikingScorpion.shadowstrike_id) then
+		Ability.DoAbilityArea(self.squad_ai, StrikingScorpion.shadowstrike_id, Ability.Filters.CloseInfantryEnemy, 40, 5)
+	end
+
+	-- Call basic DoAbilities methods
+	EldarInfantryTactic.DoAbilities(self)
+end

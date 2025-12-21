@@ -1,0 +1,61 @@
+----------------------------------------
+-- File: 'zealottactic.ai'
+-- Edited by Thudmeizer @ 09.10.2022
+
+class 'ZealotTactic' (WitchHuntersInfantryTactic)
+
+Zealot = {}
+
+function ZealotTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Zealot Tactic")
+end
+
+function ZealotTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function ZealotTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function ZealotTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Zealot.fanatical_id == nil) then
+		Zealot.fanatical_id = cpu_manager.stats:GetAbilityID( "witch_hunters_zealot_fanatical" )
+	end
+end
+
+function ZealotTactic:DoAbilities()
+
+	-- No fanatism while retreating
+	if (not self:IsMoving() and self.squad_ai:IsInCombat()) then
+		if self.squad_ai:CanDoAbility(Zealot.fanatical_id) then
+			Ability.DoAbility( self.squad_ai, Zealot.fanatical_id, Ability.Filters.IsInCombat )
+		end
+	end
+end
+
+function ZealotTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

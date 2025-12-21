@@ -1,0 +1,144 @@
+----------------------------------------
+-- File: 'LOTDForceCommanderTactic.ai'
+-- Edited by Thudmeizer	@ 19.07.2016
+-- Edited by LarkinVB	@ 16.08.2005
+-- Edited by Gambit 	@ 25.05.2016
+
+class 'LOTDForceCommanderTactic' (LOTDInfantryTactic)
+
+LOTDForceCommander = {}
+
+function LOTDForceCommanderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("LOTD Force Commander Tactic")
+end
+
+-- Assassinate win condition -- never attack
+function LOTDForceCommanderTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function LOTDForceCommanderTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function LOTDForceCommanderTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (LOTDForceCommander.bomb_id == nil) then
+		LOTDForceCommander.bomb_id = cpu_manager.stats:GetAbilityID( "lotd_bomb" )
+	end
+	if (LOTDForceCommander.tarot_id == nil) then
+		LOTDForceCommander.tarot_id = cpu_manager.stats:GetAbilityID( "lotd_imperial_tarot" )
+	end
+	if (LOTDForceCommander.fanatical_id == nil) then
+		LOTDForceCommander.fanatical_id = cpu_manager.stats:GetAbilityID( "lotd_fanatical" )
+	end
+	if (LOTDForceCommander.strip_id == nil) then
+		LOTDForceCommander.strip_id = cpu_manager.stats:GetAbilityID( "lotd_strip_soul" )
+	end
+end
+
+function LOTDForceCommanderTactic:DoAbilities()
+
+	-- Tactical Nuclear Warhead
+	if (self.squad_ai:CanDoAbility(LOTDForceCommander.bomb_id)) then
+    
+    		-- Check for closest enemy
+		local iRange = self.squad_ai:GetAbilityRange(LOTDForceCommander.bomb_id)
+        	local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+        	if (oEnemy ~= nil) then
+
+        		-- Get distance to enemy unit
+            		local vSquadPos = self.squad_ai:GetPosition()
+            		local vEnemyPos = oEnemy:GetPosition()
+            		local iDistance = distance(vSquadPos, vEnemyPos)
+            
+            		-- If target is too far away launch bomb in range
+            		local vTargetPos = Vector3f(vSquadPos)
+            		local iRange = self.squad_ai:GetAbilityRange(LOTDForceCommander.bomb_id)
+            		if (iDistance > iRange) then
+                		local fThrowFactor = iRange / iDistance
+                		vTargetPos.x = vTargetPos.x + (vEnemyPos.x - vSquadPos.x) * fThrowFactor
+                		vTargetPos.z = vTargetPos.z + (vEnemyPos.z - vSquadPos.z) * fThrowFactor
+            		else
+                		vTargetPos = Vector3f(vEnemyPos)
+            		end
+
+			-- Drop bomb at target
+            		self.squad_ai:DoSpecialAbilityPos(LOTDForceCommander.bomb_id, vTargetPos)
+		end
+	end
+
+	-- Imperial Tarot
+	if (self.squad_ai:CanDoAbility(LOTDForceCommander.tarot_id) and self.squad_ai:IsInCombat()) then
+	
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(LOTDForceCommander.tarot_id)
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_VehicleLow or eClass == UnitStatsAI.UC_VehicleMed or
+					eClass == UnitStatsAI.UC_VehicleHigh or eClass == UnitStatsAI.UC_Commander or
+					eClass == UnitStatsAI.UC_MonsterHigh or oSquad:GetNumTroopers() >= 4) then
+					
+					-- Use Tarot ability on squad
+					self.squad_ai:DoSpecialAbilitySquad(LOTDForceCommander.tarot_id, oSquad:GetSquad())
+				end
+			end	
+		end
+	end
+
+	-- Gift of the Warp Curse
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then 
+
+		if (self.squad_ai:CanDoAbility(LOTDForceCommander.fanatical_id)) then
+			self.squad_ai:DoSpecialAbility(LOTDForceCommander.fanatical_id)
+		end
+	end
+
+	-- Soul Strike
+	Ability.DoAbilityTarget( self.squad_ai, LOTDForceCommander.strip_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, LOTDForceCommander.strip_id, Ability.Filters.CloseSquadEnemy, 4 )
+end
+
+function LOTDForceCommanderTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	if not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() then
+		
+		-- Figure out my enemy's favourite class
+		local enemy = cpu_manager:FindClosestEnemyPlayer()
+		if (enemy == nil) then
+			return
+		end
+		local class_type = enemy:GetMajorityClassType()
+		
+		-- Larkins hard counter upgrade for HeavyInfantryMed 
+		if (class_type < UnitStatsAI.UC_HeavyInfantryMed) then	  
+		  
+			local enemy_race = enemy:GetPlayerRaceName()
+			if (enemy_race == "space_marine_race" or enemy_race == "chaos_marine_race" or enemy_race == "necron_race") then
+		    	class_type = UnitStatsAI.UC_HeavyInfantryMed
+		  	end
+		end
+		
+		-- Do best upgrade
+		self.squad_ai:DoBestUpgrade(class_type)
+	end
+end

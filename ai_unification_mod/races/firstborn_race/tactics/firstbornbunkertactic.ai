@@ -1,0 +1,13 @@
+----------------------------------------
+-- File: 'firstbornbunkertactic.ai'
+-- Edited by Thudmeizer		@ 05.06.2008
+
+class 'FirstbornBunkerTactic' (BaseTactic)
+
+function FirstbornBunkerTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Firstborn Bunker Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
