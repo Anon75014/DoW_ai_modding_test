@@ -1,0 +1,68 @@
+----------------------------------------
+-- File: 'chemdogtactic.ai'
+-- Edited by Thudmeizer @ 29.01.2024
+
+class 'ChemDogTactic' (SteelLegionInfantryTactic)
+
+ChemDog = {}
+
+function ChemDogTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Chem Dog Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+	
+	-- Init execute delay time
+	ChemDog.NextExecuteCheck = 0
+end
+
+function ChemDogTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function ChemDogTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function ChemDogTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (ChemDog.execute_id == nil or ChemDog.NextExecuteCheck == nil) then
+		ChemDog.execute_id = cpu_manager.stats:GetAbilityID( "steel_legion_commissar_execute_chem_dog" )
+		ChemDog.NextExecuteCheck = g_iGMT
+	end
+end
+
+function ChemDogTactic:DoAbilities()
+
+	if ChemDog.NextExecuteCheck == nil then 
+		ChemDog.NextExecuteCheck = 0
+	end
+
+	-- TargetSelf: When attached to squad, executes one of his own soldiers to increase their fighting potential
+	-- GAMBIT: Added one more function (IsNearbySquadsMoraleBelow), for more cases of nearby morale-broken toorps
+	if g_iGMT > ChemDog.NextExecuteCheck and (self.squad_ai:CanDoAbility(ChemDog.execute_id))
+	and self.squad_ai:IsAttacking() and self.squad_ai:IsAttached() then
+		if self.squad_ai:GetNumTroopers() > 6
+		or self:IsNearbySquadsMoraleBelow( self.squad_ai:GetPosition(), 30, 0.3, false ) then
+			-- Use execute ability
+			if self.squad_ai:CanDoAbility(ChemDog.execute_id) then
+				self.squad_ai:DoSpecialAbility(ChemDog.execute_id) 
+				ChemDog.NextExecuteCheck = g_iGMT + 20
+			end
+		end
+	end
+end
+
+function ChemDogTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+end

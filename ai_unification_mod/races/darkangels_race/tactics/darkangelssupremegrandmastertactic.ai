@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'darkangelssupremegrandmastertactic.ai'
+-- Edited by Thudmeizer @ 06.06.2018
+
+class 'DarkAngelsSupremeGrandMasterTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsSupremeGrandMaster = {}
+
+function DarkAngelsSupremeGrandMasterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Grand Master Tactic")
+end
+
+function DarkAngelsSupremeGrandMasterTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkAngelsSupremeGrandMasterTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkAngelsSupremeGrandMasterTactic:InitAbilities()
+
+end
+
+function DarkAngelsSupremeGrandMasterTactic:DoAbilities()
+
+    self:DoOrbitalBombardment()
+    self:DoBattlecry()
+    self:DoHuntTheFallen()
+end
+
+function DarkAngelsSupremeGrandMasterTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end

@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'kriegbaihutactic.ai'
+-- Edited by Thudmeizer @ 18.08.2024
+
+class 'KriegBaihuTactic' (KriegVehicleTactic)
+
+KriegBaihu = {}
+
+function KriegBaihuTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Baihu Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+function KriegBaihuTactic:InitAbilities()
+
+	-- Init ability ID's
+	if KriegBaihu.evacuate_id == nil then
+		KriegBaihu.evacuate_id = cpu_manager.stats:GetAbilityID( "krieg_baihu_safe_evacuate" )
+	end
+end
+
+function KriegBaihuTactic:DoAbilities()
+
+	-- Check if we can use evacate on friendly close allies
+	if (self.squad_ai:CanDoAbility(KriegBaihu.evacuate_id)) then
+	
+		-- Search a squad
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 16, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbility(KriegBaihu.evacuate_id)
+		end
+	end
+
+	-- Call standard method
+	KriegVehicleTactic.DoAbilities(self)
+end

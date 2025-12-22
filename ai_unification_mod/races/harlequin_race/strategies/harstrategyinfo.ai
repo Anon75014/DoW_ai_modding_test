@@ -1,0 +1,297 @@
+----------------------------------------
+-- File: 'harlequinstrategyinfo.ai'
+-- Edited by Thudmeizer  @ 27.01.2025
+
+BuildBaseStrategyInfo = 
+{	
+	harlequin_race =
+	{
+		post_builder = 1,
+		flag_capture = 2,
+
+		--reserve this amount for building units/buildings (not for use in upgrading/ reinforcing)
+		req_reserve = 100,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+                -- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Total Research Count: 38
+			-- Allround strategy
+			{
+				{ 1, 360, 0, 0, 1,	"Building",	"harlequin_hq" },
+				{ 1, 150, 0, 0, 1,	"Building",	"harlequin_aspect_portal" },
+				{ 1, 220, 60, 0, 1,	"Unit",		"harlequin_squad_great_harlequin" },
+				{ 1, 180, 0, 0, 2,	"Unit",		"harlequin_squad_troupe" },
+				{ 1, 125, 125, 0, 100,	"TurretAddon",	"harlequin_list_post_addon_1" },
+				{ 1, 175, 50, 0, 1,	"Building",	"harlequin_armoury" },
+				{ 1, 300, 150, 400, 1,	"Research",	"harlequin_tier2_research" },
+				{ 1, 80, 40, 450, 1,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 1, 250, 0, 450, 2,	"Building",	"harlequin_mine" },
+
+				{ 2, 200, 150, 0, 1,	"Building",	"harlequin_support_portal" },
+				{ 2, 225, 0, 0, 1,	"Research",	"harlequin_power_research_1" },
+				{ 2, 125, 50, 0, 1,	"Building",	"harlequin_masque_portal" }, 
+				{ 2, 350, 350, 1000, 1,	"Research",	"harlequin_tier3_research" },
+				{ 2, 75, 250, 1000, 1,	"Research",	"harlequin_requisition_research_1" },
+				{ 2, 80, 40, 450, 2,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 2, 75, 0, 1500, 4,	"Building",	"harlequin_mine" },
+				{ 2, 150, 0, 1500, 2,	"Building",	"harlequin_aspect_portal" },
+				{ 2, 50, 0, 1500, 50,	"Addon",	"harlequin_support_platform_addon" },
+
+				{ 3, 100, 100, 0, 1,	"Building",	"harlequin_dark_veil" },
+				{ 3, 180, 90, 0, 2,	"Unit",		"harlequin_squad_library_guardians" },
+				{ 3, 260, 80, 0, 1,	"Unit",		"harlequin_squad_solitaire" },
+				{ 3, 350, 0, 1000, 1,	"Research",	"harlequin_power_research_2" },
+				{ 3, 100, 350, 1000, 1,	"Research",	"harlequin_requisition_research_2" },
+				{ 3, 175, 250, 2000, 1,	"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 475, 425, 500, 1,	"Research",	"harlequin_rhana_dandra_research" },
+				{ 3, 175, 250, 2500, 50,"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 200, 150, 2500, 2,	"Building",	"harlequin_support_portal" },
+				{ 3, 80, 40, 2500, 4,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 3, 75, 0, 2500, 8,	"Building",	"harlequin_mine" },
+
+				{ 4, 150, 300, 0, 2,	"Unit",		"harlequin_squad_mocking_bird" },
+				{ 4, 600, 600, 0, 1,	"Unit",		"harlequin_squad_skathach_wraithknight" },
+				{ 4, 400, 400, 0, 1,	"Unit",		"harlequin_squad_spirit_walker" },
+				{ 4, 175, 250, 3000, 100,"Addon",	"harlequin_list_post_addon_2" },
+				{ 4, 650, 0, 3000, 3,	"Building",	"harlequin_hq" },
+				{ 4, 150, 0, 2500, 4,	"Building",	"harlequin_aspect_portal" },
+				{ 4, 200, 150, 2500, 4,	"Building",	"harlequin_support_portal" },
+				{ 4, 125, 50, 2500, 2,	"Building",	"harlequin_masque_portal" }, 
+				{ 4, 80, 40, 2500, 6,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 4, 75, 0, 2500, 12,	"Building",	"harlequin_mine" }
+			},
+
+			-- Troupe strategy
+			{
+				{ 1, 360, 0, 0, 1,	"Building",	"harlequin_hq" },
+				{ 1, 150, 0, 0, 1,	"Building",	"harlequin_aspect_portal" },
+				{ 1, 220, 60, 0, 1,	"Unit",		"harlequin_squad_great_harlequin" },
+				{ 1, 180, 0, 0, 2,	"Unit",		"harlequin_squad_troupe" },
+				{ 1, 180, 0, 450, 1,	"Unit",		"harlequin_squad_troupe" },
+				{ 1, 125, 125, 0, 100,	"TurretAddon",	"harlequin_list_post_addon_1" },
+				{ 1, 175, 50, 0, 1,	"Building",	"harlequin_armoury" },
+				{ 1, 300, 150, 400, 1,	"Research",	"harlequin_tier2_research" },
+
+				{ 2, 150, 100, 0, 2,	"Unit",		"harlequin_squad_venom" },
+				{ 2, 60, 20, 0, 1,	"Unit",		"harlequin_squad_jetbikes" },
+				{ 2, 200, 150, 250, 1,	"Building",	"harlequin_support_portal" },
+				{ 2, 225, 0, 0, 1,	"Research",	"harlequin_power_research_1" },
+				{ 2, 75, 250, 1000, 1,	"Research",	"harlequin_requisition_research_1" },
+				{ 2, 125, 50, 1500, 1,	"Building",	"harlequin_masque_portal" },
+				{ 2, 150, 0, 1500, 2,	"Building",	"harlequin_aspect_portal" },
+				{ 2, 350, 350, 1600, 1,	"Research",	"harlequin_tier3_research" },
+
+				{ 3, 180, 90, 0, 2,	"Unit",		"harlequin_squad_library_guardians" },
+				{ 3, 260, 80, 0, 1,	"Unit",		"harlequin_squad_solitaire" },
+				{ 3, 350, 0, 1000, 1,	"Research",	"harlequin_power_research_2" },
+				{ 3, 100, 350, 1000, 1,	"Research",	"harlequin_requisition_research_2" },
+				{ 3, 100, 100, 1500, 1,	"Building",	"harlequin_dark_veil" },
+				{ 3, 175, 250, 2000, 1,	"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 475, 425, 2400, 1,	"Research",	"harlequin_rhana_dandra_research" },
+				{ 3, 175, 250, 2500, 50,"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 200, 150, 2500, 2,	"Building",	"harlequin_support_portal" },
+				{ 3, 80, 40, 2500, 4,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 3, 75, 0, 2600, 4,	"Building",	"harlequin_mine" },
+				
+				{ 4, 150, 300, 0, 1,	"Unit",		"harlequin_squad_mocking_bird" },
+				{ 4, 600, 600, 0, 1,	"Unit",		"harlequin_squad_skathach_wraithknight" },
+				{ 4, 400, 400, 0, 1,	"Unit",		"harlequin_squad_spirit_walker" },
+				{ 4, 175, 250, 3000, 100,"Addon",	"harlequin_list_post_addon_2" },
+				{ 4, 50, 0, 3000, 50,	"Addon",	"harlequin_support_platform_addon" },
+				{ 4, 150, 0, 2500, 4,	"Building",	"harlequin_aspect_portal" },
+				{ 4, 200, 150, 2500, 4,	"Building",	"harlequin_support_portal" },
+				{ 4, 125, 50, 2500, 2,	"Building",	"harlequin_masque_portal" },
+				{ 4, 80, 40, 2500, 6,	"Building",	"harlequin_support_platform_scatterlaser" }, 
+				{ 4, 75, 0, 2500, 8,	"Building",	"harlequin_mine" },
+				{ 4, 650, 0, 3000, 3,	"Building",	"harlequin_hq" }
+			},
+
+			-- Jetbike strategy
+			{
+				{ 1, 360, 0, 0, 1,	"Building",	"harlequin_hq" },
+				{ 1, 150, 0, 0, 1,	"Building",	"harlequin_aspect_portal" },
+				{ 1, 220, 60, 0, 1,	"Unit",		"harlequin_squad_great_harlequin" },
+				{ 1, 125, 125, 0, 100,	"TurretAddon",	"harlequin_list_post_addon_1" },
+				{ 1, 175, 50, 0, 1,	"Building",	"harlequin_armoury" },
+				{ 1, 300, 150, 400, 1,	"Research",	"harlequin_tier2_research" },
+
+				{ 2, 60, 20, 0, 3,	"Unit",		"harlequin_squad_jetbikes" },
+				{ 2, 225, 0, 0, 1,	"Research",	"harlequin_power_research_1" },
+				{ 2, 125, 50, 700, 1,	"Building",	"harlequin_masque_portal" }, 
+				{ 2, 200, 150, 1000, 1,	"Building",	"harlequin_support_portal" },
+				{ 2, 75, 250, 1500, 1,	"Research",	"harlequin_requisition_research_1" },
+				{ 2, 150, 0, 1500, 2,	"Building",	"harlequin_aspect_portal" },
+				{ 2, 350, 350, 2000, 1,	"Research",	"harlequin_tier3_research" },
+
+				{ 3, 180, 90, 0, 1,	"Unit",		"harlequin_squad_library_guardians" },
+				{ 3, 260, 80, 0, 1,	"Unit",		"harlequin_squad_solitaire" },
+				{ 3, 350, 0, 2000, 1,	"Research",	"harlequin_power_research_2" },
+				{ 3, 100, 350, 2000, 1,	"Research",	"harlequin_requisition_research_2" },
+				{ 3, 175, 250, 2000, 1,	"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 100, 100, 2000, 1,	"Building",	"harlequin_dark_veil" },
+				{ 3, 475, 425, 2500, 1,	"Research",	"harlequin_rhana_dandra_research" },
+				{ 3, 175, 250, 2500, 50,"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 200, 150, 2500, 2,	"Building",	"harlequin_support_portal" },
+				{ 3, 80, 40, 2500, 4,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 3, 75, 0, 2500, 4,	"Building",	"harlequin_mine" },
+
+				{ 4, 150, 300, 0, 2,	"Unit",		"harlequin_squad_mocking_bird" },
+				{ 4, 600, 600, 0, 1,	"Unit",		"harlequin_squad_skathach_wraithknight" },
+				{ 4, 400, 400, 0, 1,	"Unit",		"harlequin_squad_spirit_walker" },
+				{ 4, 175, 250, 3000, 100,"Addon",	"harlequin_list_post_addon_2" },
+				{ 4, 50, 0, 3000, 50,	"Addon",	"harlequin_support_platform_addon" },
+				{ 4, 650, 0, 3000, 3,	"Building",	"harlequin_hq" },
+				{ 4, 150, 0, 2500, 4,	"Building",	"harlequin_aspect_portal" },
+				{ 4, 200, 150, 2500, 4,	"Building",	"harlequin_support_portal" },
+				{ 4, 125, 50, 2500, 2,	"Building",	"harlequin_masque_portal" }, 
+				{ 4, 80, 40, 2500, 6,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 4, 75, 0, 2500, 8,	"Building",	"harlequin_mine" }
+			},
+
+			-- DeathJester strategy
+			{
+				{ 1, 0, 0, 0, 0,	"Rush",		"Prepare" },
+				{ 1, 360, 0, 0, 1,	"Building",	"harlequin_hq" },
+				{ 1, 150, 0, 0, 1,	"Building",	"harlequin_aspect_portal" },
+				{ 1, 220, 60, 0, 1,	"Unit",		"harlequin_squad_great_harlequin" },
+				{ 1, 180, 0, 0, 2,	"Unit",		"harlequin_squad_troupe" },
+				{ 1, 125, 125, 0, 100,	"TurretAddon",	"harlequin_list_post_addon_1" },
+				{ 1, 175, 50, 0, 1,	"Building",	"harlequin_armoury" },
+				{ 1, 300, 150, 0, 1,	"Research",	"harlequin_tier2_research" },
+				{ 1, 80, 40, 450, 1,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 1, 250, 0, 0, 2,	"Building",	"harlequin_mine" },
+
+				{ 2, 0, 0, 0, 0,	"Rush",		"Prepare" },
+				{ 2, 100, 45, 0, 2,	"Unit",		"harlequin_squad_death_jesters" },
+				{ 2, 100, 45, 0, 1,	"Unit",		"harlequin_squad_death_jesters" },
+				{ 2, 225, 0, 150, 1,	"Research",	"harlequin_power_research_1" },
+				{ 2, 125, 50, 700, 1,	"Building",	"harlequin_masque_portal" }, 
+				{ 2, 200, 150, 0, 1,	"Building",	"harlequin_support_portal" },
+				{ 2, 75, 250, 1000, 1,	"Research",	"harlequin_requisition_research_1" },
+				{ 2, 80, 40, 450, 2,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 2, 75, 0, 1500, 4,	"Building",	"harlequin_mine" },
+				{ 2, 150, 0, 1500, 2,	"Building",	"harlequin_aspect_portal" },
+				{ 2, 350, 350, 2000, 1,	"Research",	"harlequin_tier3_research" },
+				{ 2, 50, 0, 2000, 50,	"Addon",	"harlequin_support_platform_addon" },
+
+				{ 3, 180, 90, 0, 2,	"Unit",		"harlequin_squad_library_guardians" },
+				{ 3, 100, 100, 0, 1,	"Building",	"harlequin_dark_veil" },
+				{ 3, 260, 80, 0, 1,	"Unit",		"harlequin_squad_solitaire" },
+				{ 3, 350, 0, 2000, 1,	"Research",	"harlequin_power_research_2" },
+				{ 3, 100, 350, 2000, 1,	"Research",	"harlequin_requisition_research_2" },
+				{ 3, 175, 250, 2000, 1,	"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 475, 425, 2500, 1,	"Research",	"harlequin_rhana_dandra_research" },
+				{ 3, 175, 250, 2500, 50,"Addon",	"harlequin_list_post_addon_2" },
+				{ 3, 200, 150, 2500, 2,	"Building",	"harlequin_support_portal" },
+				{ 3, 80, 40, 2000, 4,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 3, 75, 0, 2000, 8,	"Building",	"harlequin_mine" },
+
+				{ 4, 150, 300, 0, 1,	"Unit",		"harlequin_squad_mocking_bird" },
+				{ 4, 600, 600, 0, 1,	"Unit",		"harlequin_squad_skathach_wraithknight" },
+				{ 4, 400, 400, 0, 1,	"Unit",		"harlequin_squad_spirit_walker" },
+				{ 4, 175, 250, 3000, 100,"Addon",	"harlequin_list_post_addon_2" },
+				{ 4, 650, 0, 3000, 3,	"Building",	"harlequin_hq" },
+				{ 4, 150, 0, 3000, 4,	"Building",	"harlequin_aspect_portal" },
+				{ 4, 200, 150, 3000, 4,	"Building",	"harlequin_support_portal" },
+				{ 4, 125, 50, 3000, 2,	"Building",	"harlequin_masque_portal" }, 
+				{ 4, 80, 40, 2500, 6,	"Building",	"harlequin_support_platform_scatterlaser" },
+				{ 4, 75, 0, 2500, 12,	"Building",	"harlequin_mine" }
+       			}
+		},
+				
+		SquadLimits = 
+		{
+			standard = 
+			{
+				harlequin_squad_chorus = 3,
+				harlequin_squad_troubadur = 4,
+				harlequin_squad_white_seers = 1,
+				harlequin_squad_shadowseer = 1, 
+				harlequin_squad_solitaire = 1,
+				harlequin_squad_great_harlequin = 1,
+				harlequin_squad_mime = math.random( 3,5 ),
+				harlequin_squad_troupe = math.random( 3,5 ),
+				harlequin_squad_death_jesters = math.random( 2,3 ),
+				harlequin_squad_ghost_warrior_assassin = 1,
+				harlequin_squad_ghost_warrior_executioner = 1,
+				harlequin_squad_library_guardians = 2,
+				harlequin_squad_jetbikes = math.random( 1,3 ),
+				harlequin_squad_venom = math.random( 2,3 ),
+				harlequin_squad_void_weavers = math.random( 2,3 ),
+				harlequin_squad_vampire_raider = 1,
+				harlequin_squad_vampire_raider_landed = 1,
+				harlequin_squad_wraith_lord = math.random( 2,3 ),
+				harlequin_squad_skathach_wraithknight = 1,
+				harlequin_squad_mocking_bird = 2,
+				harlequin_squad_spirit_walker = 1,
+			 }
+		}
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	harlequin_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_chorus" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "harlequin_aspect_portal", true },
+		},
+		 
+		QuickStart =
+		{
+			{ "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_chorus" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "harlequin_aspect_portal", true },
+			{ "building", "harlequin_aspect_portal", true },
+			{ "building", "harlequin_hq", true },
+		},
+		 
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_mime" },
+			{ "squad", "harlequin_squad_chorus" },
+			{ "post_builder" }, { "post_builder" },
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	harlequin_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

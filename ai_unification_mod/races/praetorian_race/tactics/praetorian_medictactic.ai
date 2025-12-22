@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'Praetorian_medictactic.ai'
+-- Edited by Thudmeizer @ 05.01.2023
+
+class 'Praetorian_MedicTactic' (Praetorian_InfantryTactic)
+
+Praetorian_Medic = {}
+
+function Praetorian_MedicTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Medic Tactic")
+end
+
+function Praetorian_MedicTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Praetorian_MedicTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Praetorian_MedicTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to squad
+	self:TryAttachSquad(false, false, 1000, 60, nil)
+end
+ 

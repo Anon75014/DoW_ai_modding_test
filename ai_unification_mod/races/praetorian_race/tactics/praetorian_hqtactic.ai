@@ -1,0 +1,17 @@
+----------------------------------------
+-- File: 'Praetorian_HQTactic.ai'
+-- Edited by fuggles		@ 03.09.16
+-- Edited by fuggles		@ 07.11.2022
+
+class 'Praetorian_HQTactic' (BaseTactic)
+
+function Praetorian_HQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("HQ Tactic")
+
+	self.m_ilabID = cpu_manager.stats:GetBuildingID("praetorian_labratory")
+end
+
+function Praetorian_HQTactic:CanDeepStrikeTroops()
+	return (cpu_manager.player_stats:GetNumBasesByBPID(self.m_ilabID, true) > 0)
+end

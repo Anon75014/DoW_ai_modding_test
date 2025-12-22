@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'firstbornmedictactic.ai'
+-- Edited by Thudmeizer @ 03.12.2022
+
+class 'FirstbornMedicTactic' (FirstbornInfantryTactic)
+
+FirstbornMedic = {}
+
+function FirstbornMedicTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Medic Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function FirstbornMedicTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FirstbornMedicTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function FirstbornMedicTactic:Update()
+
+	if self:IsComplete() then
+		return
+	end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+	--attach to squad
+	self:TryAttachSquad( false, false, 1000, 200, nil )
+end

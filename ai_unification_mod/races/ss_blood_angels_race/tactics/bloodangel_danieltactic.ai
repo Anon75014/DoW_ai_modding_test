@@ -1,0 +1,68 @@
+----------------------------------------
+-- File: 'danieltactic.ai'
+-- Edited by Thudmeizer   @ 17.10.2023
+
+class 'BloodAngelDanielTactic' (BloodAngelsInfantryTactic)
+
+BloodAngelDaniel = {}
+
+function BloodAngelDanielTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angel Daniel the Sternguard Marine Tactic")
+end
+
+function BloodAngelDanielTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function BloodAngelDanielTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function BloodAngelDanielTactic:InitAbilities()
+
+	-- Init ability ID's
+	if BloodAngelDaniel.frag_id == nil then
+		BloodAngelDaniel.frag_id = cpu_manager.stats:GetAbilityID( "blood_angel_frag_grenades" )
+	end
+end
+
+function BloodAngelDanielTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(BloodAngelDaniel.frag_id) then
+			if Ability.DoAbilityTarget(self.squad_ai, BloodAngelDaniel.frag_id, Ability.Filters.CloseCommanderEnemy, 1) 
+			or Ability.DoAbilityTarget(self.squad_ai, BloodAngelDaniel.frag_id, Ability.Filters.CloseSquadEnemy, 4) then
+                		return
+			end
+		end
+	end
+end
+
+function BloodAngelDanielTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+
+

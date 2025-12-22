@@ -1,0 +1,62 @@
+----------------------------------------
+-- File: 'rhinoassaulttactic.ai'
+-- Edited by Thudmeizer        @ 13.09.2023
+
+class 'RhinoAssaultTactic' (ThirteenthcomVehicleTactic)
+
+RhinoAssault = {}
+
+function RhinoAssaultTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thirteenth Company Rhino Tactic")
+	
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 1
+end
+
+function RhinoAssaultTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RhinoAssault.smoke_id == nil) then
+		RhinoAssault.smoke_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_smoke_grenades" )	
+	end
+--[[
+	if (RhinoAssault.fragdefenders_id == nil) then
+		RhinoAssault.fragdefenders_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_frag_grenades" )	
+	end
+]]
+	if (RhinoAssault.missile_id == nil) then
+		RhinoAssault.missile_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_hk_missile_rhino" )	
+	end
+end
+
+function RhinoAssaultTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(RhinoAssault.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(RhinoAssault.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(RhinoAssault.smoke_id, oUnit:GetSquad())
+		end
+	end
+--[[
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, RhinoAssault.fragdefenders_id, Ability.Filters.CloseInfantryEnemy, 3 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, RhinoAssault.fragdefenders_id, Ability.Filters.CloseInfantryEnemy, 6 )
+	end
+]]
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(RhinoAssault.missile_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, RhinoAssault.missile_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, RhinoAssault.missile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, RhinoAssault.missile_id, Ability.Filters.CloseSquadEnemy, 4 )
+	end
+
+	-- Call standard method
+	ThirteenthcomVehicleTactic.DoAbilities(self)
+end

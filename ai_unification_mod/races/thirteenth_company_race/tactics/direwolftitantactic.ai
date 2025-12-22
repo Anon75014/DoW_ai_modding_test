@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'direwolftitantactic.ai'
+-- Edited by Gambit         @ 17.05.2022
+
+class 'DireWolfTitanTactic' (ThirteenthcomVehicleTactic)
+
+DireWolfTitan = {}
+
+function DireWolfTitanTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dire Wolf Titan Tactic")
+end
+
+function DireWolfTitanTactic:InitAbilities()
+
+	-- Init ability ID's
+	if DireWolfTitan.stomp_id == nil then
+		DireWolfTitan.stomp_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_dw_titan_trample" )
+		DireWolfTitan.push_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_dw_titan_charge" )
+	end
+end
+
+function DireWolfTitanTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(DireWolfTitan.stomp_id) and self.squad_ai:IsAttacking() then
+			if Ability.DoAbilityTarget(self.squad_ai, DireWolfTitan.stomp_id, Ability.Filters.CloseSquadEnemy, 5) then
+				return
+			end
+		end
+
+		if self.squad_ai:CanDoAbility(DireWolfTitan.push_id) and self.squad_ai:IsInStateMove() then
+			if Ability.DoAbilityArea(self.squad_ai, DireWolfTitan.push_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+			or Ability.DoAbilityArea(self.squad_ai, DireWolfTitan.push_id, Ability.Filters.CloseMonsterEnemy, 10, 4) then
+				return
+			end
+		end
+	end
+	
+	-- Do basic abilities
+	ThirteenthcomVehicleTactic.DoAbilities(self)
+end

@@ -1,0 +1,92 @@
+----------------------------------------
+-- File: 'deathguarddaemonprincetactic.ai'
+-- Edited by Thudmeizer @ 31.07.2024
+
+class 'DeathGuardDaemonPrinceTactic' (DeathGuardInfantryTactic)
+
+DeathGuardDaemonPrince = {}
+
+function DeathGuardDaemonPrinceTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Daemon Prince Tactic")
+end
+
+function DeathGuardDaemonPrinceTactic:InitAbilities()
+
+	if (DeathGuardDaemonPrince.healing_id == nil) then
+		DeathGuardDaemonPrince.healing_id = cpu_manager.stats:GetAbilityID( "death_guard_healing_touch_prince" )
+	end
+
+	if (DeathGuardDaemonPrince.miasma_id == nil) then
+		DeathGuardDaemonPrince.miasma_id = cpu_manager.stats:GetAbilityID( "death_guard_suffocating_miasma" )	
+	end
+
+	if (DeathGuardDaemonPrince.wind_id == nil) then
+		DeathGuardDaemonPrince.wind_id = cpu_manager.stats:GetAbilityID( "death_guard_plague_wind" )	
+	end
+
+	if (DeathGuardDaemonPrince.swarm_id == nil) then
+		DeathGuardDaemonPrince.swarm_id = cpu_manager.stats:GetAbilityID( "death_guard_deadly_swarm" )	
+	end
+
+	if (DeathGuardDaemonPrince.pestilence_id == nil) then
+		DeathGuardDaemonPrince.pestilence_id = cpu_manager.stats:GetAbilityID( "death_guard_torrent_of_pestilence" )	
+	end
+end
+
+function DeathGuardDaemonPrinceTactic:DoAbilities()
+
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.healing_id)) then
+			self.squad_ai:DoSpecialAbility(DeathGuardDaemonPrince.healing_id)
+		end
+	end
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.miasma_id)) then
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.miasma_id, Ability.Filters.CloseInfantryEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.miasma_id, Ability.Filters.CloseMonsterEnemy, 2 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.miasma_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.swarm_id)) then
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.swarm_id, Ability.Filters.CloseInfantryEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.swarm_id, Ability.Filters.CloseMonsterEnemy, 2 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.swarm_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.pestilence_id)) then
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.pestilence_id, Ability.Filters.CloseInfantryEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.pestilence_id, Ability.Filters.CloseMonsterEnemy, 2 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.pestilence_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.wind_id)) then
+			Ability.DoAbilityPos(self.squad_ai, DeathGuardDaemonPrince.wind_id, Ability.Filters.CloseEnemy, 2 )
+		end
+	else
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.miasma_id)) then
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.miasma_id, Ability.Filters.CloseInfantryEnemy, 6 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.miasma_id, Ability.Filters.CloseMonsterEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.miasma_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.swarm_id)) then
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.swarm_id, Ability.Filters.CloseInfantryEnemy, 6 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.swarm_id, Ability.Filters.CloseMonsterEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.swarm_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.pestilence_id)) then
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.pestilence_id, Ability.Filters.CloseInfantryEnemy, 6 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.pestilence_id, Ability.Filters.CloseMonsterEnemy, 4 )
+			Ability.DoAbilityPos( self.squad_ai, DeathGuardDaemonPrince.pestilence_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		if (self.squad_ai:CanDoAbility(DeathGuardDaemonPrince.wind_id)) then
+			Ability.DoAbilityPos(self.squad_ai, DeathGuardDaemonPrince.wind_id, Ability.Filters.CloseEnemy, 4 )
+		end
+	end
+end

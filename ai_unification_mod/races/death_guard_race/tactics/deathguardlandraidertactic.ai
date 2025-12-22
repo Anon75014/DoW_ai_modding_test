@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'deathguardlandraidertactic.ai'
+-- Edited by Thudmeizer @ 11.05.2022
+
+class 'DeathGuardLandRaiderTactic' (DeathGuardVehicleTactic)
+
+DeathGuardLandRaider = {}
+
+function DeathGuardLandRaiderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Land Raider Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function DeathGuardLandRaiderTactic:InitAbilities()
+
+	if (DeathGuardLandRaider.smoke_id == nil) then
+		DeathGuardLandRaider.smoke_id = cpu_manager.stats:GetAbilityID( "death_guard_smoke_launchers" )	
+		DeathGuardLandRaider.spirit_id = cpu_manager.stats:GetAbilityID( "death_guard_machine_spirit" )
+	end
+end
+
+function DeathGuardLandRaiderTactic:DoAbilities()
+
+	-- Check if we can launch poison
+	if (self.squad_ai:CanDoAbility(DeathGuardLandRaider.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(DeathGuardLandRaider.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(DeathGuardLandRaider.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Check if I can use corrupted machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(DeathGuardLandRaider.spirit_id)) then
+			self.squad_ai:DoSpecialAbility(DeathGuardLandRaider.spirit_id)
+		end	  
+	end
+
+	VehicleTactic.DoAbilities(self)
+end

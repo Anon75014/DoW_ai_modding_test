@@ -1,0 +1,26 @@
+----------------------------------------
+-- File: 'venenumtactic.ai'
+-- Edited by Gambit @ 08.09.2021
+
+class 'VenenumTactic' (WitchHuntersInfantryTactic)
+
+Venenum = {}
+
+function VenenumTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Venenum Tactic")
+end
+
+function VenenumTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function VenenumTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function VenenumTactic:InitAbilities()
+end
+
+function VenenumTactic:DoAbilities()
+end

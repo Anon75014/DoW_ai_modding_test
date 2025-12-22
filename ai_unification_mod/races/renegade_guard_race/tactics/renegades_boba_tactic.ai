@@ -1,0 +1,101 @@
+----------------------------------------
+-- File: 'Renegades_Boba_Tactic.ai'
+-- Edited by Thudmeizer @ 09.06.2023
+
+class 'Renegades_Boba_Tactic' (Renegades_Infantry_Tactic)
+
+Boba = {}
+
+function Renegades_Boba_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Boba Fett Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Boba_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Boba_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function Renegades_Boba_Tactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function Renegades_Boba_Tactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function Renegades_Boba_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Boba.cannon_id == nil) then
+		Boba.cannon_id = cpu_manager.stats:GetAbilityID( "renegade_guard_ion_cannon" )	
+		Boba.burn_id = cpu_manager.stats:GetAbilityID("renegade_guard_let_it_burn_boba")
+		Boba.aura_id = cpu_manager.stats:GetAbilityID( "renegade_guard_boba_aura_dummy" )	
+	end
+end
+
+function Renegades_Boba_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Try to use ion strike
+		if self.squad_ai:CanDoAbility(Boba.cannon_id) then
+			if Ability.DoAbilityPos(self.squad_ai, Boba.cannon_id, Ability.Filters.CloseEnemy, 24)
+			or Ability.DoAbilityPos(self.squad_ai, Boba.cannon_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+				return
+			end
+		end
+
+		-- Try to use Let It Burn
+		if self.squad_ai:CanDoAbility(Boba.burn_id) then
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.DoAbilityTarget(self.squad_ai, Boba.burn_id, Ability.Filters.CloseEnemy, 3) then
+					return
+				end
+			else
+				if Ability.DoAbilityTarget(self.squad_ai, Boba.burn_id, Ability.Filters.CloseEnemy, 6) then
+					return
+				end
+			end
+		end
+
+		-- Check if we can initiate The Phoenix of Ashina against our struggling fighters
+		if (self.squad_ai:CanDoAbility(Boba.aura_id)) then
+
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+	
+				-- Search a squad
+				local iRange = self.squad_ai:GetAbilityRange(Boba.aura_id)
+				local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+				if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+					self.squad_ai:DoSpecialAbilitySquad(Boba.aura_id, oUnit:GetSquad())
+				end
+			end
+		end
+	end
+end
+
+function Renegades_Boba_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+		return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

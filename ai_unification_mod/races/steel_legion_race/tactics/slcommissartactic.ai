@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'slcommissartactic.ai'
+-- Edited by Thudmeizer @ 04.10.2023
+
+class 'SLCommissarTactic' (SteelLegionInfantryTactic)
+
+SLCommissar = {}
+
+function SLCommissarTactic:__init( squad_ai ) super( squad_ai )
+
+	   self:SetName("SLCommissar Tactic")
+end
+
+function SLCommissarTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function SLCommissarTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function SLCommissarTactic:InitAbilities()
+
+	if (SLCommissar.battlecry_id == nil) then
+		SLCommissar.battlecry_id = cpu_manager.stats:GetAbilityID( "steel_legion_your_aim_will_be_true" )
+	end
+end
+
+function SLCommissarTactic:DoAbilities()
+
+	-- Try to use battlecry
+	Ability.DoAbilityArea(self.squad_ai, SLCommissar.battlecry_id, Ability.Filters.CloseInCombat, 10, 1)
+end
+
+function SLCommissarTactic:Update()
+
+	if self:IsComplete() then
+      		return
+   	end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+   	--attach to squad
+   	self:TryAttachSquad( false, false, 1000, 200, nil )
+end

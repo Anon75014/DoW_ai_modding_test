@@ -1,0 +1,37 @@
+----------------------------------------
+-- File: 'bloodangelsbannertactic.ai'
+-- Edited by Thudmeizer @ 25.11.2022
+
+class 'BloodAngelBannerTactic' (BloodAngelsInfantryTactic)
+
+BloodAngelBanner = {}
+
+function BloodAngelBannerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angels Banner Tactic")
+end
+
+function BloodAngelBannerTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function BloodAngelBannerTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function BloodAngelBannerTactic:Update()
+
+	if self:IsComplete() then
+      		return
+   	end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+   	--attach to squad
+   	self:TryAttachSquad( false, false, 1000, 200, nil )
+end
+
+

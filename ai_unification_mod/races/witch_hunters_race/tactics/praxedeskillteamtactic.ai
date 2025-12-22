@@ -1,0 +1,157 @@
+----------------------------------------
+-- File: 'praxedeskillteamtactic.ai'
+-- Edited by Thudmeizer @ 01.11.2023
+
+class 'PraxedesKillTeamTactic' (WitchHuntersInfantryTactic)
+
+PraxedesKillTeam = {}
+
+function PraxedesKillTeamTactic:__init( squad_ai ) super( squad_ai )
+
+	self.timedDirectSpawnAbility = Timer( PraxedesKillTeamTactic.DoDirectSpawnAbility, self, 5 )
+
+	self:SetName("Praxedes Kill Team Tactic")
+end
+
+-- Praxedes Kill Team is allowed to retreat even directly after a jump
+function PraxedesKillTeamTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function PraxedesKillTeamTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function PraxedesKillTeamTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function PraxedesKillTeamTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function PraxedesKillTeamTactic:InitAbilities()
+
+	if PraxedesKillTeam.brazier_id == nil then
+		PraxedesKillTeam.brazier_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ls_saint_praxedes_brasero_ktgm" )
+	end
+
+	if PraxedesKillTeam.heresius_id == nil then
+		PraxedesKillTeam.heresius_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ls_saint_praxedes_liber_heresius_ktgm" )
+	end
+
+	if PraxedesKillTeam.ophelia_id == nil then
+		PraxedesKillTeam.ophelia_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ls_saint_praxedes_mantle_ophelia_praxedes_ktgm" )
+	end
+
+	if PraxedesKillTeam.martyr_id == nil then
+		PraxedesKillTeam.martyr_id = cpu_manager.stats:GetAbilityID( "witch_hunters_ls_saint_praxedes_true_martyr_ktgm" )
+	end
+end
+
+function PraxedesKillTeamTactic:DoAbilities()
+
+	-- Always try to call the Zealots, if available
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		PraxedesKillTeamTactic.DoDirectSpawnAbility(self)
+	end
+
+	if self.squad_ai:CanDoAbility(PraxedesKillTeam.heresius_id) then
+		Ability.DoAbilityArea( self.squad_ai, PraxedesKillTeam.heresius_id, Ability.Filters.CloseInCombat, 30, 1 )
+	end
+
+	if self.squad_ai:CanDoAbility(PraxedesKillTeam.ophelia_id) then
+		Ability.DoAbilityArea( self.squad_ai, PraxedesKillTeam.ophelia_id, Ability.Filters.CloseInCombat, 40, 1 )
+	end
+
+	if self.squad_ai:CanDoAbility(PraxedesKillTeam.martyr_id) then
+
+		if (self.squad_ai:GetHealthPercentage() < 0.4) then
+
+			if (cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 40, 1) == nil and not self.squad_ai:IsInCombat()) then
+				self.squad_ai:DoSpecialAbility(PraxedesKillTeam.martyr_id)
+			end
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(PraxedesKillTeam.brazier_id) then
+		local iPos = self.squad_ai:GetPosition()
+		local vDir = cpu_manager:GetDirectionToEnemy(iPos)
+		iPos.x = iPos.x + vDir.x * math.random(1, 5)
+		iPos.z = iPos.z + vDir.z * math.random(1, 5)
+	      --if cpu_manager.cpu_player:FindFirstBaseEnemy(iPos, 10, 1) == nil
+		if cpu_manager.cpu_player:FindFirstEnemy(iPos, 10, 1) == nil then
+	      --and resource_manager:FindFirstStrategicPoint(iPos, 10) == nil then
+	      --and not self:IsAlliedBuildingWithin(iPos, 10) then
+			self.squad_ai:DoSpecialAbilityPos(PraxedesKillTeam.brazier_id, iPos)
+		end
+	end
+end
+
+function PraxedesKillTeamTactic:DoDirectSpawnAbility()
+
+	-- Spawn Zealots in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function PraxedesKillTeamTactic:Upgrade()
+
+	-- Check if we have free resources
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	if (not self.squad_ai:IsReinforcing()) then
+	
+		-- Upgrade if possible
+		if (self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 0) then
+			local class_type = cpu_manager:GetFirstEnemyPlayer():GetMajorityClassType()
+			self.squad_ai:DoBestUpgrade( class_type )
+		end
+	end
+end
+
+function PraxedesKillTeamTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+
+function PraxedesKillTeamTactic:IsAlliedBuildingWithin(iPos, iRange)
+	for oPlayer in cpu_manager.stats:GetPlayerStats() do
+		if not oPlayer:IsPlayerDead() then
+			if not cpu_manager.player_stats:IsEnemy(oPlayer) then
+				for oBuilding in oPlayer:GetBases() do
+					if oBuilding:IsValid() then
+						if distance_sqr(oBuilding:GetPosition(),iPos) < iRange*iRange then
+							return true
+						end
+					end
+				end
+			end
+		end
+	end
+	return false
+end

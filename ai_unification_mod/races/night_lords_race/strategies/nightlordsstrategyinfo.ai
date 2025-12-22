@@ -1,0 +1,241 @@
+----------------------------------------
+-- File: 'nightlordsstrategyinfo.ai'
+-- Edited by Torzel	@ 18.05.2013
+-- Edited by Thudmeizer	@ 30.05.2024
+
+BuildBaseStrategyInfo = 
+{
+	night_lords_race =
+	{
+		post_builder = 1,
+		flag_capture = 1,
+
+		-- Reserve this amount for building units, reinforcing and upgrading
+		req_reserve = 150,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+		
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Research Total: 33
+			-- Raptor strategy
+			{
+				{ 1, 220, 50, 0, 1,	"Unit",		"night_lords_squad_lord" },
+			        { 1, 150, 0, 0, 1,	"Unit",		"night_lords_squad_raptor_scout" }, -- Force a capturing squad
+			        { 1, 190, 0, 0, 2,	"Unit",		"night_lords_squad_marine" },
+				{ 1, 240, 0, 0, 2,	"Unit",		"night_lords_squad_raptor" },
+			        { 1, 450, 0, 0, 1,	"Building",	"night_lords_hq" },
+			        { 1, 250, 0, 0, 1,	"Building",	"night_lords_barracks" },
+				{ 1, 135, 0, 0, 1,	"Building",	"night_lords_generator" },
+				{ 1, 150, 0, 0, 1,	"Research",	"night_lords_squad_cap_research" },
+				{ 1, 175, 50, 500, 1,	"Building",	"night_lords_armoury" },
+				{ 1, 135, 0, 600, 2,	"Building",	"night_lords_generator" },
+				{ 1, 100, 75, 650, 60,	"TurretAddon",	"night_lords_list_post_addon_1" },
+				{ 1, 135, 0, 750, 3,	"Building",	"night_lords_generator" },
+				{ 1, 300, 125, 800, 1,	"Addon",	"night_lords_hq_addon_1" },
+			        { 1, 90, 45, 850, 1,	"Building",	"night_lords_turret_bolter" },
+				{ 1, 135, 0, 950, 4,	"Building",	"night_lords_generator" },
+
+			        { 2, 125, 200, 0, 1,	"Unit",		"night_lords_squad_hell_talon" },
+				{ 2, 140, 280, 0, 2,	"Unit",		"night_lords_squad_dreadnought" },
+			        { 2, 260, 50, 0, 1,	"Unit",		"night_lords_squad_talonmaster" },
+				{ 2, 200, 125, 250, 1,	"Building",	"night_lords_vehicle_building" },
+				{ 2, 75, 75, 250, 1,	"Research",	"night_lords_melta_bomb_research" },
+				{ 2, 150, 0, 500, 1,	"Research",	"night_lords_support_cap_research" },
+				{ 2, 100, 75, 750, 100,	"TurretAddon",	"night_lords_list_post_addon_1" },
+				{ 2, 135, 0, 1000, 6,	"Building",	"night_lords_generator" },
+				{ 2, 50, 0, 1000, 50,	"TurretAddon",	"night_lords_turret_addon" },
+				{ 2, 200, 40, 1000, 1,	"Research",	"night_lords_power_research_1" },
+				{ 2, 75, 250, 1000, 1,	"Research",	"night_lords_requisition_research_1" },
+				{ 2, 125, 50, 1500, 1,	"Building",	"night_lords_ability_building" },
+				{ 2, 260, 150, 1500, 50,"TurretAddon",	"night_lords_list_post_addon_2" },
+				{ 2, 90, 45, 1500, 2,	"Building",	"night_lords_turret_bolter" },
+				{ 2, 50, 50, 1500, 2,	"Building",	"night_lords_mine_field" },
+				{ 2, 340, 340, 2000, 1,	"Addon",	"night_lords_hq_addon_2" },
+
+				{ 3, 125, 200, 0, 1,	"Unit",		"night_lords_squad_hell_blade" },
+				{ 3, 360, 40, 0, 1,	"Unit",		"night_lords_squad_chosen_raptor" },
+				{ 3, 240, 100, 0, 1,	"Unit",		"night_lords_squad_terminator_assault" },
+				{ 3, 150, 330, 0, 1,	"Unit",		"night_lords_squad_predator" },
+				{ 3, 150, 50, 1000, 1,	"Building",	"night_lords_orbital_relay" },
+				{ 3, 350, 0, 2000, 1,	"Research",	"night_lords_power_research_2" },
+				{ 3, 100, 350, 2000, 1,	"Research",	"night_lords_requisition_research_2" },
+				{ 3, 260, 150, 2000, 100,"TurretAddon",	"night_lords_list_post_addon_2" },
+				{ 3, 90, 45, 2000, 4,	"Building",	"night_lords_turret_bolter" },
+				{ 3, 50, 50, 2000, 4,	"Building",	"night_lords_mine_field" },
+				{ 3, 450, 450, 2500, 1,	"Research",	"night_lords_heavy_armor_deployment" },
+
+				{ 4, 400, 400, 0, 1,	"Unit",		"night_lords_squad_land_raider" },
+				{ 4, 90, 45, 2000, 6,	"Building",	"night_lords_turret_bolter" },
+				{ 4, 50, 50, 2000, 6,	"Building",	"night_lords_mine_field" },
+				{ 4, 700, 150, 3000, 2,	"Building",	"night_lords_hq" }
+			},
+			-- Tactical Strategy
+			{
+				{ 1, 220, 50, 0, 1,	"Unit",		"night_lords_squad_lord" },
+			        { 1, 150, 0, 0, 1,	"Unit",		"night_lords_squad_raptor_scout" }, -- Force a capturing squad
+				{ 1, 190, 0, 0, 2,	"Unit",		"night_lords_squad_marine" },
+				{ 1, 150, 0, 0, 2,	"Unit",		"night_lords_squad_fury" },
+			        { 1, 450, 0, 0, 1,	"Building",	"night_lords_hq" },
+			        { 1, 250, 0, 0, 1,	"Building",	"night_lords_barracks" },
+				{ 1, 135, 0, 0, 1,	"Building",	"night_lords_generator" },
+				{ 1, 150, 0, 0, 1,	"Research",	"night_lords_squad_cap_research" },
+				{ 1, 175, 50, 500, 1,	"Building",	"night_lords_armoury" },
+				{ 1, 135, 0, 600, 2,	"Building",	"night_lords_generator" },
+				{ 1, 100, 75, 650, 60,	"TurretAddon",	"night_lords_list_post_addon_1" },
+				{ 1, 135, 0, 750, 3,	"Building",	"night_lords_generator" },
+				{ 1, 300, 125, 800, 1,	"Addon",	"night_lords_hq_addon_1" },
+			        { 1, 90, 45, 850, 1,	"Building",	"night_lords_turret_bolter" },
+				{ 1, 135, 0, 950, 4,	"Building",	"night_lords_generator" },
+
+			        { 2, 125, 250, 0, 1,	"Unit",		"night_lords_squad_razorback" },
+				{ 2, 140, 280, 0, 2,	"Unit",		"night_lords_squad_dreadnought" },
+			        { 2, 260, 50, 0, 1,	"Unit",		"night_lords_squad_talonmaster" },
+				{ 2, 200, 125, 250, 1,	"Building",	"night_lords_vehicle_building" },
+			        { 2, 75, 75, 250, 1,	"Research",	"night_lords_melta_bomb_research" },
+				{ 2, 150, 0, 500, 1,	"Research",	"night_lords_support_cap_research" },
+				{ 2, 100, 75, 750, 100,	"TurretAddon",	"night_lords_list_post_addon_1" },
+				{ 2, 135, 0, 1000, 6,	"Building",	"night_lords_generator" },
+				{ 2, 50, 0, 1000, 50,	"TurretAddon",	"night_lords_turret_addon" },
+				{ 2, 200, 40, 1000, 1,	"Research",	"night_lords_power_research_1" },
+				{ 2, 75, 250, 1000, 1,	"Research",	"night_lords_requisition_research_1" },
+				{ 2, 125, 50, 1500, 1,	"Building",	"night_lords_ability_building" },
+				{ 2, 260, 150, 1500, 50,"TurretAddon",	"night_lords_list_post_addon_2" },
+				{ 2, 90, 45, 1500, 2,	"Building",	"night_lords_turret_bolter" },
+				{ 2, 50, 50, 1500, 2,	"Building",	"night_lords_mine_field" },
+				{ 2, 340, 340, 2000, 1,	"Addon",	"night_lords_hq_addon_2" },
+
+				{ 3, 360, 40, 0, 1,	"Unit",		"night_lords_squad_chosen_raptor" },
+				{ 3, 240, 100, 0, 1,	"Unit",		"night_lords_squad_terminator_assault" },
+				{ 3, 300, 105, 0, 1,	"Unit",		"night_lords_squad_obliterator" },
+				{ 3, 150, 330, 0, 1,	"Unit",		"night_lords_squad_predator" },
+				{ 3, 150, 50, 1000, 1,	"Building",	"night_lords_orbital_relay" },
+				{ 3, 350, 0, 2000, 1,	"Research",	"night_lords_power_research_2" },
+				{ 3, 100, 350, 2000, 1,	"Research",	"night_lords_requisition_research_2" },
+				{ 3, 260, 150, 2000, 100,"TurretAddon",	"night_lords_list_post_addon_2" },
+				{ 3, 90, 45, 2000, 4,	"Building",	"night_lords_turret_bolter" },
+				{ 3, 50, 50, 2000, 4,	"Building",	"night_lords_mine_field" },
+				{ 3, 450, 450, 2500, 1,	"Research",	"night_lords_heavy_armor_deployment" },
+
+				{ 4, 400, 400, 0, 1,	"Unit",		"night_lords_squad_land_raider" },
+				{ 4, 90, 45, 2000, 6,	"Building",	"night_lords_turret_bolter" },
+				{ 4, 50, 50, 2000, 6,	"Building",	"night_lords_mine_field" },
+				{ 4, 700, 150, 3000, 2,	"Building",	"night_lords_hq" }
+			}
+		},
+				
+		SquadLimits = 
+		{
+			standard = 
+			{
+				night_lords_squad_serf = 0,
+				night_lords_squad_cyclops = 1,
+				night_lords_squad_raptor_scout = math.random( 2,3 ),
+				night_lords_squad_raptor_scout_nocap = 0,
+				night_lords_squad_fury = math.random( 2,3 ),
+				night_lords_squad_night_sister = 2,
+				night_lords_squad_marine = math.random( 3,4 ),
+				night_lords_squad_marine_nocap = 0,
+				night_lords_squad_raptor = math.random( 2,3 ),
+				night_lords_squad_havoc = 2,
+				night_lords_squad_possessed_marine = 1,
+				night_lords_squad_chosen_raptor = 2,
+				night_lords_squad_terminator_assault = 1,
+				night_lords_squad_obliterator = 1,
+				night_lords_squad_talos = 1,
+				night_lords_squad_lord = 1,
+				night_lords_squad_sorcerer = 1,
+				night_lords_squad_talonmaster = 1,
+				night_lords_squad_mawdrym_llansahai = 1,
+			        night_lords_squad_daemon_prince = 1,
+				night_lords_squad_rhino = math.random( 1,2 ),
+				night_lords_squad_razorback = math.random( 1,2 ),
+				night_lords_squad_hell_talon = math.random( 1,2 ),
+				night_lords_squad_hell_blade = math.random( 3,4 ),
+				night_lords_squad_dreadnought = math.random( 3,4 ),
+				night_lords_squad_dreadnought_nocap = 0,
+				night_lords_squad_vindicator = 2,
+				night_lords_squad_whirlwind = 1,
+				night_lords_squad_predator = 2,
+				night_lords_squad_predator_no_cap = 2,
+				night_lords_squad_land_raider = 1,
+				night_lords_squad_land_raider_no_cap = 0,
+				night_lords_squad_imperial_knight_titan = 1,
+				night_lords_squad_reaver_titan = 1,
+				night_lords_squad_kratos = 1,
+			}
+		},
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	night_lords_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_serf" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+		        { "squad", "night_lords_squad_raptor_scout" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "night_lords_barracks", true },
+			{ "building", "night_lords_generator" }
+		},
+		 
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_serf" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_serf" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "night_lords_barracks", true },
+			{ "building", "night_lords_barracks", true },
+			{ "building", "night_lords_generator" }
+		},
+		 
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_serf" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+			{ "squad", "night_lords_squad_raptor_scout" },
+		        { "squad", "night_lords_squad_raptor_scout" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "night_lords_barracks", true },
+			{ "building", "night_lords_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	night_lords_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

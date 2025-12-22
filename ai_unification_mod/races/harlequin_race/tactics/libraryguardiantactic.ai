@@ -1,0 +1,44 @@
+----------------------------------------
+-- File: 'libraryguardiantactic.ai'
+-- Edited by Thudmeizer @ 20.06.2023
+
+class 'LibraryGuardianTactic' (HarlequinInfantryTactic)
+
+LibraryGuardian = {}
+
+function LibraryGuardianTactic:__init( squad_ai ) super( squad_ai )
+
+        self:SetName("Shadow Dancer Tactic")
+end
+
+function LibraryGuardianTactic:InitAbilities()
+
+	if (LibraryGuardian.shadowrun_id == nil) then
+		LibraryGuardian.shadowrun_id = cpu_manager.stats:GetAbilityID( "harlequin_shadowrunners" )
+	end
+end
+
+function LibraryGuardianTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat()) then
+		Ability.DoAbility( self.squad_ai, LibraryGuardian.shadowrun_id, Ability.Filters.IsInCombat ) 
+	end
+
+	HarlequinInfantryTactic.DoAbilities(self)
+end
+
+function LibraryGuardianTactic:CanOnlyDecap()
+	return true
+end
+
+function LibraryGuardianTactic:Update()
+ 
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+end

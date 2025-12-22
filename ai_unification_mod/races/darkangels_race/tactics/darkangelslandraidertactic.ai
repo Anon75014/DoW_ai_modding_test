@@ -1,0 +1,59 @@
+----------------------------------------
+-- File: 'darkangelslandraidertactic.ai'
+-- Edited by Thudmeizer         @ 06.06.2018
+
+class 'DarkAngelsLandRaiderTactic' (DarkAngelsVehicleTactic)
+
+DarkAngelsLandRaider = {}
+
+function DarkAngelsLandRaiderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Land Raider Tactic")
+end
+
+function DarkAngelsLandRaiderTactic:InitAbilities()
+
+	-- Init ability ID's
+	if DarkAngelsLandRaider.spirit_id == nil then
+		DarkAngelsLandRaider.spirit_id = cpu_manager.stats:GetAbilityID( "darkangels_machine_spirit" )
+		DarkAngelsLandRaider.smoke_id = cpu_manager.stats:GetAbilityID( "darkangels_smoke_launchers_lr" )
+		DarkAngelsLandRaider.hk_missiles_id = cpu_manager.stats:GetAbilityID( "darkangels_hk_missile_lr" )
+	end
+end
+
+function DarkAngelsLandRaiderTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if self.squad_ai:CanDoAbility(DarkAngelsLandRaider.spirit_id) then
+			self.squad_ai:DoSpecialAbility(DarkAngelsLandRaider.spirit_id)
+		end	  
+	end
+
+	if self.squad_ai:IsInCombat() then
+		-- Check if we can launch a Hunter-Killer Missile
+		if self.squad_ai:CanDoAbility(DarkAngelsLandRaider.hk_missiles_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, DarkAngelsLandRaider.hk_missiles_id, Ability.Filters.CloseVehicleEnemy, 1 )
+			or Ability.DoAbilityTargetEntity( self.squad_ai, DarkAngelsLandRaider.hk_missiles_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+			or Ability.DoAbilityTarget( self.squad_ai, DarkAngelsLandRaider.hk_missiles_id, Ability.Filters.CloseSquadEnemy, 4 ) then
+				return
+			end
+		end
+
+		-- Check if we can launch smoke
+		if (self.squad_ai:CanDoAbility(DarkAngelsLandRaider.smoke_id)) then
+	
+			-- Search a squad
+			local iRange = self.squad_ai:GetAbilityRange(DarkAngelsLandRaider.smoke_id)
+			local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+				self.squad_ai:DoSpecialAbilitySquad(DarkAngelsLandRaider.smoke_id, oUnit:GetSquad())
+				return
+			end
+		end
+	end
+
+	-- Do basic abilities
+	DarkAngelsVehicleTactic.DoAbilities(self)
+end

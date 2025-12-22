@@ -1,0 +1,141 @@
+----------------------------------------
+-- File: 'darkangelsezekieltactic.ai'
+-- Edited by Thudmeizer @ 06.06.2018
+
+class 'DarkAngelsEzekielTactic' (DarkAngelsInfantryTactic)
+
+DarkAngelsEzekiel = {}
+
+DarkAngelsEzekielAbility =
+{
+    HellfireID = cpu_manager.stats:GetAbilityID("darkangels_hellfire_senior")
+    ,ForceBarrierID = cpu_manager.stats:GetAbilityID("darkangels_force_barrier_senior")
+    ,MindWormID = cpu_manager.stats:GetAbilityID("darkangels_mind_worm_senior")
+    ,SmiteID = cpu_manager.stats:GetAbilityID("darkangels_ezekiel_greater_smite")
+}
+
+function DarkAngelsEzekielTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Ezekiel Tactic")
+
+   self.hellfireLastUse = g_iGMT
+   self.forceBarrierLastUse = g_iGMT
+   self.mindWormLastUse = g_iGMT
+end
+
+function DarkAngelsEzekielTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DarkAngelsEzekielTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DarkAngelsEzekielTactic:InitAbilities()
+
+self.hellfireLastUse = g_iGMT
+self.forceBarrierLastUse = g_iGMT
+self.mindWormLastUse = g_iGMT
+self.smiteLastUse = g_iGMT
+
+	
+	if (DarkAngelsEzekiel.hellfire_id == nil) then
+		DarkAngelsEzekiel.hellfire_id = cpu_manager.stats:GetAbilityID( "darkangels_hellfire_senior" )
+	end
+
+	if (DarkAngelsEzekiel.barrier_id == nil) then
+		DarkAngelsEzekiel.barrier_id = cpu_manager.stats:GetAbilityID( "darkangels_force_barrier_senior" )
+	end
+
+	if (DarkAngelsEzekiel.mindworm_id == nil) then
+		DarkAngelsEzekiel.mindworm_id = cpu_manager.stats:GetAbilityID( "darkangels_mind_worm_senior" )
+	end
+	if (DarkAngelsEzekiel.smite_id == nil) then
+		DarkAngelsEzekiel.smite_id = cpu_manager.stats:GetAbilityID( "darkangels_ezekiel_greater_smite" )
+	end
+end
+
+function DarkAngelsEzekielTactic:DoAbilities()
+
+	Ability.DoAbility( self.squad_ai, DarkAngelsEzekiel.barrier_id, Ability.Filters.IsInCombat )
+	
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.hellfire_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.hellfire_id, Ability.Filters.CloseSquadEnemy, 4 )
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.hellfire_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		
+	Ability.DoAbilityPos( self.squad_ai, DarkAngelsEzekiel.smite_id, Ability.Filters.CloseInfantryEnemy, 4 )
+
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.mindworm_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.mindworm_id, Ability.Filters.CloseSquadEnemy, 4 )
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.mindworm_id, Ability.Filters.CloseMonsterEnemy, 1 )
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.hellfire_id, Ability.Filters.CloseInfantryEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.mindworm_id, Ability.Filters.CloseInfantryEnemy, 1 )
+	Ability.DoAbilityPos( self.squad_ai, DarkAngelsEzekiel.smite_id, Ability.Filters.CloseInfantryEnemy, 1 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.hellfire_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekiel.mindworm_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityPos( self.squad_ai, DarkAngelsEzekiel.smite_id, Ability.Filters.CloseInfantryEnemy, 2 )
+	end
+
+    if self.squad_ai:IsInCombat() then
+
+        if ( g_iGMT > self.hellfireLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekielAbility.HellfireID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekielAbility.HellfireID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekielAbility.HellfireID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.hellfireLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.forceBarrierLastUse + 30 ) then
+            if Ability.DoAbilityArea( self.squad_ai, DarkAngelsEzekielAbility.ForceBarrierID, Ability.Filters.CloseEnemy, 10, 1 )
+            then
+                self.forceBarrierLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.mindWormLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekielAbility.MindWormID, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekielAbility.MindWormID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, DarkAngelsEzekielAbility.MindWormID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.mindWormLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.smiteLastUse + 30 ) then
+            if 	Ability.DoAbilityPos( self.squad_ai, DarkAngelsEzekiel.smite_id, Ability.Filters.CloseInfantryEnemy, 4 )
+            then
+                self.smiteLastUse = g_iGMT 
+            end
+        end
+
+    end
+end
+
+function DarkAngelsEzekielTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

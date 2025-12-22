@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'fistsorbitalrelaytactic.ai'
+-- Edited by Thudmeizer		@ 11.03.2018
+
+class 'FistsOrbitalRelayTactic' (BaseTactic)
+
+function FistsOrbitalRelayTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Imperial Fists Orbital Relay Tactic")
+end
+
+function FistsOrbitalRelayTactic:CanDeepStrikeTroops()
+	return true
+end

@@ -1,0 +1,137 @@
+----------------------------------------
+-- File: '13thcomironpriesttactic.ai'
+-- Edited by Thudmeizer @ 26.02.2023
+
+class 'ThirteenthcomIronPriestTactic' (EngineerTactic)
+
+IronPriest = {}
+
+function ThirteenthcomIronPriestTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thirteenthcom Iron Priest Tactic")
+
+	self:InitAbilities()
+	self.delay_ability_generator_first_time = g_iGMT + math.random(2, 20)
+	self.lastused_ability_generator_time = g_iGMT
+	self.lastused_ability_generator_position = squad_ai:GetPosition()
+	self.min_generator_req_defensive_use = 300 -- amount of req to have before placing 
+	self.min_generator_req_in_combat_use = 500 -- amount of req to have in order to use it in combat
+	self.min_generator_req_actual = 150  -- the actual req cost of the ability as set in the AE
+	self.min_generator_time = 90 -- seconds to wait between use for placement (offensive, uses actual ability recharge)
+	self.min_generator_distance = 10 -- min distance between consecutive placements
+end
+
+function ThirteenthcomIronPriestTactic:IsAttacker()
+	return false
+end
+
+function ThirteenthcomIronPriestTactic:IsDefender()
+	return true
+end
+
+function ThirteenthcomIronPriestTactic:IsAffectedByMorale()
+	return true
+end
+
+function ThirteenthcomIronPriestTactic:InitAbilities()
+
+	if IronPriest.generator_id == nil then
+	   IronPriest.generator_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_generator" )	
+     end
+
+	if IronPriest.scavenge_id == nil then
+	   IronPriest.scavenge_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_scavenge" )	
+     end
+
+	if IronPriest.self_scavenge_id == nil then
+	   IronPriest.self_scavenge_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_self_scavenge" )	
+     end
+
+	if IronPriest.armour_id == nil then
+	   IronPriest.armour_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_scrap_armour" )	
+     end
+end
+
+function ThirteenthcomIronPriestTactic:DoAbilities()
+
+	Ability.DoAbilityTarget( self.squad_ai, IronPriest.scavenge_id, Ability.Filters.CloseVehicleEnemy, 1 )
+	Ability.DoAbilityTargetEntity( self.squad_ai, IronPriest.scavenge_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, IronPriest.armour_id, Ability.Filters.CloseHurt )
+
+	-- Check if we can use generator placement ability
+	if self.squad_ai:CanDoAbility(IronPriest.generator_id) then
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		local weAreInCombat = self.squad_ai:IsInCombat()
+		-- Check IF we have too little power
+		if iPower < 150 then
+
+			-- Check IF we have the resources for placement
+			if iRequisition > self.min_generator_req_defensive_use and not weAreInCombat then
+
+				-- Check first for close strategic point within 35
+				local oTarget = Ability.Filters.CloseStrategicPoint(self.squad_ai:GetPosition(), 35)
+				if (oTarget ~= nil) then
+					local vTargetPos = oTarget:GetPosition()
+					-- Modify position
+					local iOffsetX = math.random(5, 10)
+					local iOffsetZ = math.random(5, 10)
+					local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)		
+					if math.random(1, 10) < 4 then
+						if math.random(1, 2) == 1 then vDir.x = 1 else vDir.x = -1 end
+						if math.random(1, 2) == 1 then vDir.z = 1 else vDir.z = -1 end
+					end
+					vTargetPos.x = vTargetPos.x + vDir.x * iOffsetX
+					vTargetPos.z = vTargetPos.z + vDir.z * iOffsetZ
+					if distance_sqr(vTargetPos, self.squad_ai:GetPosition()) > 9 then
+						self:DoSpecialAbilityGenerator(vTargetPos, false)
+					end
+				else
+					-- Otherwise, place the generator elsewhere nearby
+					-- Modify position
+					local vTargetPos = self.squad_ai:GetPosition()
+					local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)
+					vTargetPos.x = vTargetPos.x + vDir.x * 4.5
+					vTargetPos.z = vTargetPos.z + vDir.z * 4.5
+					self:DoSpecialAbilityGenerator(vTargetPos, false)
+				end
+			end
+		end
+	end
+end
+
+function ThirteenthcomIronPriestTactic:DoSpecialAbilityGenerator(position, inCombat)
+
+	local current_time = g_iGMT
+	local current_req = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	local last_time = self.lastused_ability_generator_time
+	local last_pos = self.lastused_ability_generator_position
+	local min_time = self.min_generator_time 
+	local min_distance = self.min_generator_distance
+	-- Check situation
+	if current_req > self.min_generator_req_actual then
+		if inCombat or (current_time - last_time > min_time and distance_sqr(position,last_pos) > min_distance*min_distance
+		and self.delay_ability_generator_first_time < g_iGMT) then
+			-- Use generator placement ability
+			self.squad_ai:DoSpecialAbilityPos(IronPriest.generator_id, position)
+			self.lastused_ability_generator_time = current_time
+			self.lastused_ability_generator_position = position
+		end
+	end
+end
+
+
+function ThirteenthcomIronPriestTactic:CanOnlyDecap()
+	return true
+end
+
+function ThirteenthcomIronPriestTactic:Update()
+
+	--state machine
+	if not EngineerTactic.Update( self ) then
+		return
+	end
+
+	self:InitAbilities()
+	self:DoAbilities()
+end

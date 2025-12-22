@@ -1,0 +1,58 @@
+----------------------------------------
+-- File: 'nightlordsraptorquadtactic.ai'
+-- Edited by Torzel	@ 18.05.2013
+-- Edited by Thudmeizer	@ 06.01.2017
+
+class 'NightLordsRaptorSquadTactic' (NightLordsInfantryTactic)
+
+NightLordsRaptorSquad = {}
+
+function NightLordsRaptorSquadTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Raptor Squad Tactic")
+end
+
+function NightLordsRaptorSquadTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (NightLordsRaptorSquad.speed_id == nil) then
+		NightLordsRaptorSquad.speed_id = cpu_manager.stats:GetAbilityID( "night_lords_speed_fiend" )	
+	end
+
+	if (NightLordsRaptorSquad.rage_id == nil) then
+		NightLordsRaptorSquad.rage_id = cpu_manager.stats:GetAbilityID( "night_lords_furious_rage" )	
+	end
+
+	if (NightLordsRaptorSquad.melta_id == nil) then
+		NightLordsRaptorSquad.melta_id = cpu_manager.stats:GetAbilityID( "night_lords_melta_bombs" )	
+	end
+end
+
+function NightLordsRaptorSquadTactic:DoAbilities()
+
+	-- Try Melta Bombs
+	Ability.DoAbilityTarget( self.squad_ai, NightLordsRaptorSquad.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+	Ability.DoAbilityTargetEntity( self.squad_ai, NightLordsRaptorSquad.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+	  
+		-- Check if I can go berserk while stationary
+		if (not self:IsMoving()) then
+
+			if (self.squad_ai:CanDoAbility( NightLordsRaptorSquad.rage_id )) then
+				self.squad_ai:DoSpecialAbility( NightLordsRaptorSquad.rage_id )
+			end
+		end		
+	end
+
+	-- Check if jump squad can speed up with boost
+	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
+		
+		if (self.squad_ai:CanDoAbility( NightLordsRaptorSquad.speed_id )) then
+			self.squad_ai:DoSpecialAbility( NightLordsRaptorSquad.speed_id )
+		end
+	end
+	
+	-- Call basic DoAbilities methods
+	NightLordsInfantryTactic.DoAbilities(self)
+end

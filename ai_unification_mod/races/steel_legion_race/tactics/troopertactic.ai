@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'troopertactic.ai'
+-- Edited by Thudmeizer @ 20.08.2010
+
+class 'TrooperTactic' (SteelLegionInfantryTactic)
+
+Trooper = {}
+
+function TrooperTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Trooper Tactic")
+
+	-- Squads are transportable
+	self.m_iTransportable = 1
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function TrooperTactic:InitAbilities()
+
+	--[[if (Trooper.frag_id == nil) then
+	    Trooper.frag_id = cpu_manager.stats:GetAbilityID( "steel_legion_frag_grenades" )
+	end
+
+	if (Trooper.melta_id == nil) then
+	    Trooper.melta_id = cpu_manager.stats:GetAbilityID( "steel_legion_melta_bombs" )
+	end]]
+end
+
+function TrooperTactic:DoAbilities()
+
+    self:DoThrowGrenades()
+
+	--[[Ability.DoAbilityTarget( self.squad_ai, Trooper.frag_id, Ability.Filters.CloseSquadEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, Trooper.frag_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, Trooper.frag_id, Ability.Filters.CloseMonsterEnemy, 1 )
+	Ability.DoAbilityTarget( self.squad_ai, Trooper.melta_id, Ability.Filters.CloseVehicleEnemy, 1 )
+	Ability.DoAbilityTargetEntity( self.squad_ai, Trooper.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)]]
+end

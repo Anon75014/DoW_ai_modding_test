@@ -1,0 +1,106 @@
+----------------------------------------
+-- File: 'WulfenLordtactic.ai'
+-- Edited by Thudmeizer @ 06.08.2009
+
+class 'WulfenLordTactic' (ThirteenthcomInfantryTactic)
+
+WulfenLord = {}
+
+function WulfenLordTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Wulfen Lord Tactic")
+end
+
+-- WulfenLord is allowed to retreat even directly after a jump
+function WulfenLordTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function WulfenLordTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+function WulfenLordTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function WulfenLordTactic:InitAbilities()
+
+	if WulfenLord.battlecry_id == nil then
+	   WulfenLord.battlecry_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_battlecry" )	
+	end
+
+	if WulfenLord.wolfstorm_id == nil then
+	   WulfenLord.wolfstorm_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_wolf_storm" )	
+	end
+
+	if WulfenLord.demoralize_id == nil then
+	   WulfenLord.demoralize_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_demoralize_wl" )	
+	end
+end
+
+-- Assassinate win condition -- never jump into combat
+function WulfenLordTactic:JumpAttack()
+
+	if (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+function WulfenLordTactic:DoAbilities()
+
+	-- Try to use battlecry
+	Ability.DoAbilityArea( self.squad_ai, WulfenLord.battlecry_id, Ability.Filters.CloseInCombat, 10, 1 )
+
+	Ability.DoAbilityPos( self.squad_ai, WulfenLord.wolfstorm_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3 )
+	Ability.DoAbilityPos( self.squad_ai, WulfenLord.wolfstorm_id, Ability.Filters.CloseEnemy, 24 )
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityArea( self.squad_ai, WulfenLord.demoralize_id, Ability.Filters.CloseSquadEnemy, 10, 4 )
+		Ability.DoAbilityPos( self.squad_ai, WulfenLord.wolfstorm_id, Ability.Filters.CloseEnemy, 12 )
+	else
+		Ability.DoAbilityArea( self.squad_ai, WulfenLord.demoralize_id, Ability.Filters.CloseSquadEnemy, 10, 4 )
+		Ability.DoAbilityPos( self.squad_ai, WulfenLord.wolfstorm_id, Ability.Filters.CloseEnemy, 6 )
+	end
+end
+
+function WulfenLordTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+		
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+		
+		-- Attach to melee in tier3+
+		if (cpu_manager:GetTierLevel() > 2) then
+		
+			if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+				return
+			end
+		end
+
+		if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+end
+
+-- Arkhan 03.2006: Inherited method used by commanders which are able to jump with an attached squad
+function WulfenLordTactic:CanJumpAttached()
+	return true
+end

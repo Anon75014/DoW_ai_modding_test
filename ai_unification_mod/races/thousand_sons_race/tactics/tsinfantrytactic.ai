@@ -1,0 +1,170 @@
+----------------------------------------
+-- File: 'tsinfantrytactic.ai'
+-- Edited by Thudmeizer		@ 12.09.2025
+
+class 'TSInfantryTactic' (InfantryTactic)
+
+TSInfantryAbility = 
+{
+	 DoomBoltTermiSorcID = cpu_manager.stats:GetAbilityID("thousand_sons_doombolt")
+	,DoomBoltTermiSorc2ID = cpu_manager.stats:GetAbilityID("thousand_sons_doombolt_termi")
+	,DoomBoltAspSorcID = cpu_manager.stats:GetAbilityID("thousand_sons_doombolt_sorc")
+	,BoltChangeThrallID = cpu_manager.stats:GetAbilityID("thousand_sons_bolt_of_change_thrall")
+	,WarpTimeID = cpu_manager.stats:GetAbilityID("thousand_sons_warptime")
+	,WarpSpaceID = cpu_manager.stats:GetAbilityID("thousand_sons_warpspace")
+	,StealthID = cpu_manager.stats:GetAbilityID("thousand_sons_sekhetar_stealth")
+}
+
+function TSInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("TS Infantry Tactic")
+
+	-- Basic ts infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "thousand_sons_squad_marine" or
+		sSquadName == "thousand_sons_squad_tzeentch_cultist" or
+		sSquadName == "thousand_sons_squad_chosen" or
+		sSquadName == "thousand_sons_squad_icon_bearer" or
+		sSquadName == "thousand_sons_squad_numerologist" or
+		sSquadName == "thousand_sons_squad_mutated_sorcerer" or
+		sSquadName == "thousand_sons_squad_lord") then
+			self.m_iTransportable = 1	-- Rhino
+
+	elseif (sSquadName == "thousand_sons_squad_terminator" or
+			sSquadName == "thousand_sons_squad_terminator_veteran" or
+			sSquadName == "thousand_sons_squad_sekhetar_robots") then
+			self.m_iTransportable = 2	-- Grav Raider / Silver Tower
+
+	elseif (sSquadName == "thousand_sons_squad_screamer" or
+			sSquadName == "thousand_sons_squad_horror" or
+			sSquadName == "thousand_sons_squad_burning_chariot" or
+			sSquadName == "thousand_sons_squad_blue_scribes" or
+			sSquadName == "thousand_sons_squad_flamers_of_tzeentch") then
+			self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("thousand_sons_gate")
+	end
+
+	self.doomBoltLastUse = 0
+	self.doomBoltBLastUse = 0
+	self.doomBoltCLastUse = 0
+	self.boltChangeLastUse = 0
+	self.warpTimeLastUse = 0
+	self.warpSpaceLastUse = 0
+	self.stealthLastUse = 0
+	self.abilitySumUse = 0
+end
+
+function TSInfantryTactic:AddTargetAbilities()
+end
+
+function TSInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "thousand_sons_squad_lord", true })
+	table.insert(self.commander, { "thousand_sons_squad_chosen", false })
+	table.insert(self.commander, { "thousand_sons_squad_tzeentch_herald", false })
+	table.insert(self.commander, { "thousand_sons_squad_icon_bearer", false })
+	table.insert(self.commander, { "thousand_sons_squad_numerologist", false })
+	table.insert(self.commander, { "thousand_sons_squad_mutated_sorcerer", false })
+	table.insert(self.commander, { "thousand_sons_squad_ahriman", false })
+	table.insert(self.commander, { "thousand_sons_squad_ahriman_ktgm", false })
+end
+
+function TSInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if self.squad_ai:IsAttached() then
+		if (self.squad_ai:HasSquadAttached("thousand_sons_squad_lord")) then
+			TSLordTactic.InitAbilities( self )
+			TSLordTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thousand_sons_squad_icon_bearer")) then
+			TSIconBearerTactic.InitAbilities( self )
+			TSIconBearerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thousand_sons_squad_numerologist")) then
+			TSNumerologistTactic.InitAbilities( self )
+			TSNumerologistTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thousand_sons_squad_tzeentch_herald")) then
+			TSHeraldTzeentchTactic.InitAbilities( self )
+			TSHeraldTzeentchTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("thousand_sons_squad_mutated_sorcerer")) then
+			TSMutatedSorcererTactic.InitAbilities( self )
+			TSMutatedSorcererTactic.DoAbilities( self )
+		end
+	end
+
+	-- Perform basic bolt, warp, and stealth abilities when in combat
+    if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.DoomBoltAspSorcID) then
+			if Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltAspSorcID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+			or Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltAspSorcID, Ability.Filters.CloseSquadEnemy, 1 )
+			or Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltAspSorcID, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				self.doomBoltLastUse = g_iGMT 
+			end
+		end
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.DoomBoltTermiSorcID) then
+			if Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltTermiSorcID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+			or Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltTermiSorcID, Ability.Filters.CloseSquadEnemy, 1 )
+			or Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltTermiSorcID, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				self.doomBoltBLastUse = g_iGMT 
+			end
+		end
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.DoomBoltTermiSorc2ID) then
+			if Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltTermiSorc2ID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+			or Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltTermiSorc2ID, Ability.Filters.CloseSquadEnemy, 1 )
+			or Ability.DoAbilityTarget( self.squad_ai, TSInfantryAbility.DoomBoltTermiSorc2ID, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				self.doomBoltCLastUse = g_iGMT 
+			end
+		end
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.BoltChangeThrallID) then
+			if Ability.DoAbilityPos( self.squad_ai, TSInfantryAbility.BoltChangeThrallID, Ability.Filters.CloseVehicleEnemy, 1 )
+			or Ability.DoAbilityPos( self.squad_ai, TSInfantryAbility.BoltChangeThrallID, Ability.Filters.CloseSquadEnemy, 1 )
+			or Ability.DoAbilityTargetEntity( self.squad_ai, TSInfantryAbility.BoltChangeThrallID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 ) then
+				self.boltChangeLastUse = g_iGMT 
+			end
+		end
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.WarpTimeID) then
+			if Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.WarpTimeID, Ability.Filters.CloseSquadEnemy, 10, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.WarpTimeID, Ability.Filters.CloseCommanderEnemy, 10, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.WarpTimeID, Ability.Filters.CloseMonsterEnemy, 10, 1 ) then
+				self.warpTimeLastUse = g_iGMT 
+			end
+		end
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.WarpSpaceID) then
+			if Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.WarpSpaceID, Ability.Filters.CloseSquadEnemy, 25, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.WarpSpaceID, Ability.Filters.CloseCommanderEnemy, 25, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.WarpSpaceID, Ability.Filters.CloseMonsterEnemy, 25, 1 ) then
+				self.warpSpaceLastUse = g_iGMT 
+			end
+		end
+		if self.squad_ai:CanDoAbility(TSInfantryAbility.StealthID) then
+			if Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.StealthID, Ability.Filters.CloseVehicleEnemy, 25, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.StealthID, Ability.Filters.CloseSquadEnemy, 25, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.StealthID, Ability.Filters.CloseCommanderEnemy, 25, 1 )
+			or Ability.DoAbilityArea( self.squad_ai, TSInfantryAbility.StealthID, Ability.Filters.CloseMonsterEnemy, 25, 1 ) then
+				self.stealthLastUse = g_iGMT 
+			end
+		end
+    	end
+
+	self.abilitySumUse = self.doomBoltLastUse + self.doomBoltBLastUse + self.doomBoltCLastUse + self.boltChangeLastUse + self.warpTimeLastUse + self.warpSpaceLastUse + self.stealthLastUse
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+
+function TSInfantryTactic:CheckDance(oSquad)
+
+	-- Check opponent
+	if (oSquad == nil) then
+		return false
+	end
+	
+	-- Compare opponents
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "thousand_sons_squad_marine") then
+		
+		-- Check opponent
+		if (oSquad:GetSquadName() == "chaos_squad_cultist") then
+			return false
+		end
+	end
+	return true
+end

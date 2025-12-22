@@ -1,0 +1,95 @@
+----------------------------------------
+-- File: 'kriegdeadpooltactic.ai'
+-- Edited by Thudmeizer @ 17.09.2024
+
+class 'KriegDeadpoolTactic' (KriegInfantryTactic)
+
+KriegDeadpool = {}
+
+function KriegDeadpoolTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Deadpool and Wolverine Tactic")
+	
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function KriegDeadpoolTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegDeadpool.chimichanga_id == nil) then
+		KriegDeadpool.chimichanga_id = cpu_manager.stats:GetAbilityID( "krieg_chimichanga" )
+	end
+
+	if (KriegDeadpool.power_id == nil) then
+		KriegDeadpool.power_id = cpu_manager.stats:GetAbilityID( "krieg_deadpool_power" )
+	end
+
+	if (KriegDeadpool.krak_id == nil) then
+		KriegDeadpool.krak_id = cpu_manager.stats:GetAbilityID( "krieg_krak_grenades_deadpool" )
+	end
+
+	if (KriegDeadpool.feral_id == nil) then
+		KriegDeadpool.feral_id = cpu_manager.stats:GetAbilityID( "krieg_wolverine_feral" )
+	end
+end
+
+function KriegDeadpoolTactic:DoAbilities()
+
+	-- Check if we can use chimi changa on friendly close allies
+	if (self.squad_ai:CanDoAbility(KriegDeadpool.chimichanga_id)) then
+	
+		-- Search a squad
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 25, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbility(KriegDeadpool.chimichanga_id)
+		end
+	end
+
+	-- No deadpool power while retreating
+	if (not self:IsMoving() and self.squad_ai:IsInCombat()) then
+		if self.squad_ai:CanDoAbility(KriegDeadpool.power_id) then
+			Ability.DoAbility( self.squad_ai, KriegDeadpool.power_id, Ability.Filters.IsInCombat )
+		end
+	end
+
+	-- Try to use krak grenades
+	if self.squad_ai:CanDoAbility(KriegDeadpool.krak_id) then
+
+		Ability.DoAbilityTarget(self.squad_ai, KriegDeadpool.krak_id, Ability.Filters.CloseVehicleEnemy, 1)
+		Ability.DoAbilityTarget(self.squad_ai, KriegDeadpool.krak_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+		Ability.DoAbilityTarget(self.squad_ai, KriegDeadpool.krak_id, Ability.Filters.CloseInfantryEnemy, 6)
+		Ability.DoAbilityTarget(self.squad_ai, KriegDeadpool.krak_id, Ability.Filters.CloseMonsterEnemy, 2)
+		Ability.DoAbilityTarget(self.squad_ai, KriegDeadpool.krak_id, Ability.Filters.CloseCommanderEnemy, 1)
+	end
+
+	-- Try to use a feral attack
+	if self.squad_ai:CanDoAbility(KriegDeadpool.feral_id) then
+
+		-- We are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityTarget( self.squad_ai, KriegDeadpool.feral_id, Ability.Filters.CloseInfantryEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, KriegDeadpool.feral_id, Ability.Filters.CloseMonsterEnemy, 2 )
+			Ability.DoAbilityTarget( self.squad_ai, KriegDeadpool.feral_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		else
+			Ability.DoAbilityTarget( self.squad_ai, KriegDeadpool.feral_id, Ability.Filters.CloseInfantryEnemy, 6 )
+			Ability.DoAbilityTarget( self.squad_ai, KriegDeadpool.feral_id, Ability.Filters.CloseMonsterEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, KriegDeadpool.feral_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+	end
+
+	-- Call standard method
+	KriegInfantryTactic.DoAbilities(self)
+end
+
+function KriegDeadpoolTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end

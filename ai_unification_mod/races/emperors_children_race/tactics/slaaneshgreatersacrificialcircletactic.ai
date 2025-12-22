@@ -1,0 +1,13 @@
+----------------------------------------
+-- File: 'slaaneshgreatersacrificialcircletactic.ai'
+-- Edited by Thudmeizer		@ 24.07.2018
+
+class 'SlaaneshGreaterSacrificialCircleTactic' (BaseTactic)
+
+function SlaaneshGreaterSacrificialCircleTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Slaanesh Greater Sacrificial Circle Tactic")
+
+	-- Building can deepstrike troops
+	self.m_bCanDeepStrikeTroops = true
+end

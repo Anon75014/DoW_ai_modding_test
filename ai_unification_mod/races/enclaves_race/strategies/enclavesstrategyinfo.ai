@@ -1,0 +1,225 @@
+----------------------------------------
+-- File: 'enclavesstrategyinfo.ai'
+-- Edited by CaptJoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer			@ 24.04.2025
+
+BuildBaseStrategyInfo = 
+{
+	enclaves_race =
+	{
+		post_builder = 1,
+		flag_capture = 1,
+
+		-- Reserve this amount for building units, reinforcing and upgrading
+		req_reserve = 150,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+		
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+				
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Total Research: 13
+			-- Allround Montka strategy
+			{
+
+				{ 1, 130, 0, 0, 1,	"Unit",		"enclaves_squad_patrol_team" }, -- Force a capturing squad
+				{ 1, 200, 50, 0, 1,	"Unit",		"enclaves_squad_farsight" },
+				{ 1, 200, 50, 0, 1,	"Unit",		"enclaves_squad_arrakon" },
+				{ 1, 300, 150, 0, 1,	"Building",	"enclaves_hq" },
+				{ 1, 200, 0, 0, 1,	"Building",	"enclaves_herobarracks" },
+				{ 1, 150, 0, 0, 1,	"Building",	"enclaves_generator" },
+				{ 1, 75, 15, 250, 40,	"TurretAddon",	"addon_enclaves_list_post_1" },
+				{ 1, 150, 0, 700, 2,	"Building",	"enclaves_generator" },
+				{ 1, 120, 30, 800, 1,	"Building",	"enclaves_turret" },
+				{ 1, 200, 0, 850, 2,	"Building",	"enclaves_herobarracks" },
+				{ 1, 300, 125, 900, 1,	"Research",	"enclaves_tier1_research" },
+				{ 1, 50, 50, 950, 1,	"Building",	"enclaves_mines" },
+				{ 1, 150, 0, 950, 3,	"Building",	"enclaves_generator" },
+
+				{ 2, 200, 20, 0, 1,	"Unit",		"enclaves_squad_drone_stealth" },
+				{ 2, 250, 50, 0, 1,	"Unit",		"enclaves_squad_torchstar" },
+				{ 2, 150, 40, 0, 1,	"Unit",		"enclaves_squad_piranha" },
+				{ 2, 200, 40, 0, 1,	"Unit",		"enclaves_squad_devilfish" },
+				{ 2, 250, 50, 0, 1,	"Unit",		"enclaves_squad_shavastos" },
+				{ 2, 150, 0, 1000, 4,	"Building",	"enclaves_generator" },
+				{ 2, 150, 50, 1000, 1,	"Building",	"enclaves_armoury" },
+				{ 2, 75, 15, 1000, 100, "TurretAddon",	"addon_enclaves_list_post_1" },
+				{ 2, 150, 0, 1000, 5,	"Building",	"enclaves_generator" },
+				{ 2, 200, 0, 1000, 3,	"Building",	"enclaves_herobarracks" },
+				{ 2, 150, 25, 1000, 1,	"Research",	"enclaves_upgrade_power_1" },
+				{ 2, 25, 150, 1000, 1,	"Research",	"enclaves_upgrade_requisition_1" },
+				{ 2, 120, 30, 1000, 2,	"Building",	"enclaves_turret" },
+				{ 2, 50, 50, 1000, 2,	"Building",	"enclaves_mines" },
+				{ 2, 200, 0, 1500, 4,	"Building",	"enclaves_herobarracks" },
+				{ 2, 150, 0, 1500, 6,	"Building",	"enclaves_generator" },
+				{ 2, 100, 50, 1500, 40, "TurretAddon",  "addon_enclaves_list_post_2" },
+				{ 2, 120, 30, 1500, 3,	"Building",	"enclaves_turret" },
+				{ 2, 50, 50, 1500, 4,	"Building",	"enclaves_mines" },
+				{ 2, 400, 250, 1500, 1,	"Research",	"enclaves_tier2_research" },
+
+				{ 3, 100, 20, 0, 1,	"Unit",		"enclaves_squad_tetra" },
+				{ 3, 300, 75, 0, 1,	"Unit",		"enclaves_squad_oblotai" },
+				{ 3, 360, 120, 0, 1,	"Unit",		"enclaves_squad_broadside" },
+				{ 3, 350, 80, 0, 1,	"Unit",		"enclaves_squad_crisis" },
+				{ 3, 360, 100, 0, 1,	"Unit",		"enclaves_squad_broadside_melee" },
+				{ 3, 300, 75, 0, 1,	"Unit",		"enclaves_squad_brightsword" },
+				{ 3, 200, 100, 500, 1,	"Building",	"enclaves_landingzone" },
+				{ 3, 200, 0, 2000, 5,	"Building",	"enclaves_herobarracks" },
+				{ 3, 120, 30, 2000, 4,	"Building",	"enclaves_turret" },
+				{ 3, 50, 50, 2000, 5,	"Building",	"enclaves_mines" },
+				{ 3, 300, 50, 2000, 1,	"Research",	"enclaves_upgrade_power_2" },
+				{ 3, 50, 300, 2000, 1,	"Research",	"enclaves_upgrade_requisition_2" },
+				{ 3, 200, 0, 2000, 6,	"Building",	"enclaves_herobarracks" },
+				{ 3, 500, 375, 2000, 1,	"Research",	"enclaves_tier3_research" },
+				{ 3, 150, 0, 2500, 8,	"Building",	"enclaves_generator" },
+
+				{ 4, 200, 120, 0, 1,	"Unit",		"enclaves_squad_sunshark" },
+				{ 4, 350, 175, 0, 1,	"Unit",		"enclaves_squad_ovesa" },
+				{ 4, 350, 100, 0, 1,	"Unit",		"enclaves_squad_hammerhead" },
+				{ 4, 350, 75, 0, 1,	"Unit",		"enclaves_squad_bravestorm" },
+				{ 4, 100, 50, 2000, 100,"TurretAddon",  "addon_enclaves_list_post_2" },
+				{ 4, 200, 0, 2000, 7,	"Building",	"enclaves_herobarracks" },
+				{ 4, 50, 50, 3000, 6,	"Building",	"enclaves_mines" },
+				{ 4, 200, 0, 3000, 8,	"Building",	"enclaves_herobarracks" },
+				{ 4, 300, 150, 4000, 2,	"Building",	"enclaves_hq" }
+			}
+		},
+
+		SquadLimits =
+		{
+			standard =
+			{
+				enclaves_squad_builder = 0,
+				enclaves_squad_patrol_team = math.random( 1,3 ),
+				enclaves_squad_guevesa = math.random( 2,3 ),
+				enclaves_squad_guevesa_ezo = math.random( 2,3 ),
+				enclaves_squad_breacher_team = math.random( 1,3 ),
+				enclaves_squad_strike_team = math.random( 1,3 ),
+				enclaves_squad_broadside = math.random( 2,3 ),
+				enclaves_squad_broadside_survival = 0,
+				enclaves_squad_broadside_melee = math.random( 2,3 ),
+				enclaves_squad_crisis = math.random( 2,3 ),
+				enclaves_squad_crisis_melee = math.random( 2,3 ),
+				enclaves_squad_kokomi = 1,
+				enclaves_squad_arrakon = 1,
+				enclaves_squad_arrakon1_ktgm = 1,
+				enclaves_squad_arrakon_ktgm = 1,
+				enclaves_squad_bravestorm = 1,
+				enclaves_squad_bravestorm1_ktgm = 1,
+				enclaves_squad_bravestorm_ktgm = 1,
+				enclaves_squad_brightsword = 1,
+				enclaves_squad_brightsword1_ktgm = 1,
+				enclaves_squad_brightsword_ktgm = 1,
+				enclaves_squad_farsight = 1,
+				enclaves_squad_farsight1_ktgm = 1,
+				enclaves_squad_farsight_ktgm = 1,
+				enclaves_squad_oblotai = 1,
+				enclaves_squad_oblotai1_ktgm = 1,
+				enclaves_squad_oblotai_ktgm = 1,
+				enclaves_squad_ovesa = 1,
+				enclaves_squad_ovesa1_ktgm = 1,
+				enclaves_squad_ovesa_ktgm = 1,
+				enclaves_squad_shavastos = 1,
+				enclaves_squad_shavastos1_ktgm = 1,
+				enclaves_squad_shavastos_ktgm = 1,
+				enclaves_squad_torchstar = 1,
+				enclaves_squad_torchstar1_ktgm = 1,
+				enclaves_squad_torchstar_ktgm = 1,
+				enclaves_squad_drone_stealth = math.random( 1,2 ),
+				enclaves_squad_drone_survivors = 0,
+				enclaves_squad_drone_diamondback = math.random( 4,6 ),
+				enclaves_squad_gundrone = math.random( 4,6 ),
+				enclaves_squad_gundrone_heavy = math.random( 4,6 ),
+				enclaves_squad_gundrone_sniper = math.random( 4,6 ),
+				enclaves_squad_gundrone_missile = math.random( 4,6 ),
+				enclaves_squad_devilfish = math.random( 2,3 ),
+				enclaves_squad_sentinel = math.random( 2,3 ),
+				enclaves_squad_tetra = math.random( 1,2 ),
+				enclaves_squad_piranha = math.random( 2,4 ),
+				enclaves_squad_skyray =  math.random( 3,4 ),
+				enclaves_squad_skyray_survival = 0,
+				enclaves_squad_thunderbolt = math.random( 1,2 ),
+				enclaves_squad_basilisk = math.random( 1,2 ),
+				enclaves_squad_sunshark = math.random( 3,5 ),
+				enclaves_squad_harbinger = 1,
+				enclaves_squad_harbinger_entrenched = 1,
+				enclaves_squad_hammerhead = 2,
+				enclaves_squad_hammerhead_survival = 0,
+				enclaves_squad_diamondback = 2,
+				enclaves_squad_swordfish = 1,
+				enclaves_squad_tigershark_ax10 = 1,
+				enclaves_squad_manta = 1,
+			}
+		},
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	enclaves_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_builder" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "enclaves_herobarracks", true },
+			{ "building", "enclaves_generator" }
+		},
+		
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_builder" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_builder" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "enclaves_herobarracks", true },
+			{ "building", "enclaves_generator" }
+		},
+		
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_builder" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "squad", "enclaves_squad_patrol_team" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "enclaves_herobarracks", true },
+			{ "building", "enclaves_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{	
+	enclaves_race =
+	{
+		MinArmyStrength = 650,
+	},
+}

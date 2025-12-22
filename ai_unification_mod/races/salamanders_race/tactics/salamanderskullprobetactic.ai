@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'salamanderskullprobetactic.ai'
+-- Edited by Thudmeizer   @ 08.11.2013
+
+class 'SalamanderSkullProbeTactic' (SalamanderInfantryTactic)
+
+SalamanderSkullProbe = {}
+
+function SalamanderSkullProbeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander SkullProbe Tactic")
+end
+
+function SalamanderSkullProbeTactic:IsSupportDetector()
+	return true
+end
+
+-- Should only attack when attached
+function SalamanderSkullProbeTactic:IsAttacker()
+	return false
+end
+
+-- Should only defend when attached
+function SalamanderSkullProbeTactic:IsDefender()
+	return false
+end
+
+function SalamanderSkullProbeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SalamanderSkullProbe.sabotage_id == nil) then
+		SalamanderSkullProbe.sabotage_id = cpu_manager.stats:GetAbilityID( "salamander_sabotage" )
+	end
+end
+
+function SalamanderSkullProbeTactic:DoAbilities()
+	
+	Ability.DoAbilityTargetEntity( self.squad_ai, SalamanderSkullProbe.sabotage_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+end
+
+function SalamanderSkullProbeTactic:Update()
+
+   if self:IsComplete() then
+      return
+   end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+   --attach to squad
+   self:TryAttachSquad( false, false, 1000, 150, nil )
+end
+
+

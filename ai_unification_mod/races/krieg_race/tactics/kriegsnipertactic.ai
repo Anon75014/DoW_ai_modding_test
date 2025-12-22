@@ -1,0 +1,68 @@
+----------------------------------------
+-- File: 'kriegsnipertactic.ai'
+-- Edited by Thudmeizer @ 25.04.2022
+
+class 'KriegSniperTactic' (KriegInfantryTactic)
+
+KriegSniper = {}
+
+function KriegSniperTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Sniper Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function KriegSniperTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegSniper.shot_id == nil) then
+		KriegSniper.shot_id = cpu_manager.stats:GetAbilityID( "krieg_sniper_one_shot_one_kill" )
+	end
+
+	if (KriegSniper.invisibility_id == nil) then
+		KriegSniper.invisibility_id = cpu_manager.stats:GetAbilityID( "krieg_sniper_invisibility" )
+	end
+
+	if (KriegSniper.krak_id == nil) then
+		KriegSniper.krak_id = cpu_manager.stats:GetAbilityID( "krieg_krak_grenades" )
+	end
+
+	if (KriegSniper.vision_id == nil) then
+		KriegSniper.vision_id = cpu_manager.stats:GetAbilityID( "krieg_spotter_vision_round" )
+	end
+end
+
+function KriegSniperTactic:DoAbilities()
+
+	-- Check if I can sniperate when in combat
+	Ability.DoAbility( self.squad_ai, KriegSniper.shot_id, Ability.Filters.IsInCombat )
+
+	-- Target vehicles
+	Ability.DoAbilityTarget( self.squad_ai, KriegSniper.krak_id, Ability.Filters.CloseVehicleEnemy, 1 )
+
+	-- Can we activate infiltration when enemy is nearby
+	if (self.squad_ai:IsUsingAbility(KriegSniper.invisibility_id)) then
+		-- Enable infiltration only when enemy is nearby
+		if (Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 45, 1) == nil) then
+			self.squad_ai:DoSpecialAbility(KriegSniper.invisibility_id)
+		end
+	elseif (Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 45, 1) ~= nil) then
+		self.squad_ai:DoSpecialAbility(KriegSniper.invisibility_id)
+	end
+	
+	-- Target attacking infiltrating enemies to make part of map visible
+	if (self.squad_ai:CanDoAbility(KriegSniper.vision_id)) then
+	
+		local iRange = self.squad_ai:GetAbilityRange(KriegSniper.vision_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbilitySquad(KriegSniper.vision_id, oSquad:GetSquad())
+			end
+		end
+	end
+end

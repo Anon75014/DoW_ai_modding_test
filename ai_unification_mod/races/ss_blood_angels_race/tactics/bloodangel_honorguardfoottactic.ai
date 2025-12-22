@@ -1,0 +1,80 @@
+----------------------------------------
+-- File: 'honorguardfoottactic.ai'
+-- Edited by Thudmeizer @ 27.11.2023
+
+class 'BloodAngelHonorGuardFootTactic' (BloodAngelsInfantryTactic)
+
+BloodAngelHonorGuardFoot = {}
+
+function BloodAngelHonorGuardFootTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angel Honor Guard Foot Tactic")
+end
+
+function BloodAngelHonorGuardFootTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function BloodAngelHonorGuardFootTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function BloodAngelHonorGuardFootTactic:InitAbilities()
+
+	if (BloodAngelHonorGuardFoot.frag_id == nil) then
+      		BloodAngelHonorGuardFoot.frag_id = cpu_manager.stats:GetAbilityID( "blood_angel_frag_grenades_honour" )
+	end
+
+	if (BloodAngelHonorGuardFoot.melta_id == nil) then
+      		BloodAngelHonorGuardFoot.melta_id = cpu_manager.stats:GetAbilityID( "blood_angel_melta_bombs_honour" )
+	end
+end
+
+function BloodAngelHonorGuardFootTactic:DoAbilities()
+
+	Ability.DoAbilityTarget(self.squad_ai, BloodAngelHonorGuardFoot.frag_id, Ability.Filters.CloseSquadEnemy, 1)
+	Ability.DoAbilityTargetEntity( self.squad_ai, BloodAngelHonorGuardFoot.frag_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+
+	Ability.DoAbilityTarget(self.squad_ai, BloodAngelHonorGuardFoot.melta_id, Ability.Filters.CloseVehicleEnemy, 1)
+	Ability.DoAbilityTargetEntity( self.squad_ai, BloodAngelHonorGuardFoot.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+end
+
+function BloodAngelHonorGuardFootTactic:Reinforce()
+
+	--always try for the actual leader first
+	if not self.squad_ai:IsReinforcing() then
+		if self.squad_ai:CanReinforce( false, 0 ) then
+		   self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local guardIndex = 0
+	
+		local numGuards = self.squad_ai:GetLeaderCount( guardIndex )
+
+		-- Desired order of reinforcing
+		if numGuards < 4 then
+			if self.squad_ai:CanReinforce( true, guardIndex ) then
+				self.squad_ai:DoReinforce( true, guardIndex )
+			end
+		end
+	end
+end
+
+function BloodAngelHonorGuardFootTactic:Update()
+
+	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

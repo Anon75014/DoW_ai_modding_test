@@ -1,0 +1,32 @@
+----------------------------------------
+-- File: 'NightLordsFuryTactic.ai'
+-- Edited by Thudmeizer @ 26.09.2005
+
+class 'NightLordsFuryTactic' (NightLordsInfantryTactic)
+
+NightLordsFury = {}
+
+function NightLordsFuryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Fury Tactic")
+end
+
+function NightLordsFuryTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (NightLordsFury.surge == nil) then
+		NightLordsFury.surge = cpu_manager.stats:GetAbilityID( "night_lords_torture_fury" )
+	end
+end
+
+function NightLordsFuryTactic:DoAbilities()
+
+
+	local squad_pos = self.squad_ai:GetPosition()
+	if (((self.squad_ai:IsInCombat() and Ability.Filters.CloseEnemy( squad_pos, 20, 1 ) == nil) or
+	   	self.squad_ai:IsBroken()) and self.squad_ai:GetHealthPercentage() > 0.8 and self:IsMoving()) then 
+		if (self.squad_ai:CanDoAbility(NightLordsFury.surge)) then
+			self.squad_ai:DoSpecialAbility(NightLordsFury.surge)
+		end
+	end
+end

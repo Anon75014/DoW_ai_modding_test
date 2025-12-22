@@ -1,0 +1,165 @@
+------------------------------------------
+-- File: 'tsdaemonprincetzeentchtactic.ai'
+-- Edited by Gambit @ 19.03.2014
+
+class 'TSDaemonPrinceTzeentchTactic' (TSInfantryTactic)
+
+TSDaemonPrinceTzeentch = {}
+
+
+function TSDaemonPrinceTzeentchTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Tzeentch Daemon Prince Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+	--self.checkTime = g_iGMT
+	self.isStuck = false
+end
+
+
+function TSDaemonPrinceTzeentchTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TSDaemonPrinceTzeentch.breath_id == nil) then
+		TSDaemonPrinceTzeentch.breath_id = cpu_manager.stats:GetAbilityID( "thousand_sons_fear_roar" )	
+	end
+
+	if (TSDaemonPrinceTzeentch.drain_id == nil) then
+		TSDaemonPrinceTzeentch.drain_id = cpu_manager.stats:GetAbilityID( "thousand_sons_life_drain" )	
+	end
+
+	if (TSDaemonPrinceTzeentch.sacrifice_id == nil) then
+		TSDaemonPrinceTzeentch.sacrifice_id = cpu_manager.stats:GetAbilityID( "thousand_sons_sacrifice" )	
+	end
+end
+
+
+function TSDaemonPrinceTzeentchTactic:DoAbilities()
+
+	if Ability.DoAbilityPos( self.squad_ai, TSDaemonPrinceTzeentch.breath_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	or Ability.DoAbilityPos( self.squad_ai, TSDaemonPrinceTzeentch.breath_id, Ability.Filters.CloseSquadEnemy, 1 ) then
+		return
+	end
+
+	if self.squad_ai:CanDoAbility(TSDaemonPrinceTzeentch.drain_id) then
+		if self.squad_ai:WasRecentlyHurt() then
+			local health = self.squad_ai:GetHealthPercentage()
+			if health < 0.75 then
+				Ability.DoAbilityPos( self.squad_ai, TSDaemonPrinceTzeentch.drain_id, Ability.Filters.CloseInfantryEnemy, 3 )
+			elseif health < 0.4 then
+				Ability.DoAbilityPos( self.squad_ai, TSDaemonPrinceTzeentch.drain_id, Ability.Filters.CloseInfantryEnemy, 1 )
+			end
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(TSDaemonPrinceTzeentch.sacrifice_id) then
+		local range = self.squad_ai:GetAbilityRange( TSDaemonPrinceTzeentch.sacrifice_id ) - 2
+		local squad_filter = function( squad_ai )
+			local oStats = squad_ai:GetStats()
+			if oStats~= nil then
+				local troops = squad_ai:GetNumTroopers()
+				return oStats:GetClass() == UnitStatsAI.UC_MonsterMed and
+				((troops < 5 and troops > 1) or (troops > 4 and (squad_ai:IsBroken() or not squad_ai:IsInCombat())))
+			end
+		end
+   		local oSquad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), range, squad_filter )
+		if oSquad ~= nil then
+			self.squad_ai:DoSpecialAbilitySquad( TSDaemonPrinceTzeentch.sacrifice_id, oSquad:GetSquad() )
+ 		end
+	end
+
+    -- Jump squads' unstuck code call. Put ANYWHERE in the DoAbilities() function
+    -- Checks jump-able stuck squads, and force them to jump nearby
+	if self.squad_ai:CanJump() then
+		self:SolveStuckCase()
+	end
+
+end
+
+
+-- Unstuck Code
+function TSDaemonPrinceTzeentchTactic:SolveStuckCase()
+	local iPosition = self.squad_ai:GetPosition()
+	if iPosition.x ~= self.initialPosition.x or iPosition.z ~= self.initialPosition.z then
+		self.isStuck = false
+	elseif (self.squad_ai:IsInStateMove() or self.squad_ai:IsInStateAttackMove()) and not self.squad_ai:IsInCombat()
+	and iPosition.x == self.initialPosition.x and iPosition.z == self.initialPosition.z then
+		self.isStuck = true
+	end
+	if self.isStuck then
+		self:ForceSquadJumpNear(iPosition)
+	end
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function TSDaemonPrinceTzeentchTactic:ForceSquadJumpNear(pos)
+	-- Try to jump somewhere near, perform 16 checks for a viable position
+	local jumpDisSqr = sqr(self.squad_ai:GetJumpDistance())
+	for iLoop1 = 1, 16 do
+		-- Create a jump position
+		local vJumpPosition = pos
+		local vDir = cpu_manager:GetDirectionToEnemy(pos)
+		vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(-20, 50)
+		vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(-20, 50)
+		-- Check if target position is in range and if unit is able to jump to target position
+		local iDistance = distance_sqr(vJumpPosition, pos)
+		if iDistance < jumpDisSqr and self.squad_ai:CanJumpToPosition(vJumpPosition) then
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			self.m_iLastGatherMove = self.last_jump - 10
+			return
+		end
+	end
+end
+
+
+
+-- ORIGINAL method to check. Now obsolete.
+--[[function TSDaemonPrinceTzeentchTactic:SolveStuckCase()
+    if g_iGMT > self.checkTime + 12 and g_iGMT > self.last_jump + 60 then
+        self.checkTime = g_iGMT
+        if self:IsSquadStuck() then
+            self:ForceSquadJumpNear(self.squad_ai:GetPosition())
+        end
+    end
+end
+
+function TSDaemonPrinceTzeentchTactic:IsSquadStuck()
+	local iPosition = self.squad_ai:GetPosition()
+	local iDistance = distance_sqr(iPosition, self.initialPosition)
+	self.initialPosition = iPosition
+	if iDistance > 25 or self.squad_ai:IsInCombat() or self.squad_ai:IsCapturing() then
+		return false
+	end
+	return true
+end]]
+
+
+	-- ORIGINAL method to unstuck jump-able squads. Now obsolete.
+	--[[ Jump squads' initial unstuck attempt code - put AT THE END of DoAbilities() function
+	if self.initialPosition == nil then return end -- no need for it, once fulfilled its task
+	local iDistance = distance_sqr(self.squad_ai:GetPosition(), self.initialPosition)
+	if g_iGMT > self.checkTime + 28 or iDistance > 512 or self.squad_ai:IsInCombat() then
+		-- We are most possibly non-stuck
+		self.initialPosition = nil
+	elseif g_iGMT > self.checkTime + 9 then
+		-- Try to jump somewhere near
+		for iLoop1 = 1, 8 do
+			-- Create a jump position
+			local vJumpPosition = self.initialPosition
+			local vDir = cpu_manager:GetDirectionToEnemy(self.squad_ai:GetPosition())
+			vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(15, 32)
+			vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(15, 32)
+			-- Check if target position is in range and if unit is able to jump to target position
+			local iDistance = distance_sqr(vJumpPosition, self.initialPosition)
+			if (iDistance <= sqr(self.squad_ai:GetJumpDistance()) and self.squad_ai:CanJumpToPosition(vJumpPosition)) then				
+				-- Jump to position
+				self.squad_ai:DoJump(vJumpPosition)
+				self.last_jump = g_iGMT
+				self.m_iLastGatherMove = self.last_jump - 10
+				return
+			end
+		end
+	end]]

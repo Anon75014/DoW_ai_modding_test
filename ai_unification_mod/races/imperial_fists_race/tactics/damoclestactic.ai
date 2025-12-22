@@ -1,0 +1,154 @@
+----------------------------------------
+-- File: 'damoclestactic.ai'
+-- Edited by Thudmeizer         @ 23.11.2018
+
+class 'DamoclesTactic' (ImperialFistsVehicleTactic)
+
+Damocles = {}
+
+function DamoclesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Damocles Tactic")
+	
+	Tactic.AssignStateFunction( self, Tactic.States.Idle, DamoclesTactic.BeginIdleState )
+	Tactic.AssignStateFunction( self, Tactic.States.Hold, DamoclesTactic.BeginHoldState )
+	Tactic.AssignStateFunction( self, Tactic.States.Retreat, DamoclesTactic.BeginRetreatState )
+	Tactic.AssignStateFunction( self, Tactic.States.Attack, DamoclesTactic.BeginAttackState )
+	
+	self.timedDirectSpawnAbility = Timer( DamoclesTactic.DoDirectSpawnAbility, self, 5 )
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 3
+	self.m_iTransportSlots = 2
+end
+
+function DamoclesTactic:IsAttacker()
+	return (self.m_iUnloadTries > 0 or self.squad_ai:CanDoAbility(Damocles.smoke_id) or self.squad_ai:CanDoAbility(Damocles.orbital_id))
+end
+
+function DamoclesTactic:IsDefender()
+	return (self.m_iUnloadTries > 0 or self.squad_ai:CanDoAbility(Damocles.smoke_id) or self.squad_ai:CanDoAbility(Damocles.orbital_id))
+end
+
+function DamoclesTactic:BeginIdleState()
+	self:TransportMove()
+	Tactic.SetSubState(self, self.IdleState, "Holding")
+end
+
+function DamoclesTactic:BeginHoldState()
+	self:TransportMove()
+	Tactic.SetSubState(self, self.HoldState, "Holding")
+end
+
+function DamoclesTactic:BeginRetreatState()
+	self:TransportMove()
+	Tactic.SetSubState( self, self.HoldState, "Holding" )
+end
+
+function DamoclesTactic:BeginAttackState()
+	self:TransportMove()
+	Tactic.SetSubState(self, self.AttackingState, "Attacking")
+end
+
+function DamoclesTactic:TransportMove()
+
+	-- Check if we're busy
+	if (self:IsInSubState() or self:CheckGatherMove()) then
+		return
+	end
+	
+	-- Check move delay
+	if (g_iGMT < self.m_iMoveDelay + 3 and self:IsMoving()) then
+		return
+	end
+
+	-- Try to unload troops
+	local vSquadPos = self.squad_ai:GetPosition()
+	local iDistance = distance_sqr(self.target, vSquadPos)	
+	if (self:UnloadTroops(iDistance)) then
+		self.m_iMoveDelay = g_iGMT
+		return
+	end
+		
+	-- Check distance
+	if (self.squad_ai:WasRecentlyHurt()) then
+		cpu_manager:DoMove(self.squad_ai, cpu_manager.start_pos, false, "RetreatMove")
+		self.m_iMoveDelay = g_iGMT
+		return
+	elseif (iDistance > sqr(35)) then
+		cpu_manager:DoMove(self.squad_ai, self.target, false, "TransportMove")
+	elseif (iDistance > sqr(20) and not cpu_manager.terrain_analyzer:HasThreat(vSquadPos, 35)) then
+		cpu_manager:DoMove(self.squad_ai, self.target, false, "TransportMove")
+	else
+		self.squad_ai:DoStop()
+	end
+	self.m_iMoveDelay = g_iGMT
+end
+
+function DamoclesTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Damocles.smoke_id == nil) then
+		Damocles.smoke_id = cpu_manager.stats:GetAbilityID( "imperial_fists_smoke_launchers" )	
+	end
+
+	if (Damocles.orbital_id == nil) then
+		--Damocles.orbital_id = cpu_manager.stats:GetAbilityID( "imperial_fists_orbital_bombardment" )
+		Damocles.orbital_id = cpu_manager.stats:GetAbilityID( "imperial_fists_earthshaker_bombardment" )
+	end
+
+	if (Damocles.detection_id == nil) then
+		Damocles.detection_id = cpu_manager.stats:GetAbilityID( "imperial_fists_detection_field" )	
+	end
+end
+
+function DamoclesTactic:DoAbilities()
+
+	-- Try to spawn the Captain
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		DamoclesTactic.DoDirectSpawnAbility(self)
+	end
+
+	-- Try to use orbital bombardement
+	Ability.DoAbilityPos(self.squad_ai, Damocles.orbital_id, Ability.Filters.CloseEnemy, 24)
+	Ability.DoAbilityPos(self.squad_ai, Damocles.orbital_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(Damocles.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(Damocles.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(Damocles.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Try to activate detection field
+	if (self.squad_ai:CanDoAbility(Damocles.detection_id)) then
+	
+		local iRange = self.squad_ai:GetAbilityRange(Damocles.detection_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbilitySquad(Damocles.detection_id, oSquad:GetSquad())
+			end
+		end
+	end
+
+	-- Call standard method
+	ImperialFistsVehicleTactic.DoAbilities(self)
+end
+
+function DamoclesTactic:DoDirectSpawnAbility()
+
+	-- Spawn the Captain in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+

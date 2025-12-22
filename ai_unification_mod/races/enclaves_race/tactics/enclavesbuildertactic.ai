@@ -1,0 +1,15 @@
+----------------------------------------
+-- File: 'enclavesbuildertactic.ai'
+-- Edited by Thudmeizer   @ 25.09.2022
+
+class 'EnclavesBuilderTactic' (EngineerTactic)
+
+function EnclavesBuilderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Builder Tactic")
+end
+
+function EnclavesBuilderTactic:IsAffectedByMorale()
+	return false
+end
+

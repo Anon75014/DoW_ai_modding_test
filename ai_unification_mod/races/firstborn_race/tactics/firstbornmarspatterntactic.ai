@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'firstbornmarspatterntactic.ai'
+-- Edited by Thudmeizer		@ 28.08.2025
+
+class 'FirstbornMarsPatternTactic' (BaseTactic)
+
+function FirstbornMarsPatternTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Firstborn Mars Pattern Tactic")
+end
+
+function FirstbornMarsPatternTactic:CanDeepStrikeTroops()
+	return true
+end

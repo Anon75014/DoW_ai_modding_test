@@ -1,0 +1,71 @@
+----------------------------------------
+-- File: 'kSvanetactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 13.10.2023
+
+class 'kSvaneTactic' (kInfantryTactic)
+
+kSvane = {}
+
+function kSvaneTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("k Svane Tactic")
+end
+
+function kSvaneTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function kSvaneTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function kSvaneTactic:InitAbilities()
+
+	if (kSvane.roar_id == nil) then
+		kSvane.roar_id = cpu_manager.stats:GetAbilityID( "khm_batte_roar" )	
+	end
+
+	if (kSvane.regen_id == nil) then
+		kSvane.regen_id = cpu_manager.stats:GetAbilityID( "khm_hero_regeneration" )
+	end
+end
+
+function kSvaneTactic:DoAbilities()
+
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if self.squad_ai:CanDoAbility(kSvane.regen_id) then
+			self.squad_ai:DoSpecialAbility(kSvane.regen_id)
+		end
+	end
+
+	Ability.DoAbility( self.squad_ai, kSvane.roar_id, Ability.Filters.IsInCombat )
+end
+
+function kSvaneTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+		-- Attach to melee in tier3+
+		if (cpu_manager:GetTierLevel() > 2) then
+			if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+				return
+			end
+		end
+		if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

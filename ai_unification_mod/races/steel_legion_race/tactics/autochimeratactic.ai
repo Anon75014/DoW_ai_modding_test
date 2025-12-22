@@ -1,0 +1,17 @@
+----------------------------------------
+-- File: 'autochimeratactic.ai'
+-- Edited by Thudmeizer @ 29.07.2024
+
+class 'AutoChimeraTactic' (SteelLegionVehicleTactic)
+
+AutoChimera = {}
+
+function AutoChimeraTactic:__init( squad_ai ) super( squad_ai )
+	
+	self:SetName("Autocannon Chimera Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 1
+end
+

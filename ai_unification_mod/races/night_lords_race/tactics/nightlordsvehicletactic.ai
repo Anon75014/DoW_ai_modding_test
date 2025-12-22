@@ -1,0 +1,66 @@
+----------------------------------------
+-- File: 'nightlordsvehicletactic.ai'
+-- Edited by Thudmeizer		@ 28.11.2024
+
+class 'NightLordsVehicleTactic' (VehicleTactic)
+
+function NightLordsVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Vehicle Tactic")
+	
+	-- Dreadnoughts can enter deepstrike buildings
+	local sName = squad_ai:GetSquadName()
+	if (sName == "night_lords_squad_dreadnought") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("night_lords_orbital_relay")
+	end
+end
+
+-- Check if the vehicle should dance away in melee
+function NightLordsVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "night_lords_squad_rhino" or
+		sName == "night_lords_squad_cyclops" or
+		sName == "night_lords_squad_razorback" or
+		sName == "night_lords_squad_dreadnought" or
+		sName == "night_lords_squad_dreadnought_nocap" or
+		sName == "night_lords_squad_predator" or
+		sName == "night_lords_squad_predator_no_cap" or
+		sName == "night_lords_squad_whirlwind" or
+		sName == "night_lords_squad_vindicator" or
+		sName == "night_lords_squad_kratos" or
+		sName == "night_lords_squad_land_raider" or
+		sName == "night_lords_squad_land_raider_no_cap") then
+		return true
+	end
+	return false
+end
+
+function NightLordsVehicleTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	local vehiclesmoke_id = cpu_manager.stats:GetAbilityID( "night_lords_smoke_launchers" )
+
+	-- Search a squad
+	local iRange = self.squad_ai:GetAbilityRange(vehiclesmoke_id)
+	local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+	if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+		self.squad_ai:DoSpecialAbilitySquad(vehiclesmoke_id, oUnit:GetSquad())
+	end
+
+	-- Check if I can use nightfall stealth drive while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+
+		local vehicledrive_id = cpu_manager.stats:GetAbilityID( "night_lords_stealth_drive_rhino" )
+		if (self.squad_ai:CanDoAbility(vehicledrive_id)) then
+			self.squad_ai:DoSpecialAbility(vehicledrive_id)
+		end
+
+		local vehicledriveenhanced_id = cpu_manager.stats:GetAbilityID( "night_lords_enhanced_stealth_drive_rhino" )
+		if (self.squad_ai:CanDoAbility(vehicledriveenhanced_id)) then
+			self.squad_ai:DoSpecialAbility(vehicledriveenhanced_id)
+		end
+	end
+
+	-- Call standard method
+	VehicleTactic.DoAbilities(self)
+end

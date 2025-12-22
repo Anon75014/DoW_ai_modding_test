@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'OrbitalStalkerTactic.ai'
+-- Creat and Edited by I_Chample@ 23.06.2014
+
+class 'OrbitalStalkerTactic' (MechVehicleTactic)
+
+OrbitalStalker = {}
+
+function OrbitalStalkerTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("Orbital Stalker Tactic")
+end
+
+function OrbitalStalkerTactic:AlwaysAttack()
+	return true
+end
+
+function OrbitalStalkerTactic:InitAbilities()
+	if (OrbitalStalker.iRestoreID == nil) then
+		OrbitalStalker.iRestoreID = cpu_manager.stats:GetAbilityID( "mechanicus_reload" )
+	end
+end
+
+
+function OrbitalStalkerTactic:DoAbilities()
+
+	if (self.squad_ai:CanDoAbility(OrbitalStalker.iRestoreID) and self.squad_ai:IsBroken()) then
+		self.squad_ai:DoSpecialAbility(OrbitalStalker.iRestoreID)
+	end
+end

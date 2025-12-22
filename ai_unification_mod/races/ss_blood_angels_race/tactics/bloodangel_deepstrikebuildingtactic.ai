@@ -1,0 +1,14 @@
+------------------------------------------------
+-- File: 'bloodangel_deepstrikebuildingtactic.ai'
+-- Edited by Thudmeizer		@ 26.02.2009
+
+class 'BloodAngelDeepstrikeBuildingTactic' (BaseTactic)
+
+function BloodAngelDeepstrikeBuildingTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Deepstrike Building Tactic")
+end
+
+function BloodAngelDeepstrikeBuildingTactic:CanDeepStrikeTroops()
+	return true
+end

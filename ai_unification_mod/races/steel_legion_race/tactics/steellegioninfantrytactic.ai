@@ -1,0 +1,213 @@
+----------------------------------------
+-- File: 'steellegioninfantrytactic.ai'
+-- Edited by Thudmeizer         @ 16.09.2025
+
+class 'SteelLegionInfantryTactic' (InfantryTactic)
+
+SteelLegionInfantryAbility =
+{
+    FragBombID = cpu_manager.stats:GetAbilityID("steel_legion_frag_grenades")
+    ,FragBombBID = cpu_manager.stats:GetAbilityID("steel_legion_frag_grenades_bulgryn")
+    ,MeltaBombID = cpu_manager.stats:GetAbilityID("steel_legion_melta_bombs")
+}
+
+function SteelLegionInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Steel Legion Infantry Tactic")
+
+	-- Set infantry options
+	local sSquadName = squad_ai:GetSquadName()
+	if (sSquadName == "steel_legion_squad_pioneer" or
+		sSquadName == "steel_legion_squad_soldier" or
+		sSquadName == "steel_legion_squad_soldier_chimera" or
+		sSquadName == "steel_legion_squad_soldier_heavy_weapon" or
+		sSquadName == "steel_legion_squad_soldier_heavy_weapon_2" or
+		sSquadName == "steel_legion_squad_soldier_heavy_weapon_3" or
+		sSquadName == "steel_legion_squad_chem_dogs" or
+		sSquadName == "steel_legion_squad_panzergrenadier" or
+		sSquadName == "steel_legion_squad_ratlings" or
+		sSquadName == "steel_legion_squad_bulgryns" or
+		sSquadName == "steel_legion_squad_medic" or
+		sSquadName == "steel_legion_squad_vox_officer" or
+		sSquadName == "steel_legion_squad_setheno") then
+
+		-- Squads are transportable
+		self.m_iTransportable = 1	-- Chimera / Chimera Auto-Cannon / APDS-6a Defender
+
+		-- Squad is able to occupy bunkers
+		self.m_bBunkerSquad = true
+
+	elseif (sSquadName == "steel_legion_squad_stormtrooper_deepstrike" or
+		sSquadName == "steel_legion_squad_ork_hunters") then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("steel_legion_relay_station")
+
+		-- Squads are transportable
+		self.m_iTransportable = 1	-- Chimera / Chimera Auto-Cannon / APDS-6a Defender
+
+		-- Squad is able to occupy bunkers
+		self.m_bBunkerSquad = true
+
+	elseif (sSquadName == "steel_legion_squad_lieutenant" or
+		sSquadName == "steel_legion_squad_commissar" or
+		sSquadName == "steel_legion_squad_nahida" or
+		sSquadName == "steel_legion_squad_uriah_jacobus" or
+		sSquadName == "steel_legion_squad_yarrick") then
+
+		-- Squads are transportable
+		self.m_iTransportable = 2	-- Salamander
+
+		-- Squad is able to occupy bunkers
+		self.m_bBunkerSquad = true
+
+	elseif (sSquadName == "steel_legion_squad_commissar") then
+
+		-- Squads are transportable
+		self.m_iTransportable = 3	-- Conquerer / Demolisher / Executioner / Exterminator / Leman Russ / Vanquisher
+
+		-- Squad is able to occupy bunkers
+		self.m_bBunkerSquad = true
+	end
+
+    self.fragBombLastUse = g_iGMT
+    self.fragBombBLastUse = g_iGMT
+    self.meltaBombLastUse = g_iGMT
+end
+
+function SteelLegionInfantryTactic:AddTargetAbilities()
+
+end
+
+function SteelLegionInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "steel_legion_squad_yarrick", true })
+	table.insert(self.commander, { "steel_legion_squad_lieutenant", false })
+	table.insert(self.commander, { "steel_legion_squad_uriah_jacobus", false })
+	table.insert(self.commander, { "steel_legion_squad_nahida", false })
+	table.insert(self.commander, { "steel_legion_squad_setheno", false })
+	table.insert(self.commander, { "steel_legion_squad_commissar", false })
+	table.insert(self.commander, { "steel_legion_squad_medic", false })
+	table.insert(self.commander, { "steel_legion_squad_vox_officer", false })
+end
+
+function SteelLegionInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("steel_legion_squad_lieutenant")) then
+			LieutenantTactic.InitAbilities( self )
+			LieutenantTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("steel_legion_squad_commissar")) then
+			SLCommissarTactic.InitAbilities( self )
+			SLCommissarTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("steel_legion_squad_nahida")) then
+			PsykerTactic.InitAbilities( self )
+			PsykerTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("steel_legion_squad_setheno")) then
+			SethenoTactic.InitAbilities( self )
+			SethenoTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("steel_legion_squad_uriah_jacobus")) then
+			UriahJacobusTactic.InitAbilities( self )
+			UriahJacobusTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("steel_legion_squad_yarrick")) then
+			YarrickTactic.InitAbilities( self )
+			YarrickTactic.DoAbilities( self )
+		end
+	end
+
+	self:DoThrowGrenades()
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function SteelLegionInfantryTactic:DoThrowGrenades()
+
+    if self.squad_ai:IsInCombat() then
+        
+        if ( g_iGMT > self.fragBombLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.FragBombID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.FragBombID, Ability.Filters.CloseSquadEnemy, 4 )
+            or Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.FragBombID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.fragBombLastUse = g_iGMT 
+            end
+        end
+
+        if ( g_iGMT > self.fragBombBLastUse + 30 ) then
+            if Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.FragBombBID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            or Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.FragBombBID, Ability.Filters.CloseSquadEnemy, 4 )
+            or Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.FragBombBID, Ability.Filters.CloseMonsterEnemy, 1 )
+            then
+                self.fragBombBLastUse = g_iGMT 
+            end
+        end
+    
+        if ( g_iGMT > self.meltaBombLastUse + 65 ) then        
+            if Ability.DoAbilityTarget( self.squad_ai, SteelLegionInfantryAbility.MeltaBombID, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTargetEntity( self.squad_ai, SteelLegionInfantryAbility.MeltaBombID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            then
+                self.meltaBombLastUse = g_iGMT
+            end
+        end    
+    end
+end
+
+function SteelLegionInfantryTactic:CheckForBroken()
+
+	-- Detach commander from broken/capturing
+	if ((self.squad_ai:IsBroken() or self.squad_ai:IsCapturing()) and
+		(self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt())) then 
+		
+		self.squad_ai:DoDetachSquad()
+		self.squad_ai:DoSetDefaultMeleeStance()
+	end
+
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end
+
+function SteelLegionInfantryTactic:Upgrade()
+
+	-- Check if we have free ressources
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	if (not self.squad_ai:IsReinforcing() and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 3) then
+		
+		-- Figure out my enemy's favourite class
+		local enemy = cpu_manager:FindClosestEnemyPlayer()
+		if (enemy == nil) then
+			return
+		end
+		local class_type = enemy:GetMajorityClassType()
+		
+		-- Larkins hard counter upgrade for HeavyInfantryMed 
+		if (class_type < UnitStatsAI.UC_HeavyInfantryMed) then	  
+		  
+			local enemy_race = enemy:GetPlayerRaceName()
+			if (enemy_race == "space_marine_race" or enemy_race == "chaos_marine_race" or
+                        enemy_race == "guard_race" or enemy_race == "ork_race" or enemy_race == "eldar_race" or enemy_race == "necron_race" or enemy_race == "tau_race") then
+		    	class_type = UnitStatsAI.UC_HeavyInfantryMed
+		  	end
+		end
+		
+		-- Do best upgrade
+		self.squad_ai:DoBestUpgrade(class_type)
+	end
+end
+
+function SteelLegionInfantryTactic:CanOnlyDecap()
+
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "steel_legion_squad_ratlings") then
+		return true
+	end
+	return false
+end
+

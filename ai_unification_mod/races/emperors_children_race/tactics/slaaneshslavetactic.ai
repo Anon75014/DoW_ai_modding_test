@@ -1,0 +1,69 @@
+----------------------------------------
+-- File: 'slaaneshslavetactic.ai'
+-- Created by Gambit @ 24.08.2018
+
+class 'SlaaneshSlaveTactic' (EngineerTactic)
+
+SlaaneshSlave = {}
+
+function SlaaneshSlaveTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Slave Tactic")
+	self.minesTMR = g_iGMT
+	self.hasDroppedMines = false
+end
+
+function SlaaneshSlaveTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshSlave.mines_id == nil then
+		SlaaneshSlave.mines_id = cpu_manager.stats:GetAbilityID( "emperors_children_drop_mines" )	
+	end
+end
+
+function SlaaneshSlaveTactic:DoAbilities()
+
+	-- Drop Mines
+	if not self.m_bBusy and self.squad_ai:CanDoAbility(SlaaneshSlave.mines_id) and self.squad_ai:IsBuilding() == 0 then
+		if resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ) > 300 then
+			if not self:BuildigExistsWithin(self.squad_ai:GetPosition(),12) then
+				self.squad_ai:DoSpecialAbility( SlaaneshSlave.mines_id )
+				self.m_bBusy = true
+				self.hasDroppedMines = true
+				self.minesTMR = g_iGMT
+			end
+		end
+	end
+	-- Reset builder settings
+	if self.hasDroppedMines and g_iGMT > self.minesTMR + 14.5 then
+		self.m_bBusy = false
+		self.hasDroppedMines = false
+	end
+end
+
+function SlaaneshSlaveTactic:Reinforce()
+
+	if self.squad_ai:CanReinforce( false, 0 ) then
+		if resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition ) < 600 then
+			return false
+		else
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+    	end
+end
+
+function SlaaneshSlaveTactic:BuildigExistsWithin(iPos, iRange)
+	local disSqr = iRange*iRange
+	for oPlayer in cpu_manager.stats:GetPlayerStats() do
+		if not oPlayer:IsPlayerDead() then
+			for oBuilding in oPlayer:GetBases() do
+				if oBuilding:IsValid() then
+					if distance_sqr(oBuilding:GetPosition(),iPos) < disSqr then
+						return true
+					end
+				end
+			end
+		end
+	end
+	return false
+end

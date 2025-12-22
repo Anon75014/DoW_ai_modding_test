@@ -1,0 +1,48 @@
+----------------------------------------
+-- File: 'arrogancetactic.ai'
+-- Edited by Thudmeizer @ 23.08.2022
+
+class 'ArroganceTactic' (SteelLegionVehicleTactic)
+
+Arrogance = {}
+
+function ArroganceTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Arrogance Tactic")
+end
+
+function ArroganceTactic:InitAbilities()
+
+	if (Arrogance.battlecry_id == nil) then
+	    Arrogance.battlecry_id = cpu_manager.stats:GetAbilityID( "steel_legion_battlecry_tank" )	
+	end
+
+	if (Arrogance.forcefield_id == nil) then
+	    Arrogance.forcefield_id = cpu_manager.stats:GetAbilityID( "steel_legion_forcefield" )	
+	end
+end
+
+function ArroganceTactic:DoAbilities()
+
+	Ability.DoAbilityArea( self.squad_ai, Arrogance.battlecry_id, Ability.Filters.CloseInCombat, 10, 1 ) 
+
+ 	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.6) then
+ 
+		--check if I can protect myself and enable forcefield to protect against ranged attacks
+		if self.squad_ai:CanDoAbility( Arrogance.forcefield_id ) then
+			self.squad_ai:DoSpecialAbility( Arrogance.forcefield_id )
+		end
+	end
+end
+
+function ArroganceTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not VehicleTactic.Update( self )) then
+		return
+	end
+end

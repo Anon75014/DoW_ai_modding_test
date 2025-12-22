@@ -1,0 +1,1790 @@
+----------------------------------------
+-- File: 'enclavesunitstats.ai'
+-- Edited by CaptJoJo (meatshi3ld)	@ 31.08.2021
+-- Edited by Thudmeizer 		@ 24.04.2025
+
+-- Skirmish
+UnitStrengths.enclaves_squad_builder = 0
+UnitStrengths.enclaves_squad_patrol_team = 50
+UnitStrengths.enclaves_squad_drone_survivors = 10
+UnitStrengths.enclaves_squad_drone_diamondback = 20
+UnitStrengths.enclaves_squad_guevesa = 50
+UnitStrengths.enclaves_squad_guevesa_ezo = 50
+UnitStrengths.enclaves_squad_strike_team = 70
+UnitStrengths.enclaves_squad_manta_strike_team = 70
+UnitStrengths.enclaves_squad_breacher_team = 70
+UnitStrengths.enclaves_squad_manta_breacher_team = 70
+UnitStrengths.enclaves_squad_kokomi = 80
+UnitStrengths.enclaves_squad_tetra = 95
+UnitStrengths.enclaves_squad_piranha = 95
+UnitStrengths.enclaves_squad_devilfish = 150
+UnitStrengths.enclaves_squad_manta_devilfish = 150
+UnitStrengths.enclaves_squad_sentinel = 150
+UnitStrengths.enclaves_squad_broadside = 120
+UnitStrengths.enclaves_squad_broadside_survival = 120
+UnitStrengths.enclaves_squad_manta_broadside = 120
+UnitStrengths.enclaves_squad_broadside_melee = 150
+UnitStrengths.enclaves_squad_manta_broadside_melee = 150
+UnitStrengths.enclaves_squad_crisis = 220
+UnitStrengths.enclaves_squad_manta_crisis = 220
+UnitStrengths.enclaves_squad_crisis_melee = 250
+UnitStrengths.enclaves_squad_manta_crisis_melee = 250
+UnitStrengths.enclaves_squad_arrakon = 305
+UnitStrengths.enclaves_squad_bravestorm = 305
+UnitStrengths.enclaves_squad_brightsword = 305
+UnitStrengths.enclaves_squad_farsight = 305
+UnitStrengths.enclaves_squad_oblotai = 305
+UnitStrengths.enclaves_squad_ovesa = 305
+UnitStrengths.enclaves_squad_shavastos = 305
+UnitStrengths.enclaves_squad_torchstar = 305
+UnitStrengths.enclaves_squad_thunderbolt = 305
+UnitStrengths.enclaves_squad_basilisk = 325
+UnitStrengths.enclaves_squad_skyray = 325
+UnitStrengths.enclaves_squad_skyray_survival = 325
+UnitStrengths.enclaves_squad_manta_skyray = 325
+UnitStrengths.enclaves_squad_sunshark = 220
+UnitStrengths.enclaves_squad_harbinger = 300
+UnitStrengths.enclaves_squad_manta_harbinger = 300
+UnitStrengths.enclaves_squad_harbinger_entrenched = 300
+UnitStrengths.enclaves_squad_gundrone = 130
+UnitStrengths.enclaves_squad_gundrone_heavy = 130
+UnitStrengths.enclaves_squad_gundrone_sniper = 130
+UnitStrengths.enclaves_squad_gundrone_missile = 130
+UnitStrengths.enclaves_squad_drone_stealth = 130
+UnitStrengths.encalves_squad_drone_diamond_back = 130
+UnitStrengths.enclaves_squad_diamondback = 300
+UnitStrengths.enclaves_squad_hammerhead = 425
+UnitStrengths.enclaves_squad_hammerhead_survival = 425
+UnitStrengths.enclaves_squad_manta_hammerhead = 425
+UnitStrengths.enclaves_squad_swordfish = 1000
+--UnitStrengths.enclaves_squad_swordfish_mk2 = 1000
+UnitStrengths.enclaves_squad_tigershark_ax10 = 1500
+UnitStrengths.enclaves_squad_manta = 1500
+
+-- Last Stand + Kill-Team Game Modes
+UnitStrengths.enclaves_squad_arrakon1_ktgm = 305
+UnitStrengths.enclaves_squad_arrakon_ktgm = 305
+UnitStrengths.enclaves_squad_bravestorm1_ktgm = 305
+UnitStrengths.enclaves_squad_bravestorm_ktgm = 305
+UnitStrengths.enclaves_squad_brightsword1_ktgm = 305
+UnitStrengths.enclaves_squad_brightsword_ktgm = 305
+UnitStrengths.enclaves_squad_farsight1_ktgm = 305
+UnitStrengths.enclaves_squad_farsight_ktgm = 305
+UnitStrengths.enclaves_squad_oblotai1_ktgm = 305
+UnitStrengths.enclaves_squad_oblotai_ktgm = 305
+UnitStrengths.enclaves_squad_ovesa1_ktgm = 305
+UnitStrengths.enclaves_squad_ovesa_ktgm = 305
+UnitStrengths.enclaves_squad_shavastos1_ktgm = 305
+UnitStrengths.enclaves_squad_shavastos_ktgm = 305
+UnitStrengths.enclaves_squad_torchstar1_ktgm = 305
+UnitStrengths.enclaves_squad_torchstar_ktgm = 305
+
+LeaderStrengths.enclaves_squad_builder = 20
+LeaderStrengths.enclaves_squad_patrol_team = 0
+LeaderStrengths.enclaves_squad_strike_team = 0
+LeaderStrengths.enclaves_squad_breacher_team = 0
+LeaderStrengths.enclaves_squad_guevesa = 75
+LeaderStrengths.enclaves_squad_guevesa_ezo = 75
+LeaderStrengths.enclaves_squad_arrakon1_ktgm = 35
+LeaderStrengths.enclaves_squad_arrakon_ktgm = 35
+LeaderStrengths.enclaves_squad_brightsword1_ktgm = 35
+LeaderStrengths.enclaves_squad_brightsword_ktgm = 35
+LeaderStrengths.enclaves_squad_ovesa1_ktgm = 45
+LeaderStrengths.enclaves_squad_ovesa_ktgm = 45
+LeaderStrengths.enclaves_squad_shavastos_ktgm = 45
+LeaderStrengths.enclaves_squad_shavastos1_ktgm = 45
+LeaderStrengths.enclaves_squad_torchstar1_ktgm = 35
+LeaderStrengths.enclaves_squad_torchstar_ktgm = 35
+
+Attachments.enclaves_squad_guevesa = { "enclaves_squad_gundrone", "enclaves_squad_gundrone_heavy", "enclaves_squad_gundrone_missile", "enclaves_squad_gundrone_sniper", "enclaves_squad_kokomi" }
+Attachments.enclaves_squad_guevesa_ezo = { "enclaves_squad_gundrone", "enclaves_squad_gundrone_heavy", "enclaves_squad_gundrone_missile", "enclaves_squad_gundrone_sniper", "enclaves_squad_kokomi" }
+Attachments.enclaves_squad_patrol_team = { "enclaves_squad_gundrone", "enclaves_squad_gundrone_heavy", "enclaves_squad_gundrone_missile", "enclaves_squad_gundrone_sniper", "enclaves_squad_kokomi" }
+Attachments.enclaves_squad_strike_team = { "enclaves_squad_gundrone", "enclaves_squad_gundrone_heavy", "enclaves_squad_gundrone_missile", "enclaves_squad_gundrone_sniper", "enclaves_squad_kokomi" }
+Attachments.enclaves_squad_breacher_team = { "enclaves_squad_gundrone", "enclaves_squad_gundrone_heavy", "enclaves_squad_gundrone_missile", "enclaves_squad_gundrone_sniper", "enclaves_squad_kokomi" }
+
+EnclavesUnitStats =
+{
+	race = "enclaves_race",
+	{
+		name = "Enclaves Craftsman",
+		sbp_name = "enclaves_squad_builder",
+		ebp_name = "enclaves_builder",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 0.0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Patrol Team",
+		sbp_name = "enclaves_squad_patrol_team",
+		ebp_name = "enclaves_patrol_team",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "enclaves_pathfinder_melee",
+				effectiveness = GenerateUnitEffectiveness(1.4,2.1,1.9,1.7,1.4,0.8,0.3,0.0,1.0,0.0,0.6,0.8,0.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_ion_rifle_pathfinder",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,6.2,6.2,3.7,3.3,3.3,3.3,4.8,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Gue'vesa Auxilliary",
+		sbp_name = "enclaves_squad_guevesa",
+		ebp_name = "enclaves_guevesala",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "enclaves_lasgun_guevesa",
+				effectiveness = GenerateUnitEffectiveness(1.4,2.1,1.9,1.7,1.4,0.8,0.3,0.0,1.0,0.0,0.6,0.8,0.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_pulse_rifle_guevesa",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,6.2,6.2,3.7,3.3,3.3,3.3,4.8,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_pulse_carbine_guevesa",
+				effectiveness = GenerateUnitEffectiveness(4.3,3.3,3.3,3.3,3.3,6.2,6.2,3.7,3.3,3.3,3.3,4.8,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_guevesa_melee",
+				effectiveness = GenerateUnitEffectiveness(1.3,1.3,1.3,1.3,1.3,2.2,2.2,1.7,1.3,1.3,1.3,2.8,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Gue'vesa Auxilliary",
+		sbp_name = "enclaves_squad_guevesa_ezo",
+		ebp_name = "enclaves_guevesala_ezo",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "enclaves_lasgun_guevesa_ezo",
+				effectiveness = GenerateUnitEffectiveness(1.4,2.1,1.9,1.7,1.4,0.8,0.3,0.0,1.0,0.0,0.6,0.8,0.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_pulse_rifle_guevesa",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,3.3,6.2,6.2,3.7,3.3,3.3,3.3,4.8,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_pulse_carbine_guevesa",
+				effectiveness = GenerateUnitEffectiveness(4.3,3.3,3.3,3.3,3.3,6.2,6.2,3.7,3.3,3.3,3.3,4.8,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_guevesa_melee_ezo",
+				effectiveness = GenerateUnitEffectiveness(1.3,1.3,1.3,1.3,1.3,2.2,2.2,1.7,1.3,1.3,1.3,2.8,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Kokomi",
+		sbp_name = "enclaves_squad_kokomi",
+		ebp_name = "enclaves_kokomi",
+		class = UnitStatsAI.UC_Commander,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_lasgun_kokomi",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fire_warrior_rifle_melee",
+				effectiveness = GenerateUnitEffectiveness(0.7,1.2,0.2,0.9,0.7,0.3,0.1,0.0,0.5,0.2,0.4,0.3,0.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Strike Team",
+		sbp_name = "enclaves_squad_strike_team",
+		ebp_name = "enclaves_strike_team",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_pulse_rifle_fire_warrior",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_katana",
+				effectiveness = GenerateUnitEffectiveness(4.2,5.4,5.2,5.1,4.5,2.3,2.3,1.8,4.5,0.0,3.6,3.2,2.6,1.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Strike Team (Manta)",
+		sbp_name = "enclaves_squad_manta_strike_team",
+		ebp_name = "enclaves_squad_strike_team_check",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Breacher Team",
+		sbp_name = "enclaves_squad_breacher_team",
+		ebp_name = "enclaves_breacher_team",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_pulse_shotgun",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_katana",
+				effectiveness = GenerateUnitEffectiveness(4.2,5.4,5.2,5.1,4.5,2.3,2.3,1.8,4.5,0.0,3.6,3.2,2.6,1.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Breacher Team (Manta)",
+		sbp_name = "enclaves_squad_manta_breacher_team",
+		ebp_name = "enclaves_squad_breacher_team_check",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Broadside Heavy Battlesuit",
+		sbp_name = "enclaves_squad_broadside",
+		ebp_name = "enclaves_broadside",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_rail_gun_broadside_battlesuit",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_broadside_battlesuit",
+				effectiveness = GenerateUnitEffectiveness(0.0,7.5,7.5,7.0,6.3,7.3,7.3,7.0,5.2,4.1,5.2,6.7,6.7,6.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_plasma_rifle_battlesuit",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(2.4,3.4,3.1,2.8,2.4,1.6,0.7,0.0,1.9,0.0,1.2,1.6,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Broadside Heavy Battlesuit Survival",
+		sbp_name = "enclaves_squad_broadside_survival",
+		ebp_name = "enclaves_broadside",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_rail_gun_broadside_battlesuit",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_broadside_battlesuit",
+				effectiveness = GenerateUnitEffectiveness(0.0,7.5,7.5,7.0,6.3,7.3,7.3,7.0,5.2,4.1,5.2,6.7,6.7,6.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_plasma_rifle_battlesuit",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(2.4,3.4,3.1,2.8,2.4,1.6,0.7,0.0,1.9,0.0,1.2,1.6,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Broadside Heavy Battlesuit (Manta)",
+		sbp_name = "enclaves_squad_manta_broadside",
+		ebp_name = "enclaves_squad_broadside_check",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Broadside Assault Battlesuit",
+		sbp_name = "enclaves_squad_broadside_melee",
+		ebp_name = "enclaves_broadside_melee",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_battlesuit_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Broadside Assault Battlesuit (Manta)",
+		sbp_name = "enclaves_squad_manta_broadside_melee",
+		ebp_name = "enclaves_squad_broadside_melee_check",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Crisis Heavy Battlesuit",
+		sbp_name = "enclaves_squad_crisis",
+		ebp_name = "enclaves_crisis",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_missile_pod_crisis_shoulder",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_crisis_suit_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_flamer_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "enclaves_flamer_crisis_suit_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "enclaves_fusion_blaster_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_crisis_suit_right",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_crisis_suit_right",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_plasma_rifle_crisis",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_plasma_rifle_crisis_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(6.5*10,8*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,math.random(5.5*10,7*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(2.4,3.4,3.1,2.8,2.4,1.6,0.7,0.0,1.9,0.0,1.2,1.6,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Crisis Heavy Battlesuit (Manta)",
+		sbp_name = "enclaves_squad_manta_crisis",
+		ebp_name = "enclaves_squad_crisis_check",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Crisis Assault Battlesuit",
+		sbp_name = "enclaves_squad_crisis_melee",
+		ebp_name = "enclaves_crisis_melee",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_crisis_spear",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Crisis Assault Battlesuit (Manta)",
+		sbp_name = "enclaves_squad_manta_crisis_melee",
+		ebp_name = "enclaves_squad_crisis_melee_check",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Arrakon",
+		sbp_name = "enclaves_squad_arrakon",
+		ebp_name = "enclaves_arrakon",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_grenade_launcher_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_cyclic_ion_blaster_commander",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Arrakon (Kill Team)",
+		sbp_name = "enclaves_squad_arrakon_ktgm",
+		ebp_name = "enclaves_arrakon_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_grenade_launcher_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_cyclic_ion_blaster_commander",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Arrakon (Kill Team Beta)",
+		sbp_name = "enclaves_squad_arrakon1_ktgm",
+		ebp_name = "enclaves_arrakon_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_grenade_launcher_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_cyclic_ion_blaster_commander",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Bravestorm",
+		sbp_name = "enclaves_squad_bravestorm",
+		ebp_name = "enclaves_bravestorm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_rail_gun_broadside_bravestorm",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_onager_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Bravestorm (Kill Team)",
+		sbp_name = "enclaves_squad_bravestorm_ktgm",
+		ebp_name = "enclaves_bravestorm_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_rail_gun_broadside_bravestorm",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_onager_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Bravestorm (Kill Team Beta)",
+		sbp_name = "enclaves_squad_bravestorm1_ktgm",
+		ebp_name = "enclaves_bravestorm_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_rail_gun_broadside_bravestorm",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_onager_fist",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Brightsword",
+		sbp_name = "enclaves_squad_brightsword",
+		ebp_name = "enclaves_brightsword",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_fusion_blaster_melee",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Brightsword (Kill Team)",
+		sbp_name = "enclaves_squad_brightsword_ktgm",
+		ebp_name = "enclaves_brightsword_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_fusion_blaster_melee",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Brightsword (Kill Team Beta)",
+		sbp_name = "enclaves_squad_brightsword1_ktgm",
+		ebp_name = "enclaves_brightsword_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_fusion_blaster_melee",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Farsight",
+		sbp_name = "enclaves_squad_farsight",
+		ebp_name = "enclaves_farsight",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_dawn_blade",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_2",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_3",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_4",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Farsight (Kill Team)",
+		sbp_name = "enclaves_squad_farsight_ktgm",
+		ebp_name = "enclaves_farsight_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_dawn_blade",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_2",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_3",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_4",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Farsight (Kill Team Beta)",
+		sbp_name = "enclaves_squad_farsight1_ktgm",
+		ebp_name = "enclaves_farsight_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_dawn_blade",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_2",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_3",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_dawn_blade_4",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.4,4.6,4.6,4.6,5.4,5.4,2.9,4.3,0.0,3.5,4.3,2.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Shas'vre Oblotai 9-0",
+		sbp_name = "enclaves_squad_oblotai",
+		ebp_name = "enclaves_oblotai",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_oblotai",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_launcher_oblotai_top",
+				effectiveness = GenerateUnitEffectiveness(3.0,3.0,3.0,3.0,3.0,6.8,6.3,5.1,3.0,4.7,3.0,5.5,4.7,4.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_seeker_missile_oblotai",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Shas'vre Oblotai 9-0 (Kill Team)",
+		sbp_name = "enclaves_squad_oblotai_ktgm",
+		ebp_name = "enclaves_oblotai_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_oblotai",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_launcher_oblotai_top",
+				effectiveness = GenerateUnitEffectiveness(3.0,3.0,3.0,3.0,3.0,6.8,6.3,5.1,3.0,4.7,3.0,5.5,4.7,4.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_seeker_missile_oblotai",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Shas'vre Oblotai 9-0 (Kill Team Beta)",
+		sbp_name = "enclaves_squad_oblotai1_ktgm",
+		ebp_name = "enclaves_oblotai_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_oblotai",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_launcher_oblotai_top",
+				effectiveness = GenerateUnitEffectiveness(3.0,3.0,3.0,3.0,3.0,6.8,6.3,5.1,3.0,4.7,3.0,5.5,4.7,4.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_seeker_missile_oblotai",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Honor_Shas'vre O'Vesa",
+		sbp_name = "enclaves_squad_ovesa",
+		ebp_name = "enclaves_ovesa",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_ion_accelerator_ovesa",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_fusion_blaster_riptide",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_riptide_2",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_riptide_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Honor_Shas'vre O'Vesa (Kill Team)",
+		sbp_name = "enclaves_squad_ovesa_ktgm",
+		ebp_name = "enclaves_ovesa_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_ion_accelerator_ovesa",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_sentinel",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Honor_Shas'vre O'Vesa (Kill Team Beta)",
+		sbp_name = "enclaves_squad_ovesa1_ktgm",
+		ebp_name = "enclaves_ovesa_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_ion_accelerator_ovesa",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_sentinel",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.6,6.0,3.6,2.4,7.1,6.8,5.2,6.8,0.0,6.3,5.9,5.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Shavastos",
+		sbp_name = "enclaves_squad_shavastos",
+		ebp_name = "enclaves_shavastos",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_shavastos_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_flamer_commander",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.8,4.7,4.4,7.8,0.0,0.0,0.0,4.0,0.0,3.4,3.4,2.7,1.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Shavastos (Kill Team)",
+		sbp_name = "enclaves_squad_shavastos_ktgm",
+		ebp_name = "enclaves_shavastos_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_shavastos_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_flamer_commander",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.8,4.7,4.4,7.8,0.0,0.0,0.0,4.0,0.0,3.4,3.4,2.7,1.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Commander Shavastos (Kill Team Beta)",
+		sbp_name = "enclaves_squad_shavastos1_ktgm",
+		ebp_name = "enclaves_shavastos_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_shavastos_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_flamer_commander",
+				effectiveness = GenerateUnitEffectiveness(3.7,4.8,4.7,4.4,7.8,0.0,0.0,0.0,4.0,0.0,3.4,3.4,2.7,1.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Sub-commander Torchstar",
+		sbp_name = "enclaves_squad_torchstar",
+		ebp_name = "enclaves_torchstar",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_flamer_torchstar",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(7.1,8.3,8.0,8.3,8.0,7.6,7.6,6.4,7.1,7.1,7.1,6.4,6.4,6.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_crisis_melee_torchstar",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Sub-commander Torchstar (Kill Team)",
+		sbp_name = "enclaves_squad_torchstar_ktgm",
+		ebp_name = "enclaves_torchstar_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_flamer_torchstar",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_crisis_melee_torchstar",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Sub-commander Torchstar (Kill Team Beta)",
+		sbp_name = "enclaves_squad_torchstar1_ktgm",
+		ebp_name = "enclaves_torchstar_ktgm",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_flamer_torchstar",
+				effectiveness = GenerateUnitEffectiveness(math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,math.random(8.5*10,9.5*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "enclaves_crisis_melee",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "enclaves_crisis_melee_torchstar",
+				effectiveness = GenerateUnitEffectiveness(5.5,6.2,6.2,6.0,5.8,4.4,3.3,0.0,5.5,4.4,5.2,5.2,3.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Enclaves Combat Drone",
+		sbp_name = "enclaves_squad_gundrone",
+		ebp_name = "enclaves_gundrone",
+		class = UnitStatsAI.UC_Commander,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_twin_linked_pulse_carbine",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Missile Drone",
+		sbp_name = "enclaves_squad_gundrone_missile",
+		ebp_name = "enclaves_gundrone_missile",
+		class = UnitStatsAI.UC_Commander,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_drone",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Sniper Drone",
+		sbp_name = "enclaves_squad_gundrone_sniper",
+		ebp_name = "enclaves_gundrone_sniper",
+		class = UnitStatsAI.UC_Commander,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_rail_rifle_drone",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Heavy Gun Drone",
+		sbp_name = "enclaves_squad_gundrone_heavy",
+		ebp_name = "enclaves_gundrone_heavy",
+		class = UnitStatsAI.UC_Commander,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_drone",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Surviving Drones",
+		sbp_name = "enclaves_squad_drone_survivors",
+		ebp_name = "enclaves_drone_squad",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_twin_linked_pulse_carbine_drone",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Stealth Drone",
+		sbp_name = "enclaves_squad_drone_stealth",
+		ebp_name = "enclaves_drone_stealth",
+		class = UnitStatsAI.UC_AirLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_drone_stealth",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Diamondback Drone",
+		sbp_name = "enclaves_squad_drone_diamondback",
+		ebp_name = "enclaves_drone_diamondback",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_diamondback_drone_explode",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Tetra Speeder",
+		sbp_name = "enclaves_squad_tetra",
+		ebp_name = "enclaves_tetra",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_twin_linked_pulse_carbine_tetra",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Piranha Skimmer",
+		sbp_name = "enclaves_squad_piranha",
+		ebp_name = "enclaves_piranha",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "enclaves_rail_rifle_piranha_left",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_rail_rifle_piranha_right",
+				effectiveness = GenerateUnitEffectiveness(4.9,4.6,4.0,6.1,8.4,8.1,8.8,4.2,4.8,8.0,8.3,7.9,4.4,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Guevesa Sentinel",
+		sbp_name = "enclaves_squad_sentinel",
+		ebp_name = "enclaves_guevesa_sentinel",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_plasma_rifle_sentinel",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_sentinel",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_ion_cannon_sentinel",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_flamer_sentinel",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "enclaves_missile_launcher_sentinel",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Devilfish Assault Carrier",
+		sbp_name = "enclaves_squad_devilfish",
+		ebp_name = "enclaves_devilfish",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_devilfish",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_twin_linked_pulse_carbine_devilfish",
+				effectiveness = GenerateUnitEffectiveness(5.8,5.8,5.8,5.0,4.8,3.1,3.1,3.1,3.7,5.0,5.7,3.1,3.1,3.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_skyray_missle_1",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged
+			},
+			{
+				name = "enclaves_twin_linked_pulse_carbine_devilfish_right",
+				effectiveness = GenerateUnitEffectiveness(5.8,5.8,5.8,5.0,4.8,3.1,3.1,3.1,3.7,5.0,5.7,3.1,3.1,3.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_skyray_missle_2",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,5.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Devilfish Assault Carrier (Manta)",
+		sbp_name = "enclaves_squad_manta_devilfish",
+		ebp_name = "enclaves_squad_devilfish_check",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Skyray Missile Destroyer",
+		sbp_name = "enclaves_squad_skyray",
+		ebp_name = "enclaves_skyray",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_skyray",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_skyray_missle_1",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_skyray_missle_2",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Skyray Missile Destroyer Survival",
+		sbp_name = "enclaves_squad_skyray_survival",
+		ebp_name = "enclaves_skyray",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_skyray",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_skyray_missle_1",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_skyray_missle_2",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Skyray Missile Destroyer (Manta)",
+		sbp_name = "enclaves_squad_manta_skyray",
+		ebp_name = "enclaves_squad_skyray_check",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Heavy Drone Harbinger",
+		sbp_name = "enclaves_squad_harbinger",
+		ebp_name = "enclaves_harbinger",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_twin_linked_pulse_carbine_devilfish",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_twin_linked_pulse_carbine_devilfish_right",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.9,5.9,6.2,5.9,5.2,5.2,5.2,4.8,0.0,4.8,5.2,5.2,4.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Heavy Drone Harbinger (Manta)",
+		sbp_name = "enclaves_squad_manta_harbinger",
+		ebp_name = "enclaves_squad_harbinger_check",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Heavy Drone Harbinger Entrenched",
+		sbp_name = "enclaves_squad_harbinger_entrenched",
+		ebp_name = "enclaves_harbinger_entrenched",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(5.9,5.9,5.9,6.2,5.9,5.2,5.2,5.2,4.8,0.0,4.8,5.2,5.2,4.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Sunshark Bomber",
+		sbp_name = "enclaves_squad_sunshark",
+		ebp_name = "enclaves_sunshark",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "enclaves_ion_cannon_barracuda",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_barracuda",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_barracuda",
+				effectiveness = GenerateUnitEffectiveness(5.9,6.2,5.9,6.2,5.9,5.2,5.2,5.2,4.8,0.0,4.8,5.2,5.2,4.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Guevesa Thunderbolt",
+		sbp_name = "enclaves_squad_thunderbolt",
+		ebp_name = "enclaves_guevesa_thunderbolt",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_guevesa_thunderbolt_fusion_blaster",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_guevesa_thunderbolt_plasma_rifle",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_guevesa_thunderbolt_plasma_rifle_2",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.4,5.4,5.4,5.4,6.5,6.5,0.0,5.8,4.3,5.8,5.4,4.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_barracuda",
+				effectiveness = GenerateUnitEffectiveness(5.9,6.2,5.9,6.2,5.9,5.2,5.2,5.2,4.8,0.0,4.8,5.2,5.2,4.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Guevesa Basilisk",
+		sbp_name = "enclaves_squad_basilisk",
+		ebp_name = "enclaves_guevesa_basilisk",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_guevesa_cannon_basilisk",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_guevesa_flamer_basilisk",
+				effectiveness = GenerateUnitEffectiveness(5.8,5.8,5.8,5.0,4.8,3.1,3.1,3.1,3.7,5.0,5.7,3.1,3.1,3.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_guevesa_heavy_stubber_gunner",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Guevesa Diamondback",
+		sbp_name = "enclaves_squad_diamondback",
+		ebp_name = "enclaves_guevesa_diamondback",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_emp_battle_cannon_diamonback",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Hammerhead Gunship Mk II",
+		sbp_name = "enclaves_squad_hammerhead",
+		ebp_name = "enclaves_hammerhead",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_heavy_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_plasma_rifle_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_ion_cannon_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_crisis_suit_right",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Hammerhead Gunship Mk II Survival",
+		sbp_name = "enclaves_squad_hammerhead_survival",
+		ebp_name = "enclaves_hammerhead",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_heavy_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_fusion_blaster_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_plasma_rifle_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_ion_cannon_hammerhead",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,4.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_crisis_suit",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_crisis_suit_right",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Hammerhead Gunship Mk II (Manta)",
+		sbp_name = "enclaves_squad_manta_hammerhead",
+		ebp_name = "enclaves_squad_hammerhead_check",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,math.random(5*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Enclaves Swordfish Gunship",
+		sbp_name = "enclaves_squad_swordfish",
+		ebp_name = "enclaves_swordfish",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_devilfish",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_swordfish",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_swordfish2",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_rail_gun_swordfish_dual",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+--[[			},
+		}
+	},
+	{
+		name = "Enclaves Stingray Destroyer",
+		sbp_name = "enclaves_squad_swordfish_mk2",
+		ebp_name = "enclaves_swordfish",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_burst_cannon_devilfish",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_swordfish",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_pod_swordfish2",
+				effectiveness = GenerateUnitEffectiveness(8.1,8.8,8.6,8.5,8.3,7.1,7.0,5.7,8.6,6.8,6.5,8.3,5.1,4.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_rail_gun_swordfish_dual",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+]]
+			},
+		}
+	},
+	{
+		name = "Enclaves Tigershark AX10",
+		sbp_name = "enclaves_squad_tigershark_ax10",
+		ebp_name = "enclaves_tigershark_ax10",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_missile_launcher_skyray",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_tigershark",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_launcher_tigershark_left",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_missile_launcher_tigershark_right",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_ion_cannon_tigershark_ax10",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Enclaves Manta",
+		sbp_name = "enclaves_squad_manta",
+		ebp_name = "enclaves_manta",
+		class = UnitStatsAI.UC_AirHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "enclaves_rail_gun_manta",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_burst_cannon_manta",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_manta_missile_artillery",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "enclaves_manta_missile",
+				effectiveness = GenerateUnitEffectiveness(9.3,10.0,10.0,9.8,9.3,10.0,10.0,9.8,10.0,9.6,7.4,9.0,8.1,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+
+		}
+	},
+}

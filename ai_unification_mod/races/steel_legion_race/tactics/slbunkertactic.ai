@@ -1,0 +1,13 @@
+----------------------------------------
+-- File: 'slbunkertactic.ai'
+-- Edited by Thudmeizer		@ 29.09.2007
+
+class 'SLBunkerTactic' (BaseTactic)
+
+function SLBunkerTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("SL Bunker Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end

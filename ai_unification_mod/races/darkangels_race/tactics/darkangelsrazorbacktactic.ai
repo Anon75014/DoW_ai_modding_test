@@ -1,0 +1,41 @@
+----------------------------------------
+-- File: 'darkangelsrazorbacktactic.ai'
+-- Edited by Thudmeizer		@ 31.07.2008
+
+class 'DarkAngelsRazorbackTactic' (DarkAngelsVehicleTactic)
+
+DarkAngelsRazorback = {}
+
+function DarkAngelsRazorbackTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Razorback Tactic")
+	
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function DarkAngelsRazorbackTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DarkAngelsRazorback.smoke_id == nil) then
+		DarkAngelsRazorback.smoke_id = cpu_manager.stats:GetAbilityID( "darkangels_smoke_launchers" )	
+	end
+end
+
+function DarkAngelsRazorbackTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(DarkAngelsRazorback.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(DarkAngelsRazorback.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(DarkAngelsRazorback.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call standard method
+	DarkAngelsVehicleTactic.DoAbilities(self)
+end

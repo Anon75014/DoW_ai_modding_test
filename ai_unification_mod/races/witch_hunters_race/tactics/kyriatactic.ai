@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'kyriatactic.ai'
+-- Edited by Gambit   @ 3.6.2021
+
+class 'KyriaTactic' (WitchHuntersInfantryTactic)
+
+Kyria = {}
+
+function KyriaTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Kyria Draxus Tactic")
+end
+
+function KyriaTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function KyriaTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function KyriaTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Kyria.paralysis_id == nil then
+		Kyria.paralysis_id = cpu_manager.stats:GetAbilityID( "witch_hunters_kyria_paralysis_grenades" )
+		Kyria.smite_id = cpu_manager.stats:GetAbilityID( "witch_hunters_kyria_smite" )
+	end
+end
+
+
+function KyriaTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+        if self.squad_ai:CanDoAbility(Kyria.paralysis_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, Kyria.paralysis_id, Ability.Filters.CloseSquadEnemy, 4 )
+            or Ability.DoAbilityTarget( self.squad_ai, Kyria.paralysis_id, Ability.Filters.CloseCommanderEnemy, 1 ) then
+				return
+            end
+        end
+
+		if self.squad_ai:CanDoAbility(Kyria.smite_id) then
+			if Ability.DoAbilityPos( self.squad_ai, Kyria.smite_id, Ability.Filters.CloseInfantryEnemy, 4 )
+			or Ability.DoAbilityPos( self.squad_ai, Kyria.smite_id, Ability.Filters.CloseMonsterEnemy, 4 ) then
+				return
+			end
+		end
+	end
+end
+
+
+function KyriaTactic:Reinforce()
+end
+

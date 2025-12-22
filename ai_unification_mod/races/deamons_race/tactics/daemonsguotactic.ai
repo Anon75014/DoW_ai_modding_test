@@ -1,0 +1,37 @@
+----------------------------------------
+-- File: 'DaemonsGuoTactic.ai'
+-- Edited by fuggles 27.05.2013
+
+class 'DaemonsGuoTactic' (DaemonsInfantryTactic)
+
+DaemonsGuo = {}
+
+function DaemonsGuoTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemons Guo Tactic")
+
+end
+
+function DaemonsGuoTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DaemonsGuo.puke_id == nil) then
+		DaemonsGuo.puke_id = cpu_manager.stats:GetAbilityID( "daemons_guo_puke" )
+	end
+	if (DaemonsGuo.spit_id == nil) then
+		DaemonsGuo.spit_id = cpu_manager.stats:GetAbilityID( "daemons_guo_spit" )
+	end
+	
+end
+
+function DaemonsGuoTactic:DoAbilities()
+
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	if ( iPower >= 50 ) then
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsGuo.puke_id, Ability.Filters.CloseSquadEnemy, 2 )
+	end
+	if ( iPower >= 50 ) then
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsGuo.spit_id, Ability.Filters.CloseSquadEnemy, 2 )
+	end
+end

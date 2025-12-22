@@ -1,0 +1,89 @@
+----------------------------------------
+-- File: 'pedrokantortactic.ai'
+-- Edited by Thudmeizer @ 11.09.2024
+
+class 'PedroKantorTactic' (ImperialFistsInfantryTactic)
+
+PedroKantor = {}
+
+function PedroKantorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Pedro Kantor Tactic")
+end
+
+function PedroKantorTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function PedroKantorTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function PedroKantorTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (PedroKantor.battlecry == nil) then
+		PedroKantor.battlecry = cpu_manager.stats:GetAbilityID( "imperial_fists_battlecry" )
+	end
+
+	if (PedroKantor.guide == nil) then
+		PedroKantor.guide = cpu_manager.stats:GetAbilityID( "imperial_fists_pedro_guide" )
+	end
+
+	if (PedroKantor.halo == nil) then
+		PedroKantor.halo = cpu_manager.stats:GetAbilityID( "imperial_fists_pedro_iron_halo" )
+	end
+end
+
+function PedroKantorTactic:DoAbilities()
+
+	-- Try to use battlecry
+	Ability.DoAbilityArea(self.squad_ai, PedroKantor.battlecry, Ability.Filters.CloseInCombat, 10, 1)
+
+	-- Try to use guide
+	if (self.squad_ai:CanDoAbility(PedroKantor.guide)) then
+		local range = self.squad_ai:GetAbilityRange( PedroKantor.guide )	
+		local squad_filter = function( squad_ai )		
+			return squad_ai:IsInCombat() and squad_ai:IsInStateAttackMove() and 
+					squad_ai:GetNumTroopers() >= 4 and not squad_ai:IsBroken() and
+					not squad_ai:IsCapturing()
+		end	
+   		local target_squad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), range, squad_filter )
+		if (target_squad ~= nil) then
+			self.squad_ai:DoSpecialAbilitySquad( PedroKantor.guide, target_squad:GetSquad() )
+ 		end
+	end
+
+	-- Try to use Iron Halo while in combat and when a low health threshold is reached
+	if self.squad_ai:IsInCombat() then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+			if (self.squad_ai:CanDoAbility(PedroKantor.halo)) then
+				self.squad_ai:DoSpecialAbility(PedroKantor.halo)
+			end	  
+		end
+	end
+end
+
+function PedroKantorTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier2+
+	if (self.squad_ai:GetMeleeStance() == SquadAI.MSTANCE_Assault) then
+         
+        	if (self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt()) then
+        
+            		if (self:TryAttachSquad(false, true, 50, 150, self.m_fCommanderAttachHealth) == nil) then
+                		self:TryAttachSquadMelee()
+            		end
+        	end
+    	end
+end

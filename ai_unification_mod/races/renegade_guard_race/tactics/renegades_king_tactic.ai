@@ -1,0 +1,26 @@
+----------------------------------------
+-- File: 'renegades_king_tactic.ai'
+-- Edited by Thudmeizer		@ 04.05.2023
+
+class 'Renegades_King_Tactic' (Renegades_Vehicle_Tactic)
+
+Renegades_King = {}
+
+function Renegades_King_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades King Tactic")
+end
+
+function Renegades_King_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Renegades_King.rage_id == nil) then
+		Renegades_King.rage_id = cpu_manager.stats:GetAbilityID("renegade_guard_oni_rage")
+	end
+end
+
+function Renegades_King_Tactic:DoAbilities()
+
+	-- Activate Rage when close to the enemy
+	Ability.DoAbilityArea( self.squad_ai, Renegades_King.rage_id, Ability.Filters.CloseEnemy, 5, 2 )
+end

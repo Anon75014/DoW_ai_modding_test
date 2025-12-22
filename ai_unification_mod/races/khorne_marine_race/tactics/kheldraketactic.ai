@@ -1,0 +1,92 @@
+----------------------------------------
+-- File: 'kheldraketactic.ai'
+-- Edited by Gambit @ 30.12.2020
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kHeldrakeTactic' (kVehicleTactic)
+
+function kHeldrakeTactic:__init( squad_ai ) super( squad_ai )
+	
+	self:SetName("Hell Drake Tactic")
+end
+
+function kHeldrakeTactic:DoAbilities()
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:kSolveStuckCase(false)
+end
+
+--------------------------------------------------------------------------
+-- Gambit: Addition for solving pathing issues for squads that can jump --
+--------------------------------------------------------------------------
+
+function kHeldrakeTactic:kSolveStuckCase(multi_membered)
+
+	-- Make no attempt if we cannot jump or we are in combat
+	if not self.squad_ai:CanJump() or self.squad_ai:IsInCombat() then
+		return
+	end
+
+	-- In case this is the first time, initialise the required vars
+	if self.initialPosStuck == nil or self.isSquadStuck == nil then
+		self.initialPosStuck = self.squad_ai:GetPosition()
+		self.isSquadStuck = false
+	end
+
+	-- For multi-entities squads, we ALSO need to check for distances amongst the individuals
+	-- The best scenario to use this option is for FLYING multi-membered squads in DC maps.
+	if multi_membered == true then
+		local entity_positions_array = {}
+		for entity in self.squad_ai:GetEntities() do
+			table.insert(entity_positions_array, entity:GetPosition())
+		end
+		local members = table.getn(entity_positions_array)
+		-- Check if we indeed have a multi-entity squad
+		if members > 1 then
+			for i=1, members do
+				for j=i+1, members do
+					if distance_sqr(entity_positions_array[i], entity_positions_array[j]) > 300 then
+						self:kForceStuckSquadJumpNear(self.squad_ai:GetPosition())
+						return
+					end
+				end
+			end
+		end
+	end
+
+	-- Check if we are stuck
+	local iPos = self.squad_ai:GetPosition()
+	if iPos.x ~= self.initialPosStuck.x or iPos.z ~= self.initialPosStuck.z then
+		self.isSquadStuck = false
+	elseif (self.squad_ai:IsInStateMove() or self.squad_ai:IsInStateAttackMove())
+	and iPos.x == self.initialPosStuck.x and iPos.z == self.initialPosStuck.z then
+		self.isSquadStuck = true
+	end
+
+	if self.isSquadStuck then
+		self:kForceStuckSquadJumpNear(iPos)
+	end
+
+	self.initialPosStuck = self.squad_ai:GetPosition()
+end
+
+-- Performs numerous (maximum 16) nearby jump attempts
+function kHeldrakeTactic:kForceStuckSquadJumpNear(pos)
+
+	local jumpDisSqr = sqr(self.squad_ai:GetJumpDistance())
+	for i = 1, 16 do
+		-- Create a jump position
+		local vJumpPosition = pos
+		local vDir = cpu_manager:GetDirectionToEnemy(pos)
+		vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(-5,34)
+		vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(-5,34)
+		-- Check if target position is in range and if unit is able to jump to target position
+		if distance_sqr(vJumpPosition, pos) < jumpDisSqr and self.squad_ai:CanJumpToPosition(vJumpPosition) then
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			return
+		end
+	end
+end

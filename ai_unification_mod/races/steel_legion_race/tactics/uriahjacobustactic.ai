@@ -1,0 +1,77 @@
+----------------------------------------
+-- File: 'UriahJacobustactic.ai'
+-- Edited by Thudmeizer @ 22.02.2009
+
+class 'UriahJacobusTactic' (SteelLegionInfantryTactic)
+
+UriahJacobus = {}
+
+function UriahJacobusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Uriah Jacobus Tactic")
+end
+
+function UriahJacobusTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function UriahJacobusTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function UriahJacobusTactic:InitAbilities()
+
+	if (UriahJacobus.frenzy_id == nil) then
+	    UriahJacobus.frenzy_id = cpu_manager.stats:GetAbilityID( "steel_legion_uriah_jacobus_frenzy" )	
+	end
+	
+	if (UriahJacobus.cocktail_id == nil) then
+	    UriahJacobus.cocktail_id = cpu_manager.stats:GetAbilityID( "steel_legion_molotov_cocktail" )	
+	end
+
+	if (UriahJacobus.rally_id == nil) then
+	    UriahJacobus.rally_id = cpu_manager.stats:GetAbilityID( "steel_legion_rally_jacobus" )	
+	end
+end
+
+function UriahJacobusTactic:DoAbilities()
+
+        --SelfUse: When activated, he cannot die while melee damage and charge range is increased - short duration
+	Ability.DoAbilityArea( self.squad_ai, UriahJacobus.frenzy_id, Ability.Filters.CloseInCombat, 10, 1 ) 
+
+        --TargetInfantry: Flame attack, effective against infantry, commanders, and monsters
+	Ability.DoAbilityTarget( self.squad_ai, UriahJacobus.cocktail_id, Ability.Filters.CloseSquadEnemy, 1 ) 
+	Ability.DoAbilityTarget( self.squad_ai, UriahJacobus.cocktail_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+	Ability.DoAbilityTarget( self.squad_ai, UriahJacobus.cocktail_id, Ability.Filters.CloseMonsterEnemy, 1 ) 
+
+	--check if I can repair my morale
+        if (self.squad_ai:IsAttached() and self.squad_ai:IsBroken()) then
+	  	  
+		if self.squad_ai:CanDoAbility( UriahJacobus.rally_id ) then
+			self.squad_ai:DoSpecialAbility( UriahJacobus.rally_id )
+  	  	end
+     	end
+end
+
+function UriahJacobusTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

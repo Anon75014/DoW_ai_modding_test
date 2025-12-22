@@ -1,0 +1,975 @@
+----------------------------------------
+-- File: 'renegade_guardbuildbasestrategy.ai'
+-- Edited by Gambit 	@ 15.08.2017
+-- Edited by Kekoulis   @ 12.04.2024
+-- Edited by Thudmeizer @ 06.11.2025
+
+class 'Renegade_GuardBuildBaseStrategy' (BuildBaseStrategy)
+
+function Renegade_GuardBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+	
+	-- Add detector units (Best first, worst last)	
+	self:AddDetectorUnit("renegade_guard_squad_tekarn_damocles")
+	self:AddDetectorUnit("renegade_guard_squad_psyker_coven")
+	self:AddDetectorUnit("renegade_guard_squad_tekarn_reporter")
+	self:AddDetectorUnit("renegade_guard_squad_eversor")
+	self:AddDetectorUnit("renegade_guard_squad_rogaldorn")
+	self:AddDetectorUnit("renegade_guard_squad_herrscher")
+	self:AddDetectorUnit("renegade_guard_squad_mutant_overlord")
+	self:AddDetectorUnit("renegade_guard_squad_master_of_the_horde")
+	self:AddDetectorUnit("renegade_guard_squad_tekarn_boba")
+
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_eternal_eclipse_research", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_yorha_division", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("addon_renegade_guard_giga_thor", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_renegade_guard_leman_cryo", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_stormtrooper_tekarn", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_herrscher", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_herrscher_advance_sp", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_yae_no_seegs", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_balalaika", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_colonel", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_boba", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_yorha", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_baneblade", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_king_oni", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_executioner", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_dominus_knight", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_rogaldorn", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_scion", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_scion_advance_sp", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_stormrider", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_iron_venti", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_tank_ace", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("renegade_guard_squad_tekarn_kaga", CpuPrerequisites.BT_Squad)
+
+	-- Choose one of five research patterns for the Chaos Mark
+	self.m_iChaosGodResearchPattern = math.random(1, 5)
+
+    	-- The switch for the Commander LS/KTGM WarGear Researches
+    	G_KTGM_Commander_WG_Choice_Made = false
+end
+
+function Renegade_GuardBuildBaseStrategy:ChooseBuildProgram()
+
+	if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 1 then
+		RG_AI_StrategyChosen = 1   -- Xaphan
+		return RG_AI_StrategyChosen
+	elseif cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_mutant_overlord") or RG_AI_StrategyChosen == 2 then
+		RG_AI_StrategyChosen = 2   -- Raiden
+		return RG_AI_StrategyChosen
+	end
+end
+
+function Renegade_GuardBuildBaseStrategy:EvaluateSquadCap()
+
+	if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 1 then
+
+		-- Check squad cap
+		if (self:CheckSquadCap(300, 0)) then
+	
+			-- Check if a plan exists
+			local iBuildingID = cpu_manager.stats:GetBuildingID("renegade_guard_infantry_horde")
+			if (self:PlanExists("Build Building Plan", iBuildingID)) then
+				return
+			end
+
+			-- Check if any barracks are in production
+			for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+				-- Check building ID
+				if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+					return
+				end
+			end
+		
+			-- Build a barracks
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Building
+			tBuildType.name = "renegade_guard_infantry_horde"
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+			return
+		end
+	
+		-- Check support cap
+		if (self:CheckSupportCap(150, 300)) then
+	
+			-- Check if a plan exists
+			local iBuildingID = cpu_manager.stats:GetBuildingID("renegade_guard_mechanized")
+			if (self:PlanExists("Build Building Plan", iBuildingID)) then
+				return
+			end
+		
+			-- Check if any vehicle buildings are in production
+			for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+				-- Check building ID
+				if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+					return
+				end
+			end
+		
+			-- Build a vehicle building
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Building
+			tBuildType.name = "renegade_guard_mechanized"
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+			return
+		end
+
+	else
+		-- Check squad cap
+		if (self:CheckSquadCap(350, 0)) then
+		
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Research
+		
+			if (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_squad_cap_research" )) then
+				tBuildType.name = "renegade_guard_squad_cap_research"
+			elseif (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_squad_cap_research_1" )) then
+				tBuildType.name = "renegade_guard_squad_cap_research_1"
+			elseif (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_squad_cap_research_2" )) then
+				tBuildType.name = "renegade_guard_squad_cap_research_2"
+			elseif (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_squad_cap_research_3" )) then
+				tBuildType.name = "renegade_guard_squad_cap_research_3"
+			else
+				return
+			end
+		
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic research of "..tBuildType.name)
+			end
+		end
+
+		-- Check support cap
+		if (self:CheckSupportCap(300, 0)) then
+		
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Research
+
+			if (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_support_cap_research" )) then
+				tBuildType.name = "renegade_guard_support_cap_research"		
+			elseif (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_support_cap_research_1" )) then
+				tBuildType.name = "renegade_guard_support_cap_research_1"
+			elseif (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_support_cap_research_2" )) then
+				tBuildType.name = "renegade_guard_support_cap_research_2"
+			elseif (not cpu_manager.cpu_player:IsResearchComplete( "renegade_guard_support_cap_research_3" )) then
+				tBuildType.name = "renegade_guard_support_cap_research_3"
+			else
+				return
+			end
+		
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic research of "..tBuildType.name)
+			end
+		end
+	end
+end
+
+function Renegade_GuardBuildBaseStrategy:GetBuildingName( sType )
+
+	-- Return race specific object string
+	if (sType == "HQ") then
+		return "renegade_guard_hq"
+
+	elseif (sType == "Generator") then
+		if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 1 then
+			return "renegade_guard_plasma_generator"
+		else
+			return "renegade_guard_plasma_generator_raiden"
+		end
+
+	elseif (sType == "BiggerGenerator") then
+		if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 1 then
+			return "renegade_guard_thermo_plasma"
+		else
+			return "renegade_guard_thermo_plasma_raiden"
+		end
+
+	elseif (sType == "VehicleBuilding") then
+		if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 1 then
+			return "renegade_guard_mechanized"
+		else
+			return "renegade_guard_machine_pit"
+		end
+
+	elseif (sType == "ListeningPost") then
+		return "renegade_guard_listening_post"
+
+	elseif (sType == "Turret") then
+		return "renegade_guard_turret_heavy_bolter"
+
+	elseif (sType == "Mine") then
+		return "renegade_guard_mines"
+	end
+	return nil
+end
+
+function Renegade_GuardBuildBaseStrategy:GetAddonBuilding( sType )
+
+	if (sType == "addon_renegade_guard_hq_1" or sType == "addon_renegade_guard_hq_2") then
+		return "renegade_guard_hq"
+
+	elseif (sType == "addon_renegade_guard_list_post_1" or sType == "addon_renegade_guard_list_post_2") then
+		return "renegade_guard_listening_post"
+
+	elseif (sType == "addon_renegade_guard_turret" or sType == "addon_renegade_guard_turret_stealth") then
+		return "renegade_guard_turret_heavy_bolter"
+
+	elseif (sType == "addon_renegade_guard_turret" or sType == "addon_renegade_guard_turret_stealth") then
+		return "renegade_guard_turret_heavy_bolter_no_limit"
+
+	elseif (sType == "addon_renegade_guard_basilisk_gas") then
+		return "renegade_guard_earthshaker_platform"
+	end
+	return nil
+end
+
+-- Arkhan 01.2006: Inherited method to check if an addon is a tier addon
+function Renegade_GuardBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+
+	-- Check addon name and target tier
+	if (sName == "addon_renegade_guard_hq_1" and iTargetTier == 2) then
+		return true
+	elseif (sName == "addon_renegade_guard_hq_2" and iTargetTier == 3) then
+		return true
+	end
+	return false
+end
+
+-- Arkhan 11.2005: Returns the squad cap and support cap of the given squad
+function Renegade_GuardBuildBaseStrategy:GetUnitStats(sSquadName)
+
+	if (sSquadName == "renegade_guard_squad_tekarn_scout") then
+		return 1, 0
+	elseif (sSquadName == "renegade_guard_squad_fanatics") then
+		return 2, 0
+	elseif (sSquadName == "renegade_guard_squad_guardsmen_horde") then
+		return 2, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn") then
+		return 2, 0
+	elseif (sSquadName == "renegade_guard_squad_stormtrooper_tekarn") then
+		return 2, 0
+	elseif (sSquadName == "renegade_guard_squad_master_of_the_horde") then
+		return 2, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_tankbuster") then
+		return 2, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_archer") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_beastmen") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_rocketeer") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_skitarii") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_yorha") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_ogryns") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_ogryns") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_kasrkin") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_eradicator") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_assassin") then
+		return 3, 0
+	elseif (sSquadName == "renegade_guard_squad_scion") then
+		return 4, 0
+	elseif (sSquadName == "renegade_guard_squad_heavy_weapons_militia") then
+		return 5, 0
+	elseif (sSquadName == "renegade_guard_squad_tekarn_chimera") then
+		return 0, 1
+	elseif (sSquadName == "renegade_guard_squad_chimera") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_testudo") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_sentinel") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_sentinel_striker") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_hellhound") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_thunderbolt") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_tsunami") then
+		return 0, 2
+	elseif (sSquadName == "renegade_guard_squad_tekarn_tank_ace") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_tekarn_damocles") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_forgefiend") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_basilisk") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_medusa") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_griffon") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_stalk_tank") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_laser_destroyer") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_iron_venti") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_decimator_walker") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_macharius") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_tekarn_baneblade") then
+		return 0, 3
+	elseif (sSquadName == "renegade_guard_squad_tekarn_predator") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_tekarn_stormrider") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_avenger") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_vendetta") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_infernus") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_malcador") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_stormlord") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_baneblade") then
+		return 0, 4
+	elseif (sSquadName == "renegade_guard_squad_lemanruss") then
+		return 0, 5
+	elseif (sSquadName == "renegade_guard_squad_giga_fortress") then
+		return 0, 5
+	elseif (sSquadName == "renegade_guard_squad_tekarn_king_oni") then
+		return 0, 6
+	elseif (sSquadName == "renegade_guard_squad_rogaldorn") then
+		return 0, 6
+	elseif (sSquadName == "renegade_guard_squad_banesword") then
+		return 0, 6
+	elseif (sSquadName == "renegade_guard_squad_tekarn_executioner") then
+		return 0, 10
+	elseif (sSquadName == "renegade_guard_squad_dominus_knight") then
+		return 0, 10
+	end
+	return 0, 0
+end
+
+function Renegade_GuardBuildBaseStrategy:UpdateTierLevel()
+
+	-- Reset tier level
+	self.tierLevel = 1
+
+	-- Prepare
+	local iHQAddon1ID = cpu_manager.stats:GetAddOnID("addon_renegade_guard_hq_1")
+	local iHQAddon2ID = cpu_manager.stats:GetAddOnID("addon_renegade_guard_hq_2")
+	local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+
+	-- Check HQ's for addons
+	for oBase in oStats:GetBases() do
+
+		-- Check for valid building
+		if (oBase:IsValid() and not oBase:IsListeningPost()) then
+
+		  	-- Check for HQ addon 2
+			if (oBase:HasAddOn(iHQAddon2ID)) then
+
+				-- We still have the proper add-on
+				if (cpu_manager.cpu_player:IsResearchComplete("renegade_guard_full_scale_war")) then
+					self.tierLevel = 4
+					return
+				elseif (oBase:HasAddOn(iHQAddon2ID)) then
+					self.tierLevel = 3
+					return
+				end
+
+			-- Check for HQ addon 1 
+			elseif (oBase:HasAddOn(iHQAddon1ID)) then
+				self.tierLevel = 2
+				return
+			end
+		end
+	end
+end
+
+function Renegade_GuardBuildBaseStrategy:BuildFlexible()
+
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") then
+
+		-- For Master of the Horde builder units
+		self:BuildFirstBuilder("renegade_guard_squad_enginseer")
+
+	elseif cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_mutant_overlord") then
+
+		-- For Tekarn builder units
+		self:BuildFirstBuilder("renegade_guard_squad_tekarn_engineer")
+
+	else
+		-- Declare no builders if no branch research selected thus skip
+	end
+
+	-- Renegades Last Standing Hero Wargear
+	local iHeroLSCommanderSquads = self:CountSquads("renegade_guard_squad_mutant_overlord_ktgm")
+	if iHeroLSCommanderSquads > 0 then
+
+		if not G_KTGM_Commander_WG_Choice_Made then
+			 -- WARNING: Below, ALWAYS insert numbers <= of the total in each table!
+           		 -- I used the actual total of each table, so that ALL will be randomly available
+            		i_WG_Selection_number1 = 15	-- The number of researches to randomize, from the 1st table
+            		i_WG_Selection_number2 = 8	-- The number of researches to randomize, from the 2nd table
+
+            		i_WG_Selections1 = {
+                	{"renegade_guard_ls_champion_melee_research_1", 1, 100, 100, 0, 0, nil, 0},
+                	{"renegade_guard_ls_champion_melee_research_2", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_mighty_shogun_aura", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_shogun_aura", 1, 75, 75, 0, 0, nil, 0},
+                	{"renegade_guard_ls_warriors_assist", 1, 75, 75, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_01", 1, 75, 75, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_02", 1, 100, 100, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_03", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_04", 1, 100, 100, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_05", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_06", 1, 100, 100, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_07", 1, 100, 100, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_08", 1, 100, 100, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_09", 1, 150, 150, 0, 0, nil, 0},
+                	{"renegade_guard_ls_wargear_upgrade_10", 1, 200, 200, 0, 0, nil, 0}}
+
+            		i_WG_Selections2 = {
+                	{"renegade_guard_ls_vow1", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow2", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow3", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow4", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow5", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow6", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow7", 1, 125, 125, 0, 0, nil, 0},
+                	{"renegade_guard_ls_vow8", 1, 125, 125, 0, 0, nil, 0}}
+
+            		-- The switch ensures we make the choice only ONCE
+            		G_KTGM_Commander_WG_Choice_Made = true
+            		i_WG_Rdm1 = {}          -- The random Selections from the 1st table
+            		i_WG_Rdm2 = {}          -- The random Selections from the 2nd table
+
+            		-- Populate the two random tables with the number of researches we need for each
+            		for i = 1, i_WG_Selection_number1 do
+                		local selection = math.random(1, table.getn(i_WG_Selections1))
+                		table.insert(i_WG_Rdm1, i_WG_Selections1[selection])
+                		table.remove(i_WG_Selections1, selection)
+            		end
+
+            		for i = 1, i_WG_Selection_number2 do
+                		local selection = math.random(1, table.getn(i_WG_Selections2))
+                		table.insert(i_WG_Rdm2, i_WG_Selections2[selection])
+                		table.remove(i_WG_Selections2, selection)
+            		end
+		end
+
+       		-- We are done. Perform the Researches
+        	for i = 1, table.getn(i_WG_Rdm1) do
+            		self:DynamicResearch(i_WG_Rdm1[i][1], 0, i_WG_Rdm1[i][3], i_WG_Rdm1[i][4], 0, 0, nil, 0)
+        	end
+
+    		for i = 1, table.getn(i_WG_Rdm2) do
+       			self:DynamicResearch(i_WG_Rdm2[i][1], 0, i_WG_Rdm2[i][3], i_WG_Rdm2[i][4], 0, 0, nil, 0)
+       		end
+	end
+
+	-- Dynamic research item syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+
+	-- Compute tier 1 researches
+	if (self.tierLevel >= 1) then
+	
+		-- Compute secondary researches
+		self:DynamicResearch("renegade_guard_upgrade_guardsmen_health", 1, 100, 50, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_guardsman_morale", 1, 75, 15, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_champion_melee_research_1", 1, 40, 20, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_general_wargear_1", 1, 80, 50, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_plasma_pistol_research", 1, 50, 30, 0, 0, nil, 0)
+	end
+
+	-- Compute tier 2 researches
+	if (self.tierLevel >= 2) then
+
+		-- Compute basic infantry researches
+		self:DynamicResearch("renegade_guard_champion_melee_research_2", 2, 50, 30, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_upgrade_guardsmen_range", 2, 100, 25, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_guardsman_morale_2", 2, 75, 50, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_upgrade_weapon_specialization", 2, 100, 100, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_general_wargear_2", 2, 100, 100, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_raiden_aura_unlock", 2, 85, 35, 0, 0, nil, 0)	
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("renegade_guard_turret_heavy_bolter_no_limit", 2, 2, 200, 100, 0, 0)			
+	end
+
+	-- Compute tier 3 researches
+	if (self.tierLevel >= 3) then
+	
+		-- Compute one of five Chaos God Choices
+		if (self.m_iChaosGodResearchPattern == 1) then
+			self:DynamicResearch("renegade_guard_research_mark_of_khorne", 3, 0, 0, 0, 0, nil, 0)
+		elseif (self.m_iChaosGodResearchPattern == 2) then
+			self:DynamicResearch("renegade_guard_research_mark_of_nurgle", 3, 0, 0, 0, 0, nil, 0)
+		elseif (self.m_iChaosGodResearchPattern == 3) then
+			self:DynamicResearch("renegade_guard_research_mark_of_tzeentch", 3, 0, 0, 0, 0, nil, 0)
+		elseif (self.m_iChaosGodResearchPattern == 4) then
+			self:DynamicResearch("renegade_guard_research_mark_of_slaanesh", 3, 0, 0, 0, 0, nil, 0)
+		elseif (self.m_iChaosGodResearchPattern == 5) then
+			self:DynamicResearch("renegade_guard_research_mark_of_undivided", 3, 0, 0, 0, 0, nil, 0)
+		end
+
+		-- Compute Turret / Chimera Stealth research
+		if (self:CountSquads("renegade_guard_squad_tekarn_chimera") >= 1) or (self:CountSquads("renegade_guard_squad_vendetta") >= 1) then
+			self:DynamicResearch("renegade_guard_stealth_coating", 3, 200, 100, 0, 0, nil, 0)
+		end
+
+		-- Compute additional building health research
+		self:DynamicResearch("renegade_guard_research_prepared_defences", 3, 300, 100, 0, 0, nil, 0)
+
+		-- Compute optimized production research
+		self:DynamicResearch("renegade_guard_upgrade_optimized_production", 3, 200, 120, 0, 0, nil, 0)
+
+		-- Compute master of the horde researches
+		if (self:CountSquads("renegade_guard_squad_master_of_the_horde") >= 1) then
+			self:DynamicResearch("renegade_guard_general_wargear_3", 3, 100, 100, 0, 0, nil, 0)
+		end
+
+		-- Compute secondary researches
+		-- Compute kasrkin researches
+		if (self:CountSquads("renegade_guard_squad_kasrkin") >= 1) then
+			self:DynamicResearch("renegade_guard_research_kasrkin_armor", 3, 100, 50, 0, 0, nil, 0)
+			self:DynamicResearch("renegade_guard_research_kasrkin_speed", 3, 100, 50, 0, 0, nil, 0)
+		end
+
+		-- Compute ogyrn or medic researches
+		if (self:CountSquads("renegade_guard_squad_ogryns") >= 1) or (self:CountSquads("renegade_guard_squad_medic") >= 1) then
+			self:DynamicResearch("renegade_guard_upgrade_ogryn_melee", 3, 100, 75, 0, 0, nil, 0)
+		end
+
+		-- Compute mortar research
+		if (self:CountSquads("renegade_guard_squad_tekarn_archer") >= 1) or (self:CountSquads("renegade_guard_squad_tengu") >= 1) or (self:CountSquads("renegade_guard_squad_tekarn_ronin") >= 1) then
+			self:DynamicResearch("renegade_guard_research_mortar", 3, 100, 80, 0, 0, nil, 0)
+		end
+
+		-- Compute tsunami tank researches
+		if (self:CountSquads("renegade_guard_squad_tsunami") >= 1) then
+			self:DynamicResearch("renegade_guard_tsunami_coilgun_improvement", 3, 80, 60, 0, 0, nil, 0)
+		end
+		
+		-- Compute T3->T4 major research as AI sometimes fails to research
+		self:DynamicResearch("renegade_guard_full_scale_war", 3, 450, 450, 0, 0, nil, 0)
+
+		-- Force build additional generators in late game if we can with enough requisition and when low on power
+                local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+                local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+                if iReq > 400 and iReq/iPow > 1.6 then
+
+                	-- Check if a plan exists
+                	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("Generator"))
+                    	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+                       		return
+                    	end
+
+             		-- Check if any generators are in production
+                    	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+                        	-- Check building ID
+                        	if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+                            		return
+                        	end
+                    	end
+
+             		-- Build a Generator
+                    	local tBuildType = CpuBuildType()
+                    	tBuildType.btype = CpuPrerequisites.BT_Building
+                    	tBuildType.name = self:GetBuildingName("Generator")
+                    	if (self:TryBuild( tBuildType )) then
+               			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("renegade_guard_turret_heavy_bolter_no_limit", 4, 3, 300, 200, 0, 0)
+	end
+
+	-- Compute tier 4 researches
+	if (self.tierLevel >= 4) then
+
+		-- Try to force build a Mars Pattern as sometimes the AI fails to build one
+		if (self:GetBuildingCountByName("renegade_guard_mars_pattern") < 1) then
+
+			-- Check if a plan exists
+			local iBuildingID = cpu_manager.stats:GetBuildingID("renegade_guard_mars_pattern")
+			if (self:PlanExists("Build Building Plan", iBuildingID)) then
+				return
+			end
+
+			-- Check if any mars patterns are in production
+			for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+				-- Check building ID
+				if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+					return
+				end	
+			end
+		
+			-- Build a Mars Pattern
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Building
+			tBuildType.name = "renegade_guard_mars_pattern"
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+
+		-- Try to force build a Tri-Cannon Platform or Tesla Coil as sometimes the AI fails to build one for the Mutant Branch
+		if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_mutant_overlord") or RG_AI_StrategyChosen == 2 then --or RG_AI_StrategyChosen == 4 then
+
+			if (self:GetBuildingCountByName("renegade_guard_tricannon_platform") < 1) then
+
+				-- Check resources
+				local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+				local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+				-- Check resources
+				if (iRequisition > 400 and iPower > 400) then
+
+					-- Check if a plan exists
+					local iBuildingID = cpu_manager.stats:GetBuildingID("renegade_guard_tricannon_platform")
+					if (self:PlanExists("Build Building Plan", iBuildingID)) then
+						return
+					end
+
+					-- Check if any tri-cannon platforms are in production
+					for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+						-- Check building ID
+						if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+							return
+						end	
+					end
+		
+					-- Build a Tri-Cannon Platform
+					local tBuildType = CpuBuildType()
+					tBuildType.btype = CpuPrerequisites.BT_Building
+					tBuildType.name = "renegade_guard_tricannon_platform"
+					if (self:TryBuild( tBuildType )) then
+						aitrace("BuildController: Dynamic build of "..tBuildType.name)
+					end
+				end
+			end
+
+			if cpu_manager.cpu_player:IsResearchComplete("0liyue_enable") then
+
+				if (self:GetBuildingCountByName("renegade_guard_tesla_coil") < 1) then
+
+					-- Check if a plan exists
+					local iBuildingID = cpu_manager.stats:GetBuildingID("renegade_guard_tesla_coil")
+					if (self:PlanExists("Build Building Plan", iBuildingID)) then
+						return
+					end
+
+					-- Check if any tesla coils are in production
+					for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+						-- Check building ID
+						if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+							return
+						end	
+					end
+		
+					-- Build a Tesla Coil
+					local tBuildType = CpuBuildType()
+					tBuildType.btype = CpuPrerequisites.BT_Building
+					tBuildType.name = "renegade_guard_tesla_coil"
+					if (self:TryBuild( tBuildType )) then
+						aitrace("BuildController: Dynamic build of "..tBuildType.name)
+					end
+				end
+			end
+		end
+
+		-- Try to force build either a Psyker Tower as sometimes the AI fails to build one for the Master of the Horde Branch
+		if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 2 then --or RG_AI_StrategyChosen == 4 then
+
+			if cpu_manager.cpu_player:IsResearchComplete("0tau_psi_ops_enable") then
+
+				if (self:GetBuildingCountByName("renegade_guard_psyker_tower") < 1) then
+
+					-- Check resources
+					local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+					local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+					-- Check resources
+					if (iRequisition > 300 and iPower > 300) then
+
+						-- Check if a plan exists
+						local iBuildingID = cpu_manager.stats:GetBuildingID("renegade_guard_psyker_tower")
+						if (self:PlanExists("Build Building Plan", iBuildingID)) then
+							return
+						end
+
+						-- Check if any Psyker Towers are in production
+						for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+							-- Check building ID
+							if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+								return
+							end	
+						end
+		
+						-- Build a Psyker Tower
+						local tBuildType = CpuBuildType()
+						tBuildType.btype = CpuPrerequisites.BT_Building
+						tBuildType.name = "renegade_guard_psyker_tower"
+						if (self:TryBuild( tBuildType )) then
+							aitrace("BuildController: Dynamic build of "..tBuildType.name)
+						end
+					end
+				end
+			end
+		end
+
+		-- Compute mutant overlord researches
+		if (self:CountSquads("renegade_guard_squad_mutant_overlord") >= 1) then
+			self:DynamicResearch("renegade_guard_ion_cannon_uplink", 4, 400, 400, 0, 0, nil, 0)
+		end
+
+		-- Compute Eclipse Researches
+		self:DynamicResearch("renegade_guard_eternal_eclipse_research", 4, 400, 400, 0, 0, nil, 0)
+
+		-- Compute Yorha Researches
+		self:DynamicResearch("renegade_guard_yorha_division", 4, 200, 200, 0, 0, nil, 0)
+
+		-- Compute Titan Researches
+		self:DynamicResearch("renegade_guard_titans_1", 4, 400, 400, 0, 0, nil, 0)
+		self:DynamicResearch("renegade_guard_titans_2", 4, 800, 800, 0, 0, nil, 0)
+
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+		-- Compute HQ Tier2 Addons for future HQs
+		if (self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 1 and (iPower >= 500 and iRequisition >= 500)) then
+			self:DynamicAddon("addon_renegade_guard_hq_1", 100, 4, 300, 175, 0, 0, nil, nil, false)
+		end
+
+		-- Compute HQ Tier3 Addons for future HQs
+		if (self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 1 and (iPower >= 1000 and iRequisition >= 1000)) then
+			self:DynamicAddon("addon_renegade_guard_hq_2", 50, 4, 340, 340, 0, 0, nil, nil, false)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("renegade_guard_turret_heavy_bolter_no_limit", 10, 4, 400, 300, 0, 0)
+	end
+
+	-- Try to build an tekarn engineer squad for the Mutant Warlord branch - the AI has issues with its prerequisites for some reason!
+	if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_mutant_overlord") or RG_AI_StrategyChosen == 2 then 
+		if self:CountSquads("renegade_guard_squad_tekarn_engineer") < 3 then
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Squad
+			tBuildType.name = "renegade_guard_squad_tekarn_engineer"
+			if (self:TryBuild(tBuildType)) then
+				return
+			end
+		end
+	end
+
+	-- Restrict dynamic builds to hard difficulty or higher
+	if (CpuManager.AISettings.bMultiBuildings) then
+	
+		-- Dynamic buildings
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinPower, MinSquadCap, MinSupportCap
+
+			self:DynamicBuild("renegade_guard_hq", 2, 3, 700, 300, 0, 0)
+			self:DynamicBuild("renegade_guard_hq", 3, 4, 1000, 600, 0, 0)
+			self:DynamicBuild("renegade_guard_tactica", 2, 2, 300, 200, 0, 0)
+
+		if cpu_manager.cpu_player:IsResearchComplete("renegade_guard_research_master_of_the_horde") or RG_AI_StrategyChosen == 1 then
+			self:DynamicBuild("renegade_guard_infantry_horde", 2, 3, 500, 0, 0, 0)
+			self:DynamicBuild("renegade_guard_infantry_horde", 3, 4, 800, 0, 0, 0)
+			self:DynamicBuild("renegade_guard_mechanized", 2, 3, 200, 600, 0, 0)
+			self:DynamicBuild("renegade_guard_mechanized", 3, 4, 300, 700, 0, 0)
+		else
+			self:DynamicBuild("renegade_guard_infantry", 2, 3, 500, 0, 0, 0)
+			self:DynamicBuild("renegade_guard_infantry", 3, 4, 800, 0, 0, 0)
+			self:DynamicBuild("renegade_guard_machine_pit", 2, 3, 200, 600, 0, 0)
+			self:DynamicBuild("renegade_guard_machine_pit", 3, 4, 300, 700, 0, 0)
+		end
+
+		-- Try for more defensive emplacements if we have over one HQ
+		if (self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 1) then
+			if (resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition ) >= 1000) and (resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ) >= 1000) then
+				self:DynamicBuild("renegade_guard_turret_heavy_bolter", 12, 4, 0, 0, 0, 0)
+				self:DynamicBuild("renegade_guard_mines", 12, 4, 0, 0, 0, 0)
+			end
+		end
+
+		-- Try for more defensive emplacements if we have over two HQ
+		if (self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 2) then
+			if (resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition ) >= 1500) and (resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ) >= 1500) then
+				self:DynamicBuild("renegade_guard_turret_heavy_bolter", 18, 4, 0, 0, 0, 0)
+				self:DynamicBuild("renegade_guard_mines", 18, 4, 0, 0, 0, 0)
+			end
+		end
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function Renegade_GuardBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function Renegade_GuardBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+-- Arkhan 01.2006: Method to check if force tech should be computed
+function Renegade_GuardBuildBaseStrategy:ForceTech()
+
+	-- Check time
+	if (g_iGMT < 60 * CpuManager.ForceTech.StartTier1) then
+		return false
+	end
+	
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	-- Check tier
+	local iTierLevel = self:GetTierLevel()
+	if (iTierLevel == 1) then
+	
+		-- Check resources
+		if (iRequisition > 600 and iPower > 200) then
+			return false
+		end
+		return not self.m_bHQAddon1
+		
+	elseif (iTierLevel == 2) then
+
+		-- Check for vehicle building
+		if (self:GetBuildingCountByName("renegade_guard_mechanized", false) + self:GetBuildingCountByName("renegade_guard_machine_pit", false)) < 1 then
+			return true
+		end
+
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier2 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+
+	elseif (iTierLevel == 3) then	
+
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+	end
+	return false
+end
+
+
+-- Arkhan 03.2006: Return placement type for buildings
+function Renegade_GuardBuildBaseStrategy:GetPlacementType(iBuildingID)
+
+	-- Check building
+	if (iBuildingID == cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))) then
+        	local count = self:GetBuildingCountByName(self:GetBuildingName("HQ"), false)
+		local friend = cpu_manager:FindClosestFriendPlayer()
+		if friend == nil then
+			-- Lone Player
+			if count == 0 and not cpu_manager:HQThreat() then
+				return "HQ"
+			else
+				return "Safeplace"
+			end
+		else
+			-- Has allies
+			if count > 0 or cpu_manager:HQThreat() then
+				return "HQ"
+			else
+				return "Safeplace"
+			end
+		end
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_infantry") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_infantry_horde") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_chronosphere") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_mechanized") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_machine_pit")) then
+		return "Military"
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_mars_pattern") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_pulse_scanner")) then
+		return "Front1"
+	elseif (cpu_manager:IsTurret(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_turret_heavy_bolter_no_limit") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_psyker_tower")) then
+		return "Front2"
+	elseif (cpu_manager:IsMine(iBuildingID)) then
+		return "Mine"
+	elseif (cpu_manager:IsGenerator(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("renegade_guard_tactica")) then
+		return "BaseBack"
+	end
+	return "Basic"
+end
+
+
+-- Arkhan 11.2006: Virtual method for checking out relic units
+function Renegade_GuardBuildBaseStrategy:RelicRequired(sName)
+
+	-- Check name
+	if  (sName == "renegade_guard_squad_baneblade") or 
+		(sName == "renegade_guard_squad_tekarn_baneblade") or 
+		(sName == "renegade_guard_squad_forgefiend") or 
+		(sName == "renegade_guard_squad_banesword") or
+		(sName == "renegade_guard_squad_macharius") or 
+		(sName == "renegade_guard_squad_tekarn_executioner") or 
+		(sName == "renegade_guard_squad_tekarn_king_oni") or 
+		(sName == "renegade_guard_squad_stormlord") or
+		(sName == "renegade_guard_squad_giga_fortress") or
+		(sName == "renegade_guard_squad_dominus_knight") then
+		return true
+	end
+	return false
+end

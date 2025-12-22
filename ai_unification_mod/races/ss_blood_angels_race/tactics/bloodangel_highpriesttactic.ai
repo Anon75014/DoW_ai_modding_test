@@ -1,0 +1,45 @@
+----------------------------------------
+-- File: 'highpriesttactic.ai'
+-- Edited by LarkinVB   @ 29.01.2007
+
+class 'BloodAngelHighPriestTactic' (BloodAngelsInfantryTactic)
+
+BloodAngelHighPriest = {}
+
+function BloodAngelHighPriestTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Blood Angel High Priest Tactic")
+end
+
+function BloodAngelHighPriestTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function BloodAngelHighPriestTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function BloodAngelHighPriestTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end
+
+

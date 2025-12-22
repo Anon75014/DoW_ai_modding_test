@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'templarbarrackstactic.ai'
+-- Edited by Thudmeizer		@ 15.04.2008
+
+class 'TemplarBarracksTactic' (BaseTactic)
+
+function TemplarBarracksTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Templar Barracks Tactic")
+end
+
+function TemplarBarracksTactic:CanDeepStrikeTroops()
+	return true
+end

@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'Praetorian_MessTactic.ai'
+-- Edited by fuggles		@ 03.09.16
+
+class 'Praetorian_MessTactic' (BaseTactic)
+
+function Praetorian_MessTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Officer Mess Tactic")
+
+	self.m_imessID = cpu_manager.stats:GetBuildingID("praetorian_mess")
+end
+
+function Praetorian_MessTactic:CanDeepStrikeTroops()
+	return (cpu_manager.player_stats:GetNumBasesByBPID(self.m_imessID, true) > 0)
+end

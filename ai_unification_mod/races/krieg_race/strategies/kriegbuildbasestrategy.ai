@@ -1,0 +1,824 @@
+----------------------------------------
+-- File: 'kriegbuildbasestrategy.ai'
+-- Edited by fuggles @ 04.04.2022
+-- Edited by Thudmeizer	@ 08.09.2025
+
+class 'KriegBuildBaseStrategy' (BuildBaseStrategy)
+
+function KriegBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+	
+	-- Add detector units (Best first, worst last)
+	self:AddDetectorUnit("krieg_squad_inquisitor")
+	self:AddDetectorUnit("krieg_squad_sniper_team")
+	self:AddDetectorUnit("krieg_squad_command_squad")
+	self:AddDetectorUnit("krieg_squad_engineers")
+
+	CpuPrerequisites2.AddSpecialItem("krieg_ogryns_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("krieg_group_zeal_research", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("krieg_cathay_extra_fuel_research", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("addon_krieg_zhurong_autocannon", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_krieg_zhurong_speaker", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_krieg_zhurong_rad_cannon", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("addon_krieg_zhurong_railcannon", CpuPrerequisites.BT_AddOn)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_deathhammer", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_ogryns", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_trench_raiders", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_qilin", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_fenghuang", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_zhurong", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_blaze_trooper", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_iron_guard", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_colossus", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_dragon", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_gatling_tank", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_pdf", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_yinglong", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_baihu", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_deadpool_and_wolverine", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("krieg_squad_gun_sirin", CpuPrerequisites.BT_Squad)
+
+    	-- The switch for the Commander LS/KTGM WarGear Researches
+    	G_KTGM_Commander_WG_Choice_Made = false
+end
+
+function KriegBuildBaseStrategy:ChooseBuildProgram()
+
+	-- Check build program count
+	if (table.getn(self.info.BuildPrograms) ~= 4) then
+		return BuildBaseStrategy.ChooseBuildProgram(self)
+	end
+
+	-- Get map size and closest enemy distance
+	local sMapSize, iClosestEnemyDistance = self:GetMapSize()
+		
+	-- Set probabilities of the strategies according to the map size
+	local iBuildProgram1	-- Basic strategy
+	local iBuildProgram2	-- Guard rush
+	local iBuildProgram3	-- Command squad / Commissar rush
+	local iBuildProgram4	-- Hellhound rush
+	if (sMapSize == "small" or iClosestEnemyDistance <= 70 or cpu_manager.iPlayerCount == 2) then
+	
+		iBuildProgram1 = 40
+		iBuildProgram2 = 30
+		iBuildProgram3 = 30
+		iBuildProgram4 = 0
+		
+	elseif (sMapSize == "large" and cpu_manager.iPlayerCount >= 6) then
+	
+		iBuildProgram1 = 40
+		iBuildProgram2 = 20
+		iBuildProgram3 = 20
+		iBuildProgram4 = 20
+	else
+	
+		iBuildProgram1 = 40
+		iBuildProgram2 = 30
+		iBuildProgram3 = 30
+		iBuildProgram4 = 0
+	end
+	
+	-- Modify probabilities according to the closest enemy player
+	local oEnemy = cpu_manager:FindClosestEnemyPlayer(false)
+	local sEnemy = oEnemy:GetPlayerRaceName()		
+	if (sEnemy == "ork_race") then
+		
+		iBuildProgram2 = iBuildProgram2 + 10
+		iBuildProgram3 = iBuildProgram3 - 10
+		
+	elseif (sEnemy == "tau_race") then
+	
+		iBuildProgram1 = iBuildProgram1 - 10
+		iBuildProgram2 = iBuildProgram2 - 10
+		iBuildProgram3 = iBuildProgram3 + 20	
+	end
+		
+	-- Now choose a program
+	iBuildProgram2 = iBuildProgram1 + iBuildProgram2
+	iBuildProgram3 = iBuildProgram2 + iBuildProgram3
+	iBuildProgram4 = iBuildProgram3 + iBuildProgram4
+	local iRandom = math.random(1, 100)
+	if (iRandom <= iBuildProgram1) then
+		return 1
+	elseif (iRandom <= iBuildProgram2) then
+		return 2
+	elseif (iRandom <= iBuildProgram3) then
+		return 3
+	elseif (iRandom <= iBuildProgram4) then
+		return 4
+	end
+	return 1
+end
+
+
+function KriegBuildBaseStrategy:EvaluateSquadCap()
+	-- Check squad cap
+	if (self:CheckSquadCap(300, 0)) then
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		if (not cpu_manager.cpu_player:IsResearchComplete( "krieg_squad_cap_research" )) then
+			tBuildType.name = "krieg_squad_cap_research"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "krieg_squad_cap_research_1" ) then
+			tBuildType.name = "krieg_squad_cap_research_1"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "krieg_squad_cap_research_2" ) then
+			tBuildType.name = "krieg_squad_cap_research_2"
+		else
+			return
+		end
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+	-- Check support cap. The race increases Support Cap by constructing Vehicle Buildings
+	if (self:CheckSupportCap(150, 300)) then
+		-- Check if a plan exists
+		local iBuildingID = cpu_manager.stats:GetBuildingID("krieg_machinery_plant")
+		if (self:PlanExists("Build Building Plan", iBuildingID)) then
+			return
+		end
+		-- Check if any vehicle buildings are in production
+		for oBuildChannel in build_manager:GetBuildChannelAIs() do
+			-- Check building ID
+			if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+				return
+			end
+		end
+		-- Build a vehicle building
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Building
+		tBuildType.name = "krieg_machinery_plant"
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end	
+end
+
+
+function KriegBuildBaseStrategy:GetBuildingName( sType )
+
+	-- Return race specific object string
+	if (sType == "HQ") then
+		return "krieg_hq"
+		
+	elseif (sType == "Generator") then
+		return "krieg_generator"
+		
+	elseif (sType == "BiggerGenerator") then
+		return "krieg_thermo_plasma"
+		
+	elseif (sType == "VehicleBuilding") then
+		return "krieg_machinery_plant"
+		
+	elseif (sType == "ListeningPost") then
+		return "krieg_observation_bunker"
+		
+	elseif (sType == "Turret") then
+		return "krieg_tank_turret"
+		
+	elseif (sType == "Mine") then
+		return "krieg_mine"
+	end
+	return nil
+end
+
+function KriegBuildBaseStrategy:GetAddonBuilding( sType )
+
+	if (sType == "addon_krieg_list_post_1") then
+		return "krieg_observation_bunker"
+
+	elseif (sType == "addon_krieg_list_post_2") then
+		return "krieg_observation_bunker"
+
+	elseif (sType == "addon_krieg_netting") then
+		return "krieg_machine_gun_bunker"
+
+	elseif (sType == "addon_krieg_bunker_autocannon") then
+		return "krieg_machine_gun_bunker"
+
+	elseif (sType == "addon_krieg_bunker_lascannon") then
+		return "krieg_machine_gun_bunker"
+
+	elseif (sType == "addon_krieg_bunker_medic") then
+		return "krieg_machine_gun_bunker"
+
+	elseif (sType == "addon_krieg_bunker_engineer") then
+		return "krieg_machine_gun_bunker"
+
+	elseif (sType == "addon_turret_plasma") then
+		return "krieg_tank_turret"
+
+	elseif (sType == "addon_krieg_bolster") then
+		return "krieg_tank_turret"
+
+	elseif (sType == "addon_krieg_turret_gatling") then
+		return "krieg_tank_turret"
+
+	elseif (sType == "addon_turret_plasma") then
+		return "krieg_tank_turret_no_limit"
+
+	elseif (sType == "addon_krieg_bolster") then
+		return "krieg_tank_turret_no_limit"
+		
+	elseif (sType == "addon_krieg_hq_1") then
+		return "krieg_hq"
+		
+	elseif (sType == "addon_krieg_hq_2") then
+		return "krieg_hq"
+	end
+	return nil
+end
+
+-- Arkhan 01.2006: Inherited method to check if an addon is a tier addon
+function KriegBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+
+	-- Check addon name and target tier
+	if (sName == "addon_krieg_hq_1" and iTargetTier == 2) then
+		return true
+	elseif (sName == "addon_krieg_hq_2" and iTargetTier == 3) then
+		return true
+	end
+	return false
+end
+
+-- Arkhan 11.2005: Returns the squad cap and support cap of the given squad
+function KriegBuildBaseStrategy:GetUnitStats(sSquadName)
+
+	if (sSquadName == "krieg_squad_recruits") then
+		return 1, 0
+	elseif (sSquadName == "krieg_squad_blaze_trooper") then
+		return 1, 0
+	elseif (sSquadName == "krieg_squad_soldiers") then
+		return 2, 0
+	elseif (sSquadName == "krieg_squad_pdf") then
+		return 2, 0
+	elseif (sSquadName == "krieg_squad_iron_guard") then
+		return 2, 0
+	elseif (sSquadName == "krieg_squad_death_cavalry") then
+		return 3, 0
+	elseif (sSquadName == "krieg_squad_grenadiers") then
+		return 3, 0
+	elseif (sSquadName == "krieg_squad_ogryns") then
+		return 3, 0
+	elseif (sSquadName == "krieg_squad_trench_raiders") then
+		return 3, 0
+	elseif (sSquadName == "krieg_squad_heavy_weapon") then
+		return 5, 0
+	elseif (sSquadName == "krieg_squad_heavy_weapon_mortars") then
+		return 4, 0
+	elseif (sSquadName == "krieg_squad_centaur") then
+		return 0, 1
+	elseif (sSquadName == "krieg_squad_chimera") then
+		return 0, 2
+	elseif (sSquadName == "krieg_squad_siegfried") then
+		return 0, 1
+	elseif (sSquadName == "krieg_squad_hellhound") then
+		return 0, 2
+	elseif (sSquadName == "krieg_squad_fenghuang") then
+		return 0, 2
+	elseif (sSquadName == "krieg_squad_gatling_tank") then
+		return 0, 3
+	elseif (sSquadName == "krieg_squad_basilisk") then
+		return 0, 3
+	elseif (sSquadName == "krieg_squad_bombard") then
+		return 0, 3
+	elseif (sSquadName == "krieg_squad_ragnarok") then
+		return 0, 3
+	elseif (sSquadName == "krieg_squad_dragon") then
+		return 0, 3
+	elseif (sSquadName == "krieg_squad_baihu") then
+		return 0, 3
+	elseif (sSquadName == "krieg_squad_vulture") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_qilin") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_yinglong") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_colossus") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_lemanruss") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_valdor") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_malcador") then
+		return 0, 4
+	elseif (sSquadName == "krieg_squad_minotaur") then
+		return 0, 5
+	elseif (sSquadName == "krieg_squad_lucius_baneblade") then
+		return 0, 5
+	elseif (sSquadName == "krieg_squad_macharius") then
+		return 0, 5
+	elseif (sSquadName == "krieg_squad_deathhammer") then
+		return 0, 5
+	elseif (sSquadName == "krieg_squad_airship") then
+		return 0, 6
+	elseif (sSquadName == "krieg_squad_zhurong") then
+		return 0, 6
+	elseif (sSquadName == "krieg_squad_titan_lucius_warlord") then
+		return 0, 12
+	end
+	return 0, 0
+end
+
+function KriegBuildBaseStrategy:UpdateTierLevel()
+	-- Reset tier level
+	self.tierLevel = 1
+
+	if cpu_manager.cpu_player:IsResearchComplete("krieg_planetary_siege") then
+		self.tierLevel = 4
+		return
+	end
+
+	-- Prepare
+	local iHQAddon1ID = cpu_manager.stats:GetAddOnID("addon_krieg_hq_1")
+	local iHQAddon2ID = cpu_manager.stats:GetAddOnID("addon_krieg_hq_2")
+	local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+
+	-- Check HQ's for addons
+	for oBase in oStats:GetBases() do
+		-- Check for valid building
+		if oBase:IsValid() and not oBase:IsListeningPost() then
+		  	-- Check for HQ addon 2
+			if (oBase:HasAddOn(iHQAddon2ID)) then
+				self.tierLevel = 3
+				return
+			-- Check for HQ addon 1 
+			elseif (oBase:HasAddOn(iHQAddon1ID)) then
+				self.tierLevel = 2
+			end
+		end
+	end
+end
+
+function KriegBuildBaseStrategy:BuildFlexible()
+
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	self:BuildFirstBuilder("krieg_squad_engineers")
+
+	-- Krieg Last Standing Hero Wargear
+	local iHeroLSCommanderSquads = self:CountSquads("krieg_squad_command_squad_ktgm")
+	if iHeroLSCommanderSquads > 0 then
+
+		if not G_KTGM_Commander_WG_Choice_Made then
+			 -- WARNING: Below, ALWAYS insert numbers <= of the total in each table!
+           		 -- I used the actual total of each table, so that ALL will be randomly available
+            		i_WG_Selection_number1 = 8	-- The number of researches to randomize, from the 1st table
+            		i_WG_Selection_number2 = 12	-- The number of researches to randomize, from the 2nd table
+
+            		i_WG_Selections1 = {
+	               	{"krieg_ls_lord_general_artillery_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_bunker_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_medic_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_trenches_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_vox_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_commissar_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_veteran_ability_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_chemical_weapon_ability_ktgm", 1, 125, 125, 0, 0, nil, 0}}
+
+            		i_WG_Selections2 = {
+                	{"krieg_ls_lord_general_command_squad_banner_bearer_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_melee_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_melta_ktgm", 1, 100, 100, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_ranged_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_relic2_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_relic_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_size_research_ktgm", 1, 100, 100, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_command_squad_vox_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_inquisitor_research_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_medic_research_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_plasma_pistols_research_ktgm", 1, 100, 100, 0, 0, nil, 0},
+                	{"krieg_ls_lord_general_upgrade_ogryn_melee_ktgm", 1, 100, 100, 0, 0, nil, 0}}
+
+            		-- The switch ensures we make the choice only ONCE
+            		G_KTGM_Commander_WG_Choice_Made = true
+            		i_WG_Rdm1 = {}          -- The random Selections from the 1st table
+            		i_WG_Rdm2 = {}          -- The random Selections from the 2nd table
+
+            		-- Populate the two random tables with the number of researches we need for each
+            		for i = 1, i_WG_Selection_number1 do
+                		local selection = math.random(1, table.getn(i_WG_Selections1))
+                		table.insert(i_WG_Rdm1, i_WG_Selections1[selection])
+                		table.remove(i_WG_Selections1, selection)
+            		end
+
+            		for i = 1, i_WG_Selection_number2 do
+                		local selection = math.random(1, table.getn(i_WG_Selections2))
+                		table.insert(i_WG_Rdm2, i_WG_Selections2[selection])
+                		table.remove(i_WG_Selections2, selection)
+            		end
+		end
+
+       		-- We are done. Perform the Researches
+        	for i = 1, table.getn(i_WG_Rdm1) do
+            		self:DynamicResearch(i_WG_Rdm1[i][1], 0, i_WG_Rdm1[i][3], i_WG_Rdm1[i][4], 0, 0, nil, 0)
+        	end
+
+    		for i = 1, table.getn(i_WG_Rdm2) do
+       			self:DynamicResearch(i_WG_Rdm2[i][1], 0, i_WG_Rdm2[i][3], i_WG_Rdm2[i][4], 0, 0, nil, 0)
+       		end
+	end
+
+	-- Dynamic research item syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+	local iArmyStrength = cpu_manager:GetArmyStrength()
+	local iBasicInfantrySquads = self:CountSquads("krieg_squad_soldiers") + self:CountSquads("krieg_squad_grenadiers")
+								+ self:CountSquads("krieg_squad_recruits")
+	-- Compute tier 1 researches
+	if (self.tierLevel >= 1) then
+
+		-- Compute secondary researches
+		if (iArmyStrength >= 750) then
+	
+			-- Compute basic infantry researches
+			if (iBasicInfantrySquads >= 3) then
+
+				self:DynamicResearch("krieg_supply_ammunition_research", 1, 90, 40, 0, 0, nil, 0)
+				self:DynamicResearch("krieg_soldiers_morale", 1, 75, 15, 0, 0, nil, 0)
+				self:DynamicResearch("krieg_frag_grenade_research", 1, 60, 10, 0, 0, nil, 0)
+				self:DynamicResearch("krieg_create_shelters_research", 1, 120, 10, 0, 0, nil, 0)
+			end
+
+			-- Compute commander researches
+			self:DynamicResearch("krieg_command_squad_size_research", 1, 100, 100, 0, 0, nil, 1)
+		end
+	end
+	
+	-- Compute tier 2 researches
+	if (self.tierLevel >= 2) then
+
+		-- Compute basic infantry researches
+		if (iBasicInfantrySquads >= 3) then
+			self:DynamicResearch("krieg_soldiers_morale_2", 2, 75, 15, 0, 0, nil, 0)
+		end
+
+		-- Compute secondary researches
+		if (iArmyStrength >= 1000) then
+			-- Compute basic infantry researches
+			if (iBasicInfantrySquads >= 3) then
+				self:DynamicResearch("krieg_upgrade_soldier_range", 2, 100, 25, 0, 0, nil, 0)	-- Satellite Targeting
+				self:DynamicResearch("krieg_upgrade_weapon_specialization", 2, 100, 100, 0, 0, nil, 0)
+			end
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("krieg_tank_turret_no_limit", 2, 2, 200, 150, 0, 0)
+	end
+
+	-- Compute tier 3 researches
+	if (self.tierLevel >= 3) then
+		-- Compute secondary researches
+		if (iArmyStrength >= 1500) then
+		
+			-- Compute infantry researches
+			self:DynamicResearch("krieg_chemical_weapon_research", 3, 200, 100, 0, 0, "krieg_squad_grenadiers", 1)
+			self:DynamicResearch("krieg_plasma_pistols_research", 3, 50, 20, 0, 0, nil, 0)
+			self:DynamicResearch("krieg_command_squad_melta", 3, 50, 15, 0, 0, nil, 0)
+			self:DynamicResearch("krieg_camouflaged_netting_research", 3, 150, 150, 0, 0, nil, 0)
+		end
+		-- Compute bonus researches
+		if (iArmyStrength >= 2000) then
+
+			-- Compute vehicle researches
+			self:DynamicResearch("krieg_ablative_armour_research", 3, 200, 200, 0, 0, nil, 0)
+
+			-- Compute ogryn researches
+			self:DynamicResearch("krieg_upgrade_ogryn_melee", 3, 100, 75, 0, 0, "krieg_squad_ogryns", 1)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("krieg_tank_turret_no_limit", 4, 3, 300, 200, 0, 0)
+	end
+
+	-- Compute tier 4 researches
+	if (self.tierLevel >= 4) then
+
+		-- Compute titan researches
+		self:DynamicResearch("krieg_titans_tier_ii", 4, 800, 800, 0, 0, nil, 0)
+
+		-- Compute zeal researches
+		self:DynamicResearch("krieg_group_zeal_research", 4, 300, 250, 0, 0, nil, 0)
+
+		-- Compute extra fuel researches
+		self:DynamicResearch("krieg_cathay_extra_fuel_research", 4, 200, 200, 0, 0, nil, 0)
+
+		-- Compute HQ Tier2 and Tier3 Addons for future HQs
+       		if self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 1 then
+			self:DynamicAddon("addon_krieg_hq_1", 100, 4, 500, 500, 0, 0, nil, nil, false)
+			self:DynamicAddon("addon_krieg_hq_2", 50, 4, 1000, 1000, 0, 0, nil, nil, false)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("krieg_tank_turret_no_limit", 10, 4, 400, 250, 0, 0)
+	end
+
+	if (self:GetBuildingCountByName("krieg_infantry_bunker") > 1) then
+
+		-- Check resources
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+		-- Check resources
+		if (iRequisition > 200 and iPower > 200) then
+
+			-- Build a machine gun bunker building based on how many Infantry bunkers are present
+			local tBuildType = CpuBuildType()
+			tBuildType.btype = CpuPrerequisites.BT_Building
+			tBuildType.name = "krieg_machine_gun_bunker"
+			if (self:TryBuild( tBuildType )) then
+				aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+	end
+
+	if (self.tierLevel >= 2) then
+
+		if self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 0 then
+
+			-- Check resources
+			local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+			local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+			-- Check resources
+			if (iRequisition > 400 and iPower > 500) then
+
+				-- Build an earthshaker building depending how many HQs are present
+				local tBuildType = CpuBuildType()
+				tBuildType.btype = CpuPrerequisites.BT_Building
+				tBuildType.name = "krieg_earthshaker_platform"
+				if (self:TryBuild( tBuildType )) then
+					aitrace("BuildController: Dynamic build of "..tBuildType.name)
+				end
+			end
+		end
+	end
+
+	if (self.tierLevel >= 3) then
+
+		if (self:GetBuildingCountByName("krieg_earthshaker_platform") > 1) then
+
+			if (self:GetBuildingCountByName("krieg_communications_center") < 5) then
+
+				-- Check resources
+				local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+				local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+				-- Check resources
+				if (iRequisition > 400 and iPower > 400) then
+
+					-- Build additional vox buildings depending how many earthshakers are present
+					local tBuildType = CpuBuildType()
+					tBuildType.btype = CpuPrerequisites.BT_Building
+					tBuildType.name = "krieg_communications_center"
+					if (self:TryBuild( tBuildType )) then
+						aitrace("BuildController: Dynamic build of "..tBuildType.name)
+					end
+				end
+			end
+		end
+
+		if cpu_manager.cpu_player:IsResearchComplete("0liyue_enable") then
+
+			if (self:GetBuildingCountByName("krieg_cathay_reinforcement_bay") < 3) then
+
+				-- Check resources
+				local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+				local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+				-- Check resources
+				if (iRequisition > 200 and iPower > 150) then
+
+					-- Build cathay buildings if we have met the requirements
+					local tBuildType = CpuBuildType()
+					tBuildType.btype = CpuPrerequisites.BT_Building
+					tBuildType.name = "krieg_cathay_reinforcement_bay"
+					if (self:TryBuild( tBuildType )) then
+						aitrace("BuildController: Dynamic build of "..tBuildType.name)
+					end
+				end
+			end
+		end
+	end
+
+	if (self.tierLevel >= 4) then
+
+		-- Force build additional generators in late game if we can with enough requisition and when low on power
+                local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+                local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+                if iReq > 400 and iReq/iPow > 1.6 then
+
+                	-- Check if a plan exists
+                	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("Generator"))
+                    	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+                       		return
+                    	end
+
+             		-- Check if any generators are in production
+                    	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+                        	-- Check building ID
+                        	if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+                            		return
+                        	end
+                    	end
+
+             		-- Build a Generator
+                    	local tBuildType = CpuBuildType()
+                    	tBuildType.btype = CpuPrerequisites.BT_Building
+                    	tBuildType.name = self:GetBuildingName("Generator")
+                    	if (self:TryBuild( tBuildType )) then
+               			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+	end
+
+	-- Restrict dynamic builds to hard difficulty or higher
+	if (CpuManager.AISettings.bMultiBuildings) then
+		-- Dynamic buildings
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinPower, MinSquadCap, MinSupportCap
+		self:DynamicBuild("krieg_hq", 2, 3, 900, 0, 0, 0)
+		self:DynamicBuild("krieg_hq", 3, 4, 1500, 0, 0, 0)
+		self:DynamicBuild("krieg_infantry_bunker", 2, 1, 800, 0, 0, 0)
+		self:DynamicBuild("krieg_machinery_plant", 2, 2, 200, 600, 0, 0)
+		self:DynamicBuild("krieg_infantry_bunker", 3, 3, 2000, 0, 0, 0)
+		self:DynamicBuild("krieg_machinery_plant", 4, 3, 500, 1500, 0, 0)
+		self:DynamicBuild("krieg_titans_building", 1, 4, 500, 500, 0, 0)
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function KriegBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function KriegBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+-- Arkhan 01.2006: Method to check if force tech should be computed
+function KriegBuildBaseStrategy:ForceTech()
+
+	-- Check time
+	if (g_iGMT < 60 * CpuManager.ForceTech.StartTier1) then
+		return false
+	end
+	
+	-- Check ressources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	-- Check tier
+	local iTierLevel = self:GetTierLevel()
+	if (iTierLevel == 1) then
+	
+		-- Check resources
+		if (iRequisition > 600 and iPower > 200) then
+			return false
+		end
+		return not self.m_bHQAddon1
+		
+	elseif (iTierLevel == 2) then
+
+		-- Check for vehicle building
+		if (self:GetBuildingCountByName("krieg_machinery_plant", false) < 1) then
+			return true
+		end
+		
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier2 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+		
+	elseif (iTierLevel == 3) then	
+
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+	end
+	return false
+end
+
+-- Arkhan 03.2006: Return placement type for buildings
+function KriegBuildBaseStrategy:GetPlacementType(iBuildingID)
+	
+	-- Check building
+	if (iBuildingID == cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))) then
+        	local count = self:GetBuildingCountByName(self:GetBuildingName("HQ"), false)
+		local friend = cpu_manager:FindClosestFriendPlayer()
+		if friend == nil then
+			-- Lone Player
+                	if count == 0 and not cpu_manager:HQThreat() then
+                    		return "HQ"
+                	else
+                    		return "Safeplace"
+                	end
+        	else
+        		-- Has allies
+                	if count > 0 or cpu_manager:HQThreat() then
+ 				return "HQ"
+                	else
+				return "Safeplace"
+                	end
+		end
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("krieg_infantry_bunker") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("krieg_earthshaker_platform") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("krieg_machinery_plant")) then
+		return "Military"
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("krieg_lucius_pattern") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("krieg_titans_building")) then
+		return "Front1"
+	elseif (cpu_manager:IsTurret(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("krieg_machine_gun_bunker") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("krieg_tank_turret_no_limit")) then
+		return "Front2"
+	elseif (cpu_manager:IsMine(iBuildingID)) then
+		return "Mine"
+	elseif (cpu_manager:IsGenerator(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("krieg_communications_center")) then
+		return "BaseBack"
+	end
+	return "Basic"
+end
+
+-- Arkhan 03.2006: Inherited method to modify squad demand
+function KriegBuildBaseStrategy:ModifySquadDemand(iUnitID)
+
+	-- No more leaders than standard squads
+	if (iUnitID == cpu_manager.stats:GetSquadID("krieg_squad_commissar") or
+		iUnitID == cpu_manager.stats:GetSquadID("krieg_squad_inquisitor") or
+		iUnitID == cpu_manager.stats:GetSquadID("krieg_squad_quartermaster")) then
+			
+		-- Check number of attachable squads
+		local krieg_attach = function( squad_ai )
+			return (squad_ai:GetTactic():GetUnitStrength() >= 160 and squad_ai:CanReceiveAttachment())
+		end
+		local num_attach = self:CountSquads("krieg_squad_soldiers", krieg_attach) +
+						   self:CountSquads("krieg_squad_recruits", krieg_attach) + 
+						   self:CountSquads("krieg_squad_grenadiers", krieg_attach) + 
+						   self:CountSquads("krieg_squad_trench_raiders", krieg_attach) + 
+						   self:CountSquads("krieg_squad_ogryns", krieg_attach)
+
+		-- Check number of leaders
+		local num_leader = self:CountSquads("krieg_squad_commissar") +
+						   self:CountSquads("krieg_squad_inquisitor") +
+						   self:CountSquads("krieg_squad_quartermaster")
+		if (num_leader >= num_attach) then
+			return 0
+		end
+	end
+	return BuildBaseStrategy.ModifySquadDemand(self, iUnitID)
+end
+
+-- Arkhan 11.2006: Virtual method for checking out relic units
+function KriegBuildBaseStrategy:RelicRequired(sName)
+
+	-- Check name
+	if (sName == "krieg_squad_lucius_baneblade")
+	or (sName == "krieg_squad_airship")
+	or (sName == "krieg_squad_minotaur")
+	or (sName == "krieg_squad_macharius")
+	or (sName == "krieg_squad_malcador")
+	or (sName == "krieg_squad_deathhammer")
+	or (sName == "krieg_squad_titan_lucius_warlord") then
+		return true
+	end
+	return false
+end

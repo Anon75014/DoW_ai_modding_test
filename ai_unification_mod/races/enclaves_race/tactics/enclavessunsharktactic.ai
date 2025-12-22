@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'enclavessunsharktactic.ai'
+-- Edited by Thudmeizer @ 07.03.2024
+
+class 'EnclavesSunSharkTactic' (EnclavesVehicleTactic)
+
+EnclavesSunShark = {}
+
+function EnclavesSunSharkTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Sun Shark Tactic")
+end
+
+function EnclavesSunSharkTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesSunShark.pulsebomb_id == nil) then
+		EnclavesSunShark.pulsebomb_id = cpu_manager.stats:GetAbilityID( "enclaves_pulse_bomb" )
+	end
+end
+
+function EnclavesSunSharkTactic:DoAbilities()
+	
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos( self.squad_ai, EnclavesSunShark.pulsebomb_id, Ability.Filters.CloseEnemy, 2 ) 
+	else
+		Ability.DoAbilityPos( self.squad_ai, EnclavesSunShark.pulsebomb_id, Ability.Filters.CloseEnemy, 4 ) 
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

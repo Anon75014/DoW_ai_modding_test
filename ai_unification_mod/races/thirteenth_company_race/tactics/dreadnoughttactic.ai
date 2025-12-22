@@ -1,0 +1,44 @@
+----------------------------------------
+-- File: 'dreadnoughttactic.ai'
+-- Edited by Thudmeizer		@ 18.05.2022
+
+class 'DreadnoughtTactic' (ThirteenthcomVehicleTactic)
+
+Dreadnought = {}
+
+function DreadnoughtTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thirteenth Company Dreadnought Tactic")
+end
+
+function DreadnoughtTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Dreadnought.missile_id == nil) then
+		Dreadnought.missile_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_hk_missile_dread_1" )
+	end
+
+	if (Dreadnought.hkmissile_id == nil) then
+		Dreadnought.hkmissile_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_hk_missile_dread_2" )
+	end
+end
+
+function DreadnoughtTactic:DoAbilities()
+
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(Dreadnought.missile_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, Dreadnought.missile_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, Dreadnought.missile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Dreadnought.missile_id, Ability.Filters.CloseSquadEnemy, 4 )
+	end
+
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(Dreadnought.hkmissile_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, Dreadnought.hkmissile_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, Dreadnought.hkmissile_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Dreadnought.hkmissile_id, Ability.Filters.CloseSquadEnemy, 4 )
+	end
+
+	-- Call standard method
+	ThirteenthcomVehicleTactic.DoAbilities(self)
+end
+
+

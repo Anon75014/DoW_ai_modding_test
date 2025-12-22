@@ -1,0 +1,85 @@
+----------------------------------------
+-- File: 'renegades_rogue_psyker_tactic.ai'
+-- Edited by Gambit 	@ 26.11.2014
+-- Edited by Thudmeizer @ 07.05.2023
+
+class 'Renegades_Rogue_Psyker_Tactic' (Renegades_Infantry_Tactic)
+
+Rogue_Psyker = {}
+
+function Renegades_Rogue_Psyker_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Rogue Psyker Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Rogue_Psyker_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Rogue_Psyker_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Rogue_Psyker_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Rogue_Psyker.curse_id == nil) then
+		Rogue_Psyker.curse_id = cpu_manager.stats:GetAbilityID( "renegade_guard_curse_machine_spirits" )	
+		Rogue_Psyker.strip_id = cpu_manager.stats:GetAbilityID( "renegade_guard_psyker_strip_soul" )	
+		Rogue_Psyker.smite_id = cpu_manager.stats:GetAbilityID( "renegade_guard_smite" )	
+	end
+end
+
+function Renegades_Rogue_Psyker_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Target vehicles
+		if self.squad_ai:CanDoAbility(Rogue_Psyker.curse_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Rogue_Psyker.curse_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		end
+
+		-- Target commanders
+		if self.squad_ai:CanDoAbility(Rogue_Psyker.strip_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Rogue_Psyker.strip_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		end
+
+		-- Target enemy formations based on health
+		if self.squad_ai:CanDoAbility(Rogue_Psyker.smite_id) then
+
+			-- We are dying, lower requisites for attacks
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				Ability.DoAbilityPos( self.squad_ai, Rogue_Psyker.smite_id, Ability.Filters.CloseEnemy, 8 )
+			else
+				Ability.DoAbilityPos( self.squad_ai, Rogue_Psyker.smite_id, Ability.Filters.CloseEnemy, 12 )
+			end
+		end
+	end
+end
+
+function Renegades_Rogue_Psyker_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

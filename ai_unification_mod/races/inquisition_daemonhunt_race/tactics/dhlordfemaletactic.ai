@@ -1,0 +1,85 @@
+----------------------------------------
+-- File: 'dhlordfemaletactic.ai'
+-- Edited by Gambit 	@ 08.08.2020
+-- Edited by Thudmeizer @ 31.10.2023
+
+class 'DHLordFemaleTactic' (DaemonhuntInfantryTactic)
+
+DHLordFemale = {}
+
+function DHLordFemaleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Adrastia Tactic")
+end
+
+function DHLordFemaleTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function DHLordFemaleTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function DHLordFemaleTactic:InitAbilities()
+
+	if DHLordFemale.hammer_id == nil then
+	    DHLordFemale.hammer_id = cpu_manager.stats:GetAbilityID( "inquisition_adrastia_hammer_of_witches" )
+		DHLordFemale.silent_id = cpu_manager.stats:GetAbilityID( "inquisition_adrastia_silently" )
+		DHLordFemale.sabotage_id = cpu_manager.stats:GetAbilityID( "inquisition_special_sabotage" )	
+	end
+end
+
+function DHLordFemaleTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(DHLordFemale.hammer_id) then
+		if Ability.DoAbilityTarget(self.squad_ai, DHLordFemale.hammer_id, Ability.Filters.CloseCommanderEnemy, 1)
+		or Ability.DoAbilityTarget(self.squad_ai, DHLordFemale.hammer_id, Ability.Filters.CloseMonsterEnemy, 4)
+		or Ability.DoAbilityTarget(self.squad_ai, DHLordFemale.hammer_id, Ability.Filters.CloseInfantryEnemy, 5) then
+			return
+		end
+	end
+
+	if self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(DHLordFemale.sabotage_id) then
+		if Ability.DoAbilityTarget(self.squad_ai, DHLordFemale.sabotage_id, Ability.Filters.CloseVehicleEnemy, 1)
+		or Ability.DoAbilityTargetEntity( self.squad_ai, DHLordFemale.sabotage_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+			return
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(DHLordFemale.silent_id) then
+		local oSquad = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 18, 4)
+		if oSquad ~= nil and oSquad:IsValid() then
+			local oStats = oSquad:GetStats()
+			if oStats ~= nil then
+				local oClass = oStats:GetClass()
+				if oClass == UnitStatsAI.UC_LightInfantryLow
+				or oClass == UnitStatsAI.UC_LightInfantryMed
+				or oClass == UnitStatsAI.UC_LightInfantryHigh then
+					self.squad_ai:DoSpecialAbilitySquad(DHLordFemale.silent_id, oSquad:GetSquad())
+				end
+			end
+		end
+	end
+end
+
+function DHLordFemaleTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if cpu_manager:GetTierLevel() > 2 then
+		if self:TryAttachSquad(true, true, 50, 100, nil) ~= nil then
+			return
+		end
+	end
+	if self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil then
+		self:TryAttachSquadMelee()
+	end
+end

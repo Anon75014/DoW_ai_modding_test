@@ -1,0 +1,172 @@
+----------------------------------------
+-- File: 'slaaneshcacophony_ktgmtactic.ai'
+-- Edited by Gambit	@ 30.10.2023
+
+class 'SlaaneshCacophony_ktgmTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshCacophony_ktgm = {}
+
+function SlaaneshCacophony_ktgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Cacophony Kill Team Tactic")
+	self.doomsirenCast = g_iGMT
+	self.harmonicsTMR = g_iGMT
+end
+
+function SlaaneshCacophony_ktgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshCacophony_ktgm.doomsiren_id == nil then
+		SlaaneshCacophony_ktgm.doomsiren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren_ktgm" )
+		SlaaneshCacophony_ktgm.combat_drugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs_ktgm" )
+		SlaaneshCacophony_ktgm.harmonics_id = cpu_manager.stats:GetAbilityID( "emperors_children_harmonics_ktgm" )
+		SlaaneshCacophony_ktgm.krak_grenades_id = cpu_manager.stats:GetAbilityID( "emperors_children_krak_grenades_ktgm" )
+		SlaaneshCacophony_ktgm.frag_grenades_id = cpu_manager.stats:GetAbilityID( "emperors_children_frag_grenades_ktgm" )
+		SlaaneshCacophony_ktgm.slaaneesh_icon_id = cpu_manager.stats:GetAbilityID( "emperors_children_icon_slaaneeshi_standard" )
+	end
+end
+
+function SlaaneshCacophony_ktgmTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.slaaneesh_icon_id) then
+		self.squad_ai:DoSpecialAbility(SlaaneshCacophony_ktgm.slaaneesh_icon_id)
+	end
+
+	if (self.squad_ai:IsInCombat()) then
+		if g_iGMT > self.doomsirenCast + 15 and self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.doomsiren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshCacophony_ktgm.doomsiren_id, Ability.Filters.CloseInCombat, 10, 4 )
+			self.doomsirenCast = g_iGMT
+			return
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.combat_drugs_id) then
+			self.squad_ai:DoSpecialAbility(SlaaneshCacophony_ktgm.combat_drugs_id)
+		end
+
+		if g_iGMT > self.harmonicsTMR + 30 and self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.harmonics_id) and not self:IsMoving() then
+			local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+			if iPower > 0 then
+				--local iTarget = Ability.Filters.CloseVehicleEnemy(self.squad_ai:GetPosition(), 30, 1)
+				local iTarget = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), 30, 1)
+				if iTarget ~= nil then
+					self.squad_ai:DoSpecialAbility(SlaaneshCacophony_ktgm.harmonics_id)
+					self.harmonicsTMR = g_iGMT
+				end
+			end
+		end
+--[[
+		if self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.krak_grenades_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshCacophony_ktgm.krak_grenades_id, Ability.Filters.CloseVehicleEnemy, 1 )
+            		or Ability.DoAbilityTargetEntity( self.squad_ai, SlaaneshCacophony_ktgm.krak_grenades_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 ) then
+				return
+			end
+		end
+]]
+
+		-- Use Krak Grenade against enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.krak_grenades_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(SlaaneshCacophony_ktgm.krak_grenades_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			local oUnitB = cpu_manager.cpu_player:FindFirstBaseEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil) then
+				--print("Using  Krak Grenade against vehicle enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshCacophony_ktgm.krak_grenades_id, oUnit:GetSquad())
+				return
+			elseif (oUnitB ~= nil and oUnitB:IsValid()) then
+				--print("Using  Krak Grenade against base enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshCacophony_ktgm.krak_grenades_id, oUnitB:GetEntity():GetID())
+				return
+			end
+		end
+--[[
+		if self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.frag_grenades_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, SlaaneshCacophony_ktgm.frag_grenades_id, Ability.Filters.CloseSquadEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshCacophony_ktgm.frag_grenades_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshCacophony_ktgm.frag_grenades_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+]]
+		-- Use Frag Grenade against enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(SlaaneshCacophony_ktgm.frag_grenades_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(SlaaneshCacophony_ktgm.frag_grenades_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil) then
+				--print("Using Frag Grenade against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshCacophony_ktgm.frag_grenades_id, oUnit:GetSquad())
+				return
+			elseif (oUnitB ~= nil) then
+				--print("Using Frag Grenade against commander enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshCacophony_ktgm.frag_grenades_id, oUnitB:GetSquad())
+				return
+			elseif (oUnitC ~= nil) then
+				-- Get stats
+				local oStats = oUnitC:GetStats()
+				if (oStats ~= nil) then
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+						--print("Using Frag Grenade against monster enemies for player "..tostring(cpu_manager.player_id).."")
+						self.squad_ai:DoSpecialAbilitySquad(SlaaneshCacophony_ktgm.frag_grenades_id, oUnitC:GetSquad())
+						return
+					end
+				end
+			end
+		end
+	end
+end
+
+function SlaaneshCacophony_ktgmTactic:Reinforce()
+
+	if not self.squad_ai:IsReinforcing() then
+
+		--always try for the actual leader first
+		if self.squad_ai:CanReinforce( false, 0 ) then
+		   self.squad_ai:DoReinforce( false, 0 )
+		end
+
+		-- try for different types of squad members
+		
+		-- Desired number of each leader type
+		local Leader1_Desired = 2
+		local Leader2_Desired = 1
+		local Leader3_Desired = 1
+		local Leader4_Desired = 1
+
+		-- Proceed with adding desired leaders
+		local Leader1 = 0
+		local Leader2 = 1
+		local Leader3 = 2
+		local Leader4 = 3
+	
+		local Leader1_Count = self.squad_ai:GetLeaderCount( Leader1 )
+		local Leader2_Count = self.squad_ai:GetLeaderCount( Leader2 )
+		local Leader3_Count = self.squad_ai:GetLeaderCount( Leader3 )
+		local Leader4_Count = self.squad_ai:GetLeaderCount( Leader4 )
+
+		-- Desired order of reinforcing
+		if Leader1_Count < Leader1_Desired then
+			if self.squad_ai:CanReinforce( true, Leader1 ) then
+				self.squad_ai:DoReinforce( true, Leader1 )
+			end
+		elseif Leader2_Count < Leader2_Desired then
+			if self.squad_ai:CanReinforce( true, Leader2 ) then
+				self.squad_ai:DoReinforce( true, Leader2 )
+			end
+		elseif Leader3_Count < Leader3_Desired then
+			if self.squad_ai:CanReinforce( true, Leader3 ) then
+				self.squad_ai:DoReinforce( true, Leader3 )
+			end
+		elseif Leader4_Count < Leader4_Desired then
+			if self.squad_ai:CanReinforce( true, Leader4 ) then
+				self.squad_ai:DoReinforce( true, Leader4 )
+			end
+		end
+	end
+end

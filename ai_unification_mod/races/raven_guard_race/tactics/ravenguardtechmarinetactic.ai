@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'RavenGuardtechmarinetactic.ai'
+-- Edited by Thudmeizer   @ 21.06.2023
+
+class 'RavenGuardTechmarineTactic' (EngineerTactic)
+
+RavenGuardTechmarine = {}
+
+function RavenGuardTechmarineTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Techmarine Tactic")
+end
+
+function RavenGuardTechmarineTactic:IsAffectedByMorale()
+	return false
+end
+
+function RavenGuardTechmarineTactic:DoAbilities()
+	
+	-- Call standard method
+	RavenGuardSpaceMarineInfantryTactic.DoAbilities(self)
+end

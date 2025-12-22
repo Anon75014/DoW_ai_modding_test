@@ -1,0 +1,391 @@
+----------------------------------------
+-- File: 'tsstrategyinfo.ai'
+-- Edited by Thudmeizer    @ 11.09.2025
+
+BuildBaseStrategyInfo = 
+{
+	thousand_sons_race =
+	{
+		post_builder = 1,
+		flag_capture = 2,
+
+		--reserve this amount for building units/buildings (not for use in upgrading/ reinforcing)
+		req_reserve = 100,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+		
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+				
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			--Research Total: 21
+			-- Rubric / Warp Gate strategy
+			{
+				{ 1, 230, 55, 0, 1,		"Unit",			"thousand_sons_squad_lord" },
+				{ 1, 90, 0, 0, 1,		"Unit",			"thousand_sons_squad_tzeentch_cultist" }, -- Force a capturing squad
+				{ 1, 195, 0, 0, 3,		"Unit",			"thousand_sons_squad_marine" },
+				{ 1, 200, 0, 0, 1,		"Building",		"thousand_sons_tomb" },
+				{ 1, 130, 0, 0, 2,		"Building",		"thousand_sons_generator" },
+				{ 1, 120, 75, 0, 50,		"TurretAddon",		"thousand_sons_list_post_addon_1" },
+				{ 1, 150, 75, 200, 1,		"Building",		"thousand_sons_library" },
+				{ 1, 140, 0, 300, 3,		"Building",		"thousand_sons_generator" },
+				{ 1, 300, 150, 400, 1,		"Addon",		"thousand_sons_hq_addon_1" },
+				{ 1, 100, 50, 350, 1,		"Building",		"thousand_sons_turret_bolter" },
+				{ 1, 50, 50, 200, 1,		"Building",		"thousand_sons_mine_field" },
+
+				{ 2, 195, 0, 0, 3,		"Unit",			"thousand_sons_squad_marine" },
+				{ 2, 180, 90, 0, 1,		"Unit",			"thousand_sons_squad_chosen" },
+				{ 2, 100, 275, 0, 1,		"Unit",			"thousand_sons_squad_dreadnought" },
+				{ 2, 75, 250, 200, 1,		"Research",		"thousand_sons_requisition_research_1" },
+				{ 2, 200, 40, 300, 1,		"Research",		"thousand_sons_power_research_1" },
+				{ 2, 225, 175, 0, 1,		"Building",		"thousand_sons_machine_altar" },
+				{ 2, 160, 0, 0, 4,		"Building",		"thousand_sons_generator" },
+				{ 2, 125, 0, 0, 1,		"Research",		"thousand_sons_support_cap_research" },
+				{ 2, 600, 0, 0, 1,		"Building",		"thousand_sons_tomb" },
+				{ 2, 120, 75, 800, 100, 	"TurretAddon",		"thousand_sons_list_post_addon_1" },
+				{ 2, 300, 200, 600, 2,		"Building",		"thousand_sons_library" },
+				{ 2, 50, 50, 1000, 35,		"TurretAddon",		"thousand_sons_turret_invisibility_addon" },
+				{ 2, 50, 0, 1000, 100,		"TurretAddon",		"thousand_sons_turret_addon" },
+				{ 2, 200, 0, 1500, 1,		"Building",		"thousand_sons_gate" },
+				{ 2, 180, 0, 0, 5,		"Building",		"thousand_sons_generator" },
+				{ 2, 300, 380, 1500, 1,		"Addon",		"thousand_sons_hq_addon_2" },
+				{ 2, 275, 150, 2000, 50,	"TurretAddon",		"thousand_sons_list_post_addon_2" },
+				{ 2, 100, 50, 2000, 2,		"Building",		"thousand_sons_turret_bolter" },
+				{ 2, 50, 50, 2000, 2,		"Building",		"thousand_sons_mine_field" },
+
+				{ 3, 195, 0, 0, 3,		"Unit",			"thousand_sons_squad_marine" },
+				{ 3, 200, 350, 0, 1,		"Unit",			"thousand_sons_squad_dreadnought_sorc" },
+				{ 3, 200, 50, 0, 1,		"Unit",			"thousand_sons_squad_burning_chariot" },
+				{ 3, 75, 350, 900, 1,		"Research",		"thousand_sons_requisition_research_2" },
+				{ 3, 350, 0, 1000, 1,		"Research",		"thousand_sons_power_research_2" },
+				{ 3, 200, 250, 0, 1,		"Building",		"thousand_sons_altar_of_tzeentch" },
+				{ 3, 800, 0, 1000, 6,		"Building",		"thousand_sons_generator" },
+				{ 3, 400, 400, 2000, 1,		"Research",		"thousand_sons_tier4" },
+				{ 3, 1000, 400, 0, 2,		"Building",		"thousand_sons_machine_altar" },
+				{ 3, 1000, 0, 0, 2,		"Building",		"thousand_sons_tomb" },
+				{ 3, 275, 150, 2500, 75,	"TurretAddon",		"thousand_sons_list_post_addon_2" },
+				{ 3, 100, 50, 2500, 3,		"Building",		"thousand_sons_turret_bolter" },
+				{ 3, 50, 50, 2500, 3,		"Building",		"thousand_sons_mine_field" },
+				{ 3, 800, 0, 1500, 1,		"Building",		"thousand_sons_gate" },
+
+				{ 4, 350, 275, 2000, 1,		"Unit",			"thousand_sons_squad_ahriman" },
+				{ 4, 400, 400, 2500, 1,		"Research",		"thousand_sons_lord_of_change_research" },
+				{ 4, 100, 50, 2500, 9,		"Building",		"thousand_sons_turret_bolter" },
+				{ 4, 50, 50, 2500, 6,		"Building",		"thousand_sons_mine_field" },
+				{ 4, 275, 150, 2550, 100,	"TurretAddon",		"thousand_sons_list_post_addon_2" },
+				{ 4, 900, 0, 2600, 3,   	"Building",		"thousand_sons_hq" },
+				{ 4, 1500, 0, 1000, 14,		"Building",		"thousand_sons_generator" },
+				{ 4, 800, 800, 2000, 100,	"Addon",		"thousand_sons_hq_addon_1" },
+				{ 4, 1000, 1000, 2500, 100,	"Addon",		"thousand_sons_hq_addon_2" }
+			},
+			-- Daemons / Daemon Gate strategy
+			{
+				{ 1, 230, 55, 0, 1,		"Unit",			"thousand_sons_squad_lord" },
+				{ 1, 90, 0, 0, 1,		"Unit",			"thousand_sons_squad_tzeentch_cultist" }, -- Force a capturing squad
+				{ 1, 200, 20, 0, 3,		"Unit",			"thousand_sons_squad_screamer" },
+				{ 1, 200, 0, 0, 1,		"Building",		"thousand_sons_gate" },
+				{ 1, 130, 0, 0, 2,		"Building",		"thousand_sons_generator" },
+				{ 1, 150, 75, 100, 1,		"Building",		"thousand_sons_library" },
+				{ 1, 120, 75, 0, 50,		"TurretAddon",		"thousand_sons_list_post_addon_1" },
+				{ 1, 150, 0, 250, 3,		"Building",		"thousand_sons_generator" },
+				{ 1, 300, 150, 300, 1,		"Addon",		"thousand_sons_hq_addon_1" },
+				{ 1, 100, 50, 300, 1,		"Building",		"thousand_sons_turret_bolter" },
+
+				{ 2, 200, 20, 0, 3,		"Unit",			"thousand_sons_squad_screamer" },
+				{ 2, 160, 16, 0, 2,		"Unit",			"thousand_sons_squad_horror" },
+				{ 2, 180, 90, 0, 1,		"Unit",			"thousand_sons_squad_chosen" },
+				{ 2, 100, 275, 0, 1,		"Unit",			"thousand_sons_squad_dreadnought" },
+				{ 2, 150, 0, 0, 1,		"Research",		"thousand_sons_squad_cap_research" },
+				{ 2, 75, 250, 200, 1,		"Research",		"thousand_sons_requisition_research_1" },
+				{ 2, 200, 40, 300, 1,		"Research",		"thousand_sons_power_research_1" },
+				{ 2, 225, 175, 0, 1,		"Building",		"thousand_sons_machine_altar" },
+				{ 2, 160, 0, 0, 4,		"Building",		"thousand_sons_generator" },
+				{ 2, 120, 75, 800, 100, 	"TurretAddon",		"thousand_sons_list_post_addon_1" },
+				{ 2, 125, 0, 0, 1,		"Research",		"thousand_sons_support_cap_research" },
+				{ 2, 200, 0, 500, 1,		"Building",		"thousand_sons_tomb" },
+				{ 2, 300, 200, 600, 2,		"Building",		"thousand_sons_library" },
+				{ 2, 50, 0, 1000, 35,		"TurretAddon",		"thousand_sons_turret_addon" },
+				{ 2, 50, 50, 1000, 100,		"TurretAddon",		"thousand_sons_turret_invisibility_addon" },
+				{ 2, 600, 0, 1200, 1,		"Building",		"thousand_sons_gate" },
+				{ 2, 180, 0, 0, 5,		"Building",		"thousand_sons_generator" },
+				{ 2, 300, 380, 1500, 1,		"Addon",		"thousand_sons_hq_addon_2" },
+				{ 2, 275, 150, 2000, 50,	"TurretAddon",		"thousand_sons_list_post_addon_2" },
+				{ 2, 100, 50, 2000, 2,		"Building",		"thousand_sons_turret_bolter" },
+				{ 2, 50, 50, 2000, 2,		"Building",		"thousand_sons_mine_field" },
+				
+				{ 3, 200, 20, 0, 2,		"Unit",			"thousand_sons_squad_screamer" },
+				{ 3, 160, 16, 0, 2,		"Unit",			"thousand_sons_squad_horror" },
+				{ 3, 200, 350, 0, 1,		"Unit",			"thousand_sons_squad_dreadnought_sorc" },
+				{ 3, 75, 350, 900, 1,		"Research",		"thousand_sons_requisition_research_2" },
+				{ 3, 350, 0, 1000, 1,		"Research",		"thousand_sons_power_research_2" },
+				{ 3, 200, 250, 0, 1,		"Building",		"thousand_sons_altar_of_tzeentch" },
+				{ 3, 800, 0, 1000, 6,		"Building",		"thousand_sons_generator" },
+				{ 3, 400, 400, 2000, 1,		"Research",		"thousand_sons_tier4" },
+				{ 3, 1000, 400, 0, 2,		"Building",		"thousand_sons_machine_altar" },
+				{ 3, 1000, 0, 0, 2,		"Building",		"thousand_sons_gate" },
+				{ 3, 275, 150, 2500, 75,	"TurretAddon",		"thousand_sons_list_post_addon_2" },
+				{ 3, 100, 50, 2500, 3,		"Building",		"thousand_sons_turret_bolter" },
+				{ 3, 50, 50, 2500, 3,		"Building",		"thousand_sons_mine_field" },
+				{ 3, 800, 0, 1500, 1,		"Building",		"thousand_sons_tomb" },
+
+				{ 4, 300, 225, 2000, 1,		"Unit",			"thousand_sons_squad_daemon_prince_tzeentch" },
+				{ 4, 400, 400, 2500, 1,		"Research",		"thousand_sons_lord_of_change_research" },
+				{ 4, 100, 50, 2500, 9,		"Building",		"thousand_sons_turret_bolter" },
+				{ 4, 50, 50, 2500, 6,		"Building",		"thousand_sons_mine_field" },
+				{ 4, 275, 150, 2500, 100,	"TurretAddon",		"thousand_sons_list_post_addon_2" },
+				{ 4, 900, 0, 2600, 3,   	"Building",		"thousand_sons_hq" },
+				{ 4, 1500, 0, 1000, 14,		"Building",		"thousand_sons_generator" },
+				{ 4, 800, 800, 2000, 100,	"Addon",		"thousand_sons_hq_addon_1" },
+				{ 4, 1000, 1000, 2500, 100,	"Addon",		"thousand_sons_hq_addon_2" }
+			},
+		},
+				
+		SquadLimits = 
+		{
+			standard =
+			{
+				thousand_sons_squad_thrall = 3,
+				thousand_sons_squad_tzeentch_cultist = math.random( 2,3 ),
+				thousand_sons_squad_marine = math.random( 4,5 ),
+				thousand_sons_squad_marine_favoured = 1,
+				thousand_sons_squad_marine_damned = 1,
+				thousand_sons_squad_daemon = 1,
+				thousand_sons_squad_screamer = 3,
+				thousand_sons_squad_horror = math.random( 2,4 ),
+				thousand_sons_squad_flamers_of_tzeentch = 1,
+				thousand_sons_squad_spawn_1 = 0,
+				thousand_sons_squad_spawn_2 = 0,
+				thousand_sons_squad_spawn_3 = 0,
+				thousand_sons_squad_spawn_4 = 0,
+				thousand_sons_squad_spawn_5 = 0,
+				thousand_sons_squad_terminator = 1,
+				thousand_sons_squad_terminator_veteran = 1,
+				thousand_sons_squad_mutated_marine = 1,
+				thousand_sons_squad_disc_sorcerer = math.random( 2,3 ),
+				thousand_sons_squad_icon_bearer = 2,
+				thousand_sons_squad_burning_chariot = 1,
+				thousand_sons_squad_chosen = 1,
+				thousand_sons_squad_numerologist = 1,
+				thousand_sons_squad_mutated_sorcerer = 2,
+				thousand_sons_squad_lord = 1,
+				thousand_sons_squad_tzeentch_herald = 1,
+				thousand_sons_squad_blue_scribes = 1,
+				thousand_sons_squad_ahriman = 1,
+				thousand_sons_squad_ahriman_ktgm = 1,
+				thousand_sons_squad_daemon_prince_tzeentch = 1,
+				thousand_sons_squad_rhino = math.random( 1,2 ),
+				thousand_sons_squad_hell_blade = math.random( 2,5 ),
+				thousand_sons_squad_sekhetar_robots = 2,
+				thousand_sons_squad_deceiver = math.random( 1,3 ),
+				thousand_sons_squad_dreadnought = math.random( 2,4 ),
+				thousand_sons_squad_dreadnought_sorc = 1,
+				thousand_sons_squad_rubric_dreadnought = 1,
+				thousand_sons_squad_predator = math.random( 1,2 ),
+				thousand_sons_squad_whirlwind = 1,
+				thousand_sons_squad_grav_raider = 1,
+				thousand_sons_squad_hoverblade = 1,
+				thousand_sons_squad_loc = 1,
+				thousand_sons_squad_silver_tower = 1,
+			}
+		},
+	},
+}
+
+
+--------------------------------------------------------------------------------------------------------------------
+-- Gambit: I overrode the strategy choosing (to be done here), in order to have a different BuildOrderStrategyInfo,
+-- which is required for the two different type of armies, so that to properly start. Otherwise, 45 secs delay!
+		-- Tactic 1:  Rubric / Warp Gate strategy
+		-- Tactic 2:  Daemons / Daemon Gate strategy
+		-- Get map size and closest enemy distance
+		-- Calculate Chaos Daemons allies and Inquisition enemies probabilities (%)
+		TSons_MapSize, TSons_iClosestEnemyDistance = Strategy:GetMapSize()
+		TSons_daemonAllies, TSons_inquisitionEnemies = 0, 0
+		for oPlayer in cpu_manager.stats:GetPlayerStats() do
+			if not oPlayer:IsPlayerDead() then
+				if cpu_manager.player_stats:IsEnemy(oPlayer) then
+					TSons_oRace = oPlayer:GetPlayerRaceName()
+					if TSons_oRace == "inquisition_daemonhunt_race" then
+						TSons_inquisitionEnemies = TSons_inquisitionEnemies + 25
+					elseif TSons_oRace == "witch_hunters_race" then
+						TSons_inquisitionEnemies = TSons_inquisitionEnemies + 15
+					end
+				else
+					TSons_oRace = oPlayer:GetPlayerRaceName()
+					if TSons_oRace == "deamons_race" then
+						TSons_daemonAllies = TSons_daemonAllies + 20
+					end
+				end
+			end
+		end
+
+		-- 1] Set probability modifier based on enemies and allies
+		TSons_oModifier = TSons_daemonAllies - TSons_inquisitionEnemies
+
+		-- 2] Modify probability modifier in accordance with the map size
+		if TSons_MapSize == "small" then
+			TSons_oModifier = TSons_oModifier - 10
+		elseif TSons_MapSize == "medium" then
+			TSons_oModifier = TSons_oModifier + 5
+		elseif TSons_MapSize == "large" then
+			TSons_oModifier = TSons_oModifier + 10
+		end
+
+		-- 3] Modify probability modifier according to the closest enemy player
+		TSons_sEnemy = cpu_manager:FindClosestEnemyPlayer(false):GetPlayerRaceName()		
+		if TSons_sEnemy == "inquisition_daemonhunt_race" then
+			TSons_oModifier = TSons_oModifier - 30
+		elseif TSons_sEnemy == "witch_hunters_race" then
+			TSons_oModifier = TSons_oModifier - 20
+		end
+
+		-- 4] Now choose a program - 8%, make a purely random choice
+		if math.random(1,100) <= 8 then
+			TSons_AI_StrategyChosen = math.random(1,2)
+		-- 92%, make a choice based upon true battle conditions, as calculated above
+		else
+			TSons_iRandom = math.random(1, 100)
+			if (TSons_iRandom + TSons_oModifier <= 50) then
+			-- Tactic 1:  Rubric / Warp Gate strategy
+				TSons_AI_StrategyChosen = 1
+			else
+			-- Tactic 2:  Daemons / Daemon Gate strategy
+				TSons_AI_StrategyChosen = 2
+			end
+		end
+		-- Strategy chosen. Now, set the proper BuildOrderStrategyInfo
+		if TSons_AI_StrategyChosen == 1 then
+
+BuildOrderStrategyInfo = 
+{
+	thousand_sons_race =
+	{
+		Basic =
+		{
+			{ "building", "thousand_sons_tomb", true },
+			{ "building", "thousand_sons_generator", true },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "post_builder" }, { "post_builder" },
+		},
+
+		QuickStart =
+		{
+			{ "building", "thousand_sons_tomb", true },
+			{ "building", "thousand_sons_gate", true },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "flag_capture" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_screamer" },
+			{ "squad", "thousand_sons_squad_marine" },
+			{ "building", "thousand_sons_library", true },
+			{ "flag_capture" },
+			{ "building", "thousand_sons_generator"},
+			{ "flag_capture" }, { "flag_capture" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "thousand_sons_hq", true },
+			{ "building", "thousand_sons_generator", true }
+		},
+
+		LargeMap =
+		{
+			{ "building", "thousand_sons_tomb", true },
+			{ "building", "thousand_sons_generator"},
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_screamer" },
+			{ "squad", "thousand_sons_squad_marine" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "post_builder" }, { "post_builder" },
+		}
+	}
+}
+
+		else
+
+BuildOrderStrategyInfo = 
+{
+	thousand_sons_race =
+	{
+		Basic =
+		{
+			{ "building", "thousand_sons_gate", true },
+			{ "building", "thousand_sons_generator", true },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "post_builder" }, { "post_builder" },
+		},
+
+		QuickStart =
+		{
+			{ "building", "thousand_sons_gate", true },
+			{ "building", "thousand_sons_tomb", true },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "flag_capture" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_screamer" },
+			{ "squad", "thousand_sons_squad_marine" },
+			{ "building", "thousand_sons_library", true },
+			{ "flag_capture" },
+			{ "building", "thousand_sons_generator"},
+			{ "flag_capture" }, { "flag_capture" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "thousand_sons_hq", true },
+			{ "building", "thousand_sons_generator", true }
+		},
+
+		LargeMap =
+		{
+			{ "building", "thousand_sons_gate", true },
+			{ "building", "thousand_sons_generator"},
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "squad", "thousand_sons_squad_tzeentch_cultist" },
+			{ "squad", "thousand_sons_squad_screamer" },
+			{ "squad", "thousand_sons_squad_marine" },
+			{ "squad", "thousand_sons_squad_thrall" },
+			{ "post_builder" }, { "post_builder" },
+		}
+	}
+}
+
+	end
+--------------------------------------------------------------------------------------------------------------------
+
+AttackStrategyInfo = 
+{	
+	thousand_sons_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

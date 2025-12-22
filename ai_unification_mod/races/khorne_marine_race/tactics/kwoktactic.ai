@@ -1,0 +1,117 @@
+----------------------------------------
+-- File: 'WOKtactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 25.05.2020
+
+class 'kWOKTactic' (kInfantryTactic)
+
+WOK = {}
+
+function kWOKTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("WOK Tactic")
+
+	self.delayedTimer = g_iGMT
+	self.abilitySelection = math.random ( 1,100 )
+end
+
+function kWOKTactic:InitAbilities()
+
+	if (WOK.rage_id == nil) then
+		WOK.rage_id = cpu_manager.stats:GetAbilityID( "khm_khorne_rage" )
+	end
+
+	if (WOK.br_id == nil) then
+		WOK.br_id = cpu_manager.stats:GetAbilityID( "khm_blood_rain_wok" )	
+	end
+
+	if (WOK.ic_id == nil) then
+		WOK.ic_id = cpu_manager.stats:GetAbilityID( "khm_kdk_infernal_contempt" )	
+	end
+
+	if (WOK.ib_id == nil) then
+		WOK.ib_id = cpu_manager.stats:GetAbilityID( "khm_kdk_insatiable_bloodlust" )	
+	end
+
+	if (WOK.uf_id == nil) then
+		WOK.uf_id = cpu_manager.stats:GetAbilityID( "khm_kdk_unstoppable_ferocity" )	
+	end
+
+	if (WOK.af_id == nil) then
+		WOK.af_id = cpu_manager.stats:GetAbilityID( "khm_kdk_apocalyptic_fury" )	
+	end
+end
+
+function kWOKTactic:DoAbilities()
+
+	if g_iGMT > self.delayedTimer + 60 then
+        	self.abilitySelection = math.random ( 1,100 )
+        	self.delayedTimer = g_iGMT
+    	end
+
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	if iRequisition > 1000 and iPower > 1000 then
+
+		-- Check if we can use Khorne Rage
+		if (self.squad_ai:CanDoAbility(WOK.rage_id) and self.abilitySelection <= 50) then
+			local iRange = math.random (60,80)
+			local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), iRange, math.random(4,9))
+			if (oSquad ~= nil and oSquad:IsAttacking()) then
+				self.squad_ai:DoSpecialAbility(WOK.rage_id)
+		 		--print("Using Khorne Rage ability for player "..tostring(cpu_manager.player_id).."")
+			end
+		end
+	end
+
+	-- Check if we can use Insatiable Bloodlust
+	if (self.squad_ai:CanDoAbility(WOK.ib_id) and self.abilitySelection <= 50) then
+		local iRange = math.random (60,80)
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), iRange, math.random(4,9))
+		if (oSquad ~= nil and oSquad:IsAttacking()) then
+			self.squad_ai:DoSpecialAbility(WOK.ib_id)
+			--print("Using Insatiable Bloodlust ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Check if we can use Unstoppable Ferocity
+	if (self.squad_ai:CanDoAbility(WOK.uf_id) and self.abilitySelection <= 50) then
+		local iRange = math.random (60,80)
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), iRange, math.random(4,9))
+		if (oSquad ~= nil and oSquad:IsAttacking()) then
+			self.squad_ai:DoSpecialAbility(WOK.uf_id)
+			--print("Using Unstoppable Ferocity ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Check if we can use Apocalyptic Fury
+	if (self.squad_ai:CanDoAbility(WOK.af_id) and self.abilitySelection <= 50) then
+		local iRange = math.random (60,80)
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), iRange, math.random(4,9))
+		if (oSquad ~= nil and oSquad:IsAttacking()) then
+			self.squad_ai:DoSpecialAbility(WOK.af_id)
+			--print("Using Apocalyptic Fury ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Check if we can use Blood Rain
+	if (self.squad_ai:CanDoAbility(WOK.br_id) and self.abilitySelection <= 50) then
+		local iRange = self.squad_ai:GetAbilityRange(WOK.br_id)
+		local oSquad = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), iRange, math.random(10,14))
+		if (oSquad ~= nil and oSquad:IsAttacking()) then
+			self.squad_ai:DoSpecialAbilitySquad(WOK.br_id, oSquad:GetSquad())
+		 	--print("Using Blood Rain ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Check if we can use Infernal Contempt
+	if (self.squad_ai:CanDoAbility(WOK.ic_id) and self.abilitySelection <= 50) then
+		local iRange = self.squad_ai:GetAbilityRange(WOK.ic_id)
+		local oSquad = Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), iRange, math.random(10,14))
+		if (oSquad ~= nil and oSquad:IsAttacking()) then
+			self.squad_ai:DoSpecialAbilitySquad(WOK.ic_id, oSquad:GetSquad())
+		 	--print("Using Infernal Contempt ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+end

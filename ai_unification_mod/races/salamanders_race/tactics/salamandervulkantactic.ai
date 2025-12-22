@@ -1,0 +1,51 @@
+----------------------------------------
+-- File: 'salamandervulkantactic.ai'
+-- Edited by Gambit		@ 12.01.2006
+
+class 'SalamanderVulkanTactic' (SalamanderInfantryTactic)
+
+SalamanderVulkan = {}
+
+function SalamanderVulkanTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Vulkan Primarch Tactic")
+end
+
+function SalamanderVulkanTactic:IsAttacker()
+	return true
+end
+
+function SalamanderVulkanTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SalamanderVulkan.scorch_id == nil) then
+		SalamanderVulkan.scorch_id = cpu_manager.stats:GetAbilityID( "salamander_vulkan_scorch_the_earth" )
+		SalamanderVulkan.melta_id = cpu_manager.stats:GetAbilityID( "salamander_vulkan_melta_strike" )
+		SalamanderVulkan.rally_id = cpu_manager.stats:GetAbilityID( "salamander_vulkan_rally" )
+	end
+end
+
+function SalamanderVulkanTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SalamanderVulkan.scorch_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, SalamanderVulkan.scorch_id, Ability.Filters.CloseInfantryEnemy, 8 ) or
+			Ability.DoAbilityTarget( self.squad_ai, SalamanderVulkan.scorch_id, Ability.Filters.CloseMonsterEnemy, 6 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(SalamanderVulkan.melta_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, SalamanderVulkan.melta_id, Ability.Filters.CloseVehicleEnemy, 1 ) or
+			Ability.DoAbilityTargetEntity(self.squad_ai, SalamanderVulkan.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+				return
+			end
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(SalamanderVulkan.rally_id) then
+		local oHurtSquad = cpu_manager.cpu_player:FindFirstHurtSquad( self.squad_ai:GetPosition(), 200 )
+		if oHurtSquad ~= nil and oHurtSquad:IsBroken() then 
+			self.squad_ai:DoSpecialAbilitySquad(SalamanderVulkan.rally_id, self.squad_ai:GetSquad())
+		end
+	end
+end

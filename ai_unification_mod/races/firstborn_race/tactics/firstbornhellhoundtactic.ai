@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'firstbornhellhoundtactic.ai'
+-- Edited by Thudmeizer		@ 05.06.2008
+
+class 'FirstbornHellhoundTactic' (FirstbornVehicleTactic)
+
+FirstbornHellhound = {}
+
+function FirstbornHellhoundTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Hellhound Tactic")
+end
+
+function FirstbornHellhoundTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (FirstbornHellhound.burn_id == nil) then
+		FirstbornHellhound.burn_id = cpu_manager.stats:GetAbilityID( "firstborn_let_it_burn" )
+	end
+end
+
+function FirstbornHellhoundTactic:DoAbilities()
+
+	-- Try to use 'Let it Burn' (FirstbornHellhound)
+	Ability.DoAbilityPos(self.squad_ai, FirstbornHellhound.burn_id, Ability.Filters.CloseEnemy, 6)
+	
+	-- Call standard method
+	FirstbornVehicleTactic.DoAbilities(self)
+end

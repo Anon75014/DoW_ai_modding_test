@@ -1,0 +1,56 @@
+----------------------------------------
+-- File: 'skullprobetactic.ai'
+-- Edited by Thudmeizer   @ 27.02.2023
+
+class 'TemplarSkullProbeTactic' (InfantryTactic) -- (TemplarInfantryTactic)
+
+TemplarSkullProbe = {}
+
+function TemplarSkullProbeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("TemplarSkullProbe Tactic")
+end
+
+function TemplarSkullProbeTactic:IsSupportDetector()
+	return true
+end
+
+-- Should only attack when attached
+function TemplarSkullProbeTactic:IsAttacker()
+	return false
+end
+
+-- Should only defend when attached
+function TemplarSkullProbeTactic:IsDefender()
+	return false
+end
+
+function TemplarSkullProbeTactic:InitAbilities()
+
+	if TemplarSkullProbe.sabotage_id == nil then
+		TemplarSkullProbe.sabotage_id = cpu_manager.stats:GetAbilityID( "marines_sabotage" )	
+     	end
+end
+
+function TemplarSkullProbeTactic:DoAbilities()
+
+	if self.squad_ai:WasRecentlyHurt() then
+		Ability.DoAbilityTarget( self.squad_ai, TemplarSkullProbe.sabotage_id, Ability.Filters.CloseVehicleEnemy, 1 )
+  	end
+end
+
+function TemplarSkullProbeTactic:Update()
+
+	if self:IsComplete() then
+      		return
+	end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+	
+	self:TryAttachSquadMelee()
+end
+
+

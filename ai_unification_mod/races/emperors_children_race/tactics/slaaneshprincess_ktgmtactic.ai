@@ -1,0 +1,117 @@
+----------------------------------------
+-- File: 'slaaneshprincess_ktgmtactic.ai'
+-- Edited by Thudmeizer	@ 30.10.2023
+
+class 'SlaaneshPrincess_ktgmTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshPrincess_ktgm = {}
+
+function SlaaneshPrincess_ktgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Avatar Kill Team")
+end
+
+-- Try not to attack if of low health
+function SlaaneshPrincess_ktgmTactic:IsAttacker()
+	if self.squad_ai:GetHealthPercentage() < 0.25 then
+		return false
+	else
+		return true
+	end
+end
+
+-- Try not to defend if of low health
+function SlaaneshPrincess_ktgmTactic:IsDefender()
+	if self.squad_ai:GetHealthPercentage() < 0.25 then
+		return false
+	else
+		return true
+	end
+end
+
+function SlaaneshPrincess_ktgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshPrincess_ktgm.allure_id == nil then
+		SlaaneshPrincess_ktgm.allure_id = cpu_manager.stats:GetAbilityID( "emperors_children_allure_slaanesh" )
+		SlaaneshPrincess_ktgm.heal_id = cpu_manager.stats:GetAbilityID( "emperors_children_emerald_lifeswarm" )
+	end
+end
+
+function SlaaneshPrincess_ktgmTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		-- First, try to direct spawn the Kakophoni squad
+		if (self.squad_ai:CanDirectSpawn()) then 
+			self.squad_ai:DoDirectSpawn()
+			return
+		end
+--[[
+		-- Check if I can use in-combat abilities 
+		if self.squad_ai:IsInCombat() then
+
+			if self.squad_ai:CanDoAbility(SlaaneshPrincess_ktgm.allure_id) then
+				if Ability.Filters.CloseCommanderEnemy(self.squad_ai:GetPosition(), 5, 1) ~= nil
+				or Ability.Filters.CloseSquadEnemy(self.squad_ai:GetPosition(), 10, 6) ~= nil
+				or Ability.Filters.CloseMonsterEnemy(self.squad_ai:GetPosition(), 8, 1) ~= nil then
+					self.squad_ai:DoSpecialAbility( SlaaneshPrincess_ktgm.allure_id )
+					return
+				end
+			end
+]]
+		-- Use Allure against enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(SlaaneshPrincess_ktgm.allure_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(SlaaneshPrincess_ktgm.allure_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil) then
+				--print("Using Allure against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshPrincess_ktgm.allure_id, oUnit:GetSquad())
+				return
+			elseif (oUnitB ~= nil) then
+				--print("Using Allure against commander enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshPrincess_ktgm.allure_id, oUnitB:GetSquad())
+				return
+			elseif (oUnitC ~= nil) then
+				-- Get stats
+				local oStats = oUnitC:GetStats()
+				if (oStats ~= nil) then
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+						--print("Using Allure against monster enemies for player "..tostring(cpu_manager.player_id).."")
+						self.squad_ai:DoSpecialAbilitySquad(SlaaneshPrincess_ktgm.allure_id, oUnitC:GetSquad())
+						return
+					end
+				end
+			end
+		end
+	end
+
+	-- NOT TESTED!!!
+	if self.squad_ai:CanDoAbility(SlaaneshPrincess_ktgm.heal_id) then
+		-- Find: nearby (25) + wounded + non-vehicle + more that 3 members squad. For Commanders apply even for 1 member.
+		local oSquad = cpu_manager.cpu_player:FindFirstHurtSquad(self.squad_ai:GetPosition(), 25)
+		if oSquad ~= nil and oSquad:GetHealthPercentage() < 0.75 then
+			local oStats = oSquad:GetStats()
+			local oClass = nil
+			if oStats ~= nil then oClass = oStats:GetClass() end
+				if oClass ~= nil then
+					if oClass == UnitStatsAI.UC_Commander then
+						self.squad_ai:DoSpecialAbilitySquad(SlaaneshPrincess_ktgm.heal_id, oSquad:GetSquad())
+					elseif oSquad:GetNumTroopers() > 3 then
+						if oClass ~= UnitStatsAI.UC_VehicleLow and oClass ~= UnitStatsAI.UC_VehicleMed
+						and oClass ~= UnitStatsAI.UC_VehicleHigh and oClass ~= UnitStatsAI.UC_AirMed
+						and oClass ~= UnitStatsAI.UC_MonsterHigh then
+							self.squad_ai:DoSpecialAbilitySquad(SlaaneshPrincess_ktgm.heal_id, oSquad:GetSquad())
+					end
+				end
+			end
+		end
+	end
+end
+

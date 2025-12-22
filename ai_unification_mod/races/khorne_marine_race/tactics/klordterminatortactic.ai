@@ -1,0 +1,121 @@
+----------------------------------------
+-- File: 'klordterminatortactic.ai'
+-- Edited by Thudmeizer  @ 12.06.2022
+
+class 'kLordTerminatorTactic' (kInfantryTactic)
+
+kLordTerminator = {}
+
+function kLordTerminatorTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("k Lord Terminator Tactic")
+end
+
+function kLordTerminatorTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannelkLordTerminator = build_manager:GetBuildChannelFromID(e:GetID())
+		if (buildChannelkLordTerminator ~= nil) then
+			local addOnID = buildChannelkLordTerminator:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannelkLordTerminator:IsBuilding() == 0 and buildChannelkLordTerminator:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then			
+				buildChannelkLordTerminator:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+-- Assassinate win condition -- never attack
+function kLordTerminatorTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function kLordTerminatorTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function kLordTerminatorTactic:SetTarget( target, variant_type )
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+-- Assassinate win condition -- never jump into combat
+function kLordTerminatorTactic:JumpAttack()
+	if (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+function kLordTerminatorTactic:InitAbilities()
+
+	if (kLordTerminator.strength_id == nil) then
+		kLordTerminator.strength_id = cpu_manager.stats:GetAbilityID( "khm_daemon_strength" )	
+	end
+	if (kLordTerminator.regen_id == nil) then
+		kLordTerminator.regen_id = cpu_manager.stats:GetAbilityID( "khm_hero_regeneration" )
+	end
+end
+function kLordTerminatorTactic:DoAbilities()
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5) then
+	Ability.DoAbility(self.squad_ai, kLordTerminator.regen_id, Ability.Filters.IsInCombat )
+	end
+	Ability.DoAbility( self.squad_ai, kLordTerminator.strength_id, Ability.Filters.IsInCombat )
+end
+
+function kLordTerminatorTactic:Update()
+
+	local wargear_addons = math.random( 0,9 )
+
+	if (wargear_addons == 0) then
+		self:AutoBuildAddOn(0)
+	elseif (wargear_addons == 1) then
+		self:AutoBuildAddOn(1)
+	elseif (wargear_addons == 2) then
+		self:AutoBuildAddOn(2)
+	elseif (wargear_addons == 3) then
+		self:AutoBuildAddOn(3)
+	elseif (wargear_addons == 4) then
+		self:AutoBuildAddOn(4)
+	elseif (wargear_addons == 5) then
+		self:AutoBuildAddOn(5)
+	elseif (wargear_addons == 6) then
+		self:AutoBuildAddOn(6)
+	elseif (wargear_addons == 7) then
+		self:AutoBuildAddOn(7)
+	elseif (wargear_addons == 8) then
+		self:AutoBuildAddOn(8)
+	elseif (wargear_addons == 9) then
+		self:AutoBuildAddOn(9)
+	end
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+		
+		-- Attach to melee in tier3+
+		if (cpu_manager:GetTierLevel() > 2) then
+		
+			if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+				return
+			end
+		end
+
+		if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'Praetorian_ChimeraTactic.ai'
+-- Edited by fuggles		@ 05.09.2016
+
+class 'Praetorian_ChimeraTactic' (Praetorian_VehicleTactic)
+
+function Praetorian_ChimeraTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorian_Chimera Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end

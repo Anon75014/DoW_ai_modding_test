@@ -1,0 +1,31 @@
+----------------------------------------
+-- File: 'daemonsjuggtactic.ai'
+-- Edited by Gambit 5.30.2014
+
+class 'DaemonsJuggTactic' (DaemonsInfantryTactic)
+
+DaemonsJugg = {}
+
+function DaemonsJuggTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemons Infernal Juggernaut Tactic")
+end
+
+
+function DaemonsJuggTactic:InitAbilities()
+
+	if ( DaemonsJugg.headbutt_id == nil ) then
+		DaemonsJugg.headbutt_id = cpu_manager.stats:GetAbilityID( "daemons_jugg_head_butt" )
+	end
+end
+
+function DaemonsJuggTactic:DoAbilities()
+
+	if ( self.squad_ai:IsInCombat() ) then
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsJugg.headbutt_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+
+	-- Call basic DoAbilities methods
+	DaemonsInfantryTactic.DoAbilities(self)
+end
+ 

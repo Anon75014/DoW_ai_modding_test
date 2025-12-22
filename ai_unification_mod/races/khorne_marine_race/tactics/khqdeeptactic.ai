@@ -1,0 +1,43 @@
+----------------------------------------
+-- File: 'khqdeeptactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 23.05.2020
+
+class 'khqdeepTactic' (BaseTactic)
+
+function khqdeepTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("HQ Deep Tactic")
+
+	self.m_bCanDeepStrikeTroops = true
+end
+
+KhorneHQ = {}
+
+function khqdeepTactic:InitAbilities()
+
+	if (KhorneHQ.oblitMercenaries == nil) then
+		KhorneHQ.oblitMercenaries = cpu_manager.stats:GetAddOnID( "khm_obliterator_mercer_addon" )
+	end
+end
+
+function khqdeepTactic:HQDeepStrikeImmediately()
+
+	local buildChannelHQ = build_manager:GetBuildChannelFromID(self.base_ai:GetEntity():GetID())
+	local id = buildChannelHQ:GetBlueprintID()
+	if buildChannelHQ ~= nil then
+		if (buildChannelHQ:CanDeepStrike() and cpu_manager:MilitaryDeepStrike(id)) then
+			buildChannelHQ:DoDeepStrikeToPos(self.base_ai:GetPosition())
+		end
+	end
+end
+
+function khqdeepTactic:DoAbilities()
+
+	-- We want builders to be DSed immediately, but obliterators hopefully, only in battle...
+	if BuildBaseStrategy:CountSquads("khm_squad_slave") < 2 then 
+		self:HQDeepStrikeImmediately()
+	elseif not self.base_ai:HasAddOn(KhorneHQ.oblitMercenaries) then
+		self:HQDeepStrikeImmediately()
+	end
+end

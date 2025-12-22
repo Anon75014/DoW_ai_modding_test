@@ -1,0 +1,81 @@
+----------------------------------------
+-- File: 'enclavesetherealtactic.ai'
+-- Edited by Thudmeizer @ 09.09.2022
+
+class 'EnclavesEtherealTactic' (EnclavesInfantryTactic)
+
+EnclavesEthereal = {}
+
+function EnclavesEtherealTactic:__init( squad_ai ) super( squad_ai )
+	
+	self.timedDirectSpawnAbility = Timer( EnclavesEtherealTactic.DoDirectSpawnAbility, self, 5 )
+
+	self:SetName("Enclaves Ethereal Tactic")
+	
+	self.m_bRecover = true
+end
+
+function EnclavesEtherealTactic:IsAttacker()
+	return not self.m_bRecover
+end
+
+function EnclavesEtherealTactic:IsDefender()
+	return not self.m_bRecover
+end
+
+function EnclavesEtherealTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesEthereal.deathpulse_id == nil) then
+		EnclavesEthereal.deathpulse_id = cpu_manager.stats:GetAbilityID( "enclaves_death_pulse_child1_inner_damage" )
+	end
+end
+
+function EnclavesEtherealTactic:DoAbilities()
+
+	-- Target a wide area for an Air Caste Strike
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.6) then
+		Ability.DoAbilityPos(self.squad_ai, EnclavesEthereal.deathpulse_id, Ability.Filters.CloseEnemy, 8)
+		Ability.DoAbilityPos(self.squad_ai, EnclavesEthereal.deathpulse_id, Ability.Filters.CloseVehicleEnemy, 2)
+	else
+		Ability.DoAbilityPos(self.squad_ai, EnclavesEthereal.deathpulse_id, Ability.Filters.CloseEnemy, 12)
+		Ability.DoAbilityPos(self.squad_ai, EnclavesEthereal.deathpulse_id, Ability.Filters.CloseVehicleEnemy, 4)
+	end
+
+	-- Try to spawn honor guards
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		EnclavesEtherealTactic.DoDirectSpawnAbility(self)
+	end
+end
+
+function EnclavesEtherealTactic:DoDirectSpawnAbility()
+
+	-- Spawn honor guards in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function EnclavesEtherealTactic:Update()
+
+	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+
+	dbAssert( EnclavesEthereal.deathpulse_id ~= nil )
+    
+    	-- Check ethereal health
+    	if (self.squad_ai:GetHealthPercentage() < 0.5 or not self.squad_ai:CanDoAbility(EnclavesEthereal.deathpulse_id)) then
+    		self.m_bRecover = true
+	elseif (self.squad_ai:GetHealthPercentage() > 0.9 and self.squad_ai:CanDoAbility(EnclavesEthereal.deathpulse_id)) then
+		self.m_bRecover = false
+	end
+end
+

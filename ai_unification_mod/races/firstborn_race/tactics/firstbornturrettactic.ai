@@ -1,0 +1,41 @@
+----------------------------------------
+-- File: 'firstbornturrettactic.ai'
+-- Edited by Thudmeizer	@ 10.04.2023
+
+class 'FirstbornTurretTactic' (BaseTactic)
+
+FirstbornTurret = {}
+
+function FirstbornTurretTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Firstborn Turret Tactic")
+
+	self.Addon = math.random( 0, 1 )	  -- Choose either to leave turret as bolter or choose either heavy guns or speaker tower addons
+	self.Upgrade = math.random( 0, 1 )	  -- Choose either heavy guns or speaker tower
+end
+
+function FirstbornTurretTactic:AutoBuildTurretAddOn( addonSlot, iID )
+	local buildChannelLP = build_manager:GetBuildChannelFromID(iID)
+	if (buildChannelLP ~= nil) then
+		local addOnID = buildChannelLP:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+		if (buildChannelLP:IsBuilding() == 0 and buildChannelLP:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+			buildChannelLP:BuildAddOn(addOnID)
+		end
+	end
+end
+
+function FirstbornTurretTactic:DoAbilities()
+
+	if self.Addon == 0 then
+		-- Choose to remain turret bolter and not build any addons
+		return
+	else
+   		if (cpu_manager:GetTierLevel() >= 2) then 
+			local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+			local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+			if (iRequisition >= 100 and iPower >= 100) then
+				self:AutoBuildTurretAddOn(self.Upgrade, self.base_ai:GetEntity():GetID())	-- Build either heavy guns or speaker tower
+			end
+		end
+	end
+end

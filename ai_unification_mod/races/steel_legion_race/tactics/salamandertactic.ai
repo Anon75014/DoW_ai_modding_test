@@ -1,0 +1,71 @@
+----------------------------------------
+-- File: 'salamandertactic.ai'
+-- Edited by Thudmeizer @ 18.12.2010
+
+class 'SalamanderTactic' (SteelLegionVehicleTactic)
+
+Salamander = {}
+
+function SalamanderTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function SalamanderTactic:InitAbilities()
+
+	if (Salamander.bomber_id == nil) then
+		Salamander.bomber_id = cpu_manager.stats:GetAbilityID( "steel_legion_salamander_dive_bomber" )	
+	end
+
+	if (Salamander.sweep_id == nil) then
+		Salamander.sweep_id = cpu_manager.stats:GetAbilityID( "steel_legion_sensor_sweep" )
+	end
+end
+
+function SalamanderTactic:DoAbilities()
+
+	-- Commence air attack on these corrdinates
+ 	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos(self.squad_ai, Salamander.bomber_id, Ability.Filters.CloseEnemy, 12)
+		Ability.DoAbilityPos(self.squad_ai, Salamander.bomber_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+	else
+		Ability.DoAbilityPos(self.squad_ai, Salamander.bomber_id, Ability.Filters.CloseEnemy, 24)
+		Ability.DoAbilityPos(self.squad_ai, Salamander.bomber_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+	end
+
+	-- Activate Sensor Sweep to increase sight range or chance of detecting infiltrators
+	if (self.squad_ai:GetHealthPercentage() > 0.4) then
+
+		-- Can we activate sensor sweep when enemy is near
+		if (self.squad_ai:IsUsingAbility(Salamander.sweep_id)) then
+
+		-- Turn sweep on only when enemy is near
+   		if (Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), 20, 1) == nil) then
+			self.squad_ai:DoSpecialAbility(Salamander.sweep_id)
+		end
+	
+		elseif (Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), 20, 1) ~= nil) then
+			self.squad_ai:DoSpecialAbility(Salamander.sweep_id)
+		end
+	end
+end
+
+function SalamanderTactic:UnloadTroops()
+	return false
+end
+
+function SalamanderTactic:Update()
+
+	if self:IsComplete() then
+		return
+	end
+
+	--state machine
+   	if not VehicleTactic.Update( self ) then
+		return
+   	end
+end

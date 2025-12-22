@@ -1,0 +1,33 @@
+----------------------------------------
+-- File: 'kinfantrytactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 09.03.2023
+
+class 'kRampagersTactic' (kInfantryTactic)
+
+Rampagers = {}
+
+function kRampagersTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("k Rampagers Tactic")
+end
+
+function kRampagersTactic:InitAbilities()
+
+	if (Rampagers.blood_frenzy_id == nil) then
+		Rampagers.blood_frenzy_id = cpu_manager.stats:GetAbilityID( "khm_blood_frenzy" )	
+	end
+end
+
+function kRampagersTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+		if (not self:IsMoving()) then
+			if (self.squad_ai:CanDoAbility( Rampagers.blood_frenzy_id )) then
+				self.squad_ai:DoSpecialAbility( Rampagers.blood_frenzy_id )
+			end
+		end		
+	end
+
+	kInfantryTactic.DoAbilities(self)
+end

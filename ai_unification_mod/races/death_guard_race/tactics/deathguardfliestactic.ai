@@ -1,0 +1,36 @@
+----------------------------------------
+-- File: 'deathguardfliestactic.ai'
+-- Edited by Thudmeizer		@ 11.05.2022
+
+class 'DeathGuardFliesTactic' (DeathGuardInfantryTactic)
+
+DeathGuardFlies = {}
+
+function DeathGuardFliesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Flies Tactic")
+end
+
+function DeathGuardFliesTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DeathGuardFlies.swarm_id == nil) then
+		DeathGuardFlies.swarm_id = cpu_manager.stats:GetAbilityID( "death_guard_swarm" )
+	end
+end
+
+function DeathGuardFliesTactic:DoAbilities()
+		
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos( self.squad_ai, DeathGuardFlies.swarm_id, Ability.Filters.CloseEnemy, 4 )
+		Ability.DoAbilityPos(self.squad_ai, DeathGuardFlies.swarm_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) 
+	else
+		Ability.DoAbilityPos( self.squad_ai, DeathGuardFlies.swarm_id, Ability.Filters.CloseEnemy, 8 )
+		Ability.DoAbilityPos(self.squad_ai, DeathGuardFlies.swarm_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) 
+	end
+end
+
+function DeathGuardFliesTactic:IsSupportDetector()
+	return true
+end

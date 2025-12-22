@@ -1,0 +1,154 @@
+----------------------------------------
+-- File: 'slaaneshlordtermitactic.ai'
+-- Edited by Gambit @ 28.11.2018
+
+class 'SlaaneshLordTermiTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshLordTermi = {}
+
+function SlaaneshLordTermiTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Lord Termi Tactic")
+
+	self.melee1_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_chainfist_addon")
+	self.melee2_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_relicfist_addon")
+	self.multiw_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_staffshield_addon")
+	self.ranged1_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_volkite_addon")
+	self.ranged2_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_missilepod_addon")
+	self.special1_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_helmet_addon")
+	self.special2_id = cpu_manager.stats:GetAddOnID("emperors_children_lord_teleporter_addon")
+	
+	self.LordWGChoice1 = math.random( 1, 3 )
+	self.LordWGChoice2 = math.random( 1, 2 )
+end
+
+
+-- Assassinate win condition -- never attack
+function SlaaneshLordTermiTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+
+-- Assassinate win condition -- never defend
+function SlaaneshLordTermiTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+
+function SlaaneshLordTermiTactic:JumpAttack()
+
+	if (cpu_manager.assassinate) or (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+
+function SlaaneshLordTermiTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannelLord = build_manager:GetBuildChannelFromID(e:GetID())
+		if (buildChannelLord ~= nil) then
+			local addOnID = buildChannelLord:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannelLord:IsBuilding() == 0 and buildChannelLord:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then
+				buildChannelLord:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+
+function SlaaneshLordTermiTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshLordTermi.mutation_id == nil) then
+		SlaaneshLordTermi.mutation_id = cpu_manager.stats:GetAbilityID( "emperors_children_daemon_mutation" )
+		SlaaneshLordTermi.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren" )
+		SlaaneshLordTermi.drugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )
+		SlaaneshLordTermi.missiles_id = cpu_manager.stats:GetAbilityID( "emperors_children_lord_pod_missiles" )
+	end
+end
+
+
+function SlaaneshLordTermiTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SlaaneshLordTermi.siren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshLordTermi.siren_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshLordTermi.mutation_id) then
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshLordTermi.mutation_id, Ability.Filters.CloseEnemy, 10, 3 )
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshLordTermi.drugs_id) then
+			self.squad_ai:DoSpecialAbility(SlaaneshLordTermi.drugs_id)
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshLordTermi.missiles_id) then
+			Ability.DoAbilityPos(self.squad_ai, SlaaneshLordTermi.missiles_id, Ability.Filters.CloseInfantryEnemy, 6)
+		end
+	end
+end
+
+
+function SlaaneshLordTermiTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+--[[ Special local method to build addons (Termi Lord's Wargear)
+		*********** WARGEAR ADDONS LIST ***********
+	SLOT	WARGEAR ADDON NAME								Entity Addon Line
+	  0		emperors_children_lord_chainfist_addon			[addon_01]
+	  1		emperors_children_lord_relicfist_addon			[addon_02]
+	  2		emperors_children_lord_staffshield_addon		[addon_03]
+	  3		emperors_children_lord_volkite_addon			[addon_04]
+	  4		emperors_children_lord_missilepod_addon			[addon_05]
+	  5		emperors_children_lord_missilepod_barrage_addon	[addon_06]
+	  6		emperors_children_lord_helmet_addon				[addon_07]
+	  7		emperors_children_lord_teleporter_addon			[addon_08]
+	  8		emperors_children_lord_rosarius_addon			[addon_09]
+
+	Note: Each slot (starting from 0) corresponds to a wargear
+	addon (starting from 01 on the entity's addon_ext list)]]
+
+	-- Check available resources and health, before performing the upgrades
+	local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	if iReq > 250 and iPow > 250 and self.squad_ai:GetHealthPercentage() > 0.35 then
+		if self.LordWGChoice1 == 1 then
+			-- ChainFist set
+			self:AutoBuildAddOn(0); self:AutoBuildAddOn(3)
+			self:AutoBuildAddOn(6); self:AutoBuildAddOn(7); self:AutoBuildAddOn(8)
+		elseif self.LordWGChoice1 == 2 then
+			-- RelicBlade set
+			self:AutoBuildAddOn(1); self:AutoBuildAddOn(3)
+			self:AutoBuildAddOn(6); self:AutoBuildAddOn(7); self:AutoBuildAddOn(8)
+		elseif self.LordWGChoice1 == 3 then
+			-- StaffShield set
+			self:AutoBuildAddOn(2)
+			self:AutoBuildAddOn(6); self:AutoBuildAddOn(7); self:AutoBuildAddOn(8)
+		end
+		if self.LordWGChoice2 == 1 then self:AutoBuildAddOn(4)
+		elseif self.LordWGChoice2 == 2 then self:AutoBuildAddOn(5) end
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+				
+		if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+			return
+		end
+		if (self:TryAttachSquad(false, true, 50, nil, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+end

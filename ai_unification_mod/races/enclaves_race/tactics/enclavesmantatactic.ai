@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'enclavesmantatactic.ai'
+-- Edited by Thudmeizer     @ 17.09.2022
+
+class 'EnclavesMantaTactic' (EnclavesVehicleTactic)
+
+function EnclavesMantaTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Enclaves Manta Tactic")
+	
+	-- Vehicle is a super heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 10
+end
+
+

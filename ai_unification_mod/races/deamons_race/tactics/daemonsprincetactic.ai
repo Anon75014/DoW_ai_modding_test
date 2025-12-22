@@ -1,0 +1,261 @@
+----------------------------------------
+-- File: 'daemonsprincetactic.ai'
+-- Edited by CornCobMan @ 29.05.2013
+-- Edited by Gambit 16/04/2018
+-- Edited by Thudmeizer 29.10.2023
+
+class 'DaemonsPrinceTactic' (DaemonsInfantryTactic)
+
+DaemonsPrince = {}
+
+function DaemonsPrinceTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemons Prince Tactic")
+	self.squadDPrinceName = self.squad_ai:GetSquadName()
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+	--self.checkTime = g_iGMT
+	self.isStuck = false
+end
+
+-- Assassinate win condition -- never attack
+function DaemonsPrinceTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function DaemonsPrinceTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function DaemonsPrinceTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (DaemonsPrince.warpportal_id == nil) then
+		DaemonsPrince.warpportal_id = cpu_manager.stats:GetAbilityID( "daemons_warp_portal_lord" )	
+	end
+	if(self.squadDPrinceName == "daemon_squad_daemon_prince" ) then
+		if (DaemonsPrince.warpfire_id == nil) then
+			DaemonsPrince.warpfire_id = cpu_manager.stats:GetAbilityID( "daemons_warpfire_prince" )	
+			DaemonsPrince.hellmouth_id = cpu_manager.stats:GetAbilityID( "daemons_warpfire_roar" )	
+			DaemonsPrince.obliteration_id = cpu_manager.stats:GetAbilityID( "daemons_divine_obliteration" )	
+		end
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_khorne" ) then
+		if (DaemonsPrince.fear_id == nil) then
+			DaemonsPrince.fear_id = cpu_manager.stats:GetAbilityID( "daemons_fear_roar" )	
+			DaemonsPrince.blood_id = cpu_manager.stats:GetAbilityID( "daemons_mark_of_blood" )	
+		end
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_nurgle" ) then
+		if (DaemonsPrince.fear_id == nil) then
+			DaemonsPrince.fear_id = cpu_manager.stats:GetAbilityID( "daemons_fear_roar" )	
+			DaemonsPrince.rot_id = cpu_manager.stats:GetAbilityID( "daemons_nurgles_rot_prince" )	
+		end
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_slaanesh" ) then
+		if (DaemonsPrince.fear_id == nil) then
+			DaemonsPrince.fear_id = cpu_manager.stats:GetAbilityID( "daemons_fear_roar" )	
+			DaemonsPrince.curse_id = cpu_manager.stats:GetAbilityID( "daemons_curse_slaanesh" )	
+		end
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_tzeentch" ) then
+		if (DaemonsPrince.fear_id == nil) then
+			DaemonsPrince.fear_id = cpu_manager.stats:GetAbilityID( "daemons_fear_roar" )	
+			DaemonsPrince.warptime_id = cpu_manager.stats:GetAbilityID( "daemons_warp_time_prince" )	
+			DaemonsPrince.warpfire_id = cpu_manager.stats:GetAbilityID( "daemons_warpfire_loc" )	
+		end
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_advance_sp" ) then
+		if (DaemonsPrince.curse_id == nil) then
+			DaemonsPrince.curse_id = cpu_manager.stats:GetAbilityID( "daemons_curse_slaanesh_advance" )
+			DaemonsPrince.obliteration_id = cpu_manager.stats:GetAbilityID( "daemons_divine_obliteration_advance" )	
+			DaemonsPrince.blood_id = cpu_manager.stats:GetAbilityID( "daemons_mark_of_blood_advance" )
+			DaemonsPrince.rot_id = cpu_manager.stats:GetAbilityID( "daemons_nurgles_rot_prince_advance" )
+			DaemonsPrince.warptime_id = cpu_manager.stats:GetAbilityID( "daemons_warp_time_prince_advance" )
+			DaemonsPrince.warpfire_id = cpu_manager.stats:GetAbilityID( "daemons_warpfire_loc_advance" )	
+			DaemonsPrince.warpfireb_id = cpu_manager.stats:GetAbilityID( "daemons_warpfire_prince" )	
+			DaemonsPrince.hellmouth_id = cpu_manager.stats:GetAbilityID( "daemons_warpfire_roar" )	
+		end
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_ktgm" ) then
+		if (DaemonsPrince.curse_id == nil) then
+			DaemonsPrince.curse_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_curse_slaanesh_ktgm" )
+			DaemonsPrince.obliteration_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_divine_obliteration" )
+			DaemonsPrince.fear_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_fear_roar" )		
+			DaemonsPrince.blood_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_mark_of_blood_ktgm" )
+			DaemonsPrince.rot_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_nurgles_rot_prince_ktgm" )
+			DaemonsPrince.warptime_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_warp_time_prince_ktgm" )
+			DaemonsPrince.warpfire_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_warpfire_loc_ktgm" )	
+			DaemonsPrince.warpfireb_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_warpfire_prince" )	
+			DaemonsPrince.hellmouth_id = cpu_manager.stats:GetAbilityID( "daemons_ls_daemon_lord_warpfire_roar" )	
+		end
+	end
+end
+
+function DaemonsPrinceTactic:DoAbilities()
+
+	Ability.DoAbilityPos( self.squad_ai, DaemonsPrince.warpportal_id, Ability.Filters.CloseSquadEnemy, 1 )
+
+	if (self.squadDPrinceName == "daemon_squad_daemon_prince" ) then
+	
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.obliteration_id, Ability.Filters.IsInCombat )
+		Ability.DoAbilityPos( self.squad_ai, DaemonsPrince.hellmouth_id, Ability.Filters.CloseSquadEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.warpfire_id, Ability.Filters.CloseSquadEnemy, 1 )
+		
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_khorne" ) then
+	
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.fear_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.blood_id, Ability.Filters.IsInCombat )
+		
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_nurgle" ) then
+	
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.fear_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.rot_id, Ability.Filters.IsInCombat )
+		
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_slaanesh" ) then
+	
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.fear_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.curse_id, Ability.Filters.CloseSquadEnemy, 1 )
+		
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_tzeentch" ) then
+	
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.fear_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.warptime_id, Ability.Filters.IsInCombat )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.warpfire_id, Ability.Filters.CloseSquadEnemy, 1 )
+
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_advance_sp" ) then
+
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.curse_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.obliteration_id, Ability.Filters.IsInCombat )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.blood_id, Ability.Filters.IsInCombat )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.rot_id, Ability.Filters.IsInCombat )
+		Ability.DoAbility( self.squad_ai, DaemonsPrince.warptime_id, Ability.Filters.IsInCombat )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.warpfire_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, DaemonsPrince.warpfireb_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbilityPos( self.squad_ai, DaemonsPrince.hellmouth_id, Ability.Filters.CloseSquadEnemy, 2 )
+
+	elseif(self.squadDPrinceName == "daemon_squad_daemon_prince_ktgm" ) then	
+
+		-- Try to use Obliteration Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.obliteration_id)) then 
+			Ability.DoAbility( self.squad_ai, DaemonsPrince.obliteration_id, Ability.Filters.IsInCombat )
+		end
+
+		-- Try to use Blood Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.blood_id)) then 
+			Ability.DoAbility( self.squad_ai, DaemonsPrince.blood_id, Ability.Filters.IsInCombat )
+		end
+
+		-- Try to use Rot Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.rot_id)) then 
+			Ability.DoAbility( self.squad_ai, DaemonsPrince.rot_id, Ability.Filters.IsInCombat )
+		end
+
+		-- Try to use Warptime Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.warptime_id)) then 
+			Ability.DoAbility( self.squad_ai, DaemonsPrince.warptime_id, Ability.Filters.IsInCombat )
+		end
+
+		-- Try to use Curse Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.curse_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DaemonsPrince.curse_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			if (oUnit ~= nil) then
+				--print("Using Curse Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DaemonsPrince.curse_id, oUnit:GetSquad())
+				return
+			end
+		end
+
+		-- Try to use Fear Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.fear_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DaemonsPrince.fear_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 2)
+			if (oUnit ~= nil) then
+				--print("Using Fear Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DaemonsPrince.fear_id, oUnit:GetSquad())
+				return
+			end
+		end
+
+		-- Try to use Warpfire Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.warpfire_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DaemonsPrince.warpfire_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			if (oUnit ~= nil) then
+				--print("Using Warpfire Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DaemonsPrince.warpfire_id, oUnit:GetSquad())
+				return
+			end
+		end
+
+		-- Try to use Warpfire B Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.warpfireb_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DaemonsPrince.warpfireb_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			if (oUnit ~= nil) then
+				--print("Using Warpfire B Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DaemonsPrince.warpfireb_id, oUnit:GetSquad())
+				return
+			end
+		end
+
+		-- Try to use Hellmouth Ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DaemonsPrince.hellmouth_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DaemonsPrince.hellmouth_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 2)
+			if (oUnit ~= nil) then
+				--print("Using Hellmouth Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DaemonsPrince.hellmouth_id, oUnit:GetSquad())
+				return
+			end
+		end
+	end
+
+    -- Jump squads' unstuck code call. Put ANYWHERE in the DoAbilities() function
+    -- Checks jump-able stuck squads, and force them to jump nearby
+	if self.squad_ai:CanJump() then
+		self:SolveStuckCase()
+	end
+end
+
+-- Unstuck Code
+function DaemonsPrinceTactic:SolveStuckCase()
+	local iPosition = self.squad_ai:GetPosition()
+	if iPosition.x ~= self.initialPosition.x or iPosition.z ~= self.initialPosition.z then
+		self.isStuck = false
+	elseif (self.squad_ai:IsInStateMove() or self.squad_ai:IsInStateAttackMove()) and not self.squad_ai:IsInCombat()
+	and iPosition.x == self.initialPosition.x and iPosition.z == self.initialPosition.z then
+		self.isStuck = true
+	end
+	if self.isStuck then
+		self:ForceSquadJumpNear(iPosition)
+	end
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function DaemonsPrinceTactic:ForceSquadJumpNear(pos)
+	-- Try to jump somewhere near, perform 16 checks for a viable position
+	local jumpDisSqr = sqr(self.squad_ai:GetJumpDistance())
+	for iLoop1 = 1, 16 do
+		-- Create a jump position
+		local vJumpPosition = pos
+		local vDir = cpu_manager:GetDirectionToEnemy(pos)
+		vJumpPosition.x = vJumpPosition.x + vDir.x * math.random(-20, 50)
+		vJumpPosition.z = vJumpPosition.z + vDir.z * math.random(-20, 50)
+		-- Check if target position is in range and if unit is able to jump to target position
+		local iDistance = distance_sqr(vJumpPosition, pos)
+		if iDistance < jumpDisSqr and self.squad_ai:CanJumpToPosition(vJumpPosition) then
+			-- Jump to position
+			self.squad_ai:DoJump(vJumpPosition)
+			self.last_jump = g_iGMT
+			self.m_iLastGatherMove = self.last_jump - 10
+			return
+		end
+	end
+end

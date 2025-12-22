@@ -1,0 +1,66 @@
+----------------------------------------
+-- File: 'renegades_balalaika_tactic.ai'
+-- Edited by Thudmeizer @ 24.09.2023
+
+class 'Renegades_Balalaika_Tactic' (Renegades_Infantry_Tactic)
+
+Balalaika = {}
+
+function Renegades_Balalaika_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Balalaika Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Balalaika_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Balalaika_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Balalaika_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Balalaika.emp_id == nil) then
+		Balalaika.emp_id = cpu_manager.stats:GetAbilityID( "renegade_guard_emp_shot" )	
+	end
+end
+
+function Renegades_Balalaika_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Target vehicles
+		if self.squad_ai:CanDoAbility(Balalaika.emp_id) then
+			Ability.DoAbilityTarget( self.squad_ai, Balalaika.emp_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		end
+	end
+end
+
+function Renegades_Balalaika_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

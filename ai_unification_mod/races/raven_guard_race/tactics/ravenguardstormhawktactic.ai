@@ -1,0 +1,58 @@
+----------------------------------------
+-- File: 'RavenGuardStormhawkTactic.ai'
+-- Edited by Gambit	@ 14.09.2021
+-- Edited by Thudmeizer	@ 21.03.2023
+
+class 'RavenGuardStormhawkTactic' (RavenGuardSpaceMarineVehicleTactic)
+
+RavenGuardStormHawk = {}
+
+function RavenGuardStormhawkTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Stormhawk Interceptor Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function RavenGuardStormhawkTactic:InitAbilities()
+
+	-- Init ability ID's
+	if RavenGuardStormHawk.missiles_id == nil then
+		RavenGuardStormHawk.missiles_id = cpu_manager.stats:GetAbilityID( "raven_guard_stormhawk_missiles" )
+	end
+
+	if RavenGuardStormHawk.infiltration_id == nil then
+		RavenGuardStormHawk.infiltration_id = cpu_manager.stats:GetAbilityID( "raven_guard_aircraft_infiltration" )
+	end
+end
+
+function RavenGuardStormhawkTactic:DoAbilities()
+
+	local pos = self.squad_ai:GetPosition()
+	local use_frag = (Ability.Filters.CloseSquadEnemy(pos, 40, 1) ~= nil or Ability.Filters.CloseMonsterEnemy(pos, 40, 1) ~= nil)
+	if self.squad_ai:IsUsingAbility(RavenGuardStormHawk.missiles_id) then
+		if use_frag then
+			self.squad_ai:DoSpecialAbility(RavenGuardStormHawk.missiles_id)
+		end
+	elseif not use_frag then
+		self.squad_ai:DoSpecialAbility(RavenGuardStormHawk.missiles_id)
+	end
+
+	-- Check to make sure if threats are nearby
+	if self.squad_ai:IsInCombat() then
+
+		-- If I can infiltrate when enemies are close
+		local iPos = self.squad_ai:GetPosition()
+		local oTarget = Ability.Filters.CloseEnemy(iPos, 10, 1)
+		if oTarget ~= nil and oTarget:IsValid() then
+			if (self.squad_ai:CanDoAbility( RavenGuardStormHawk.infiltration_id )) then
+				self.squad_ai:DoSpecialAbility( RavenGuardStormHawk.infiltration_id )
+			end
+		end
+	end
+	
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

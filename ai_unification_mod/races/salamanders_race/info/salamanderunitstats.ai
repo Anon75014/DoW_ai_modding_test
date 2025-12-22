@@ -1,0 +1,1422 @@
+----------------------------------------
+-- File: 'salamanderunitstats.ai'
+-- Edited by Gambit 	@ 28.08.2019
+-- Edited by Thudmeizer	@ 08.02.2025
+
+-- Skirmish
+UnitStrengths.salamander_squad_techmarine = 10
+UnitStrengths.salamander_squad_salamander = 0
+UnitStrengths.salamander_squad_daemonette = 40
+UnitStrengths.salamander_squad_skull_probe = 50
+UnitStrengths.salamander_squad_scout = 45
+UnitStrengths.salamander_squad_tactical = 50
+UnitStrengths.salamander_squad_tactical_assault = 55
+UnitStrengths.salamander_squad_sisters = 70
+UnitStrengths.salamander_squad_vanguard_veterans = 70
+UnitStrengths.salamander_squad_sternguard_veterans = 90
+UnitStrengths.salamander_squad_primaris_aggressor = 70
+UnitStrengths.salamander_squad_primaris_eradicator = 80
+UnitStrengths.salamander_squad_primaris_infernus = 80
+UnitStrengths.salamander_squad_terminator = 85
+UnitStrengths.salamander_squad_terminator_assault = 85
+UnitStrengths.salamander_squad_terminator_fire_drakes = 120
+UnitStrengths.salamander_squad_apothecary = 60
+UnitStrengths.salamander_squad_sister_hospitaller = 60
+UnitStrengths.salamander_squad_banner_bearer = 85
+UnitStrengths.salamander_squad_deathwatch_vanguard_veteran = 240
+UnitStrengths.salamander_squad_librarian = 350
+UnitStrengths.salamander_squad_librarian_survival = 350
+UnitStrengths.salamander_squad_chaplain = 310
+UnitStrengths.salamander_squad_force_commander = 310
+UnitStrengths.salamander_squad_force_commander_terminator = 350
+UnitStrengths.salamander_squad_force_commander_primaris = 450
+UnitStrengths.salamander_squad_rhino = 145
+UnitStrengths.salamander_squad_razorback = 145
+UnitStrengths.salamander_squad_land_speeder_variant = 200
+UnitStrengths.salamander_squad_thundercannon = 300
+UnitStrengths.salamander_squad_rapier = 330
+UnitStrengths.salamander_squad_lighting = 350
+UnitStrengths.salamander_squad_dreadnought_codex = 470
+UnitStrengths.salamander_squad_dreadnought_ironclad_ven = 650
+UnitStrengths.salamander_squad_whirlwind = 490
+UnitStrengths.salamander_squad_vindicator = 490
+UnitStrengths.salamander_squad_predator = 465
+UnitStrengths.salamander_squad_sicaran_punisher = 850
+UnitStrengths.salamander_squad_sicaran_venator = 1250
+UnitStrengths.salamander_squad_land_raider_prometheus = 800
+UnitStrengths.salamander_squad_land_raider_redeemer = 1000
+UnitStrengths.salamander_squad_stormraven = 1000
+UnitStrengths.salamander_squad_stormraven_landed = 1000
+UnitStrengths.salamander_squad_vulkan_primarch = 1100
+
+LeaderStrengths.salamander_squad_scout = 75
+LeaderStrengths.salamander_squad_tactical = 75
+LeaderStrengths.salamander_squad_tactical_assault = 75
+LeaderStrengths.salamander_squad_vanguard_veterans = 75
+LeaderStrengths.salamander_squad_primaris_infernus = 75
+LeaderStrengths.salamander_squad_primaris_eradicator = 100
+LeaderStrengths.salamander_squad_sisters = 100
+LeaderStrengths.salamander_squad_terminator = 100
+LeaderStrengths.salamander_squad_terminator_assault = 100
+LeaderStrengths.salamander_squad_terminator_fire_drakes = 320
+
+Attachments.salamander_squad_scout = { "salamander_squad_skull_probe", "salamander_squad_apothecary", "salamander_squad_sister_hospitaller", "salamander_squad_banner_bearer", "salamander_squad_chaplain", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator" }
+Attachments.salamander_squad_tactical = { "salamander_squad_skull_probe", "salamander_squad_sister_hospitaller", "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_chaplain", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator" }
+Attachments.salamander_squad_vanguard_veterans = { "salamander_squad_banner_bearer", "salamander_squad_apothecary", "salamander_squad_sister_hospitaller", "salamander_squad_chaplain", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe" }
+Attachments.salamander_squad_sisters = { "salamander_squad_sister_hospitaller", "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_chaplain", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe" }
+Attachments.salamander_squad_primaris_aggressor = { "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_chaplain", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe", "salamander_squad_sister_hospitaller" }
+Attachments.salamander_squad_primaris_infernus = { "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_chaplain", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe", "salamander_squad_sister_hospitaller" }
+Attachments.salamander_squad_primaris_eradicator = { "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_chaplain", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe", "salamander_squad_sister_hospitaller" }
+Attachments.salamander_squad_terminator = { "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_chaplain", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe", "salamander_squad_sister_hospitaller" }
+Attachments.salamander_squad_terminator_assault = { "salamander_squad_force_commander_terminator", "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_force_commander", "salamander_squad_chaplain", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_skull_probe", "salamander_squad_sister_hospitaller" }
+Attachments.salamander_squad_sternguard_veterans = { "salamander_squad_apothecary", "salamander_squad_banner_bearer", "salamander_squad_librarian", "salamander_squad_librarian_survival", "salamander_squad_sister_hospitaller", "salamander_squad_chaplain", "salamander_squad_force_commander", "salamander_squad_force_commander_terminator", "salamander_squad_skull_probe" }
+
+SalamanderUnitStats = 
+{
+	race = "salamanders_race",
+	{
+		name = "Salamander Techmarine",
+		sbp_name = "salamander_squad_techmarine",
+		ebp_name = "salamander_techmarine",
+		class = UnitStatsAI.UC_Commander,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "salamander_bolter_tactical_techmarine",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.8,0.4,2.9,2.6,0.3,1.1,0.0,2.6,1.0,1.5,1.8,0.5,0.0,0.0,0.7,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_combi_bolter_flamer_techmarine",
+				effectiveness = GenerateUnitEffectiveness(2.9,3.7,1.0,3.9,2.9,1.2,0.6,0.0,3.8,1.7,2.4,2.4,0.5,0.0,0.0,1.2,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_combi_bolter_melta_techmarine",
+				effectiveness = GenerateUnitEffectiveness(1.7,2.0,0.3,1.0,0.8,1.5,1.9,2.1,1.0,1.0,1.1,1.5,1.9,1.9,0.0,1.5,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_power_axe_techmarine",
+				effectiveness = GenerateUnitEffectiveness(3.4,7.0,0.5,7.6,6.4,2.6,2.0,0.7,8.2,8.2,4.6,2.6,1.3,1.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_thunder_hammer_techmarine",
+				effectiveness = GenerateUnitEffectiveness(4.0,4.4,0.1,4.4,4.0,2.0,2.0,1.0,3.3,1.0,2.4,2.0,1.3,1.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Beast",
+		sbp_name = "salamander_squad_salamander",
+		ebp_name = "salamander_salamander",
+		class = UnitStatsAI.UC_MonsterMed,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "salamander_unarmed_warp_beast_big",
+				effectiveness = GenerateUnitEffectiveness(3.5,3.7,0.4,3.2,3.3,0.6,0.0,0.0,3.2,1.3,3.3,3.7,1.5,2.5,0.0,0.6,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Lesser Daemonette (Prime)",
+		sbp_name = "salamander_squad_daemonette",
+		ebp_name = "salamander_daemonette",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 3,
+		potential =
+		{
+			{
+				name = "salamander_blades_daemonette",
+				effectiveness = GenerateUnitEffectiveness(8,7,7,4,3.3,1,0,0,8,5,3.3,2,1,0,0,0,0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Skull Probe",
+		sbp_name = "salamander_squad_skull_probe",
+		ebp_name = "salamander_skull_probe",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 0,
+		potential =
+		{
+			{
+				name = "none",
+				effectiveness = GenerateUnitEffectiveness(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+				range = UnitStatsAI.RT_None,
+			},
+		}
+	},
+	{
+		name = "Salamander Scout Marine",
+		sbp_name = "salamander_squad_scout",
+		ebp_name = "salamander_scout_marine",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_bolter_scout",
+				effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_scout",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_shotgun_scout",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_sniper_rifle",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_scout",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_missile_launcher_scout",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,math.random(6*10,7*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_knife_scout",
+				effectiveness = GenerateUnitEffectiveness(2.9,3.7,1.0,3.9,2.9,1.2,0.6,0.0,3.8,1.7,2.4,2.4,0.5,0.0,0.0,1.2,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Sister Battle Sister",
+		sbp_name = "salamander_squad_sisters",
+		ebp_name = "salamander_sister_battle_sister",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 6.5,
+		potential =
+		{
+			{
+				name = "salamander_bolter_battle_sister",
+				effectiveness = GenerateUnitEffectiveness(math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,math.random(4.5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_battle_sister",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,4.3,2.2,3.3,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,2.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_gun_battle_sister",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,4.3,2.2,3.3,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_storm_bolter_battle_sister",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,4.3,2.2,3.3,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,2.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_battle_sister",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,4.3,2.2,3.3,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,math.random(5*10,6.5*10)/10,2.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_knife_battle_sister",
+				effectiveness = GenerateUnitEffectiveness(1.5,1.9,0.3,1.5,1.5,0.0,0.0,0.0,1.5,0.3,1.2,1.3,0.3,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Tactical Bolter",
+		sbp_name = "salamander_squad_tactical",
+		ebp_name = "salamander_tactical_bolter",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_tactical",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_gun_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_heavy_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_tactical",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Assault Marine",
+		sbp_name = "salamander_squad_tactical_assault",
+		ebp_name = "salamander_assault_marine",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_assault",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_assault",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_gun_assault",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_chainsword_assault",
+				effectiveness = GenerateUnitEffectiveness(4.3,5.4,0.7,4.8,4.5,1.8,0.9,0.4,4.7,0.7,2.7,1.9,0.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander First Company Veteran Marine Cc",
+		sbp_name = "salamander_squad_vanguard_veterans",
+		ebp_name = "salamander_first_company_veteran_marine_cc",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_assault",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_lightning_claw_veteran",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_power_axe_veteran",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_thunder_hammer_veteran",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_power_sword_flaming_veteran",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_chainsword_assault",
+				effectiveness = GenerateUnitEffectiveness(4.3,5.4,0.7,4.8,4.5,1.8,0.9,0.4,4.7,0.7,2.7,1.9,0.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander First Company Veteran Marine Ranged",
+		sbp_name = "salamander_squad_sternguard_veterans",
+		ebp_name = "salamander_first_company_veteran_sternguard",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_bolter_sternguard",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_combi_bolter_flamer_sternguard",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.1,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_combi_bolter_melta_sternguard",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_heavy_flamer_sternguard",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.1,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_heavy_bolter_sternguard",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.1,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_missile_launcher_sternguard",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_sternguard",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_knife_sternguard",
+				effectiveness = GenerateUnitEffectiveness(4.3,5.4,0.7,4.8,4.5,1.8,0.9,0.4,4.7,0.7,2.7,1.9,0.8,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Primaris Aggressor",
+		sbp_name = "salamander_squad_primaris_aggressor",
+		ebp_name = "salamander_primaris_aggressor",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6.8,
+		potential =
+		{
+			{
+				name = "salamander_heavy_bolter_aggressor_primaris",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,9*10)/10,math.random(7*10,9*10)/10,math.random(6*10,9*10)/10,math.random(6*10,9*10)/10,math.random(6*10,9*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_aggressor_primaris",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_grenade_launcher_aggressor_primaris",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_power_fist_terminator",
+				effectiveness = GenerateUnitEffectiveness(1.4,2.1,0.3,2.3,1.9,0.8,0.6,0.3,2.2,0.5,1.3,1.7,0.6,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Primaris Infernus",
+		sbp_name = "salamander_squad_primaris_infernus",
+		ebp_name = "salamander_primaris_infernus",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7.4,
+		potential =
+		{
+			{
+				name = "salamander_flamer_infernus",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_knife_sternguard",
+				effectiveness = GenerateUnitEffectiveness(3.3,4.4,0.3,3.3,3.2,0.0,0.0,0.0,3.2,0.3,2.5,3.3,0.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Primaris Eradicator",
+		sbp_name = "salamander_squad_primaris_eradicator",
+		ebp_name = "salamander_primaris_eradicator",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 7.4,
+		potential =
+		{
+			{
+				name = "salamander_melta_rifle_eradicator",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_eradicator",
+				effectiveness = GenerateUnitEffectiveness(4.7,4.2,4.1,4.1,math.random(7*10,8.5*10)/10,math.random(7*10,8.5*10)/10,math.random(7.5*10,9*10)/10,math.random(8.5*10,100)/10,4.3,2.2,3.3,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,4.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_knife_sternguard",
+				effectiveness = GenerateUnitEffectiveness(1.4,2.1,0.3,2.3,1.9,0.8,0.6,0.3,2.2,0.5,1.3,1.7,0.6,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Terminator",
+		sbp_name = "salamander_squad_terminator",
+		ebp_name = "salamander_terminator",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "salamander_storm_bolter_termi",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_terminator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_assault_cannon_terminator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,math.random(7.5*10,9*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_power_fist_terminator",
+				effectiveness = GenerateUnitEffectiveness(1.4,2.1,0.3,2.3,1.9,0.8,0.6,0.3,2.2,0.5,1.3,1.7,0.6,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Terminator Assault",
+		sbp_name = "salamander_squad_terminator_assault",
+		ebp_name = "salamander_terminator_assault",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "salamander_thunder_hammer_terminator",
+				effectiveness = GenerateUnitEffectiveness(math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,math.random(6*10,8*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Terminator Fire Drake",
+		sbp_name = "salamander_squad_terminator_fire_drakes",
+		ebp_name = "salamander_terminator_fire_drake",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 9,
+		potential =
+		{
+			{
+				name = "salamander_thunder_hammer_fire_drake",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Apothecary",
+		sbp_name = "salamander_squad_apothecary",
+		ebp_name = "salamander_apothecary",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_sergeant",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_pistol_apothecary",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_pistol_apothecary",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_power_sword_flaming_sergeant",
+				effectiveness = GenerateUnitEffectiveness(2.6,2.4,0.9,2.4,2.0,4.9,2.7,0.0,7.4,6.2,5.0,4.1,1.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_chainsword_apothecary",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.7,2.5,2.4,0.4,0.1,0.0,2.4,0.7,2.0,2.0,0.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Sister Hospitaller",
+		sbp_name = "salamander_squad_sister_hospitaller",
+		ebp_name = "salamander_sister_hospitaller",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_laspistol_hospitaller",
+				effectiveness = GenerateUnitEffectiveness(6.5,7.7,0.4,5.2,5.3,0.6,0.0,0.0,5.2,1.3,3.3,5.7,1.5,2.5,0.0,0.6,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_chainsword_assault",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.9,0.7,2.5,2.4,0.4,0.1,0.0,2.4,0.7,2.0,2.0,0.5,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Banner Bearer",
+		sbp_name = "salamander_squad_banner_bearer",
+		ebp_name = "salamander_banner_bearer",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_bolter_tactical",
+				effectiveness = GenerateUnitEffectiveness(math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,math.random(5*10,6*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_tactical",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_gun_tactical",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_knife_tactical",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Deathwatch Vanguard Veteran",
+		sbp_name = "salamander_squad_deathwatch_vanguard_veteran",
+		ebp_name = "salamander_deathwatch_vanguard_veteran",
+		class = UnitStatsAI.UC_Commander,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_chaplain",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_pistol_deathwatch_veteran",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_pistol_deathwatch_veteran",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_power_sword_librarian",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_thunder_hammer_fire_drake",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_xenophase_blade",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Librarian",
+		sbp_name = "salamander_squad_librarian",
+		ebp_name = "salamander_librarian",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(8*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_librarian",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_combi_bolter_flamer_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_combi_bolter_melta_commander",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_power_sword_librarian",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_force_weapon_flaming",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Librarian Survival",
+		sbp_name = "salamander_squad_librarian_survival",
+		ebp_name = "salamander_librarian_survival",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(8*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_librarian",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_combi_bolter_flamer_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_combi_bolter_melta_commander",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_power_sword_librarian",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_force_weapon_flaming",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Chaplain",
+		sbp_name = "salamander_squad_chaplain",
+		ebp_name = "salamander_chaplain",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(8*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_chaplain",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_combi_bolter_flamer_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_combi_bolter_melta_commander",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_crozius_arcanum",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_crozius_arcanum_flaming",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Force Commander",
+		sbp_name = "salamander_squad_force_commander",
+		ebp_name = "salamander_force_commander",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(8*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_forcecommander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_mastercraft_force_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_mastercraft_force_commander",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_flamesword_force_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_daemon_hammer_flaming",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_relic_blade_flaming_commander",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Force Commander Terminator",
+		sbp_name = "salamander_squad_force_commander_terminator",
+		ebp_name = "salamander_force_commander_terminator",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(8*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_storm_bolter_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_power_fist_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_chainfist_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_lightning_claws_flaming_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_thunder_hammer_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_relic_blade_flaming_termi_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_missile_launcher_cyclone_terminator",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Force Commander Primaris",
+		sbp_name = "salamander_squad_force_commander_primaris",
+		ebp_name = "salamander_force_commander_primaris",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(8*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_bolt_pistol_forcecommander",
+				effectiveness = GenerateUnitEffectiveness(math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,math.random(8*10,9*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamer_mastercraft_force_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_melta_mastercraft_force_commander",
+				effectiveness = GenerateUnitEffectiveness(2.5,2.3,1.0,2.9,2.7,3.1,2.2,1.6,3.8,1.0,2.4,2.5,1.6,1.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_flamesword_force_commander",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_daemon_hammer_flaming",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_relic_blade_flaming_commander",
+				effectiveness = GenerateUnitEffectiveness(2.6,3.4,0.3,2.6,2.5,0.0,0.0,0.0,2.5,0.3,2.0,2.5,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Salamander Rhino",
+		sbp_name = "salamander_squad_rhino",
+		ebp_name = "salamander_rhino",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 5,
+		potential =
+		{
+			{
+				name = "salamander_storm_bolter_rhino_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_storm_bolter_rhino_left",
+				effectiveness = GenerateUnitEffectiveness(3.5,4.3,1.0,3.9,3.7,2.1,1.2,0.6,3.8,1.0,2.4,1.5,0.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_rhino_left",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,5.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Salamander Razorback",
+		sbp_name = "salamander_squad_razorback",
+		ebp_name = "salamander_razorback",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_heavy_bolter_razorback",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_twin_razorback",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_assault_cannon_twin_razorback",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_twin_razorback",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_storm_bolter_razorback",
+				effectiveness = GenerateUnitEffectiveness(4.0,6.3,0.2,6.7,5.2,1.3,1.0,0.4,6.6,1.0,2.3,2.1,0.8,0.0,0.0,1.3,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Land Speeder Variant",
+		sbp_name = "salamander_squad_land_speeder_variant",
+		ebp_name = "salamander_land_speeder_variant",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_heavy_bolter_land_speeder",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_land_speeder",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_land_speeder",
+				effectiveness = GenerateUnitEffectiveness(4.0,6.3,0.2,6.7,5.2,1.3,1.0,0.4,6.6,1.0,2.3,2.1,0.8,0.0,0.0,1.3,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Lightning Fighter",
+		sbp_name = "salamander_squad_lighting",
+		ebp_name = "salamander_lighting",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_lightning_missile",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_lightning_lascannon",
+				effectiveness = GenerateUnitEffectiveness(2.0,2.0,0.4,2.4,2.4,3.9,3.4,2.4,2.6,2.6,1.7,1.8,1.3,1.0,0.0,7.8,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_lightning_lascannon_2",
+				effectiveness = GenerateUnitEffectiveness(2.0,2.0,0.4,2.4,2.4,3.9,3.4,2.4,2.6,2.6,1.7,1.8,1.3,1.0,0.0,7.8,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_lightning_missile",
+				effectiveness = GenerateUnitEffectiveness(1.2,1.8,0.5,1.5,1.2,1.5,1.4,1.0,1.5,1.5,0.9,1.4,0.6,0.5,0.0,1.9,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Thunderfire Cannon",
+		sbp_name = "salamander_squad_thundercannon",
+		ebp_name = "salamander_thunderfire_cannon",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 6,
+		potential =
+		{
+			{
+				name = "salamander_thundercannon",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Rapier",
+		sbp_name = "salamander_squad_rapier",
+		ebp_name = "salamander_rapier",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_thermite_quad_rapier",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Dreadnought Codex",
+		sbp_name = "salamander_squad_dreadnought_codex",
+		ebp_name = "salamander_dreadnought_codex",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_dreadnought_fist",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_heavy_flamer_twin_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_dreadnought",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_dreadnought_fist_twin",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_heavy_flamer_dreadnought_left",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Salamander Venerable Ironclad Dreadnought",
+		sbp_name = "salamander_squad_dreadnought_ironclad_ven",
+		ebp_name = "salamander_dreadnought_ironclad_ven",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 7.5,
+		potential =
+		{
+			{
+				name = "salamander_seismic_hammer_dreadnought_iclad_ven",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "salamander_hurricane_bolter_dreadnought_iclad_ven",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_inferno_cannon_dreadnought_iclad_ven",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Whirlwind",
+		sbp_name = "salamander_squad_whirlwind",
+		ebp_name = "salamander_whirlwind",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_missile_battery",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_storm_bolter_whirlwind",
+				effectiveness = GenerateUnitEffectiveness(4.0,6.3,0.2,6.7,5.2,1.3,1.0,0.4,6.6,1.0,2.3,2.1,0.8,0.0,0.0,1.3,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Vindicator",
+		sbp_name = "salamander_squad_vindicator",
+		ebp_name = "salamander_vindicator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_vindicator_gun",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_storm_bolter_vindicator_right",
+				effectiveness = GenerateUnitEffectiveness(6.2,9.7,0.4,10.0,8.0,2.0,1.5,0.7,10.0,1.6,3.6,3.3,1.2,0.0,0.0,2.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Predator",
+		sbp_name = "salamander_squad_predator",
+		ebp_name = "salamander_predator",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 7,
+		potential =
+		{
+			{
+				name = "salamander_storm_bolter_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_autocannon_predator",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_infernus_cannon_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_magma_melta_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_tank_right",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_heavy_flamer_tank_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_tank_right",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_tank_left",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_tank_left",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_tank_left",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Sicaran Punisher",
+		sbp_name = "salamander_squad_sicaran_punisher",
+		ebp_name = "salamander_sicaran_punisher",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "salamander_storm_bolter_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_sicaran_left_top",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_sicaran_right_top",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_punisher_rotary_cannon_sicaran",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_sicaran_hull",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Sicaran Venator",
+		sbp_name = "salamander_squad_sicaran_venator",
+		ebp_name = "salamander_sicaran_venator",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8,
+		potential =
+		{
+			{
+				name = "salamander_storm_bolter_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,math.random(4*10,7*10)/10,6.1,2.3,3.1,3.7,1.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_flamer_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.7,3.2,3.1,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,2.3,3.1,3.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "salamander_multi_melta_predator",
+				effectiveness = GenerateUnitEffectiveness(3.7,3.2,3.1,3.1,math.random(7*10,7.5*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,3.3,2.2,3.3,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_sicaran_left_top",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_heavy_bolter_sicaran_right_top",
+				effectiveness = GenerateUnitEffectiveness(2.1,2.6,1.5,2.5,2.3,0.4,0.3,0.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_neutron_beam_venator",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.6,2.5,3.5,3.3,1.4,1.3,1.1,2.8,1.6,1.8,0.8,0.3,0.4,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Prometheus Command Tank",
+		sbp_name = "salamander_squad_land_raider_prometheus",
+		ebp_name = "salamander_land_raider_prometheus",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = math.random(7.5*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_quad_bolter_right",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_quad_bolter_left",
+				effectiveness = GenerateUnitEffectiveness(5.2,5.2,4.4,4.2,3.2,3.0,3.0,3.7,4.0,6.7,3.2,8.8,7.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_predator",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.2,1.4,3.2,3.2,5.0,6.0,4.7,4.0,5.7,3.2,6.8,5.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Land Raider Redeemer",
+		sbp_name = "salamander_squad_land_raider_redeemer",
+		ebp_name = "salamander_land_raider_redeemer",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = math.random(7.5*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_multi_melta_predator",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_assault_cannon_redeemer",
+				effectiveness = GenerateUnitEffectiveness(5.2,5.2,4.4,4.2,3.2,3.0,3.0,3.7,4.0,6.7,3.2,8.8,7.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamestorm_cannon_right",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.2,1.4,3.2,3.2,5.0,6.0,4.7,4.0,5.7,3.2,6.8,5.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_flamestorm_cannon_left",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.2,1.4,3.2,3.2,5.0,6.0,4.7,4.0,5.7,3.2,6.8,5.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Stormraven",
+		sbp_name = "salamander_squad_stormraven",
+		ebp_name = "salamander_stormraven",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = math.random(7.5*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_assault_cannon_twin_stormraven",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_multi_melta_stormraven",
+				effectiveness = GenerateUnitEffectiveness(3.2,3.2,1.4,3.2,3.2,5.0,6.0,4.7,4.0,5.7,3.2,6.8,5.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_hurricane_bolter_left",
+				effectiveness = GenerateUnitEffectiveness(5.2,5.2,4.4,4.2,3.2,3.0,3.0,3.7,4.0,6.7,3.2,8.8,7.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_hurricane_bolter_right",
+				effectiveness = GenerateUnitEffectiveness(5.2,5.2,4.4,4.2,3.2,3.0,3.0,3.7,4.0,6.7,3.2,8.8,7.8,6.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Stormraven Landed",
+		sbp_name = "salamander_squad_stormraven_landed",
+		ebp_name = "salamander_stormraven_landed",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = math.random(7.5*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_assault_cannon_twin_stormraven",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Salamander Vulkan Primarch",
+		sbp_name = "salamander_squad_vulkan_primarch",
+		ebp_name = "salamander_vulkan_primarch",
+		class = UnitStatsAI.UC_Commander,
+		rating = math.random(7.5*10,9.5*10)/10,
+		potential =
+		{
+			{
+				name = "salamander_heavy_incinerator_vulkan",
+				effectiveness = GenerateUnitEffectiveness(math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,math.random(7*10,8*10)/10,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "salamander_thunder_hammer_vulkan",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.0,7.0,7.0,7.9,7.2,7.0,7.6,7.0,7.2,7.2,7.6,7.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+}

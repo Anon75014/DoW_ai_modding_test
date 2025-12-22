@@ -1,0 +1,789 @@
+----------------------------------------
+-- File: 'MechUnitStats.ai'
+-- Edited by Arkhan		@ 24.10.2006
+-- Edited by Warboss-rus	@ 27.11.2010
+-- Edited by Karandras		@ 08.03.2012
+-- Edited by fuggles 		@ 08.01.2014
+-- Edited by I_Chample		@ 23.06.2014
+-- Edited by Thudmeizer 	@ 04.02.2024
+
+-- Skirmish
+UnitStrengths.mechanicus_squad_skull_probes = 75
+UnitStrengths.mechanicus_squad_skull_probes_2 = 75
+UnitStrengths.mechanicus_squad_skull_probes_3 = 75
+UnitStrengths.mechanicus_squad_servitor_melee = 50
+UnitStrengths.mechanicus_squad_skitarii = 200
+UnitStrengths.mechanicus_squad_skitarii_hover = 300
+UnitStrengths.mechanicus_squad_praetorian = 450
+UnitStrengths.mechanicus_squad_visitor = 600
+UnitStrengths.mechanicus_squad_magos_explorator = 325
+UnitStrengths.mechanicus_squad_arhimagos = 400
+UnitStrengths.mechanicus_squad_arhimagos_prime = 600
+UnitStrengths.mechanicus_squad_warrior = 300
+UnitStrengths.mechanicus_squad_hell_stalker = 500
+UnitStrengths.mechanicus_squad_orbital_stalker = 550
+UnitStrengths.mechanicus_fabricator_squad_aetos_surveyor = 600
+UnitStrengths.mechanicus_squad_king_russ = 700
+UnitStrengths.mechanicus_squad_knight = 1000
+UnitStrengths.mechanicus_squad_living_base = 1000
+
+LeaderStrengths.mechanicus_squad_magos_explorator = 0
+LeaderStrengths.mechanicus_squad_praetorian = 0 -- command squad
+LeaderStrengths.mechanicus_squad_skitarii = 75
+LeaderStrengths.mechanicus_squad_skitarii_hover = 75
+
+Attachments.mechanicus_squad_servitor_melee = { "mechanicus_squad_skull_probes", "mechanicus_squad_skull_probes_2", "mechanicus_squad_skull_probes_3" }
+Attachments.mechanicus_squad_skitarii = { "mechanicus_squad_arhimagos", "mechanicus_squad_skull_probes", "mechanicus_squad_skull_probes_2", "mechanicus_squad_skull_probes_3" }
+Attachments.mechanicus_squad_praetorian = { "mechanicus_squad_arhimagos", "mechanicus_squad_skull_probes", "mechanicus_squad_skull_probes_2", "mechanicus_squad_skull_probes_3" }
+Attachments.mechanicus_squad_visitor = { "mechanicus_squad_arhimagos", "mechanicus_squad_skull_probes", "mechanicus_squad_skull_probes_2", "mechanicus_squad_skull_probes_3" }
+
+MechUnitStats =
+{
+	race = "mechanicus_race",
+	{
+		name = "Melee Servitor",
+		sbp_name = "mechanicus_squad_servitor_melee",
+		ebp_name = "mechanicus_servitor_melee",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 2.0,
+		potential =
+		{
+			{
+				name = "am_power_wrench_servitor",
+				effectiveness = GenerateUnitEffectiveness(1.0,1.4,1.1,1.2,1.1,1.7,1.6,1.8,1.1,0.0,1.0,1.8,1.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_heavy_bolter_servitor",
+				effectiveness = GenerateUnitEffectiveness(3.1,4.1,0.4,4.6,3.3,0.3,0.9,0.0,4.3,0.9,1.4,1.5,0.3,0.0,0.0,0.5,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_multi_melta_servitor",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.5,3.4,3.6,3.3,3.2,5.9,4.9,3.3,2.9,3.4,3.5,5.3,5.9,2.9,0.5,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_plasma_cannon_servitor",
+				effectiveness = GenerateUnitEffectiveness(4.1,4.5,3.4,4.4,5.3,3.2,3.9,3.9,4.3,4.9,4.4,3.5,3.3,2.9,2.9,0.5,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_power_wrench_inferior_servitor",
+				effectiveness = GenerateUnitEffectiveness(1.0,1.4,1.1,1.2,1.1,1.7,1.6,1.8,1.1,0.0,1.0,1.8,1.6,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Skull Probes",
+		sbp_name = "mechanicus_squad_skull_probes",
+		ebp_name = "mechanicus_skull_probes",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 3.0,
+		potential =
+		{
+			{
+				name = "am_dummy_weapon",
+				effectiveness = GenerateUnitEffectiveness(2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+			{
+				name = "am_flamer_skull",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.3,2.3,2.3,1.7,0.7,0.1,0.0,0.9,0.0,1.5,1.0,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_lasgun_skull",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.3,2.3,2.3,1.7,0.7,0.1,0.0,0.9,0.0,1.5,1.0,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_skull_probes_melee_1",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.3,0.3,0.3,0.0,0.0,0.0,0.0,0.3,0.0,0.0,0.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_skull_probes_melee_2",
+				effectiveness = GenerateUnitEffectiveness(0.0,1.3,1.3,1.3,0.0,0.0,0.0,0.0,1.3,0.0,0.0,1.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_skull_probes_melee_3",
+				effectiveness = GenerateUnitEffectiveness(0.0,2.3,2.3,2.3,0.0,0.0,0.0,0.0,2.3,0.0,0.0,2.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Skull Probes",
+		sbp_name = "mechanicus_squad_skull_probes_2",
+		ebp_name = "mechanicus_skull_probes",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 3.0,
+		potential =
+		{
+			{
+				name = "am_dummy_weapon",
+				effectiveness = GenerateUnitEffectiveness(2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+			{
+				name = "am_flamer_skull",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.3,2.3,2.3,1.7,0.7,0.1,0.0,0.9,0.0,1.5,1.0,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_lasgun_skull",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.3,2.3,2.3,1.7,0.7,0.1,0.0,0.9,0.0,1.5,1.0,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_skull_probes_melee_1",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.3,0.3,0.3,0.0,0.0,0.0,0.0,0.3,0.0,0.0,0.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_skull_probes_melee_2",
+				effectiveness = GenerateUnitEffectiveness(0.0,1.3,1.3,1.3,0.0,0.0,0.0,0.0,1.3,0.0,0.0,1.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_skull_probes_melee_3",
+				effectiveness = GenerateUnitEffectiveness(0.0,2.3,2.3,2.3,0.0,0.0,0.0,0.0,2.3,0.0,0.0,2.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Skull Probes",
+		sbp_name = "mechanicus_squad_skull_probes_3",
+		ebp_name = "mechanicus_skull_probes",
+		class = UnitStatsAI.UC_LightInfantryLow,
+		rating = 3.0,
+		potential =
+		{
+			{
+				name = "am_dummy_weapon",
+				effectiveness = GenerateUnitEffectiveness(2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_None,
+			},
+			{
+				name = "am_flamer_skull",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.3,2.3,2.3,1.7,0.7,0.1,0.0,0.9,0.0,1.5,1.0,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_lasgun_skull",
+				effectiveness = GenerateUnitEffectiveness(2.3,2.3,2.3,2.3,1.7,0.7,0.1,0.0,0.9,0.0,1.5,1.0,0.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_skull_probes_melee_1",
+				effectiveness = GenerateUnitEffectiveness(0.0,0.3,0.3,0.3,0.0,0.0,0.0,0.0,0.3,0.0,0.0,0.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_skull_probes_melee_2",
+				effectiveness = GenerateUnitEffectiveness(0.0,1.3,1.3,1.3,0.0,0.0,0.0,0.0,1.3,0.0,0.0,1.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_skull_probes_melee_3",
+				effectiveness = GenerateUnitEffectiveness(0.0,2.3,2.3,2.3,0.0,0.0,0.0,0.0,2.3,0.0,0.0,2.3,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Skitarii",
+		sbp_name = "mechanicus_squad_skitarii",
+		ebp_name = "mechanicus_skitarii",
+		class = UnitStatsAI.UC_LightInfantryMed,
+		rating = 3.5,
+		potential =
+		{
+			{
+				name = "am_lasgun",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,2.7,1.7,1.1,0.0,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_grenade_launcher",
+				effectiveness = GenerateUnitEffectiveness(4.6,5.1,5.0,4.8,3.7,3.0,3.0,1.6,3.6,0.0,1.0,3.4,2.4,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_sniper_rifle",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.1,4.1,5.0,4.7,2.1,1.9,0.0,5.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_flamer",
+				effectiveness = GenerateUnitEffectiveness(3.3,3.3,3.3,3.3,2.7,1.7,1.1,0.0,3.2,2.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_hellgun_gipastist",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.2,4.1,4.4,3.5,2.7,1.7,0.9,2.7,1.0,4.1,4.5,3.4,2.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_plasma_gun",
+				effectiveness = GenerateUnitEffectiveness(3.0,3.9,3.7,5.5,5.3,3.9,3.4,0.0,4.3,3.3,3.0,4.7,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_melta_gun",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.1,3.6,3.6,7.0,7.0,1.8,0.0,2.6,7.2,7.2,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_hellgun_hower_gipastist_heavy",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.2,4.1,4.4,3.5,2.7,1.7,0.9,2.7,1.0,4.1,4.5,3.4,2.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_knife_skitarii",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_chainsword",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_power_sword",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Skitarii Hover",
+		sbp_name = "mechanicus_squad_skitarii_hover",
+		ebp_name = "mechanicus_skitarii_hover",
+		class = UnitStatsAI.UC_LightInfantryHigh,
+		rating = 4.0,
+		potential =
+		{
+			{
+				name = "am_shotgun",
+				effectiveness = GenerateUnitEffectiveness(4.3,4.3,4.3,4.3,3.7,1.7,1.1,0.0,1.9,0.0,2.5,2.0,1.7,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_flamer",
+				effectiveness = GenerateUnitEffectiveness(5.7,3.6,3.8,3.4,2.5,0.4,0.4,0.0,4.6,0.2,1.3,2.6,1.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_plasma_gun",
+				effectiveness = GenerateUnitEffectiveness(3.0,3.9,3.7,5.5,5.3,3.9,3.4,0.0,4.3,3.3,3.0,4.7,3.9,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_hellgun_gipastist",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.2,4.1,4.4,3.5,2.7,1.7,0.9,2.7,1.0,4.1,4.5,3.4,2.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_melta_gun",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.1,3.6,3.6,7.0,7.0,1.8,0.0,2.6,7.2,7.2,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_cryogun_gipastist",
+				effectiveness = GenerateUnitEffectiveness(5.7,3.6,3.8,3.4,2.5,0.4,0.4,0.0,3.6,0.0,1.3,2.6,1.1,3.0,3.0,3.0,3.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_chainsword",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_power_sword",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_power_fist",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Praetorians",
+		sbp_name = "mechanicus_squad_praetorian",
+		ebp_name = "mechanicus_praetorian_base",
+		class = UnitStatsAI.UC_HeavyInfantryMed,
+		rating = 5.0,
+		potential =
+		{
+			{
+				name = "am_power_sabres_praetorians",
+				effectiveness = GenerateUnitEffectiveness(5.4,5.9,5.1,5.1,5.0,0.0,0.0,0.0,2.2,0.0,1.1,3.1,2.2,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Visitor",
+		sbp_name = "mechanicus_squad_visitor",
+		ebp_name = "mechanicus_visitor",
+		class = UnitStatsAI.UC_HeavyInfantryHigh,
+		rating = 7.0,
+		potential =
+		{
+			{
+				name = "am_heavy_bolter_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_heavy_bolter_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.6,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_heavy_flamer_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_flamer_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_cryogun_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_cryogun_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_multi_melta_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_multi_melta_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_plasma_cannon_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_plasma_cannon_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_twin_claws_heavy_melee_servitor",
+				effectiveness = GenerateUnitEffectiveness(7.5,8.8,8.6,8.9,8.6,7.1,6.8,8.6,9.0,8.6,7.4,8.3,5.7,5.8,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Magos Explorator",
+		sbp_name = "mechanicus_squad_magos_explorator",
+		ebp_name = "mechanicus_magos_explorator",
+		class = UnitStatsAI.UC_Commander,
+		rating = 7.0,
+		potential =
+		{
+			{
+				name = "am_flamer_techpriest",
+				effectiveness = GenerateUnitEffectiveness(6.2,7.3,6.9,7.3,5.9,5.8,5.1,3.9,7.2,4.1,5.3,6.6,4.8,5.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_techpriest_weapon",
+				effectiveness = GenerateUnitEffectiveness(3.4,3.9,3.1,3.1,0.0,0.0,0.0,0.0,2.2,0.0,1.1,3.1,2.2,1.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "ArhiMagos",
+		sbp_name = "mechanicus_squad_arhimagos",
+		ebp_name = "mechanicus_arhimagos",
+		class = UnitStatsAI.UC_Commander,
+		rating = 8.0,
+		potential =
+		{
+			{
+				name = "am_arhimagos_ranged_group",
+				effectiveness = GenerateUnitEffectiveness(6.3,7.2,7.0,7.2,6.0,5.7,5.2,3.8,7.3,3.9,5.4,6.5,4.9,5.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_arhimagos_melee",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.8,3.5,2.9,3.2,0.9,1.4,0.0,2.2,0.0,1.6,1.6,1.2,0.1,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "ArhiMagos Prime",
+		sbp_name = "mechanicus_squad_arhimagos_prime",
+		ebp_name = "mechanicus_arhimagos_prime",
+		class = UnitStatsAI.UC_Commander,
+		rating = 9.0,
+		potential =
+		{
+			{
+				name = "am_arhimagos_ranged_group",
+				effectiveness = GenerateUnitEffectiveness(6.2,7.3,6.9,7.3,5.9,5.8,5.1,3.9,7.2,4.1,5.3,6.6,4.8,5.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_arhimagos_prime_melee",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.8,9.8,9.8,8.2,7.9,10.0,8.2,10.0,7.0,8.5,7.9,6.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+		}
+	},
+	{
+		name = "Warrior of Omnissiah",
+		sbp_name = "mechanicus_squad_warrior",
+		ebp_name = "mechanicus_warrior",
+		class = UnitStatsAI.UC_VehicleLow,
+		rating = 5.0,
+		potential =
+		{
+			{
+				name = "am_heavy_bolter",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.1,5.1,5.1,4.6,3.6,3.0,2.0,2.8,2.0,2.5,2.3,2.1,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_heavy_flamer",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,5.3,1.9,1.5,1.3,0.9,1.6,5.3,4.6,4.0,4.3,2.9,2.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_lascannon",
+				effectiveness = GenerateUnitEffectiveness(5.0,5.1,5.0,4.9,5.1,8.6,8.6,5.6,5.0,5.7,5.2,6.5,5.7,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_plasma_cannon",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.7,4.7,6.1,6.5,5.6,5.7,5.3,6.1,1.3,5.1,4.1,2.8,2.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_multi_melta",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.2,5.1,5.5,4.3,8.1,6.3,8.2,5.9,4.2,3.1,6.5,5.7,6.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_autocannon_warrior",
+				effectiveness = GenerateUnitEffectiveness(3.6,3.6,7.3,5.2,5.2,7.6,2.0,0.0,2.8,1.0,1.6,2.2,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_multi_laser",
+				effectiveness = GenerateUnitEffectiveness(2.6,2.6,3.3,5.2,5.2,7.6,2.0,0.0,2.8,2.0,2.6,2.2,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Hell Stalker",
+		sbp_name = "mechanicus_squad_hell_stalker",
+		ebp_name = "mechanicus_hell_stalker",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 6.0,
+		potential =
+		{
+			{
+				name = "am_hell_stalker_melee",
+				effectiveness = GenerateUnitEffectiveness(6.2,6.0,5.2,5.0,4.7,3.5,3.1,0.0,2.9,0.0,2.6,2.2,2.2,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_inferno_cannon_hell_stalker",
+				effectiveness = GenerateUnitEffectiveness(8.5,8.1,3.7,5.3,6.2,5.8,5.6,5.7,8.3,7.7,6.1,7.7,7.4,7.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_chemical_cannon_hell_stalker",
+				effectiveness = GenerateUnitEffectiveness(8.4,8.4,8.2,6.9,6.9,7.1,4.2,4.0,5.3,3.0,3.1,7.4,6.2,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_melta_cannon_hell_stalker",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.1,4.6,8.6,8.0,7.0,1.8,0.0,2.6,7.2,7.2,5.0,3.0,3.0,3.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_assault_cannon_hell_stalker",
+				effectiveness = GenerateUnitEffectiveness(5.4,6.6,8.1,6.2,5.9,4.0,0.0,9.0,4.3,0.0,2.7,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Orbital Stalker",
+		sbp_name = "mechanicus_squad_orbital_stalker",
+		ebp_name = "mechanicus_orbital_stalker",
+		class = UnitStatsAI.UC_VehicleMed,
+		rating = 6.5,
+		potential =
+		{
+			{
+				name = "am_orbital_marker_stalker",
+				effectiveness = GenerateUnitEffectiveness(7.4,7.4,7.2,5.9,5.9,6.1,4.2,4.0,5.3,3.0,3.1,7.4,6.2,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_assault_cannon_hell_stalker",
+				effectiveness = GenerateUnitEffectiveness(8.4,8.6,8.1,8.2,8.9,8.0,8.0,8.0,8.3,0.0,2.7,0.0,0.0,0.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Aetos Surveyor",
+		sbp_name = "mechanicus_fabricator_squad_aetos_surveyor",
+		ebp_name = "mechanicus_fabricator_cybernetica_aetos_surveyor",
+		class = UnitStatsAI.UC_AirMed,
+		rating = 7.0,
+		potential =
+		{
+			{
+				name = "am_fabricator_hellstorm_aetos_surveyor",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.4,6.2,5.9,5.9,6.1,4.2,4.0,5.3,3.0,3.1,7.4,6.2,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Leman Russ King Pattern",
+		sbp_name = "mechanicus_squad_king_russ",
+		ebp_name = "mechanicus_king_russ",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 8.0,
+		potential =
+		{
+			{
+				name = "am_king_russ_chemical_cannon",
+				effectiveness = GenerateUnitEffectiveness(7.4,7.4,7.2,5.9,5.9,6.1,4.2,4.0,5.3,3.0,3.1,7.4,6.2,6.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_conqueror_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_demolisher_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_autocannon_twin",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_vanquisher_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_eradicator_nova_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_executioner_plasma_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_punisher_gatling_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_stormblade_plasmacannon",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.5,5.3,4.4,4.3,4.0,3.2,0.0,6.2,4.6,4.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_cryo_cannon",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_king_russ_tesla_cannon",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_king_russ_lascannon_twin",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.1,5.1,5.1,5.1,7.3,7.1,6.9,5.1,6.6,5.1,7.4,6.9,6.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_king_russ_melta_cannon",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_king_russ_inferno_cannon",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_bolter_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_heavy_bolter_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.6,3.6,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_heavy_flamer_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_flamer_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_cryogun_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_cryogun_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_multi_melta_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_multi_melta_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(6.4,6.2,6.1,5.9,5.7,4.9,2.7,0.0,5.1,2.5,3.4,5.5,4.2,0.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_plasma_cannon_king_russ_right",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_plasma_cannon_king_russ_left",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_bolter_king_russ_hull",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,0.0,5.2,3.6,3.5,7.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_lascannon_king_russ",
+				effectiveness = GenerateUnitEffectiveness(5.1,5.1,5.1,5.1,5.1,7.3,7.1,6.9,5.1,6.6,5.1,7.4,6.9,6.7,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_heavy_flamer_hull",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_heavy_cryogun_king_russ_hull",
+				effectiveness = GenerateUnitEffectiveness(7.0,7.0,7.3,6.9,6.5,4.3,3.9,2.6,6.3,6.6,6.0,5.3,3.9,4.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+		}
+	},
+	{
+		name = "Knight",
+		sbp_name = "mechanicus_squad_knight",
+		ebp_name = "mechanicus_knight",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10.0,
+		potential =
+		{
+			{
+				name = "am_powerfist_knight",
+				effectiveness = GenerateUnitEffectiveness(9.6,9.5,9.5,9.1,9.6,9.6,9.0,9.0,9.8,9.0,9.6,9.2,9.2,9.0,9.0,0.0,0.0),
+				range = UnitStatsAI.RT_Melee,
+			},
+			{
+				name = "am_vulcan_bolter_knight",
+				effectiveness = GenerateUnitEffectiveness(3.1,8.8,8.7,3.0,3.7,3.4,3.2,3.4,8.0,3.4,3.9,3.5,3.9,3.9,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_inferno_cannon_knight",
+				effectiveness = GenerateUnitEffectiveness(8.0,5.0,5.3,1.9,1.5,1.3,0.9,1.6,7.3,8.6,4.0,4.3,2.9,2.2,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_ShortRanged,
+			},
+			{
+				name = "am_plasma_blustgun_knight",
+				effectiveness = GenerateUnitEffectiveness(4.4,4.7,4.7,8.1,8.5,5.6,5.7,5.3,6.1,1.3,8.1,4.1,2.8,2.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_lascannon_knight",
+				effectiveness = GenerateUnitEffectiveness(5.0,5.1,5.0,4.9,5.1,8.3,5.6,5.6,5.0,5.7,5.2,8.5,5.7,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_volcano_cannon_knight",
+				effectiveness = GenerateUnitEffectiveness(3.1,3.1,3.1,3.1,3.6,3.6,8.0,7.1,1.8,0.0,2.6,5.2,8.2,5.0,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_missile_launcher_knight",
+				effectiveness = GenerateUnitEffectiveness(6.1,6.5,6.3,5.4,5.3,5.0,4.2,8.0,5.2,3.6,3.5,8.0,5.6,4.5,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+		}
+	},
+	{
+		name = "Living Base",
+		sbp_name = "mechanicus_squad_living_base",
+		ebp_name = "mechanicus_living_base",
+		class = UnitStatsAI.UC_VehicleHigh,
+		rating = 10.0,
+		potential =
+		{
+			{
+				name = "am_heavy_bolter_twin_living_base",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.8,9.8,9.8,8.2,7.9,10.0,8.2,10.0,7.0,8.5,7.9,6.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+			},
+			{
+				name = "am_lascannon_hq",
+				effectiveness = GenerateUnitEffectiveness(8.2,9.8,9.8,9.8,9.8,8.2,7.9,10.0,8.2,10.0,7.0,8.5,7.9,6.3,0.0,0.0,0.0),
+				range = UnitStatsAI.RT_Ranged,
+
+			},
+		}
+	},
+}

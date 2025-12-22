@@ -1,0 +1,51 @@
+---------------------------------
+-- File: 'zoanthropetactic.ai'
+-- Edited by Gambit 	@ 25.05.2022
+-- Edited by Thudmeizer @ 28.08.2025
+
+class 'ZoanthropeTactic' (TyranidInfantryTactic)
+
+Zoanthrope = {}
+
+
+function ZoanthropeTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("Zoanthrope Tactic")
+end
+
+
+function ZoanthropeTactic:InitAbilities()
+	if Zoanthrope.catalyst_id == nil then
+		Zoanthrope.catalyst_id = cpu_manager.stats:GetAbilityID( "tyranids_zohan_catalyst" )
+	end
+
+	if Zoanthrope.catalyst_sp == nil then
+		Zoanthrope.catalyst_sp = cpu_manager.stats:GetAbilityID( "tyranids_zohan_catalyst_sp" )
+	end
+end
+
+
+function ZoanthropeTactic:DoAbilities()
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(Zoanthrope.catalyst_id) then
+			if self.squad_ai:GetHealthPercentage() < 0.4 and self.squad_ai:WasRecentlyHurt() then
+				self.squad_ai:DoSpecialAbility(Zoanthrope.catalyst_id)
+			else
+				local oSquad = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 20, 1)
+				if oSquad ~= nil and oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() < 0.4 then
+					self.squad_ai:DoSpecialAbilitySquad(Zoanthrope.catalyst_id, oSquad:GetSquad())
+				end
+			end
+		end
+
+		if self.squad_ai:CanDoAbility(Zoanthrope.catalyst_sp) then
+			if self.squad_ai:GetHealthPercentage() < 0.4 and self.squad_ai:WasRecentlyHurt() then
+				self.squad_ai:DoSpecialAbility(Zoanthrope.catalyst_sp)
+			else
+				local oSquad = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 20, 1)
+				if oSquad ~= nil and oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() < 0.4 then
+					self.squad_ai:DoSpecialAbilitySquad(Zoanthrope.catalyst_sp, oSquad:GetSquad())
+				end
+			end
+		end
+	end
+end

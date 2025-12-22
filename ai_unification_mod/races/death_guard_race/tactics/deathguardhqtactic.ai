@@ -1,0 +1,12 @@
+----------------------------------------
+-- File: 'deathguardhqtactic.ai'
+-- Edited by Thudmeizer		@ 11.05.2022
+
+class 'DeathGuardHQTactic' (BaseTactic)
+
+function DeathGuardHQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Death Guard HQ Tactic")
+
+	self.m_bCanDeepStrikeTroops = true
+end

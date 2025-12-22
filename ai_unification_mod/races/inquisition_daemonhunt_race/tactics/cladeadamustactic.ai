@@ -1,0 +1,120 @@
+----------------------------------------
+-- File: 'cladeadamustactic.ai'
+-- Edited by Thudmeizer @ 01.03.2023
+
+class 'CladeAdamusTactic' (DaemonhuntInfantryTactic)
+
+CladeAdamus = {}
+
+function CladeAdamusTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Clade Adamus Assassin Tactic")
+	self.m_iAssassinRunTime = g_iGMT
+end
+
+function CladeAdamusTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function CladeAdamusTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function CladeAdamusTactic:InitAbilities()
+
+	if (CladeAdamus.assassinate_id == nil) then
+		CladeAdamus.assassinate_id = cpu_manager.stats:GetAbilityID( "inquisition_assassin_assassinate" )
+		CladeAdamus.assassinate_melee = cpu_manager.stats:GetAbilityID( "inquisition_assassin_assassinate_melee" )
+		CladeAdamus.foot_id = cpu_manager.stats:GetAbilityID( "inquisition_assassin_fleetoffoot" )
+		CladeAdamus.healing_id = cpu_manager.stats:GetAbilityID( "inquisition_assassin_healing" )
+		CladeAdamus.melta_bomb = cpu_manager.stats:GetAbilityID( "inquisition_assassin_melta_bombs" )
+		CladeAdamus.mode_melee = cpu_manager.stats:GetAbilityID( "inquisition_assassin_mode_switch_melee" )
+		CladeAdamus.mode_range = cpu_manager.stats:GetAbilityID( "inquisition_assassin_mode_switch_range" )
+		CladeAdamus.smoke_launchers = cpu_manager.stats:GetAbilityID( "inquisition_assassin_smoke_launchers" )
+	end
+end
+
+function CladeAdamusTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Randomise choice for both switch mode abilities (they share recharge)
+		local choice = math.random(1,2)
+	
+		-- Melee Mode: Unlocks Deadly strike, Impact bomb, and Melta bomb.
+		if choice == 1 and self.squad_ai:CanDoAbility(CladeAdamus.mode_melee) then
+			self.squad_ai:DoSpecialAbility(CladeAdamus.mode_melee)
+			--print("Selected Melee Mode for player "..tostring(cpu_manager.player_id).."")
+		-- Ranged Mode: Unlocks Healing, Sprinting, and Sniper fire.
+		elseif choice == 2 and self.squad_ai:CanDoAbility(CladeAdamus.mode_range) then
+			self.squad_ai:DoSpecialAbility(CladeAdamus.mode_range)
+			--print("Selected Ranged Mode for player "..tostring(cpu_manager.player_id).."")
+		end
+
+		-- Activate Assassinate while in combat (Sniper Fire)
+		if self.squad_ai:CanDoAbility(CladeAdamus.assassinate_id) then
+			Ability.DoAbility( self.squad_ai, CladeAdamus.assassinate_id, Ability.Filters.IsInCombat )
+			--print("Using Sniper Fire ability for player "..tostring(cpu_manager.player_id).."")
+		end
+
+		-- Use targeted assassination while in combat (Deadly strike)
+		if self.squad_ai:CanDoAbility(CladeAdamus.assassinate_melee) then
+			Ability.DoAbilityTarget( self.squad_ai, CladeAdamus.assassinate_melee, Ability.Filters.CloseCommanderEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, CladeAdamus.assassinate_melee, Ability.Filters.CloseMonsterEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, CladeAdamus.assassinate_melee, Ability.Filters.CloseInfantryEnemy, 4 )
+			--print("Using Deadly strike ability for player "..tostring(cpu_manager.player_id).."")
+		end
+		
+		-- Use Melta Bombs in combat (Melta bomb)
+		if self.squad_ai:CanDoAbility(CladeAdamus.melta_bomb) then
+			Ability.DoAbilityTarget( self.squad_ai, CladeAdamus.melta_bomb, Ability.Filters.CloseVehicleEnemy, 1 )
+			Ability.DoAbilityTargetEntity( self.squad_ai, CladeAdamus.melta_bomb, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+			--print("Using Melta bomb ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Enable/Disable Run Toggle (Sprinting)
+	if self.m_iAssassinRunTime == nil then self.m_iAssassinRunTime = g_iGMT end
+	local was_recently_hurt = self.squad_ai:WasRecentlyHurt()
+	local health = self.squad_ai:GetHealthPercentage()
+	local pos = self.squad_ai:GetPosition()
+	local use_run = (was_recently_hurt and health < 0.35) or (health < 0.2 and cpu_manager.terrain_analyzer:HasThreat(pos, 40))
+	if self.squad_ai:IsUsingAbility(CladeAdamus.foot_id) and g_iGMT > self.m_iAssassinRunTime + 6 then
+		-- Stop running if not injured or we have enough health, to keep fighting
+		if not use_run then
+			self.squad_ai:DoSpecialAbility(CladeAdamus.foot_id)
+			self.m_iAssassinRunTime = g_iGMT
+			--print("Running stopped ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	elseif use_run and g_iGMT > self.m_iAssassinRunTime + 6 then
+		-- Enable running, to prevent further damage and enemy attacks
+		self.squad_ai:DoSpecialAbility(CladeAdamus.foot_id)
+		self.m_iAssassinRunTime = g_iGMT
+		--print("Running started ability for player "..tostring(cpu_manager.player_id).."")
+	end
+
+
+	-- If we are dying, heal up. (Healing)
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if self.squad_ai:CanDoAbility(CladeAdamus.healing_id) then
+			self.squad_ai:DoSpecialAbility(CladeAdamus.healing_id)
+			--print("Using Healing ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Check if we can throw smoke grenades (Impact Bomb)
+	if (self.squad_ai:CanDoAbility(CladeAdamus.smoke_launchers)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(CladeAdamus.smoke_launchers)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(CladeAdamus.smoke_launchers, oUnit:GetSquad())
+			--print("Using Smoke Bomb ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+end
+
+function CladeAdamusTactic:CanOnlyDecap()
+	return true
+end

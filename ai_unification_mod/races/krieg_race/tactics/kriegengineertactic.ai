@@ -1,0 +1,133 @@
+----------------------------------------
+-- File: 'kriegengineertactic.ai'
+-- Edited by Arkhan 	@ 10.01.2007
+-- Edited by Thudmeizer	@ 05.05.2022
+
+class 'KriegEngineerTactic' (EngineerTactic)
+
+KriegEngineer = {}
+
+function KriegEngineerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Engineer Tactic")
+	
+	-- Engineers are able to enter bunkers
+	self.m_iBunkerMoveDelay = 0
+end
+
+function KriegEngineerTactic:IsAttacker()
+	return false
+end
+
+function KriegEngineerTactic:IsDefender()
+	return true
+end
+
+function KriegEngineerTactic:IsAffectedByMorale()
+	return true
+end
+
+function KriegEngineerTactic:InitAbilities()
+
+	if (KriegEngineer.defenses_id == nil) then
+		KriegEngineer.defenses_id = cpu_manager.stats:GetAbilityID( "krieg_engineer_bolster_defenses" )
+	end
+
+	if (KriegEngineer.launcher_id == nil) then
+		KriegEngineer.launcher_id = cpu_manager.stats:GetAbilityID( "krieg_engineer_mole_launcher" )
+	end
+
+	if (KriegEngineer.run_id == nil) then
+		KriegEngineer.run_id = cpu_manager.stats:GetAbilityID( "krieg_run!" )
+	end
+end
+
+function KriegEngineerTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat()) then
+		Ability.DoAbilityTarget( self.squad_ai, KriegEngineer.launcher_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, KriegEngineer.launcher_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		Ability.DoAbilityTargetEntity( self.squad_ai, KriegEngineer.launcher_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+	end
+
+	-- Run while moving
+	if ((not self.squad_ai:IsInCombat() and self.squad_ai:IsInStateMove()) or self.stateID ~= Tactic.StateID.NoState) then
+		if (self.squad_ai:CanDoAbility(KriegEngineer.run_id)) then
+			self.squad_ai:DoSpecialAbility(KriegEngineer.run_id)
+		end
+	end
+
+	-- Check if we can Bolster Defenses
+	if (self.squad_ai:CanDoAbility(KriegEngineer.defenses_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegEngineer.defenses_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(KriegEngineer.defenses_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call standard method
+	EngineerTactic.DoAbilities(self)
+end
+
+function KriegEngineerTactic:Reinforce()
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local iSergeantIndex = 0
+        	local iDoggoIndex = 1
+		
+		local iNumSergeant = self.squad_ai:GetLeaderCount( iSergeantIndex )
+		local iNumDoggo = self.squad_ai:GetLeaderCount( iDoggoIndex )
+
+		-- Desired number of each leader type
+		local iDesiredSergeant = math.random(0,1)
+		local iDesiredDoggo = math.random(0,1)
+		
+		-- Desired order of reinforcing
+		if iNumSergeant < iDesiredSergeant then
+			if self.squad_ai:CanReinforce( true, iSergeantIndex ) then
+				self.squad_ai:DoReinforce( true, iSergeantIndex )
+			end
+		elseif iNumDoggo < iDesiredDoggo then
+			if self.squad_ai:CanReinforce( true, iDoggoIndex ) then
+				self.squad_ai:DoReinforce( true, iDoggoIndex )
+			end
+		end
+	end
+
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+
+	if not self.squad_ai:IsReinforcing() then		
+		if (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+end
+
+function KriegEngineerTactic:Update()
+
+	-- Check bunker move delay
+	if (g_iGMT < self.m_iBunkerMoveDelay) then
+		return
+	end
+
+	-- Update engineer tactic
+	EngineerTactic.Update(self)
+
+	-- Check if we're hurt
+	if (self.squad_ai:WasRecentlyHurt()) then
+	
+		-- Try to occupy a close bunker	
+		if (cpu_manager:OccupyBunker(self.squad_ai, 35)) then
+			self.m_iBunkerMoveDelay = g_iGMT + 5
+			return
+		end
+	end
+end
+ 

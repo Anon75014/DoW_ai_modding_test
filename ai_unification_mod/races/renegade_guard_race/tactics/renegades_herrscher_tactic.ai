@@ -1,0 +1,173 @@
+----------------------------------------
+-- File: 'Renegades_Herrscher_Tactic.ai'
+-- Edited by Thudmeizer @ 02.08.2024
+
+class 'Renegades_Herrscher_Tactic' (Renegades_Infantry_Tactic)
+
+Herrscher = {}
+
+function Renegades_Herrscher_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Herrscher Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Herrscher_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Herrscher_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function Renegades_Herrscher_Tactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function Renegades_Herrscher_Tactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+-- Arkhan 03.2006: Inherited method used by commanders which are able to jump with an attached squad
+function Renegades_Herrscher_Tactic:CanJumpAttached()
+	return true
+end
+
+function Renegades_Herrscher_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Herrscher.cannon_id == nil) then
+		Herrscher.cannon_id = cpu_manager.stats:GetAbilityID( "renegade_guard_ion_cannon" )
+		Herrscher.cannon_ktgm = cpu_manager.stats:GetAbilityID( "renegade_guard_ls_ion_cannon" )
+		Herrscher.punishment_id = cpu_manager.stats:GetAbilityID("renegade_guard_raiden_herrscher_divine_punishment")
+		Herrscher.punishment_ktgm = cpu_manager.stats:GetAbilityID("renegade_guard_raiden_herrscher_divine_punishment")
+		Herrscher.shield_id = cpu_manager.stats:GetAbilityID( "renegade_guard_raiden_herrscher_shield" )
+	end
+end
+
+function Renegades_Herrscher_Tactic:DoAbilities()
+
+	-- Activate shield if low on health
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if self.squad_ai:CanDoAbility(Herrscher.shield_id) then
+			self.squad_ai:DoSpecialAbility(Herrscher.shield_id)
+		end
+	end
+
+	-- Check if enemies are nearby and we are engaged in combat
+	if self.squad_ai:IsInCombat() then
+
+		-- Try to use ion strike
+		if self.squad_ai:CanDoAbility(Herrscher.cannon_id) then
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.DoAbilityPos(self.squad_ai, Herrscher.cannon_id, Ability.Filters.CloseEnemy, 24)
+				or Ability.DoAbilityPos(self.squad_ai, Herrscher.cannon_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3) then
+					return
+				end
+			else
+				if Ability.DoAbilityPos(self.squad_ai, Herrscher.cannon_id, Ability.Filters.CloseEnemy, 12)
+				or Ability.DoAbilityPos(self.squad_ai, Herrscher.cannon_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+					return
+				end
+			end
+		end
+
+		-- Launch Ion Cannon at close enemy (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(Herrscher.cannon_ktgm)) then 
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(Herrscher.cannon_ktgm)
+				local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 4)
+				if (oUnit ~= nil) then
+					--print("Using Deploy Ion Cannon with low health for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(Herrscher.cannon_ktgm, oUnit:GetSquad())
+					return
+				end
+			else
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(Herrscher.cannon_ktgm)
+				local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 8)
+				if (oUnit ~= nil) then
+					--print("Using Deploy Ion Cannon with good health for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(Herrscher.cannon_ktgm, oUnit:GetSquad())
+					return
+				end
+			end
+		end
+
+		-- Try to use Divine Punishment
+		if self.squad_ai:CanDoAbility(Herrscher.punishment_id) then
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				if Ability.DoAbilityTarget(self.squad_ai, Herrscher.punishment_id, Ability.Filters.CloseEnemy, 3) then
+					return
+				end
+			else
+				if Ability.DoAbilityTarget(self.squad_ai, Herrscher.punishment_id, Ability.Filters.CloseEnemy, 6) then
+					return
+				end
+			end
+		end
+
+		-- Use Divine Punishment at close enemy (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(Herrscher.punishment_ktgm)) then 
+			if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(Herrscher.punishment_ktgm)
+				local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 3)
+				if (oUnit ~= nil) then
+					--print("Using Divine Punishment with low health for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(Herrscher.punishment_ktgm, oUnit:GetSquad())
+					return
+				end
+			else
+				-- Search for a nearby enemy squad
+				local iRange = self.squad_ai:GetAbilityRange(Herrscher.punishment_ktgm)
+				local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 6)
+				if (oUnit ~= nil) then
+					--print("Using Divine Punishment with good health for player "..tostring(cpu_manager.player_id).."")
+					self.squad_ai:DoSpecialAbilitySquad(Herrscher.punishment_ktgm, oUnit:GetSquad())
+					return
+				end
+			end
+		end
+	end
+
+	-- Spawn Warrior Squad (Last Stand / Kill Team)
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+
+function Renegades_Herrscher_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

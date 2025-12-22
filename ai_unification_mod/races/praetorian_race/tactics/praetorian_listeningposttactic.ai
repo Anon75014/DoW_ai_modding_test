@@ -1,0 +1,59 @@
+----------------------------------------
+-- File: 'Praetorian_ListeningPostTactic.ai'
+-- Edited by Arkhan		@ 24.10.2006
+-- Edited by fuggles		@ 06.06.2016
+-- Edited by Thudmeizer		@ 26.03.2023
+
+class 'Praetorian_ListeningPostTactic' (BaseTactic)
+
+PraetorianListeningPost = {}
+
+function Praetorian_ListeningPostTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Praetorian Listening Post Tactic")
+
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
+
+function Praetorian_ListeningPostTactic:InitAbilities()
+	
+	-- Init abilities
+	if (PraetorianListeningPost.speakers_id == nil) then
+		PraetorianListeningPost.speakers_id = cpu_manager.stats:GetAbilityID( "praetorian_laud_hailers" )
+		PraetorianListeningPost.strafe_id= cpu_manager.stats:GetAbilityID( "praetorian_strafing_run" )
+		PraetorianListeningPost.valkyrie_id = cpu_manager.stats:GetAbilityID( "praetorian_valkyrie_strike" )
+		PraetorianListeningPost.vulture_id = cpu_manager.stats:GetAbilityID( "praetorian_vulture_strike" )
+	end
+end
+
+function Praetorian_ListeningPostTactic:DoAbilities()
+
+	if (self.base_ai:CanDoAbility(PraetorianListeningPost.speakers_id)) then
+		Ability.DoAbilityArea(self.base_ai, PraetorianListeningPost.speakers_id, Ability.Filters.CloseEnemy, 20, 1)
+	end
+	
+	if (self.base_ai:CanDoAbility(PraetorianListeningPost.strafe_id)) then
+		local iRange = self.base_ai:GetAbilityRange(PraetorianListeningPost.strafe_id)
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.base_ai:GetPosition(), iRange, 1)
+		if oSquad ~= nil then
+			self.base_ai:DoSpecialAbilitySquad(PraetorianListeningPost.strafe_id, oSquad:GetSquad())
+		end
+	end
+
+	if (self.base_ai:CanDoAbility(PraetorianListeningPost.valkyrie_id)) then
+		local iRange = self.base_ai:GetAbilityRange(PraetorianListeningPost.valkyrie_id)
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.base_ai:GetPosition(), iRange, 1)
+		if oSquad ~= nil then
+			self.base_ai:DoSpecialAbilitySquad(PraetorianListeningPost.valkyrie_id, oSquad:GetSquad())
+		end
+	end
+
+	if (self.base_ai:CanDoAbility(PraetorianListeningPost.vulture_id)) then
+		local iRange = self.base_ai:GetAbilityRange(PraetorianListeningPost.vulture_id)
+		local oSquad = Ability.Filters.CloseInfantryEnemy(self.base_ai:GetPosition(), iRange, 1)
+		if oSquad ~= nil then
+			self.base_ai:DoSpecialAbilitySquad(PraetorianListeningPost.vulture_id, oSquad:GetSquad())
+		end
+	end
+end

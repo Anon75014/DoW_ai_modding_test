@@ -1,0 +1,49 @@
+----------------------------------------
+-- File: 'slaaneshmoritattactic.ai'
+-- Edited by Gambit @ 19.10.2018
+
+class 'SlaaneshMoritatTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshMoritat = {}
+
+function SlaaneshMoritatTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Moritat Tactic")
+end
+
+function SlaaneshMoritatTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function SlaaneshMoritatTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+
+function SlaaneshMoritatTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshMoritat.drugs_id == nil) then
+		SlaaneshMoritat.drugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )
+		SlaaneshMoritat.grenades_id = cpu_manager.stats:GetAbilityID( "emperors_children_shockwave_grenades" )
+	end
+end
+
+
+function SlaaneshMoritatTactic:DoAbilities()
+
+-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SlaaneshMoritat.grenades_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshMoritat.grenades_id, Ability.Filters.CloseSquadEnemy, 6 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMoritat.grenades_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMoritat.grenades_id, Ability.Filters.CloseMonsterEnemy, 4 )
+            then
+                return
+            end
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshMoritat.drugs_id) then
+			self.squad_ai:DoSpecialAbility(SlaaneshMoritat.drugs_id)
+		end
+	end
+end

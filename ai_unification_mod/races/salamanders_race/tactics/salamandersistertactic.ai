@@ -1,0 +1,69 @@
+----------------------------------------
+-- File: 'salamandersistertactic.ai'
+-- Edited by Gambit		@ 29.08.2019
+
+class 'SalamanderSisterTactic' (SalamanderInfantryTactic)
+
+SalamanderSisters = {}
+
+function SalamanderSisterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamander Sisters of Battle Tactic")
+end
+
+function SalamanderSisterTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SalamanderSisters.shield_faith_id == nil) then
+		SalamanderSisters.shield_faith_id = cpu_manager.stats:GetAbilityID( "salamander_legatine_shield_of_faith" )
+	end
+end
+
+function SalamanderSisterTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(SalamanderSisters.shield_faith_id) then
+		if self.squad_ai:IsBroken() or (self.squad_ai:IsInCombat() and self.squad_ai:WasRecentlyHurt()) then
+			self.squad_ai:DoSpecialAbility(SalamanderSisters.shield_faith_id)
+		end
+	end
+end
+
+function SalamanderSisterTactic:Reinforce()
+
+	-- If there are no resources available, don't upgrade!
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+
+
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- Always try for the actual leader first
+		if (self.squad_ai:CanReinforce( true, 2 )) then
+			self.squad_ai:DoReinforce( true, 2 )
+			return
+		end
+
+		-- Try for different types of squad members
+		local iRandom = math.random(0, 1)
+
+		if iRandom == 0 then
+			if self.squad_ai:CanReinforce( true, 0 ) then
+				self.squad_ai:DoReinforce( true, 0 )
+				return
+			end
+		else
+			if self.squad_ai:CanReinforce( true, 1 ) then
+				self.squad_ai:DoReinforce( true, 1 )
+				return
+			end
+		end
+		if self.squad_ai:CanReinforce( false, 0 ) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+end
+
+
+
+

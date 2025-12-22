@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'nightlordsbarrackstactic.ai'
+-- Edited by Torzel		@ 18.05.2013
+
+class 'NightLordsBarracksTactic' (BaseTactic)
+
+function NightLordsBarracksTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Night Lords Barracks Tactic")
+
+	self.m_iArmouryID = cpu_manager.stats:GetBuildingID("night_lords_armoury")
+end
+
+function NightLordsBarracksTactic:CanDeepStrikeTroops()
+	return (cpu_manager.player_stats:GetNumBasesByBPID(self.m_iArmouryID, true) > 0)
+end

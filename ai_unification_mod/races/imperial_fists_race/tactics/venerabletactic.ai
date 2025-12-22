@@ -1,0 +1,47 @@
+----------------------------------------
+-- File: 'Venerabletactic.ai'
+-- Edited by Thudmeizer		@ 17.03.2018
+
+class 'VenerableTactic' (ImperialFistsVehicleTactic)
+
+Venerable = {}
+
+function VenerableTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Imperial Fists Venerable Tactic")
+end
+
+function VenerableTactic:InitAbilities()
+
+	-- Init ability ID's
+
+	if (Venerable.quake_id == nil) then
+		Venerable.quake_id = cpu_manager.stats:GetAbilityID( "imperial_fists_earthquake" )	
+	end
+
+	if (Venerable.smoke_id == nil) then
+		Venerable.smoke_id = cpu_manager.stats:GetAbilityID( "imperial_fists_smoke_launchers" )	
+	end
+
+
+end
+
+function VenerableTactic:DoAbilities()
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(Venerable.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(Venerable.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(Venerable.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Call standard method
+	Ability.DoAbility( self.squad_ai,Venerable.quake_id, Ability.Filters.IsInCombat )
+	ImperialFistsVehicleTactic.DoAbilities(self)
+end
+
+

@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'fistsbarrackstactic.ai'
+-- Edited by Thudmeizer		@ 12.03.2018
+
+class 'FistsBarracksTactic' (BaseTactic)
+
+function FistsBarracksTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Imperial Fists Barracks Tactic")
+end
+
+function FistsBarracksTactic:CanDeepStrikeTroops()
+	return true
+end

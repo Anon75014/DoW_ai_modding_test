@@ -1,0 +1,172 @@
+----------------------------------------
+-- File: 'thirteenthcomstrategyinfo.ai'
+-- Edited by Thudmeizer    @ 21.12.2024
+
+BuildBaseStrategyInfo = 
+{
+	thirteenth_company_race =
+	{
+		post_builder = 1,
+		flag_capture = 2,
+
+		--reserve this amount for building units/buildings (not for use in upgrading/ reinforcing)
+		req_reserve = 100,
+		
+		--need at least this at all times
+		squad_cap_threshold = 2,
+
+		--need at least this at all times
+		support_cap_threshold = 3,
+		
+		--used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+				
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Total Research: 20
+			-- All Around strategy
+			{
+			        { 1, 220, 50, 0, 1,	 "Unit",	"thirteenthcom_squad_wolf_lord" },
+			        { 1, 165, 0, 0, 2,	 "Unit",	"thirteenthcom_squad_grey_slayer" },
+			        { 1, 165, 0, 700, 4,	 "Unit",	"thirteenthcom_squad_grey_slayer" },
+				{ 1, 300, 0, 0, 1,       "Building",	"thirteenthcom_hq" },
+				{ 1, 150, 0, 0, 1,	 "Building",	"thirteenthcom_barracks" },
+				{ 1, 150, 0, 800, 1,	 "Building",	"thirteenthcom_armoury" },
+				{ 1, 90, 45, 950, 1,	 "Building",	"thirteenthcom_turret" },
+			        { 1, 20, 0, 950, 1,	 "Building",	"thirteenthcom_razor_wire" },
+			        { 1, 60, 60, 950, 1,	 "Building",	"thirteenthcom_mine_field" },
+				{ 1, 150, 0, 950, 2,	 "Building",	"thirteenthcom_armoury" },
+				{ 1, 300, 100, 1000, 1,  "Addon",	"thirteenthcom_hq_addon_1" },
+			        { 1, 50, 0, 1000, 1,	 "Building",	"thirteenthcom_tank_trap" },
+
+				{ 2, 220, 20, 0, 2,	 "Unit",	"thirteenthcom_squad_fenris_wolves" },
+				{ 2, 210, 60, 0, 1,	 "Unit",	"thirteenthcom_squad_long_fangs" },
+				{ 2, 200, 40, 0, 1,	 "Unit",	"thirteenthcom_squad_storm_claws" },
+				{ 2, 75, 250, 750, 1,	 "Research",	"thirteenthcom_requisition_research_1" },
+				{ 2, 200, 40, 750, 1,	 "Research",	"thirteenthcom_power_research_1" },
+			        { 2, 20, 0, 1000, 2,	 "Building",	"thirteenthcom_razor_wire_2" },
+			        { 2, 60, 60, 1000, 2,	 "Building",	"thirteenthcom_mine_field" },
+			        { 2, 50, 0, 1000, 2,	 "Building",	"thirteenthcom_tank_trap" },
+				{ 2, 90, 45, 1000, 2,	 "Building",	"thirteenthcom_turret" },
+				{ 2, 150, 0, 1000, 3,	 "Building",	"thirteenthcom_armoury" },
+				{ 2, 50, 0, 1000, 50,	 "Addon",	"thirteenthcom_turret_grav_addon" },
+				{ 2, 90, 45, 1500, 3,	 "Building",	"thirteenthcom_turret" },
+				{ 2, 350, 200, 1500, 1,  "Addon",	"thirteenthcom_hq_addon_2" },
+			        { 2, 60, 60, 1500, 3,	 "Building",	"thirteenthcom_mine_field" },
+			        { 2, 50, 0, 1500, 3,	 "Building",	"thirteenthcom_tank_trap" },
+			        { 2, 20, 0, 1500, 3,	 "Building",	"thirteenthcom_razor_wire" },
+
+				{ 3, 100, 100, 0, 1,	 "Unit",	"thirteenthcom_squad_bike" },
+				{ 3, 220, 80, 0, 1,	 "Unit",	"thirteenthcom_squad_wulfen_marine" },
+				{ 3, 100, 350, 0, 1,	 "Research",	"thirteenthcom_requisition_research_2" },
+				{ 3, 350, 0, 2000, 1,	 "Research",	"thirteenthcom_power_research_2" },
+			        { 3, 20, 0, 2000, 4,	 "Building",	"thirteenthcom_razor_wire_2" },
+			        { 3, 60, 60, 2000, 4,	 "Building",	"thirteenthcom_mine_field" },
+			        { 3, 50, 0, 2000, 4,	 "Building",	"thirteenthcom_tank_trap" },
+				{ 3, 400, 300, 2000, 1,  "Addon",	"thirteenthcom_hq_addon_3" },
+				{ 3, 90, 45, 2500, 4,	 "Building",	"thirteenthcom_turret" },
+			        { 3, 20, 0, 2500, 5,	 "Building",	"thirteenthcom_razor_wire_2" },
+			        { 3, 60, 60, 2500, 5,	 "Building",	"thirteenthcom_mine_field" },
+			        { 3, 50, 0, 2500, 5,	 "Building",	"thirteenthcom_tank_trap" },
+
+				{ 4, 90, 45, 2500, 8,	 "Building",	"thirteenthcom_turret" },
+			        { 4, 20, 0, 3000, 8,	 "Building",	"thirteenthcom_razor_wire" },
+			        { 4, 60, 60, 3000, 8,	 "Building",	"thirteenthcom_mine_field" },
+			        { 4, 50, 0, 3000, 8,	 "Building",	"thirteenthcom_tank_trap" },
+				{ 4, 700, 300, 3000, 2,	 "Building",	"thirteenthcom_hq" }
+			}
+		},
+				
+		SquadLimits = 
+		{
+			standard =
+			{
+				thirteenthcom_squad_iron_priest = 0,
+				thirteenthcom_squad_grey_slayer = math.random( 2,4 ),
+				thirteenthcom_squad_fenris_wolves = math.random( 2,3 ),
+				thirteenthcom_squad_storm_claws = math.random( 2,4 ),
+				thirteenthcom_squad_long_fangs = math.random( 2,4 ),
+				thirteenthcom_squad_bike = math.random( 1,3 ),
+				thirteenthcom_squad_wulfen_marine = math.random( 2,4 ),
+				thirteenthcom_squad_veteraners = 1,
+				thirteenthcom_squad_deathsworn = 1,
+				thirteenthcom_squad_terminator = 1,
+				thirteenthcom_squad_terminator_storm_claws = 1,
+				thirteenthcom_squad_rune_priest = 1,
+				thirteenthcom_squad_wolf_priest = 1,
+				thirteenthcom_squad_wolf_lord = 1,
+				thirteenthcom_squad_wulfen_lord = 1,
+				thirteenthcom_squad_terminator_lord = 1,
+				thirteenthcom_squad_rhino = math.random( 1,2 ),
+				thirteenthcom_squad_leman_russ = 1,
+				thirteenthcom_squad_dreadnought = 1,
+				thirteenthcom_squad_xiphon_pattern_interceptor = 1,
+				thirteenthcom_squad_predator = 1,
+				thirteenthcom_squad_exterminator = 1,
+				thirteenthcom_squad_land_raider_frosty = 1,
+				thirteenthcom_squad_dire_wolf_titan = 1,
+			}
+		},
+	},
+}
+
+BuildOrderStrategyInfo = 
+{
+	thirteenth_company_race =
+	{
+		Basic =
+		{
+		        { "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+		        { "building", "thirteenthcom_barracks" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+		        { "research", "thirteenthcom_squad_cap_research", true },
+		        { "squad", "thirteenthcom_squad_grey_slayer", true },
+			{ "post_builder" }, { "post_builder" }
+		},
+		
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "building", "thirteenthcom_barracks" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+			{ "post_builder" }, { "post_builder" }
+		},
+		
+		LargeMap =
+		{
+		        { "flag_capture" }, { "flag_capture" }, 
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+		        { "building", "thirteenthcom_barracks" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+		        { "squad", "thirteenthcom_squad_grey_slayer" },
+		        { "research", "thirteenthcom_squad_cap_research", true },
+		        { "squad", "thirteenthcom_squad_grey_slayer", true },
+		        { "research", "thirteenthcom_squad_cap_research_1", true },
+		        { "squad", "thirteenthcom_squad_grey_slayer", true },
+			{ "post_builder" }, { "post_builder" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{	
+	thirteenth_company_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

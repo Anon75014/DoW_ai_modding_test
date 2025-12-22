@@ -1,0 +1,222 @@
+----------------------------------------
+-- File: 'techmarinetactic.ai'
+-- Edited by Thudmeizer   @ 27.01.2025
+
+class 'TechmarineTactic' (EngineerTactic)
+
+Techmarine = {}
+
+function TechmarineTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Techmarine Tactic")
+	self:InitAbilities()
+
+	self.lastused_ability_turret_position = squad_ai:GetPosition()
+	self.min_turret_req_defensive_use = 200 -- amount of req to have before defensive placing 
+	self.min_turret_req_in_combat_use = 150 --- amount of req to have in order to use it in combat
+	self.min_turret_req_actual = 150  -- the actual req cost of the ability as set in the AE
+	self.min_turret_distance = 20 -- min distance between consecutive placements
+
+	self.lastused_ability_wall_time = g_iGMT - math.random(70, 96)
+	if TFC_TMR == nil then
+		TFC_TMR = g_iGMT - math.random(168, 184)
+	end
+end
+
+function TechmarineTactic:IsAffectedByMorale()
+	return false
+end
+
+function TechmarineTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Techmarine.frags_id == nil) then
+		Techmarine.frags_id = cpu_manager.stats:GetAbilityID( "imperial_fists_frag_grenades_noreq" )
+	end
+
+	if (Techmarine.defenses_id == nil) then
+		Techmarine.defenses_id = cpu_manager.stats:GetAbilityID( "imperial_fists_bolster_defence" )
+	end
+
+	if (Techmarine.thunderfire_id == nil) then
+--		Techmarine.thunderfire_id = cpu_manager.stats:GetAbilityID( "imperial_fists_squad_turret_drop" )
+	end
+
+	if (Techmarine.aegis_id == nil) then
+--		Techmarine.aegis_id = cpu_manager.stats:GetAbilityID( "imperial_fists_aegis_horizontal" )
+	end
+end
+
+function TechmarineTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat()) then
+		Ability.DoAbilityTarget( self.squad_ai, Techmarine.frags_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Techmarine.frags_id, Ability.Filters.CloseSquadEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Techmarine.frags_id, Ability.Filters.CloseMonsterEnemy, 4 )
+	end
+
+	-- Check if we can use Turret Placement or the Wall Placement abilities
+	local can_place_turret = false
+	local can_place_wall = false
+--	if g_iGMT > TFC_TMR + 185 and self.squad_ai:CanDoAbility(Techmarine.thunderfire_id) then
+--		can_place_turret = true
+--	end
+--	if g_iGMT > self.lastused_ability_wall_time + 100 and self.squad_ai:CanDoAbility(Techmarine.aegis_id) then
+--		can_place_wall = true
+--	end
+	local try_abilities = false
+	if can_place_turret or can_place_wall then
+		if self.squad_ai:IsBuilding() == 0 and not self.m_bBusy then
+			try_abilities = true
+		end
+	end
+	if try_abilities then
+		-- Check IF we have the resources
+		local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		local weAreInCombat = self.squad_ai:IsInCombat()
+		if iRequisition > self.min_turret_req_defensive_use and not weAreInCombat then
+			-- Check first for close strategic point within 35
+			local oTarget = Ability.Filters.CloseStrategicPoint(self.squad_ai:GetPosition(), 35)
+			if (oTarget ~= nil) then
+				local vTargetPos = oTarget:GetPosition()
+				-- Modify position
+				local iOffsetX = math.random(5, 10)
+				local iOffsetZ = math.random(5, 10)
+				local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)		
+				if math.random(1, 10) < 4 then
+					if math.random(1, 2) == 1 then vDir.x = 1 else vDir.x = -1 end
+					if math.random(1, 2) == 1 then vDir.z = 1 else vDir.z = -1 end
+				end
+				vTargetPos.x = vTargetPos.x + vDir.x * iOffsetX
+				vTargetPos.z = vTargetPos.z + vDir.z * iOffsetZ
+				if distance_sqr(vTargetPos, self.squad_ai:GetPosition()) > 9 then
+					self:DoSpecialAbilityTurret(vTargetPos, false, can_place_turret)
+				end
+			else
+				-- Otherwise, place the turret elsewhere nearby
+				-- Modify position
+				local vTargetPos = self.squad_ai:GetPosition()
+				local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)
+				vTargetPos.x = vTargetPos.x + vDir.x * 3.5
+				vTargetPos.z = vTargetPos.z + vDir.z * 3.5
+				self:DoSpecialAbilityTurret(vTargetPos, false, can_place_turret)
+			end
+
+		elseif iRequisition > self.min_turret_req_in_combat_use and weAreInCombat then
+		-- Even with low resources, place the turret nearby if IN combat, for offensive usage
+			-- Modify position
+			local vTargetPos = self.squad_ai:GetPosition()
+			local vDir = cpu_manager:GetDirectionToEnemy(vTargetPos)
+			vTargetPos.x = vTargetPos.x + vDir.x * 3
+			vTargetPos.z = vTargetPos.z + vDir.z * 3
+			-- The "true" below is for no random delay or other limits when used in combat
+			self:DoSpecialAbilityTurret(vTargetPos, true, can_place_turret)
+		end
+	end
+
+	-- Search for a near-by damaged building
+	local iRange = self.squad_ai:GetAbilityRange(Techmarine.defenses_id)
+	local iSelfRange = self.squad_ai:GetPosition()
+	local oBuilding = self:GetAlliedDamagedBuildingWithin(0.5, iSelfRange, iRange)
+	local oBuildingB = self:GetClosestAlliedDamagedBuildingWithin(0.5, iSelfRange, iRange)
+	if oBuilding ~= nil then
+		-- Cast Bone Song on our own or allies' damaged buildings
+		self.squad_ai:DoSpecialAbilityEntity(Techmarine.defenses_id, oBuilding:GetEntity())
+	elseif oBuildingB ~= nil then
+		-- Cast Bone Song on cloeset own or allies' damaged buildings
+		self.squad_ai:DoSpecialAbilityEntity(Techmarine.defenses_id, oBuildingB:GetEntity())
+	end
+end
+
+
+function TechmarineTactic:DoSpecialAbilityTurret(position, inCombat, isTurret)
+
+	local current_req = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	local last_pos = self.lastused_ability_turret_position
+	local min_distance = self.min_turret_distance
+
+	-- Check situation
+	if current_req > self.min_turret_req_actual then
+		if distance_sqr(position,last_pos) > min_distance*min_distance then
+			-- Use turret placement ability
+			if isTurret then
+				TFC_TMR = g_iGMT
+				self.squad_ai:DoSpecialAbilityPos(Techmarine.thunderfire_id, position)
+			else
+			-- Use wall placement
+				lastused_ability_wall_time = g_iGMT
+--				self.squad_ai:DoSpecialAbilityPos(Techmarine.aegis_id, position)
+			end
+			self.lastused_ability_turret_position = position
+		end
+	end
+end
+
+
+
+-- Called to find a random ally/own damaged building (finished) within range.
+function TechmarineTactic:GetAlliedDamagedBuildingWithin(iHealthRatio, iPosition, iRange)
+
+	local iRange_sqr = iRange * iRange
+	for oPlayer in cpu_manager.stats:GetPlayerStats() do
+    		if not (cpu_manager.player_stats:IsEnemy(oPlayer) or oPlayer:IsPlayerDead()) then
+        		for oBuilding in oPlayer:GetBases() do
+            			if oBuilding:IsValid() then
+                			if (oBuilding:IsConstructionDone() and oBuilding:CanBeRepaired() and oBuilding:GetHealthPercentage() <= iHealthRatio) then
+                    				if distance_sqr(oBuilding:GetPosition(),iPosition) < iRange_sqr then
+                        				return oBuilding
+                    				end
+                			end
+            			end
+        		end
+		end
+	end
+	return nil
+end
+
+-- Called to find THE CLOSEST ally/own damaged building (finished) within range.
+function TechmarineTactic:GetClosestAlliedDamagedBuildingWithin(iHealthRatio, iPosition, iRange)
+	local iRange_sqr = iRange * iRange
+	local best_base = nil
+	local best_distance = -1
+	local candidate_bases = {}
+	for oPlayer in cpu_manager.stats:GetPlayerStats() do
+    		if not (cpu_manager.player_stats:IsEnemy(oPlayer) or oPlayer:IsPlayerDead()) then
+        		for oBuilding in oPlayer:GetBases() do
+            			if oBuilding:IsValid() then
+                			if (oBuilding:IsConstructionDone() and oBuilding:CanBeRepaired() and oBuilding:GetHealthPercentage() <= iHealthRatio) then
+                				local oPos = oBuilding:GetPosition()
+                    				if distance_sqr(oPos,iPosition) < iRange_sqr then
+                        				local base_info = {}
+                        				base_info.base = oBuilding
+                        				base_info.distance = distance(oPos,iPosition)
+                        				table.insert(candidate_bases,base_info)
+                    				end
+                			end
+            			end
+        		end
+    		end
+	end
+
+	-- Sort candidates so we get closest at array index 1
+	table.sort(candidate_bases,function(e1,e2) return e1.distance < e2.distance end)
+	if table.getn(candidate_bases) > 0 then
+    		return candidate_bases[1].base
+	else
+    		return nil
+	end
+end
+
+function TechmarineTactic:Update()
+
+	self:DoAbilities()
+
+	if self:IsComplete() then
+		return
+	end
+    
+	-- State machine
+	if not EngineerTactic.Update( self ) then
+		return
+	end
+end

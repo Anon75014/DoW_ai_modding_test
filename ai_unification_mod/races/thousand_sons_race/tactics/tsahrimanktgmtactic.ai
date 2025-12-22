@@ -1,0 +1,261 @@
+------------------------------------------
+-- File: 'tsahrimanktgmtactic.ai'
+-- Edited by Thudmeizer @ 27.01.2024
+
+class 'TSAhrimanKtgmTactic' (TSInfantryTactic)
+
+TSAhrimanKtgm = {}
+
+function TSAhrimanKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("TS Ahriman Kill Team Tactic")
+
+	self.tzeentchCurseLastUse = g_iGMT
+end
+
+function TSAhrimanKtgmTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function TSAhrimanKtgmTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function TSAhrimanKtgmTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+function TSAhrimanKtgmTactic:JumpAttack()
+	Tactic.JumpAttack(self)
+end
+
+function TSAhrimanKtgmTactic:InitAbilities()
+
+	if (TSAhrimanKtgm.silence_id == nil) then
+	   	TSAhrimanKtgm.silence_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_silence" )	
+	end
+
+	if (TSAhrimanKtgm.damned_marines_id == nil) then
+	   	TSAhrimanKtgm.damned_marines_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_summon_damned_marines" )	
+	end
+
+	if (TSAhrimanKtgm.discs_id == nil) then
+	   	TSAhrimanKtgm.discs_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_discs_of_tzeentch" )	
+	end
+
+	if (TSAhrimanKtgm.winds_id == nil) then
+	  	 TSAhrimanKtgm.winds_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_wind_of_chaos" )	
+	end
+
+	if (TSAhrimanKtgm.phantasmal_killer_id == nil) then
+	   	TSAhrimanKtgm.phantasmal_killer_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_phantasmal_killer" )	
+	end
+
+	if (TSAhrimanKtgm.tzeentch_curse_id == nil) then
+	   	TSAhrimanKtgm.tzeentch_curse_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_tzeentch_curse" )	
+	end
+
+	if (TSAhrimanKtgm.tzeentch_boon_id == nil) then
+	   	TSAhrimanKtgm.tzeentch_boon_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_tzeentch_boon" )	
+	end
+
+	if (TSAhrimanKtgm.meteor_swarm_id == nil) then
+	   	TSAhrimanKtgm.meteor_swarm_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_meteor_swarm" )	
+	end
+
+	if (TSAhrimanKtgm.nightmare_prophecy_id == nil) then
+	   	TSAhrimanKtgm.nightmare_prophecy_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_nightmare_prophecy" )	
+	end
+
+	if (TSAhrimanKtgm.ritual_time_dilation_id == nil) then
+	   	TSAhrimanKtgm.ritual_time_dilation_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_ritual_time_dilation" )	
+	end
+
+	if (TSAhrimanKtgm.ritual_blur_reality_id == nil) then
+	   	TSAhrimanKtgm.ritual_blur_reality_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_ritual_blur_reality" )	
+	end
+
+	if (TSAhrimanKtgm.ritual_mass_slow_id == nil) then
+	   	TSAhrimanKtgm.ritual_mass_slow_id = cpu_manager.stats:GetAbilityID( "thousand_sons_ls_ahriman_ritual_mass_slow" )	
+	end
+end
+
+function TSAhrimanKtgmTactic:DoAbilities()
+
+	-- Try to use Silence
+	if (self.squad_ai:CanDoAbility(TSAhrimanKtgm.silence_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.silence_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Silence Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.silence_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Use Phantasmal Killer
+	if (self.squad_ai:CanDoAbility(TSAhrimanKtgm.phantasmal_killer_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.phantasmal_killer_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Phantasmal Killer against enemy infantry for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.phantasmal_killer_id, oUnit:GetSquad())
+		elseif (oUnitB ~= nil) then
+			--print("Using Phantasmal Killer against enemy commanders for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.phantasmal_killer_id, oUnitB:GetSquad())
+		end
+	end
+
+	-- Use Discs Of Tzeentch
+	if (self.squad_ai:CanDoAbility(TSAhrimanKtgm.discs_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.discs_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 2)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Discs Of Tzeentch against enemy infantry for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.discs_id, oUnit:GetSquad())
+		elseif (oUnitB ~= nil) then
+			--print("Using Discs Of Tzeentch against enemy commanders for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.discs_id, oUnitB:GetSquad())
+		end
+	end
+
+	-- Try to conjure Damned Marines
+	if ( self.squad_ai:CanDoAbility(TSAhrimanKtgm.damned_marines_id) ) then
+		local oSquad = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 15, 2)
+		if ( oSquad ~= nil ) then
+			--print("Using Damned Marines Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.damned_marines_id)
+		end
+	end
+
+	-- Try to use Winds of Chaos
+	if (self.squad_ai:CanDoAbility(TSAhrimanKtgm.winds_id)) then 
+
+		-- Search for a nearby enemy
+		local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.winds_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 14)
+		if (oUnit ~= nil) then
+			--print("Using Winds of Chaos Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.winds_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Try to use Boon on close hurt allies
+	if (self.squad_ai:CanDoAbility(TSAhrimanKtgm.tzeentch_boon_id)) then 
+
+		-- Search for a nearby hurt squad 
+		local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.tzeentch_boon_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat()) then
+			--print("Using Boon Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.tzeentch_boon_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Try to use meteor swarm
+	if (self.squad_ai:CanDoAbility(TSAhrimanKtgm.meteor_swarm_id)) then 
+
+		-- Search for a nearby enemy
+		local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.meteor_swarm_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 12)
+		if (oUnit ~= nil) then
+			--print("Using Meteor Swarm Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.meteor_swarm_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Try to use Nightmare Prophecy
+	if ( self.squad_ai:CanDoAbility(TSAhrimanKtgm.nightmare_prophecy_id) ) then
+		local oSquad = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), 20, 3)
+		if ( oSquad ~= nil ) then
+			--print("Using Nightmare Prophecy Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.nightmare_prophecy_id)
+		end
+	end
+
+	-- Activate/Deactivate Rituals
+	-- Time Dilation
+	if (self.squad_ai:IsUsingAbility(TSAhrimanKtgm.ritual_time_dilation_id)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 15, 1)
+		if ((oUnit ~= nil) or self.squad_ai:GetHealthPercentage() > 0.3) then
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.ritual_time_dilation_id)
+		end
+	elseif (cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 30, 1)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 30, 1)
+		if ((oUnit == nil) and self.squad_ai:GetHealthPercentage() < 0.3) then
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.ritual_time_dilation_id)
+		end
+	end
+
+	-- Blur Reality
+	if (self.squad_ai:IsUsingAbility(TSAhrimanKtgm.ritual_blur_reality_id)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 15, 1)
+		if ((oUnit ~= nil) or self.squad_ai:GetHealthPercentage() > 0.3) then
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.ritual_blur_reality_id)
+		end
+	elseif (cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 30, 1)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 30, 1)
+		if ((oUnit == nil) and self.squad_ai:GetHealthPercentage() < 0.3) then
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.ritual_blur_reality_id)
+		end
+	end
+
+	-- Mass Slowdown
+	if (self.squad_ai:IsUsingAbility(TSAhrimanKtgm.ritual_mass_slow_id)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 15, 1)
+		if ((oUnit ~= nil) or self.squad_ai:GetHealthPercentage() > 0.3) then
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.ritual_mass_slow_id)
+		end
+	elseif (cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 30, 1)) then
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 30, 1)
+		if ((oUnit == nil) and self.squad_ai:GetHealthPercentage() < 0.3) then
+			self.squad_ai:DoSpecialAbility(TSAhrimanKtgm.ritual_mass_slow_id)
+		end
+	end
+
+	self:DoAhrimanTargetWeapon()
+		
+	InfantryTactic.DoAbilities(self)
+end
+
+function TSAhrimanKtgmTactic:DoAhrimanTargetWeapon()
+
+	if self.squad_ai:IsInCombat() then
+		if ( g_iGMT > self.tzeentchCurseLastUse + 70 ) then
+			local iRange = self.squad_ai:GetAbilityRange(TSAhrimanKtgm.tzeentch_curse_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil) then
+				--print("Using Curse Ability for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(TSAhrimanKtgm.tzeentch_curse_id, oUnit:GetSquad())
+				self.tzeentchCurseLastUse = g_iGMT 
+			end
+		end
+	end
+end
+
+function TSAhrimanKtgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

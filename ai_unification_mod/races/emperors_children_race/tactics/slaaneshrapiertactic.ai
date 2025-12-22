@@ -1,0 +1,61 @@
+----------------------------------------
+-- File: 'slaaneshrapiertactic.ai'
+-- Edited by Thudmeizer         @ 05.09.2024
+
+class 'SlaaneshRapierTactic' (EmperorsChildrenVehicleTactic)
+
+SlaaneshRapier = {}
+
+function SlaaneshRapierTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Rapier Tactic")
+	
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 2
+	self.m_iTransportSlots = 1
+end
+
+function SlaaneshRapierTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshRapier.spirit_id == nil) then
+		SlaaneshRapier.spirit_id = cpu_manager.stats:GetAbilityID( "emperors_children_machine_spirit" )
+	end
+
+	if (SlaaneshRapier.smoke_id == nil) then
+		SlaaneshRapier.smoke_id = cpu_manager.stats:GetAbilityID( "emperors_children_smoke_launchers" )	
+	end
+end
+
+function SlaaneshRapierTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if (self.squad_ai:CanDoAbility(SlaaneshRapier.spirit_id)) then
+			self.squad_ai:DoSpecialAbility(SlaaneshRapier.spirit_id)
+		end
+	end
+
+	-- Check if we can launch smoke
+	if (self.squad_ai:CanDoAbility(SlaaneshRapier.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(SlaaneshRapier.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshRapier.smoke_id, oUnit:GetSquad())
+		end
+	end
+end
+
+function SlaaneshRapierTactic:Upgrade()
+
+	-- If there are no resources available, don't upgrade!
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+  
+	local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+		self.squad_ai:DoBestUpgrade( class_type )
+end

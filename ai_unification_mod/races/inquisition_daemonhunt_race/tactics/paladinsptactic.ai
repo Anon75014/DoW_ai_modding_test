@@ -1,0 +1,66 @@
+----------------------------------------
+-- File: 'paladinsptactic.ai'
+-- Edited by Thudmeizer @ 11.03.2024
+
+class 'PaladinSPTactic' (DaemonhuntInfantryGKTactic)
+
+PaladinSP = {}
+
+function PaladinSPTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Paladin Campaign Tactic")
+	self.m_iTransportable = 1
+end
+
+-- Arkhan 03.2006: Inherited method used by commanders which are able to jump with an attached squad
+function PaladinSPTactic:CanJumpAttached()
+	return true
+end
+
+function PaladinSPTactic:InitAbilities()
+
+	if PaladinSP.holocaust_id == nil then
+		PaladinSP.holocaust_id = cpu_manager.stats:GetAbilityID( "inquisition_holocaust" )
+	end
+end
+
+function PaladinSPTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(PaladinSP.holocaust_id) then
+		Ability.DoAbilityPos( self.squad_ai, PaladinSP.holocaust_id, Ability.Filters.CloseSquadEnemy, 3 ) 
+		Ability.DoAbilityPos( self.squad_ai, PaladinSP.holocaust_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+		Ability.DoAbilityPos( self.squad_ai, PaladinSP.holocaust_id, Ability.Filters.CloseMonsterEnemy, 1 ) 
+	end
+end
+
+function PaladinSPTactic:Upgrade()
+
+	-- Check if we are reinforcing
+	if (self.squad_ai:IsReinforcing() or not self.squad_ai:HasUpgradableTrooper()) then
+		return
+	end
+
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end	
+	
+	-- Only upgrade in healthy state
+	if (self.squad_ai:GetNumTroopers() < self.squad_ai:GetMaxTroopers() * 0.6 or self.squad_ai:GetHealthPercentage() < 0.5) then
+		return
+	end
+	
+	-- Set upgrade direction
+	local eUpgradeType = UnitStatsAI.UC_VehicleMed
+	if (math.random(1, 2) == 2) then
+
+		-- Figure out my enemy's favourite class
+		local oEnemy = cpu_manager:FindClosestEnemyPlayer()
+		if (oEnemy ~= nil) then
+			eUpgradeType = oEnemy:GetMajorityClassType()
+		end
+	end
+
+	-- Try to upgrade
+	self.squad_ai:DoBestUpgrade(eUpgradeType)
+end

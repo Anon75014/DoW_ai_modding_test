@@ -1,0 +1,95 @@
+----------------------------------------
+-- File: 'fallenangelscyphertactic.ai'
+-- Edited by Gambit @ 21.08.2018
+-- Edited by Thudmeizer @ 10.10.2022
+
+class 'FallenAngelsCypherTactic' (FallenAngelsInfantryTactic)
+
+FallenAngelsCypher = {}
+
+function FallenAngelsCypherTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Cypher Tactic")
+
+    self.fragLastUse = g_iGMT
+    self.krakLastUse = g_iGMT
+end
+
+function FallenAngelsCypherTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FallenAngelsCypherTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+-- This hero is allowed to retreat even directly after a jump
+function FallenAngelsCypherTactic:SetTarget( target, variant_type )
+
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+
+function FallenAngelsCypherTactic:InitAbilities()
+	if FallenAngelsCypher.krak_id == nil then
+		FallenAngelsCypher.krak_id = cpu_manager.stats:GetAbilityID( "fallen_krak_grenades_cypher" )
+		FallenAngelsCypher.chronobelt_id = cpu_manager.stats:GetAbilityID( "fallen_cypher_chronobelt" )
+		FallenAngelsCypher.stealth_id = cpu_manager.stats:GetAbilityID( "fallen_infiltrate_cypher" )
+		FallenAngelsCypher.plasma_id = cpu_manager.stats:GetAbilityID( "fallen_charged_plasma_shot_cypher" )
+	end
+end
+
+function FallenAngelsCypherTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+    
+		if g_iGMT > self.krakLastUse + 30 and self.squad_ai:CanDoAbility(FallenAngelsCypher.krak_id) then
+            		if Ability.DoAbilityTarget( self.squad_ai, FallenAngelsCypher.krak_id, Ability.Filters.CloseVehicleEnemy, 1 )
+            		or Ability.DoAbilityTargetEntity( self.squad_ai, FallenAngelsCypher.krak_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            		then
+                		self.krakLastUse = g_iGMT             
+            		end
+        	end
+
+		-- If we are dying while in combat, lower prequisites for escape
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			if self.squad_ai:CanDoAbility(FallenAngelsCypher.chronobelt_id) then
+				self.squad_ai:DoSpecialAbility(FallenAngelsCypher.chronobelt_id)
+			end
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(FallenAngelsCypher.plasma_id) then
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsCypher.plasma_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsCypher.plasma_id, Ability.Filters.CloseMonsterEnemy, 1 )
+	end
+
+	local healthPercent = self.squad_ai:GetHealthPercentage()
+	local recentlyHurt = self.squad_ai:WasRecentlyHurt() or self.squad_ai:IsUnderAttack()
+	if self.squad_ai:IsUsingAbility(FallenAngelsCypher.stealth_id) then
+		if healthPercent > 0.4 or not recentlyHurt then
+			self.squad_ai:DoSpecialAbility(FallenAngelsCypher.stealth_id)
+		end
+	elseif healthPercent < 0.35 and recentlyHurt then
+		self.squad_ai:DoSpecialAbility(FallenAngelsCypher.stealth_id)
+	end
+end
+
+
+function FallenAngelsCypherTactic:Update()
+
+    	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

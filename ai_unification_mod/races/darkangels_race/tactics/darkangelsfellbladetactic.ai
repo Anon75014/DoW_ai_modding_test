@@ -1,0 +1,34 @@
+----------------------------------------
+-- File: 'darkangelsfellbladetactic.ai'
+-- Edited by Thudmeizer         @ 09.09.2025
+
+class 'DarkAngelsFellbladeTactic' (DarkAngelsVehicleTactic)
+
+DarkAngelsFellblade = {}
+
+function DarkAngelsFellbladeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Fellblade Tactic")
+end
+
+function DarkAngelsFellbladeTactic:InitAbilities()
+
+	-- Init ability ID's
+	if DarkAngelsFellblade.spirit_id == nil then
+		DarkAngelsFellblade.spirit_id = cpu_manager.stats:GetAbilityID( "darkangels_machine_spirit_fellblade" )
+	end
+end
+
+function DarkAngelsFellbladeTactic:DoAbilities()
+
+	-- Check if I can use machine spirit while stationary
+	if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+		
+		if self.squad_ai:CanDoAbility(DarkAngelsFellblade.spirit_id) then
+			self.squad_ai:DoSpecialAbility(DarkAngelsFellblade.spirit_id)
+		end	  
+	end
+
+	-- Do basic abilities
+	DarkAngelsVehicleTactic.DoAbilities(self)
+end

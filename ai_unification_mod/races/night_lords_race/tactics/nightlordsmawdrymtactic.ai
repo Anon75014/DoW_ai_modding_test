@@ -1,0 +1,76 @@
+----------------------------------------
+-- File: 'nightlordsmawdrymtactic.ai'
+-- Edited by Thudmeizer	@ 28.09.2022
+
+class 'NightLordsMawdrymTactic' (NightLordsInfantryTactic)
+
+NightLordsMawdrym = {}
+
+function NightLordsMawdrymTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Mawdrym Tactic")
+end
+
+function NightLordsMawdrymTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function NightLordsMawdrymTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function NightLordsMawdrymTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (NightLordsMawdrym.insanity_id == nil) then
+		NightLordsMawdrym.insanity_id = cpu_manager.stats:GetAbilityID( "night_lords_insanity" )	
+	end
+	if (NightLordsMawdrym.torture_id == nil) then
+		NightLordsMawdrym.torture_id = cpu_manager.stats:GetAbilityID( "night_lords_torture" )	
+	end
+end
+
+function NightLordsMawdrymTactic:DoAbilities()
+
+	Ability.DoAbility( self.squad_ai, NightLordsMawdrym.insanity_id, Ability.Filters.IsInCombat )
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsMawdrym.torture_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsMawdrym.torture_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsMawdrym.torture_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsMawdrym.torture_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsMawdrym.torture_id, Ability.Filters.CloseMonsterEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, NightLordsMawdrym.torture_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+end
+
+function NightLordsMawdrymTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier2+
+	if (cpu_manager:GetTierLevel() > 1) then
+		
+		if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+			return
+		end
+	end
+
+	if (self:TryAttachSquad(false, true, 50, nil, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+

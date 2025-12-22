@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'firstbornhqtactic.ai'
+-- Edited by Thudmeizer		@ 24.01.2023
+
+class 'FirstbornHQTactic' (BaseTactic)
+
+FirstbornHQ = {}
+
+function FirstbornHQTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Firstborn HQ Tactic")
+	
+	-- Building is a bunker
+	self:AddToBunkerList()
+end
+
+function FirstbornHQTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (FirstbornHQ.detection_id == nil) then
+		FirstbornHQ.detection_id = cpu_manager.stats:GetAbilityID( "firstborn_detection_field" )
+	end
+end
+
+function FirstbornHQTactic:DoAbilities()
+
+	-- Try to activate detection field
+	if (self.base_ai:CanDoAbility(FirstbornHQ.detection_id)) then
+	
+		local iRange = self.base_ai:GetAbilityRange(FirstbornHQ.detection_id)
+		local oSquad = Ability.Filters.CloseInfiltratedEnemy(self.base_ai:GetPosition(), iRange, 1)
+		if (oSquad ~= nil) then
+			
+			-- Only try to detect if the infiltrated unit is attacking
+			if (oSquad:IsAttacking()) then
+				self.base_ai:DoSpecialAbilitySquad(FirstbornHQ.detection_id, oSquad:GetSquad())
+			end
+		end
+	end
+end

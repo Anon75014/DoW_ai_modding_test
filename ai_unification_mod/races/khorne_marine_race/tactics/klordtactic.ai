@@ -1,0 +1,147 @@
+----------------------------------------
+-- File: 'klordtactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 12.06.2022
+
+class 'kLordTactic' (kInfantryTactic)
+
+kLord = {}
+
+function kLordTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("k Lord Tactic")
+end
+
+function kLordTactic:AutoBuildAddOn( addonSlot )
+	for e in self.squad_ai:GetEntities() do
+		local buildChannelkLord = build_manager:GetBuildChannelFromID(e:GetID())
+		if (buildChannelkLord ~= nil) then
+			local addOnID = buildChannelkLord:GetItemIDAt(BuildChannelAI.PQ_AddOn, addonSlot)
+			if (buildChannelkLord:IsBuilding() == 0 and buildChannelkLord:CanAddToQueue(BuildChannelAI.PQ_AddOn, addOnID) == BuildChannelAI.CANBUILD_Ok) then			
+				buildChannelkLord:BuildAddOn(addOnID)
+				return
+			end
+		end
+	end
+	return
+end
+
+-- Assassinate win condition -- never attack
+function kLordTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function kLordTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+-- Commander is allowed to retreat even directly after a jump
+function kLordTactic:SetTarget( target, variant_type )
+	self.variant_type = variant_type
+	self.target = Vector3f(target)
+	self.m_iMoveDelay = 0
+	self.last_jump = 0
+end
+
+-- Assassinate win condition -- never jump into combat
+function kLordTactic:JumpAttack()
+	if (not cpu_manager.assassinate) then
+		Tactic.JumpAttack(self)
+	end
+end
+
+function kLordTactic:InitAbilities()
+
+	if (kLord.strength_id == nil) then
+		kLord.strength_id = cpu_manager.stats:GetAbilityID( "khm_daemon_strength" )	
+	end
+	if (kLord.regen_id == nil) then
+		kLord.regen_id = cpu_manager.stats:GetAbilityID( "khm_hero_regeneration" )
+	end
+end
+function kLordTactic:DoAbilities()
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5) then
+	Ability.DoAbility(self.squad_ai, kLord.regen_id, Ability.Filters.IsInCombat )
+	end
+	Ability.DoAbility( self.squad_ai, kLord.strength_id, Ability.Filters.IsInCombat )
+end
+
+function kLordTactic:Update()
+--[[
+self:AutoBuildAddOn(0)	-- 
+self:AutoBuildAddOn(1)	-- 
+self:AutoBuildAddOn(2)  -- 
+self:AutoBuildAddOn(3)	-- 
+self:AutoBuildAddOn(4)	-- 
+self:AutoBuildAddOn(5)	-- 
+self:AutoBuildAddOn(6)	-- 
+self:AutoBuildAddOn(7)	-- 
+self:AutoBuildAddOn(8)	-- 
+self:AutoBuildAddOn(9)	-- 
+self:AutoBuildAddOn(10)	-- 
+self:AutoBuildAddOn(11)	-- 
+]]
+	local wargear_addons = math.random( 0,7 )
+
+	if (wargear_addons == 0) then
+		self:AutoBuildAddOn(0)
+	elseif (wargear_addons == 1) then
+		self:AutoBuildAddOn(1)
+	elseif (wargear_addons == 2) then
+		self:AutoBuildAddOn(2)
+	elseif (wargear_addons == 3) then
+		self:AutoBuildAddOn(3)
+	elseif (wargear_addons == 4) then
+		self:AutoBuildAddOn(4)
+	elseif (wargear_addons == 5) then
+		self:AutoBuildAddOn(5)
+	elseif (wargear_addons == 6) then
+		self:AutoBuildAddOn(6)
+	elseif (wargear_addons == 7) then
+		self:AutoBuildAddOn(7)
+--[[
+	elseif (wargear_addons == 8) then
+		self:AutoBuildAddOn(8)
+	elseif (wargear_addons == 9) then
+		self:AutoBuildAddOn(9)
+	elseif (wargear_addons == 10) then
+		self:AutoBuildAddOn(10)
+	elseif (wargear_addons == 11) then
+		self:AutoBuildAddOn(11)
+	elseif (wargear_addons == 12) then
+		self:AutoBuildAddOn(12)
+	elseif (wargear_addons == 13) then
+		self:AutoBuildAddOn(13)
+	elseif (wargear_addons == 14) then
+		self:AutoBuildAddOn(14)
+]]
+	end
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+		
+		-- Attach to melee in tier3+
+		if (cpu_manager:GetTierLevel() > 2) then
+		
+			if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+				return
+			end
+		end
+
+		if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

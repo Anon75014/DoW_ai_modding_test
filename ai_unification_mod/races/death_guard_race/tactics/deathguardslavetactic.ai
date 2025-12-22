@@ -1,0 +1,12 @@
+----------------------------------------
+-- File: 'deathguardslavetactic.ai'
+-- Edited by Thudmeizer	@ 11.05.2022
+
+class 'DeathGuardSlaveTactic' (EngineerTactic)
+
+DeathGuardSlave = {}
+
+function DeathGuardSlaveTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Death Guard Slave Tactic")
+end

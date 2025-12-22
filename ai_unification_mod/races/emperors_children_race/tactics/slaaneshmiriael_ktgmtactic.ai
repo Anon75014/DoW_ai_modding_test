@@ -1,0 +1,187 @@
+----------------------------------------
+-- File: 'slaaneshmiriael_ktgmtactic.ai'
+-- Edited by Gambit 	@ 06.03.2023
+-- Edited by Thudmeizer @ 30.10.2023
+
+class 'SlaaneshMiriael_ktgmTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshMiriael = {}
+
+function SlaaneshMiriael_ktgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Miriael Sabathiel Kill Team Tactic")
+end
+
+function SlaaneshMiriael_ktgmTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function SlaaneshMiriael_ktgmTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function SlaaneshMiriael_ktgmTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshMiriael.airstrike_id == nil) then
+		SlaaneshMiriael.airstrike_id = cpu_manager.stats:GetAbilityID( "emperors_children_ls_miri_airstrike" )
+		SlaaneshMiriael.allure_id = cpu_manager.stats:GetAbilityID( "emperors_children_ls_miri_allure" )
+		SlaaneshMiriael.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_ls_miri_doom_siren" )
+		SlaaneshMiriael.rosarius_id = cpu_manager.stats:GetAbilityID( "emperors_children_ls_miri_rosarius" )
+		SlaaneshMiriael.plasma_id = cpu_manager.stats:GetAbilityID( "emperors_children_ls_miri_charged_plasma" )
+		SlaaneshMiriael.explosive_id = cpu_manager.stats:GetAbilityID( "emperors_children_ls_miri_explosive_round" )
+	end
+end
+
+function SlaaneshMiriael_ktgmTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		-- First, try to direct spawn the Raptor squad
+		if (self.squad_ai:CanDirectSpawn()) then 
+			self.squad_ai:DoDirectSpawn()
+			--print("Summon Raptor Squad Ability for player "..tostring(cpu_manager.player_id).."")
+			return
+		end
+	end
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+
+		-- First, see if we can possess to Avatar state
+		if self.squad_ai:CanPossess() and self.squad_ai:GetHealthPercentage() < 0.8 then
+			self.squad_ai:DoPossess()
+			--print("Summon Avatar Ability for player "..tostring(cpu_manager.player_id).."")
+			return
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshMiriael.rosarius_id) then
+			if self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.25 then
+				self.squad_ai:DoSpecialAbility(SlaaneshMiriael.rosarius_id)
+				--print("Activate Rosarius Ability for player "..tostring(cpu_manager.player_id).."")
+				return
+			end
+		end
+--[[
+		if self.squad_ai:CanDoAbility(SlaaneshMiriael.allure_id) then
+           			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.allure_id, Ability.Filters.CloseInfantryEnemy, 1 )
+           			or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.allure_id, Ability.Filters.CloseCommanderEnemy, 1 )
+           			or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.allure_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshMiriael.explosive_id) then
+           			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.explosive_id, Ability.Filters.CloseSquadEnemy, 2 )
+           			or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.explosive_id, Ability.Filters.CloseCommanderEnemy, 1 )
+           			or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.explosive_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshMiriael.plasma_id) then
+			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.plasma_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+			or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.plasma_id, Ability.Filters.CloseMonsterEnemy, 1 )
+			or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMiriael.plasma_id, Ability.Filters.CloseVehicleEnemy, 1 ) then
+				return
+			end
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshMiriael.airstrike_id) then
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshMiriael.airstrike_id, Ability.Filters.CloseInCombat, 10, 3 )
+			return
+		end
+
+]]			
+		if self.squad_ai:CanDoAbility(SlaaneshMiriael.siren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshMiriael.siren_id, Ability.Filters.CloseInCombat, 10, 4 )
+			--print("Activate Siren Ability for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Try to summon an Air Strike (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(SlaaneshMiriael.airstrike_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(SlaaneshMiriael.airstrike_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 8)
+		if (oUnit ~= nil) then
+			--print("Summon Air Strike Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.airstrike_id, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Use Allure against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(SlaaneshMiriael.allure_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(SlaaneshMiriael.allure_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Allure against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.allure_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Allure against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.allure_id, oUnitB:GetSquad())
+			return
+		end
+	end
+
+	-- Use Explosive Round against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(SlaaneshMiriael.explosive_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(SlaaneshMiriael.explosive_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 6)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Explosive Round against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.explosive_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Explosive Round against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.explosive_id, oUnitB:GetSquad())
+			return
+		end
+	end
+
+	-- Use Charged Plasma against enemies (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(SlaaneshMiriael.plasma_id)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(SlaaneshMiriael.plasma_id)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Charged Plasma against vehicle enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.plasma_id, oUnit:GetSquad())
+			return
+		elseif (oUnitB ~= nil) then
+			--print("Using Charged Plasma against commander enemies for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(SlaaneshMiriael.plasma_id, oUnitB:GetSquad())
+			return
+		end
+	end
+end
+
+function SlaaneshMiriael_ktgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Attach to melee
+	if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+		return
+	end
+	if (self:TryAttachSquad(false, true, 50, nil, nil) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end
+

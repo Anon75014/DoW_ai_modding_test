@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'nightlordshelltalontactic.ai'
+-- Edited by Torzel @ 18.05.2013
+-- Edited by Thudmeizer	@ 28.11.2024
+
+class 'NightLordsHellTalonTactic' (NightLordsVehicleTactic)
+
+NightLordsHellTalon = {}
+
+function NightLordsHellTalonTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Night Lords Hell Talon Tactic")
+end
+
+function NightLordsHellTalonTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (NightLordsHellTalon.biotoxin_id == nil) then
+		NightLordsHellTalon.biotoxin_id = cpu_manager.stats:GetAbilityID( "night_lords_biotoxin_rocket" )
+	end
+
+	if (NightLordsHellTalon.barrage_id == nil) then
+		NightLordsHellTalon.barrage_id = cpu_manager.stats:GetAbilityID( "night_lords_storm_barrage" )
+	end
+end
+
+function NightLordsHellTalonTactic:DoAbilities()
+	
+	if self.squad_ai:CanDoAbility(NightLordsHellTalon.biotoxin_id) then
+		Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.biotoxin_id, Ability.Filters.CloseSquadEnemy, 2 ) 
+		Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.biotoxin_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.biotoxin_id, Ability.Filters.CloseCommanderEnemy, 1 )
+
+		-- We are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.biotoxin_id, Ability.Filters.CloseSquadEnemy, 1 ) 
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(NightLordsHellTalon.barrage_id) then
+
+		-- We are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.barrage_id, Ability.Filters.CloseSquadEnemy, 2 ) 
+			Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.barrage_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		else
+			Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.barrage_id, Ability.Filters.CloseSquadEnemy, 3 )
+			Ability.DoAbilityPos( self.squad_ai, NightLordsHellTalon.barrage_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		end
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

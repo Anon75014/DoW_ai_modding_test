@@ -1,0 +1,295 @@
+----------------------------------------
+-- File: 'eldarinfantrytactic.ai'
+-- Created by Arkhan		@ 12.01.2006
+-- Edited by Thudmeizer         @ 12.03.2025
+
+class 'YnnariInfantryTactic' (InfantryTactic)
+
+YnnariInfantryAbility =
+{
+    PlasmaID = cpu_manager.stats:GetAbilityID("ynnari_plasma_grenades")
+	,TroupeID = cpu_manager.stats:GetAbilityID("ynnari_troupe_grenades")
+	,TerrorfexID = cpu_manager.stats:GetAbilityID("ynnari_terrorfex_grenade")
+	,HaywireID = cpu_manager.stats:GetAbilityID("ynnari_haywire_bombs")
+	,CursesID = cpu_manager.stats:GetAbilityID("ynnari_song_of_curses")
+}
+
+function YnnariInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Ynnari Infantry Tactic")
+
+	-- Most Ynnari infantry are able to enter transport vehicles except these cited below.
+	if (sSquadName ~= "ynnari_squad_ynncarnate") or (sSquadName ~= "ynnari_squad_aspect_hawk") or (sSquadName ~= "ynnari_squad_harlequin_jetbikes") or (sSquadName ~= "ynnari_squad_hellion") then
+		self.m_iTransportable = 1  -- Venom
+	end	
+
+	-- Set FoF range
+	self.m_iFoFRange = 35
+	if (sSquadName == "ynnari_squad_scorpions") then
+		self.m_iFoFRange = 15
+	elseif (sSquadName == "ynnari_squad_guardian") then
+		self.m_iFoFRange = 35
+	elseif (sSquadName == "ynnari_squad_rangers") then
+		self.m_iFoFRange = 40
+	elseif (sSquadName == "ynnari_squad_wraithblade") or (sSquadName == "ynnari_squad_wraithguard") then
+		self.m_iFoFRange = 45
+	end
+
+	self.plasmaLastUse = g_iGMT
+	self.troupeLastUse = g_iGMT
+	self.terrorfexLastUse = g_iGMT
+	self.haywireLastUse = g_iGMT
+	self.cursesLastUse = g_iGMT
+end
+
+function YnnariInfantryTactic:AddTargetAbilities()
+
+end
+
+function YnnariInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "ynnari_squad_yvainne", true })
+	table.insert(self.commander, { "ynnari_squad_visarch", false })
+	table.insert(self.commander, { "ynnari_squad_girax", false })
+end
+
+function YnnariInfantryTactic:DoAbilities()
+
+	-- Check if I should enable/disable fleet of foot
+	self:DoAbilityFoF()
+	
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+	end
+	
+	self:DoThrowGrenades()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Use Swooping Hawk Krak bombs!
+		local krak_id = cpu_manager.stats:GetAbilityID( "ynnari_krak_bombs" )
+		-- Check if we're in close combat - Krak
+		if self.squad_ai:CanDoAbility(krak_id) and not self.squad_ai:IsInStateMove() then
+			local selfPos = self.squad_ai:GetPosition()
+			local oEnemyVehicle = Ability.Filters.CloseVehicleEnemy(selfPos, 25, 1)
+			if oEnemyVehicle ~= nil then
+				local oEnemyPos = oEnemyVehicle:GetPosition()
+				selfPos.x = selfPos.x + 2*(oEnemyPos.x - selfPos.x)
+				selfPos.z = selfPos.z + 2*(oEnemyPos.z - selfPos.z)
+				self.squad_ai:DoMove(selfPos)
+				self.squad_ai:DoSpecialAbility(krak_id)
+				--print("Swooping Hawk Krak Bomb deployed for player "..tostring(cpu_manager.player_id).."")
+				return
+			end
+		end
+
+		-- Use Wych drugs!
+		local drugs_id = cpu_manager.stats:GetAbilityID( "ynnari_combat_drugs" )
+		if (self.squad_ai:CanDoAbility( drugs_id )) then
+			self.squad_ai:DoSpecialAbility( drugs_id )
+			--print("Wych Drugs deployed for player "..tostring(cpu_manager.player_id).."")
+		end
+
+		-- Use Library Guardian shadowrunners!
+		local shadowrunners_id = cpu_manager.stats:GetAbilityID( "ynnari_harlequin_shadowrunners" )
+		if (self.squad_ai:CanDoAbility( shadowrunners_id )) then
+			self.squad_ai:DoSpecialAbility( shadowrunners_id )
+			--print("Library Guardian Shadowrunners deployed for player "..tostring(cpu_manager.player_id).."")
+		end
+	end
+
+	-- Embolden if low morale for Warlocks
+	local embolden_id = cpu_manager.stats:GetAbilityID( "ynnari_embolden" )
+	if (self.squad_ai:CanDoAbility( embolden_id ) and self.squad_ai:GetMoralePercentage() < 0.6) then
+		self.squad_ai:DoSpecialAbility( embolden_id )
+		--print("Warlock Embolen deployed for player "..tostring(cpu_manager.player_id).."")
+	end
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function YnnariInfantryTactic:CanOnlyDecap()
+
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "ynnari_squad_troupe" or
+		sSquadName == "ynnari_squad_death_jesters" or
+		sSquadName == "ynnari_squad_library_guardians") then
+		return true
+	end
+	return false
+end
+
+function YnnariInfantryTactic:DoThrowGrenades()
+
+	if self.squad_ai:IsInCombat() then
+        
+		if ( g_iGMT > self.plasmaLastUse + 90 ) then
+            		if Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.PlasmaID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            		or Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.PlasmaID, Ability.Filters.CloseSquadEnemy, 1 )
+            		or Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.PlasmaID, Ability.Filters.CloseMonsterEnemy, 1 )
+            		then
+				--print("Plasma Grenade deployed for player "..tostring(cpu_manager.player_id).."")
+                		self.plasmaLastUse = g_iGMT 
+            		end
+        	end
+
+        	if ( g_iGMT > self.troupeLastUse + 90 ) then
+            		if Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.TroupeID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            		or Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.TroupeID, Ability.Filters.CloseSquadEnemy, 1 )
+            		or Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.TroupeID, Ability.Filters.CloseMonsterEnemy, 1 )
+            		then
+				--print("Troupe Grenade deployed for player "..tostring(cpu_manager.player_id).."")
+                		self.troupeLastUse = g_iGMT 
+            		end
+        	end
+		
+        	if ( g_iGMT > self.terrorfexLastUse + 90 ) then
+            		if Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.TerrorfexID, Ability.Filters.CloseCommanderEnemy, 1 ) 
+            		or Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.TerrorfexID, Ability.Filters.CloseSquadEnemy, 1 )
+            		or Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.TerrorfexID, Ability.Filters.CloseMonsterEnemy, 1 )
+            		then
+				--print("Terrorfex Grenade deployed for player "..tostring(cpu_manager.player_id).."")
+                		self.terrorfexLastUse = g_iGMT 
+            		end
+        	end
+
+        	if ( g_iGMT > self.cursesLastUse + 90 ) then
+            		if Ability.DoAbilityArea( self.squad_ai, YnnariInfantryAbility.CursesID, Ability.Filters.CloseCommanderEnemy, 10, 1 ) 
+            		or Ability.DoAbilityArea( self.squad_ai, YnnariInfantryAbility.CursesID, Ability.Filters.CloseSquadEnemy, 10, 1 )
+            		or Ability.DoAbilityArea( self.squad_ai, YnnariInfantryAbility.CursesID, Ability.Filters.CloseMonsterEnemy, 10, 1 )
+            		then
+				--print("Song of Cruses deployed for player "..tostring(cpu_manager.player_id).."")
+                		self.cursesLastUse = g_iGMT 
+            		end
+        	end
+
+		if ( g_iGMT > self.haywireLastUse + 90 ) then        
+            		if Ability.DoAbilityTarget( self.squad_ai, YnnariInfantryAbility.HaywireID, Ability.Filters.CloseVehicleEnemy, 1 )
+            		or Ability.DoAbilityTargetEntity( self.squad_ai, YnnariInfantryAbility.HaywireID, Ability.EntityFilters.CloseBaseEntityEnemy, 1 )
+            		then
+				--print("Haywire Bomb deployed for player "..tostring(cpu_manager.player_id).."")
+                		self.haywireLastUse = g_iGMT
+            		end
+        	end 
+	end
+end
+
+function YnnariInfantryTactic:TryAttachSquadMelee()
+
+	-- if I'm in combat
+   	local bInfiltrator = self.squad_ai:IsInfiltrating()
+   	if not self.squad_ai:IsBroken() and self.squad_ai:IsInCombat() then
+	  
+	  	if self.squad_ai:GetHealthPercentage() < 0.3 then
+		 
+		 	local attachable_filter = function( squad_ai )
+		 	local oTactic = squad_ai:GetTactic()
+		    	return self.squad_ai:CanAttachTo( squad_ai ) and not squad_ai:IsBroken() and
+			   not squad_ai:IsCapturing() and not oTactic:IsInSubState() and
+			   (not squad_ai:IsInfiltrating() or bInfiltrator) and oTactic:IsAttacker()
+		 	end
+		 
+			-- find close by squads
+		 	local attach_to = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 10, attachable_filter )
+		 	if attach_to ~= nil then 
+			
+				-- sync FoF
+				self:ToggleFoF( self.squad_ai, false )
+				self:ToggleFoF( attach_to, false )  
+			
+				self.squad_ai:DoAttachSquad( attach_to )
+				attach_to:DoSetMeleeStance( SquadAI.MSTANCE_Assault )
+		 	end
+	  	else
+			local melee_filter = function( squad_ai )
+		 	local oTactic = squad_ai:GetTactic()
+	        	return self.squad_ai:CanAttachTo( squad_ai ) and not squad_ai:IsRanged() and 
+			   not squad_ai:IsBroken() and not squad_ai:IsCapturing() and not oTactic:IsInSubState() and
+			   (not squad_ai:IsInfiltrating() or bInfiltrator) and oTactic:IsAttacker()
+		 	end
+		 
+		 	local attach_to = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 10, melee_filter )
+		 	if attach_to ~= nil then 
+			
+				-- sync FoF
+				self:ToggleFoF( self.squad_ai, false )
+				self:ToggleFoF( attach_to, false )  
+			
+				self.squad_ai:DoAttachSquad( attach_to )
+				attach_to:DoSetMeleeStance( SquadAI.MSTANCE_Assault )
+		 	end
+	  	end	  
+   	end
+end
+
+function YnnariInfantryTactic:DoMoveAttach( attach_to )
+   
+	-- Sync FoF
+	self:ToggleFoF( self.squad_ai, fof )
+	self:ToggleFoF( attach_to, fof )
+
+	-- Call standard method
+	Tactic.DoMoveAttach(self, attach_to)
+end
+
+function YnnariInfantryTactic:ToggleFoF( squad_ai, state )
+
+	-- Check if the squad can handle fleet of foot
+	local id = cpu_manager.stats:GetAbilityID( "ynnari_fleetoffoot" )
+	if (not squad_ai:CanDoAbility(id)) then
+		return
+	end
+	
+	-- Check if it's already in desired state
+	if (squad_ai:IsUsingAbility(id) == state) then
+		return 
+	end
+	
+	-- Activate fleet of foot
+	squad_ai:DoSpecialAbility(id)
+end
+
+-- Dreddnott edit (April 16th)
+function YnnariInfantryTactic:DoAbilityFoF()
+
+	-- Check if we should toggle FoF
+	local iFoFID = cpu_manager.stats:GetAbilityID("ynnari_fleetoffoot")
+	local bToggleFoF = false
+
+	-- Check whether we're using the ability
+	local bIsUsing = self.squad_ai:IsUsingAbility(iFoFID)
+
+	-- Check if we're attacking
+	local bIsAttacking = self.squad_ai:IsInStateAttackMove()
+    
+	-- Check if we are shooting or fighting in melee
+	local bIsFighting = self.squad_ai:IsAttacking()
+    
+	-- Check if we're moving normally
+	local bIsMoving = (self.squad_ai:IsInStateMove() and not bIsAttacking)
+
+	-- Check if we're in a state that should FoF regardless of enemy presence
+	local bAvoidCombat = (self.squad_ai:IsBroken() or self:IsInSubState() or self.squad_ai:IsCapturing() or bIsMoving)
+
+	-- Check if we should slow down for enemies nearing range
+	local vSquadPos = self.squad_ai:GetPosition()
+	local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(vSquadPos, self.m_iFoFRange, 1)
+	local bCloseEnemy = (oEnemy ~= nil)
+    
+	-- Helper flags
+	local bIsCharging = (bIsAttacking and bCloseEnemy)
+	local bIsDefending = (not bIsMoving and bCloseEnemy)
+	local bIsInCombat = (bIsFighting or bIsCharging or bIsDefending)
+
+	-- Check if FoF should be toggled
+	if ((bIsUsing and bIsInCombat and not bAvoidCombat) or
+	(not bIsUsing and (not bIsInCombat or bAvoidCombat))) then        
+        	bToggleFoF = true
+	end
+
+	-- Toggle FoF
+	if (bToggleFoF and self.squad_ai:CanDoAbility(iFoFID)) then
+		self.squad_ai:DoSpecialAbility(iFoFID)
+	end
+end

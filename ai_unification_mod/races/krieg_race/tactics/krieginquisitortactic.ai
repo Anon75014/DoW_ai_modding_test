@@ -1,0 +1,113 @@
+----------------------------------------
+-- File: 'krieginquisitortactic.ai'
+-- Edited by fuggles @ 07.04.2022
+-- Edited by Thudmeizer @ 18.08.2024
+
+class 'KriegInquisitorTactic' (KriegInfantryTactic)
+
+KriegInquisitor = {}
+
+function KriegInquisitorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Krieg Inquisitor Tactic")
+
+	-- Inquisitor is able to enter a bunker
+	self.m_bBunkerSquad = true
+end
+
+function KriegInquisitorTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function KriegInquisitorTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function KriegInquisitorTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (KriegInquisitor.hammer_id == nil) then
+		KriegInquisitor.hammer_id = cpu_manager.stats:GetAbilityID( "krieg_hammer_of_witches" )
+		KriegInquisitor.hammer_ktgm = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_hammer_of_witches_ktgm" )
+		KriegInquisitor.smite_id = cpu_manager.stats:GetAbilityID( "krieg_smite" )
+		KriegInquisitor.smite_ktgm = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_smite_ktgm" )
+		KriegInquisitor.curse_id = cpu_manager.stats:GetAbilityID( "krieg_curse_machine_spirits" )
+		KriegInquisitor.curse_ktgm = cpu_manager.stats:GetAbilityID( "krieg_ls_lord_general_curse_machine_spirits_ktgm" )
+	end
+end
+
+function KriegInquisitorTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Target infantry
+		if self.squad_ai:CanDoAbility(KriegInquisitor.hammer_id) then
+			Ability.DoAbilityTarget( self.squad_ai, KriegInquisitor.hammer_id, Ability.Filters.CloseInfantryEnemy, 1 )
+		end
+
+		-- Target commanders
+		if self.squad_ai:CanDoAbility(KriegInquisitor.smite_id) then
+			Ability.DoAbilityPos( self.squad_ai, KriegInquisitor.smite_id, Ability.Filters.CloseInfantryEnemy, 8 )
+		end
+
+		-- Target vehicles
+		if self.squad_ai:CanDoAbility(KriegInquisitor.curse_id) then
+			Ability.DoAbilityTarget( self.squad_ai, KriegInquisitor.curse_id, Ability.Filters.CloseVehicleEnemy, 1 )
+		end
+	end
+
+	-- Try to use Hammer Ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegInquisitor.hammer_ktgm)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegInquisitor.hammer_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 2)
+		if (oUnit ~= nil) then
+			--print("Using Hammer Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegInquisitor.hammer_ktgm, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Try to use Smite Ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegInquisitor.smite_ktgm)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegInquisitor.smite_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+		if (oUnit ~= nil) then
+			--print("Using Smite Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegInquisitor.smite_ktgm, oUnit:GetSquad())
+			return
+		end
+	end
+
+	-- Try to use Curse Machine Ability (Last Stand / Kill Team)
+	if (self.squad_ai:CanDoAbility(KriegInquisitor.curse_ktgm)) then 
+
+		-- Search for a nearby enemy squad
+		local iRange = self.squad_ai:GetAbilityRange(KriegInquisitor.curse_ktgm)
+		local oUnit = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil) then
+			--print("Using Curse Machine Ability for player "..tostring(cpu_manager.player_id).."")
+			self.squad_ai:DoSpecialAbilitySquad(KriegInquisitor.curse_ktgm, oUnit:GetSquad())
+			return
+		end
+	end
+end
+
+function KriegInquisitorTactic:Update()
+
+	if self:IsComplete() then
+      		return
+	end
+
+	--state machine
+   	if not InfantryTactic.Update( self ) then
+      		return
+	end
+
+	--attach to squad
+   	self:TryAttachSquad( false, false, 1000, 100, nil )
+end
+

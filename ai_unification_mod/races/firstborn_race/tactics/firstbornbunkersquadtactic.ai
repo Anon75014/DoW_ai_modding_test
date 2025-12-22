@@ -1,0 +1,13 @@
+----------------------------------------
+-- File: 'firstbornbunkersquadtactic.ai'
+-- Edited by Thudmeizer @ 05.06.2008
+
+class 'FirstbornBunkerSquadTactic' (FirstbornInfantryTactic)
+
+function FirstbornBunkerSquadTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Bunker Squad Tactic")
+	
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end

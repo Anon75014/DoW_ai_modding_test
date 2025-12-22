@@ -1,0 +1,67 @@
+----------------------------------------
+-- File: 'slaaneshsoloisttactic.ai'
+-- Edited by Thudmeizer	@ 24.07.2018
+
+class 'SlaaneshSoloistTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshSoloist = {}
+
+function SlaaneshSoloistTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Soloist Tactic")
+end
+
+function SlaaneshSoloistTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshSoloist.doomsiren_id == nil) then
+		SlaaneshSoloist.doomsiren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren" )
+		SlaaneshSoloist.krakgrenades_id = cpu_manager.stats:GetAbilityID( "emperors_children_krak_grenades" )
+		SlaaneshSoloist.blessing_id = cpu_manager.stats:GetAbilityID( "emperors_children_slaanesh_blessing_2" )
+		SlaaneshSoloist.icon_id = cpu_manager.stats:GetAbilityID( "emperors_children_slaaneshi_icon" )
+	end
+end
+
+function SlaaneshSoloistTactic:DoAbilities()
+
+	if (self.squad_ai:IsInCombat()) then
+		if self.squad_ai:CanDoAbility(SlaaneshSoloist.doomsiren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshSoloist.doomsiren_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+
+		if self.squad_ai:CanDoAbility( SlaaneshSoloist.krakgrenades_id ) then
+			if Ability.DoAbilityTarget( self.squad_ai, SlaaneshSoloist.krakgrenades_id, Ability.Filters.CloseVehicleEnemy, 1 )
+            or Ability.DoAbilityTargetEntity( self.squad_ai, SlaaneshSoloist.krakgrenades_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1 ) then
+				return
+			end
+		end
+
+		if self.squad_ai:CanDoAbility( SlaaneshSoloist.blessing_id ) then
+			self.squad_ai:DoSpecialAbility( SlaaneshSoloist.blessing_id )
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshSoloist.icon_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshSoloist.icon_id, Ability.Filters.CloseEnemy, 10, 3 )
+		end
+	end
+end
+
+function SlaaneshSoloistTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Attach to melee
+	if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+		return
+	end
+	if (self:TryAttachSquad(false, true, 50, nil, nil) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

@@ -1,0 +1,54 @@
+----------------------------------------
+-- File: 'nightlordsgelbombtactic.ai'
+-- Edited by Thudmeizer		@ 12.11.2024
+
+class 'NightLordsGelBombTactic' (BaseTactic)
+
+NightLordsGelBomb = {}
+
+function NightLordsGelBombTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("NightLords Gel Bomb Tactic")
+end
+
+function NightLordsGelBombTactic:InitAbilities()
+	
+	-- Init abilities
+	if (NightLordsGelBomb.detonation_id == nil) then
+		NightLordsGelBomb.detonation_id = cpu_manager.stats:GetAbilityID( "night_lords_explosive_gel_detonation" )
+	end
+end
+
+function NightLordsGelBombTactic:DoAbilities()
+
+	-- Try to activate detonation when specific enemies types are nearby
+	if (self.base_ai:CanDoAbility(NightLordsGelBomb.detonation_id)) then
+
+		local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.base_ai:GetPosition(), 10, 4)
+		local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.base_ai:GetPosition(), 10, 1)
+		local oUnitC = cpu_manager.cpu_player:FindFirstVehicleEnemy(self.base_ai:GetPosition(), 10, 1)
+		local oUnitD = cpu_manager.cpu_player:FindFirstEnemy(self.base_ai:GetPosition(), 10, 1)
+		if (oUnit ~= nil) then
+			self.base_ai:DoSpecialAbility(NightLordsGelBomb.detonation_id)
+			--print("Using Gel Detonation ability against enemy infantry for player "..tostring(cpu_manager.player_id).."")
+		elseif (oUnitB ~= nil) then
+			self.base_ai:DoSpecialAbility(NightLordsGelBomb.detonation_id)
+			--print("Using Gel Detonation ability against enemy commanders for player "..tostring(cpu_manager.player_id).."")
+		elseif (oUnitC ~= nil) then
+			self.base_ai:DoSpecialAbility(NightLordsGelBomb.detonation_id)
+			--print("Using Gel Detonation ability against enemy vehicles for player "..tostring(cpu_manager.player_id).."")
+		elseif (oUnitD ~= nil) then
+			-- Get stats
+			local oStats = oUnitD:GetStats()
+			if (oStats ~= nil) then
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+					self.base_ai:DoSpecialAbility(NightLordsGelBomb.detonation_id)
+					--print("Using Gel Detonation ability against enemy monsters for player "..tostring(cpu_manager.player_id).."")
+				end
+			end
+		end
+	end
+end
+

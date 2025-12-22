@@ -1,0 +1,337 @@
+----------------------------------------
+-- File: 'kriegstrategyinfo.ai'
+-- Edited by fuggles @ 04.04.2022
+-- Edited by Thudmeizer @ 31.08.2025
+
+BuildBaseStrategyInfo = 
+{
+	krieg_race =
+	{
+		post_builder = 1,
+		flag_capture = 1,
+
+		-- Reserve this amount for building units, reinforcing and upgrading
+		req_reserve = 150,
+		
+		-- need at least this at all times
+		squad_cap_threshold = 3,
+
+		-- need at least this at all times
+		support_cap_threshold = 4,
+		
+		-- used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 2,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Research Total: 15
+			-- Allround strategy
+			{
+				{ 1, 125, 30, 0, 1,	"Unit",		"krieg_squad_command_squad" },
+				{ 1, 160, 0, 0, 3,	"Unit",		"krieg_squad_soldiers" },
+				{ 1, 90, 40, 0, 2,	"Unit",		"krieg_squad_commissar" },
+				{ 1, 450, 0, 0, 1,	"Building",    	"krieg_hq" },
+				{ 1, 125, 0, 0, 1,	"Building",   	"krieg_infantry_bunker" },
+				{ 1, 165, 0, 0, 1,	"Building",    	"krieg_generator" },
+				{ 1, 175, 50, 500, 1,	"Building",   	"krieg_communications_center" },
+				{ 1, 165, 0, 600, 3,	"Building",    	"krieg_generator" },
+				{ 1, 100, 60, 650, 60,	"TurretAddon", 	"addon_krieg_list_post_1" },
+				{ 1, 165, 0, 700, 4,	"Building",    	"krieg_generator" },
+				{ 1, 300, 175, 750, 1,	"Addon",	"addon_krieg_hq_1" },
+				{ 1, 120, 90, 800, 1,	"Building",    	"krieg_tank_turret" },
+				{ 1, 100, 45, 950, 1,	"Building",	"krieg_machine_gun_bunker" },
+
+				{ 2, 120, 70, 0, 1,	"Unit",		"krieg_squad_chimera" },
+				{ 2, 220, 80, 0, 1,	"Unit",		"krieg_squad_death_cavalry" },
+				{ 2, 250, 50, 0, 1,	"Unit",		"krieg_squad_heavy_weapon" },
+				{ 2, 200, 125, 250, 1,	"Building",    	"krieg_machinery_plant" },
+				{ 2, 165, 0, 1000, 6,	"Building",    	"krieg_generator" },
+				{ 2, 100, 60, 1000, 100,"TurretAddon", 	"addon_krieg_list_post_1" },
+				{ 2, 75, 250, 1000, 1,	"Research",    	"krieg_upgrade_requisition_1" },
+				{ 2, 150, 50, 1000, 1,	"Research",    	"krieg_upgrade_power_1" },
+				{ 2, 340, 340, 1500, 1,	"Addon",	"addon_krieg_hq_2" },
+				{ 2, 250, 100, 2000, 40,"TurretAddon", 	"addon_krieg_list_post_2" },
+				{ 2, 120, 90, 2000, 2,	"Building",    	"krieg_tank_turret" },
+				{ 2, 100, 45, 2000, 2,	"Building",	"krieg_machine_gun_bunker" },
+				{ 2, 50, 50, 2000, 2,	"Building",	"krieg_mine" },
+
+				{ 3, 140, 85, 0, 1,	"Unit",		"krieg_squad_centaur" },
+			        { 3, 200, 30, 0, 1,	"Unit",		"krieg_squad_heavy_weapon_mortars" },
+				{ 3, 200, 250, 0, 1,	"Unit",		"krieg_squad_bombard" },
+			        { 3, 100, 300, 2000, 1,	"Research",    	"krieg_upgrade_requisition_2" },
+				{ 3, 250, 100, 2000, 1,	"Research",    	"krieg_upgrade_power_2" },
+				{ 3, 120, 90, 2000, 4,	"Building",    	"krieg_tank_turret" },
+				{ 3, 50, 50, 2000, 4,	"Building",	"krieg_mine" },
+				{ 3, 450, 450, 2000, 1,	"Research",    	"krieg_planetary_siege" },
+
+				{ 4, 200, 50, 0, 1,	"Building",	"krieg_lucius_pattern" },
+				{ 4, 120, 90, 2000, 6,	"Building",    	"krieg_tank_turret" },
+				{ 4, 50, 50, 2000, 6,	"Building",	"krieg_mine" },
+				{ 4, 250, 100, 3000, 100,"TurretAddon", "addon_krieg_list_post_2" },
+				{ 4, 450, 0, 4000, 2,	"Building",    	"krieg_hq" }
+--[[			},
+			
+			-- Mass guard strategy
+			{
+				{ 1, 0, 0, 0, 0,	 "Rush", 	"Prepare" },
+				{ 1, 120, 30, 0, 1,	 "Unit",	"krieg_squad_command_squad" },
+				{ 1, 160, 0, 0, 3,	 "Unit",	"krieg_squad_soldiers" },
+				{ 1, 450, 0, 0, 1,	 "Building",    "krieg_hq" },
+				{ 1, 125, 0, 0, 1,	 "Building",    "krieg_infantry_bunker" },
+				{ 1, 165, 0, 0, 1,	 "Building",    "krieg_generator" },
+				{ 1, 175, 50, 500, 1,	 "Building",    "krieg_communications_center" },
+				{ 1, 100, 60, 750, 60,	 "TurretAddon", "addon_krieg_list_post_1" },
+				{ 1, 120, 90, 0, 1,	 "Building",    "krieg_tank_turret" },
+				{ 1, 165, 0, 0, 2,	 "Building",    "krieg_generator" },
+				{ 1, 165, 0, 750, 3,	 "Building",    "krieg_generator" },
+				{ 1, 300, 175, 1000, 1,	 "Addon",	"addon_krieg_hq_1" },
+				{ 1, 100, 45, 900, 1,	"Building",	"krieg_machine_gun_bunker" },
+				{ 1, 100, 60, 250, 100,	 "TurretAddon", "addon_krieg_list_post_1" },
+				{ 1, 165, 0, 500, 4,	 "Building",    "krieg_generator" },
+
+				{ 2, 250, 50, 0, 1,	 "Unit",	"krieg_squad_heavy_weapon" },
+				{ 2, 150, 150, 0, 1,	 "Unit",	"krieg_squad_hellhound" },
+				{ 2, 200, 125, 250, 1,	 "Building",    "krieg_machinery_plant" },
+				{ 2, 165, 0, 1000, 6,	 "Building",    "krieg_generator" },
+				{ 2, 75, 250, 1000, 1,	 "Research",    "krieg_upgrade_requisition_1" },
+				{ 2, 150, 50, 1000, 1,	 "Research",    "krieg_upgrade_power_1" },
+				{ 2, 340, 340, 1500, 1,	 "Addon",	"addon_krieg_hq_2" },
+				{ 2, 250, 100, 2000, 40, "TurretAddon", "addon_krieg_list_post_2" },
+				{ 2, 120, 90, 2000, 2,	 "Building",    "krieg_tank_turret" },
+				{ 2, 100, 45, 2000, 2,	"Building",	"krieg_machine_gun_bunker" },
+				{ 2, 50, 50, 2000, 2,	 "Building",	"krieg_mine" },
+
+				{ 3, 195, 15, 0, 1,	 "Unit",	"krieg_squad_ogryns" },
+				{ 3, 200, 100, 0, 1,	 "Unit",	"krieg_squad_grenadiers" },
+				{ 3, 100, 300, 2000, 1,	 "Research",    "krieg_upgrade_requisition_2" },
+				{ 3, 250, 100, 2000, 1,	 "Research",    "krieg_upgrade_power_2" },
+				{ 3, 120, 90, 2000, 4,	 "Building",    "krieg_tank_turret" },
+				{ 3, 50, 50, 2000, 4,	 "Building",	"krieg_mine" },
+				{ 3, 450, 450, 2000, 1,	 "Research",    "krieg_planetary_siege" },
+
+				{ 4, 200, 50, 2000, 1,	 "Building",    "krieg_lucius_pattern" },
+				{ 4, 120, 90, 2000, 6,	 "Building",    "krieg_tank_turret" },
+				{ 4, 50, 50, 2000, 6,	 "Building",	"krieg_mine" },
+				{ 4, 250, 100, 3000, 100,"TurretAddon", "addon_krieg_list_post_2" },
+				{ 4, 450, 0, 4000, 2,	 "Building",    "krieg_hq" }
+			},
+
+			-- Command squad / Commissar strategy
+			{
+				{ 1, 0, 0, 0, 0,	 "Rush", 	"Prepare" },
+				{ 1, 120, 30, 0, 1,	 "Unit",	"krieg_squad_command_squad" },
+				{ 1, 90, 40, 0, 3,	 "Unit",	"krieg_squad_commissar" },
+				{ 1, 160, 0, 0, 3,	 "Unit",	"krieg_squad_soldiers" },
+				{ 1, 450, 0, 0, 1,	 "Building",    "krieg_hq" },
+				{ 1, 125, 0, 0, 1,	 "Building",    "krieg_infantry_bunker" },
+				{ 1, 165, 0, 0, 1,	 "Building",    "krieg_generator" },
+				{ 1, 175, 50, 500, 1,	 "Building",    "krieg_communications_center" },
+				{ 1, 100, 60, 750, 60,	 "TurretAddon", "addon_krieg_list_post_1" },
+				{ 1, 120, 90, 0, 1,	 "Building",    "krieg_tank_turret" },
+				{ 1, 165, 0, 0, 2,	 "Building",    "krieg_generator" },
+				{ 1, 165, 0, 750, 3,	 "Building",    "krieg_generator" },
+				{ 1, 300, 175, 1000, 1,	 "Addon",	"addon_krieg_hq_1" },
+				{ 1, 100, 45, 900, 1,	"Building",	"krieg_machine_gun_bunker" },
+				{ 1, 100, 60, 250, 100,	 "TurretAddon", "addon_krieg_list_post_1" },
+				{ 1, 165, 0, 500, 4,	 "Building",    "krieg_generator" },
+
+				{ 2, 250, 50, 0, 1,	 "Unit",	"krieg_squad_heavy_weapon" },
+				{ 2, 150, 150, 0, 1,	 "Unit",	"krieg_squad_hellhound" },
+				{ 2, 200, 125, 250, 1,	 "Building",    "krieg_machinery_plant" },
+				{ 2, 165, 0, 1000, 6,	 "Building",    "krieg_generator" },
+				{ 2, 75, 250, 1000, 1,	 "Research",    "krieg_upgrade_requisition_1" },
+				{ 2, 150, 50, 1000, 1,	 "Research",    "krieg_upgrade_power_1" },
+				{ 2, 340, 340, 1500, 1,	 "Addon",	"addon_krieg_hq_2" },
+				{ 2, 250, 100, 2000, 40, "TurretAddon", "addon_krieg_list_post_2" },
+				{ 2, 120, 90, 2000, 2,	 "Building",    "krieg_tank_turret" },
+				{ 2, 100, 45, 2000, 2,	"Building",	"krieg_machine_gun_bunker" },
+				{ 2, 50, 50, 2000, 2,	 "Building",	"krieg_mine" },
+
+				{ 3, 225, 125, 0, 1,	 "Unit",	"krieg_squad_trench_raiders" },
+				{ 3, 200, 100, 0, 1,	 "Unit",	"krieg_squad_grenadiers" },
+				{ 3, 100, 300, 2000, 1,	 "Research",    "krieg_upgrade_requisition_2" },
+				{ 3, 250, 100, 2000, 1,	 "Research",    "krieg_upgrade_power_2" },
+				{ 3, 120, 90, 2000, 4,	 "Building",    "krieg_tank_turret" },
+				{ 3, 50, 50, 2000, 4,	 "Building",	"krieg_mine" },
+				{ 3, 450, 450, 2000, 1,	 "Research",    "krieg_planetary_siege" },
+
+				{ 4, 200, 50, 2000, 1,	 "Building",    "krieg_lucius_pattern" },
+				{ 4, 120, 90, 2000, 6,	 "Building",    "krieg_tank_turret" },
+				{ 4, 50, 50, 2000, 6,	 "Building",	"krieg_mine" },
+				{ 4, 250, 100, 3000, 100,"TurretAddon", "addon_krieg_list_post_2" },
+				{ 4, 450, 0, 4000, 2,	 "Building",    "krieg_hq" }
+			},
+		
+			-- Hellhound strategy
+			{
+				{ 1, 0, 0, 0, 1,	 "Rush", 	"Prepare" },
+				{ 1, 75, 0, 0, 3,	 "Unit",	"krieg_squad_engineers" },
+				{ 1, 450, 0, 0, 1,	 "Building",    "krieg_hq" },
+				{ 1, 125, 0, 0, 1,	 "Building",    "krieg_infantry_bunker" },
+				{ 1, 165, 0, 0, 1,	 "Building",    "krieg_generator" },
+				{ 1, 100, 60, 0, 100,	 "TurretAddon", "addon_krieg_list_post_1" },
+				{ 1, 165, 0, 0, 2,	 "Building",    "krieg_generator" },
+				{ 1, 300, 175, 0, 1,	 "Addon",	"addon_krieg_hq_1" },
+				{ 1, 100, 45, 900, 1,	"Building",	"krieg_machine_gun_bunker" },
+				{ 1, 165, 0, 0, 6,	 "Building",    "krieg_generator" },
+
+				{ 2, 0, 0, 0, 1,	 "Rush", 	"Prepare" },
+				{ 2, 200, 125, 0, 1,	 "Building",    "krieg_machinery_plant" },
+				{ 2, 120, 30, 0, 1,	 "Unit",	"krieg_squad_command_squad" },
+				{ 2, 150, 150, 0, 2,	 "Unit",	"krieg_squad_hellhound" },
+				{ 2, 75, 250, 0, 1,	 "Research",    "krieg_upgrade_requisition_1" },
+				{ 2, 160, 0, 0, 2,	 "Unit",	"krieg_squad_soldiers" },
+				{ 2, 90, 40, 0, 2,	 "Unit",	"krieg_squad_commissar" },
+				{ 2, 250, 50, 0, 2,	 "Unit",	"krieg_squad_heavy_weapon" },
+				{ 2, 0, 0, 1500, 0,	 "Rush", 	"Unleash" },
+				{ 2, 175, 50, 1500, 1,	 "Building",    "krieg_communications_center" },
+				{ 2, 120, 90, 1500, 1,	 "Building",    "krieg_tank_turret" },
+				{ 2, 150, 50, 1500, 1,	 "Research",    "krieg_upgrade_power_1" },
+				{ 2, 340, 340, 1500, 1,	 "Addon",	"addon_krieg_hq_2" },
+				{ 2, 250, 100, 2000, 40, "TurretAddon", "addon_krieg_list_post_2" },
+				{ 2, 120, 90, 2000, 2,	 "Building",    "krieg_tank_turret" },
+				{ 2, 100, 45, 2000, 2,	"Building",	"krieg_machine_gun_bunker" },
+				{ 2, 50, 50, 2000, 2,	 "Building",	"krieg_mine" },
+
+				{ 3, 195, 15, 0, 1,	 "Unit",	"krieg_squad_ogryns" },
+				{ 3, 200, 100, 0, 1,	 "Unit",	"krieg_squad_grenadiers" },
+				{ 3, 100, 300, 2000, 1,	 "Research",    "krieg_upgrade_requisition_2" },
+				{ 3, 250, 100, 2000, 1,	 "Research",    "krieg_upgrade_power_2" },
+				{ 3, 120, 90, 2000, 4,	 "Building",    "krieg_tank_turret" },
+				{ 3, 50, 50, 2000, 4,	 "Building",	"krieg_mine" },
+				{ 3, 450, 450, 2000, 1,	 "Research",    "krieg_planetary_siege" },
+
+				{ 4, 200, 50, 2000, 1,	 "Building",    "krieg_lucius_pattern" },
+				{ 4, 120, 90, 2000, 6,	 "Building",    "krieg_tank_turret" },
+				{ 4, 50, 50, 2000, 6,	 "Building",	"krieg_mine" },
+				{ 4, 250, 100, 3000, 100,"TurretAddon", "addon_krieg_list_post_2" },
+				{ 4, 450, 0, 4000, 2,	 "Building",    "krieg_hq" }
+]]
+			}
+		},
+		
+		SquadLimits = 
+		{
+			standard = 
+			{
+				krieg_squad_engineers = 0,
+				krieg_squad_soldiers = math.random( 5,7 ),
+				krieg_squad_pdf = math.random( 2,3 ),
+				krieg_squad_blaze_trooper = math.random( 2,3 ),
+				krieg_squad_recruits = math.random( 1,3 ),
+				krieg_squad_heavy_weapon = math.random( 3,5 ),
+				krieg_squad_heavy_weapon_mortars = math.random( 3,5 ),
+				krieg_squad_death_cavalry = math.random( 2,4 ),
+				krieg_squad_grenadiers = 1,
+				krieg_squad_iron_guard = math.random( 2,3 ),
+				krieg_squad_iron_guard_deployed = 0,
+				krieg_squad_ogryns = 1,
+				krieg_squad_grenadiers = math.random( 1,2 ),
+				krieg_squad_trench_raiders = 1,
+				krieg_squad_commissar = 3,
+				krieg_squad_sniper_team = 1,
+				krieg_squad_deadpool_and_wolverine = 1,	
+				krieg_squad_quartermaster = 2,
+				krieg_squad_quartermaster_ktgm = 1,
+				krieg_squad_gun_sirin = 1,
+				krieg_squad_inquisitor = 1,
+				krieg_squad_inquisitor_ktgm = 1,
+				krieg_squad_command_squad = 1,
+				krieg_squad_command_squad_ktgm = 1,
+				krieg_squad_chimera = math.random( 1,2 ),
+				krieg_squad_hellhound = math.random( 1,2 ),
+				krieg_squad_fenghuang = math.random( 1,4 ),
+				krieg_squad_firewolf = math.random( 1,2 ),
+				krieg_squad_siegfried = math.random( 1,2 ),
+				krieg_squad_centaur = math.random( 1,2 ),
+				krieg_squad_dragon = math.random( 1,3 ),
+				krieg_squad_baihu = math.random( 1,3 ),
+				krieg_squad_vulture = math.random( 1,2 ),
+				krieg_squad_vulture_landed = math.random( 1,2 ),
+				krieg_squad_basilisk = math.random( 1,2 ),
+				krieg_squad_bombard = math.random( 1,2 ),
+				krieg_squad_gatling_tank = math.random( 1,2 ),
+				krieg_squad_qilin = math.random( 1,2 ),
+				krieg_squad_yinglong = math.random( 1,2 ),
+				krieg_squad_yinglong_landed = 0,
+				krieg_squad_colossus = 1,
+				krieg_squad_ragnarok = 1,
+				krieg_squad_valdor = 1,
+				krieg_squad_lemanruss = 1,
+				krieg_squad_malcador = 1,
+				krieg_squad_minotaur = 1,
+				krieg_squad_macharius = 1,
+				krieg_squad_lucius_baneblade = 1,
+				krieg_squad_deathhammer = 1,
+				krieg_squad_airship = 1,
+				krieg_squad_zhurong = 1,
+				krieg_squad_titan_lucius_warlord = 1,
+			}
+		}
+	}
+}
+
+BuildOrderStrategyInfo = 
+{
+	krieg_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_engineers" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "krieg_infantry_bunker", true },
+			{ "building", "krieg_generator" }
+		},
+		
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_engineers" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_engineers" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "krieg_infantry_bunker", true },
+			{ "building", "krieg_infantry_bunker", true },
+			{ "building", "krieg_generator" }
+		},
+		
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_engineers" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "squad", "krieg_squad_recruits" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "krieg_infantry_bunker", true },
+			{ "building", "krieg_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	krieg_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

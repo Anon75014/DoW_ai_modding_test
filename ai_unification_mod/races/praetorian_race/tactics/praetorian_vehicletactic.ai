@@ -1,0 +1,37 @@
+----------------------------------------
+-- File: 'Praetorian_VehicleTactic.ai'
+-- Edited by Thudmeizer		@ 07.08.2023
+
+class 'Praetorian_VehicleTactic' (VehicleTactic)
+
+function Praetorian_VehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorian Vehicle Tactic")
+end
+
+-- Check if the vehicle should dance away in melee
+function Praetorian_VehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "praetorian_squad_sentinel" or	
+		sName == "praetorian_squad_grot_tank" or
+		sName == "praetorian_squad_kronus" or
+		sName == "praetorian_squad_griffon" or
+		sName == "praetorian_squad_ork_looted_tank" or
+		sName == "praetorian_squad_lemanruss" or
+		sName == "praetorian_squad_leader" or
+		sName == "praetorian_squad_leader_female" or
+		sName == "praetorian_squad_grot_stompa" or
+		sName == "praetorian_squad_ork_battlewagon" or
+		sName == "praetorian_squad_shadowsword_titanicus" or
+		sName == "praetorian_squad_stormhammer" or
+		sName == "praetorian_squad_stormhammer_arkurian") then
+		return true
+	end
+	return false
+end
+
+function Praetorian_VehicleTactic:DoAbilities()
+
+	-- Call standard method
+	VehicleTactic.DoAbilities(self)
+end

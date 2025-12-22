@@ -1,0 +1,39 @@
+----------------------------------
+-- File: 'deathguardtitantactic.ai'
+-- Created by Gambit @10.02.2022
+
+class 'DeathGuardTitanTactic' (DeathGuardVehicleTactic)
+
+DeathGuardTitan = {}
+
+function DeathGuardTitanTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("DG Feral Titan Tactic")
+end
+
+
+function DeathGuardTitanTactic:InitAbilities()
+	if DeathGuardTitan.trample_id == nil then
+		DeathGuardTitan.trample_id = cpu_manager.stats:GetAbilityID("death_guard_wh_titan_trample")
+		DeathGuardTitan.charge_id = cpu_manager.stats:GetAbilityID("death_guard_wh_titan_charge")
+	end
+end
+
+
+function DeathGuardTitanTactic:DoAbilities()
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(DeathGuardTitan.trample_id) and self.squad_ai:IsAttacking() then
+			if Ability.DoAbilityTarget(self.squad_ai, DeathGuardTitan.trample_id, Ability.Filters.CloseSquadEnemy, 5) then
+				return
+			end
+		end
+		if self.squad_ai:CanDoAbility(DeathGuardTitan.charge_id) and self.squad_ai:IsInStateMove() then
+			if Ability.DoAbilityArea(self.squad_ai, DeathGuardTitan.charge_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+			or Ability.DoAbilityArea(self.squad_ai, DeathGuardTitan.charge_id, Ability.Filters.CloseMonsterEnemy, 10, 4) then
+				return
+			end
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	VehicleTactic.DoAbilities(self)
+end

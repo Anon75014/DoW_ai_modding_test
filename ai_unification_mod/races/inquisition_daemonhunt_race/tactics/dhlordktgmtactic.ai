@@ -1,0 +1,289 @@
+----------------------------------------
+-- File: 'DHLordKtgmtactic.ai'
+-- Edited by Thudmeizer @ 02.12.2023
+
+class 'DHLordKtgmTactic' (DaemonhuntInfantryTactic)
+
+DHLordKtgm = {}
+
+function DHLordKtgmTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("DHLord Kill Team Tactic")
+	self.daemonhostTime = g_iGMT
+end
+
+-- Assassinate win condition -- never attack
+function DHLordKtgmTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function DHLordKtgmTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function DHLordKtgmTactic:InitAbilities()
+
+	if (DHLordKtgm.banish_id == nil) then
+	    	DHLordKtgm.banish_id = cpu_manager.stats:GetAbilityID( "inquisition_ls_inquisitor_lord_banish_ktgm" )
+	   	DHLordKtgm.banish_sp = cpu_manager.stats:GetAbilityID( "inquisition_inquisitor_lord_banish_advance" )
+	    	DHLordKtgm.wrath_id = cpu_manager.stats:GetAbilityID( "inquisition_ls_inquisitor_lord_emperor_wrath_ktgm" )
+	    	DHLordKtgm.wrath_sp = cpu_manager.stats:GetAbilityID( "inquisition_inquisitor_lord_emperor_wrath_advance" )
+		DHLordKtgm.daemonhost_id = cpu_manager.stats:GetAbilityID( "inquisition_ls_inquisitor_lord_create_daemonhost_ktgm" )
+		DHLordKtgm.daemonhost_sp = cpu_manager.stats:GetAbilityID( "inquisition_inquisitor_lord_create_daemonhost_advance" )
+		DHLordKtgm.daemonhostB_sp = cpu_manager.stats:GetAbilityID( "inquisition_inquisitor_lord_create_daemonhost_advance_2" )
+		DHLordKtgm.frags_id = cpu_manager.stats:GetAbilityID( "inquisition_ls_inquisitor_lord_frag_grenades_bodyguards_ktgm" )
+		DHLordKtgm.frags_single = cpu_manager.stats:GetAbilityID( "inquisition_ls_inquisitor_lord_frag_grenades_bodyguards_single" )
+		DHLordKtgm.frags_sp = cpu_manager.stats:GetAbilityID( "inquisition_frag_grenades_bodyguards_advance" )
+		DHLordKtgm.strength_id = cpu_manager.stats:GetAbilityID( "inquisition_ls_inquisitor_lord_daemon_strength" )	
+		DHLordKtgm.strength_sp = cpu_manager.stats:GetAbilityID( "inquisition_daemon_strength" )
+	end
+end
+
+function DHLordKtgmTactic:DoAbilities()
+
+	if self.daemonhostTime == nil then self.daemonhostTime = g_iGMT end
+
+	-- Use the Create Daemonhost ability when alone and out of trouble (Last Stand / Kill Team)
+	if g_iGMT > self.daemonhostTime + 10 and not self.squad_ai:IsAttached() then
+		if not self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(DHLordKtgm.daemonhost_id) then	
+			local squad_filter = function( squad_ai )
+				return squad_ai:IsValid() and squad_ai:GetSquadName() == "inquisition_squad_acolyte_ktgm"
+			end	
+			local oSquad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 20, squad_filter )
+			if oSquad ~= nil and oSquad:IsValid() then
+				if oSquad:GetHealthPercentage() > 0.8 then
+					self.squad_ai:DoSpecialAbilitySquad( DHLordKtgm.daemonhost_id, oSquad:GetSquad() )
+					--print("Possess DaemonHost from wayward Acolyte for player "..tostring(cpu_manager.player_id).."")
+					self.daemonhostTime = g_iGMT
+				end
+			end
+ 		end
+	end
+
+	-- Use the Create Daemonhost ability when alone and out of trouble (Single Player)
+	if g_iGMT > self.daemonhostTime + 10 and not self.squad_ai:IsAttached() then
+		if not self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(DHLordKtgm.daemonhost_sp) then	
+			local squad_filter = function( squad_ai )
+				return squad_ai:IsValid() and squad_ai:GetSquadName() == "inquisition_squad_acolyte_doomed"
+			end	
+			local oSquad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 20, squad_filter )
+			if oSquad ~= nil and oSquad:IsValid() then
+				if oSquad:GetHealthPercentage() > 0.8 then
+					self.squad_ai:DoSpecialAbilitySquad( DHLordKtgm.daemonhost_sp, oSquad:GetSquad() )
+					self.daemonhostTime = g_iGMT
+				end
+			end
+ 		end
+	end
+
+	-- Use the Create 2nd Daemonhost ability when alone and out of trouble (Single Player)
+	if g_iGMT > self.daemonhostTime + 10 and not self.squad_ai:IsAttached() then
+		if not self.squad_ai:IsInCombat() and self.squad_ai:CanDoAbility(DHLordKtgm.daemonhostB_sp) then	
+			local squad_filter = function( squad_ai )
+				return squad_ai:IsValid() and squad_ai:GetSquadName() == "inquisition_squad_acolyte_doomed"
+			end	
+			local oSquad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), 20, squad_filter )
+			if oSquad ~= nil and oSquad:IsValid() then
+				if oSquad:GetHealthPercentage() > 0.8 then
+					self.squad_ai:DoSpecialAbilitySquad( DHLordKtgm.daemonhostB_sp, oSquad:GetSquad() )
+					self.daemonhostTime = g_iGMT
+				end
+			end
+ 		end
+	end
+
+	if g_iGMT > self.daemonhostTime + 10 and self.squad_ai:IsInCombat() then
+--[[
+		if self.squad_ai:CanDoAbility(DHLordKtgm.banish_id) then	
+			Ability.DoAbilityPos( self.squad_ai, DHLordKtgm.banish_id, Ability.Filters.CloseMonsterEnemy, 1 )
+			Ability.DoAbilityPos( self.squad_ai, DHLordKtgm.banish_id, Ability.Filters.CloseCommanderEnemy, 1 ) 
+		end
+]]
+		-- Use Banish against enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DHLordKtgm.banish_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DHLordKtgm.banish_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			local oUnitB = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			if (oUnit ~= nil) then
+				--print("Using Banish against commander enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.banish_id, oUnit:GetSquad())
+				return
+			elseif (oUnitB ~= nil) then
+				-- Get stats
+				local oStats = oUnitB:GetStats()
+				if (oStats ~= nil) then
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+						--print("Using Banish against monster enemies for player "..tostring(cpu_manager.player_id).."")
+						self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.banish_id, oUnitB:GetSquad())
+						return
+					end
+				end
+			end
+		end
+
+ 		if self.squad_ai:CanDoAbility(DHLordKtgm.banish_sp) then	
+			Ability.DoAbilityPos( self.squad_ai, DHLordKtgm.banish_sp, Ability.Filters.CloseMonsterEnemy, 1 )
+			Ability.DoAbilityPos( self.squad_ai, DHLordKtgm.banish_sp, Ability.Filters.CloseCommanderEnemy, 1 ) 
+		end
+
+ 		if self.squad_ai:CanDoAbility(DHLordKtgm.wrath_id) then	
+			Ability.DoAbilityArea( self.squad_ai, DHLordKtgm.wrath_id, Ability.Filters.CloseInCombat, 15, 2 )
+		end
+
+ 		if self.squad_ai:CanDoAbility(DHLordKtgm.wrath_sp) then	
+			Ability.DoAbilityArea( self.squad_ai, DHLordKtgm.wrath_sp, Ability.Filters.CloseEnemy, 15, 2 )
+		end
+--[[
+ 		if self.squad_ai:CanDoAbility(DHLordKtgm.frags_id) then	
+			Ability.DoAbilityTarget( self.squad_ai, DHLordKtgm.frags_id, Ability.Filters.CloseSquadEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, DHLordKtgm.frags_id, Ability.Filters.CloseCommanderEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, DHLordKtgm.frags_id, Ability.Filters.CloseMonsterEnemy, 3 )
+		end
+]]
+		-- Use Frag Grenades against enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DHLordKtgm.frags_id)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DHLordKtgm.frags_id)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 3)
+			if (oUnit ~= nil) then
+				--print("Using Frag Grenades against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.frags_id, oUnit:GetSquad())
+				return
+			elseif (oUnitB ~= nil) then
+				--print("Using Frag Grenades against commander enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.frags_id, oUnitB:GetSquad())
+				return
+			elseif (oUnitC ~= nil) then
+				-- Get stats
+				local oStats = oUnitC:GetStats()
+				if (oStats ~= nil) then
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+						--print("Using Frag Grenades against monster enemies for player "..tostring(cpu_manager.player_id).."")
+						self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.frags_id, oUnitC:GetSquad())
+						return
+					end
+				end
+			end
+		end
+
+		-- Use Frag Grenades Single against enemies (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DHLordKtgm.frags_single)) then 
+
+			-- Search for a nearby enemy squad
+			local iRange = self.squad_ai:GetAbilityRange(DHLordKtgm.frags_single)
+			local oUnit = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 4)
+			local oUnitB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+			local oUnitC = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), iRange, 3)
+			if (oUnit ~= nil) then
+				--print("Using Frag Grenades Single against infantry enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.frags_single, oUnit:GetSquad())
+				return
+			elseif (oUnitB ~= nil) then
+				--print("Using Frag Grenades Single against commander enemies for player "..tostring(cpu_manager.player_id).."")
+				self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.frags_single, oUnitB:GetSquad())
+				return
+			elseif (oUnitC ~= nil) then
+				-- Get stats
+				local oStats = oUnitC:GetStats()
+				if (oStats ~= nil) then
+					-- Check unit type
+					local eClass = oStats:GetClass()
+					if (eClass == UnitStatsAI.UC_MonsterMed or eClass == UnitStatsAI.UC_MonsterHigh) then
+						--print("Using Frag Grenades Single against monster enemies for player "..tostring(cpu_manager.player_id).."")
+						self.squad_ai:DoSpecialAbilitySquad(DHLordKtgm.frags_single, oUnitC:GetSquad())
+						return
+					end
+				end
+			end
+		end
+
+ 		if self.squad_ai:CanDoAbility(DHLordKtgm.frags_sp) then	
+			Ability.DoAbilityTarget( self.squad_ai, DHLordKtgm.frags_sp, Ability.Filters.CloseSquadEnemy, 3 )
+			Ability.DoAbilityTarget( self.squad_ai, DHLordKtgm.frags_sp, Ability.Filters.CloseCommanderEnemy, 1 )
+			Ability.DoAbilityTarget( self.squad_ai, DHLordKtgm.frags_sp, Ability.Filters.CloseMonsterEnemy, 3 )
+		end
+
+		-- Try to use daemon strength ability (Last Stand / Kill Team)
+		if (self.squad_ai:CanDoAbility(DHLordKtgm.strength_id)) then
+			Ability.DoAbility( self.squad_ai, DHLordKtgm.strength_id, Ability.Filters.IsInCombat )
+		end
+
+		-- Try to use daemon strength ability
+		if (self.squad_ai:CanDoAbility(DHLordKtgm.strength_sp)) then
+			Ability.DoAbility( self.squad_ai, DHLordKtgm.strength_sp, Ability.Filters.IsInCombat )
+		end
+	end
+end
+
+function DHLordKtgmTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (not self.squad_ai:IsReinforcing()) then
+
+		-- try for different types of squad members
+		local bodyguardAIndex = 0
+		local bodyguardBIndex = 1
+		local bodyguardCindex = 2
+		local bodyguardDindex = 3
+
+		local numBodyguardsA = self.squad_ai:GetLeaderCount( bodyguardAIndex )
+		local numBodyguardsB = self.squad_ai:GetLeaderCount( bodyguardBIndex )	
+		local numBodyguardsC = self.squad_ai:GetLeaderCount( bodyguardCindex )	
+		local numBodyguardsD = self.squad_ai:GetLeaderCount( bodyguardDindex )	
+
+		-- Desired number of each bodyguard type
+		local desiredBodyguardsA = math.random(0,1)
+		local desiredBodyguardsB = math.random(0,1) 
+		local desiredBodyguardsC = math.random(0,1) 
+		local desiredBodyguardsD = math.random(0,1) 
+
+		-- Desired order of reinforcing
+		if (numBodyguardsA < desiredBodyguardsA) then
+			if (self.squad_ai:CanReinforce( true, bodyguardAIndex )) then
+				self.squad_ai:DoReinforce( true, bodyguardAIndex )
+			end
+		elseif (numBodyguardsB < desiredBodyguardsB) then
+			if (self.squad_ai:CanReinforce( true, bodyguardBIndex )) then
+				self.squad_ai:DoReinforce( true, bodyguardBIndex )
+			end
+		elseif (numBodyguardsC < desiredBodyguardsC) then
+			if (self.squad_ai:CanReinforce( true, bodyguardCindex )) then
+				self.squad_ai:DoReinforce( true, bodyguardCindex )
+			end
+		elseif (numBodyguardsD < desiredBodyguardsD) then
+			if (self.squad_ai:CanReinforce( true, bodyguardDindex )) then
+				self.squad_ai:DoReinforce( true, bodyguardDindex )
+			end
+		else
+			if (self.squad_ai:CanReinforce( false, 0 )) then
+				self.squad_ai:DoReinforce( false, 0 )
+			end			
+		end
+	end
+end
+
+function DHLordKtgmTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end
+

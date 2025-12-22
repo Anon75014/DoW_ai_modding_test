@@ -1,0 +1,18 @@
+----------------------------------------
+-- File: 'RavenGuarddreadnoughttactic.ai'
+-- Created by Arkhan	@ 18.03.2008
+-- Edited by Thudmeizer	@ 20.03.2023
+
+class 'RavenGuardDreadnoughtTactic' (RavenGuardSpaceMarineVehicleTactic)
+
+function RavenGuardDreadnoughtTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Dreadnought Tactic")
+end
+
+function RavenGuardDreadnoughtTactic:Upgrade()
+
+	-- Do best upgrade
+	local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+	self.squad_ai:DoBestUpgrade( class_type )
+end

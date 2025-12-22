@@ -1,0 +1,14 @@
+----------------------------------------
+-- File: 'relaystationtactic.ai'
+-- Edited by Thudmeizer		@ 23.02.2009
+
+class 'RelayStationTactic' (BaseTactic)
+
+function RelayStationTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Relay Station Tactic")
+end
+
+function RelayStationTactic:CanDeepStrikeTroops()
+	return true
+end

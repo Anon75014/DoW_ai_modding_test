@@ -1,0 +1,50 @@
+----------------------------------------
+-- File: 'renegades_basilisk_tactic.ai'
+-- Edited by Thudmeizer	@ 14.01.2024
+
+class 'Renegades_Basilisk_Tactic' (Renegades_Vehicle_Tactic)
+
+Renegades_Basilisk = {}
+
+function Renegades_Basilisk_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Basilisk Tactic")
+end
+
+function Renegades_Basilisk_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Renegades_Basilisk.warpshell_id == nil) then
+		Renegades_Basilisk.warpshell_id = cpu_manager.stats:GetAbilityID( "renegade_guard_warp_shell" )
+	end
+
+	if (Renegades_Basilisk.gas_id == nil) then
+		Renegades_Basilisk.gas_id = cpu_manager.stats:GetAbilityID( "renegade_guard_vraks_gas_dummy" )
+	end
+end
+
+function Renegades_Basilisk_Tactic:DoAbilities()
+
+	-- Check if I can launch Warp Shell Round
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	if (iPower >= 500) then
+
+		-- We are dying, lower requisites for attacks
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.warpshell_id, Ability.Filters.CloseEnemy, 8)
+			Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.warpshell_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+		else
+			Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.warpshell_id, Ability.Filters.CloseEnemy, 16)
+			Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.warpshell_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+		end
+	end
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.gas_id, Ability.Filters.CloseInfantryEnemy, 4)
+		Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.gas_id, Ability.Filters.CloseMonsterEnemy, 2)
+	else
+		Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.gas_id, Ability.Filters.CloseInfantryEnemy, 6)
+		Ability.DoAbilityPos(self.squad_ai, Renegades_Basilisk.gas_id, Ability.Filters.CloseMonsterEnemy, 3)
+	end
+end

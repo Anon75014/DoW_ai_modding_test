@@ -1,0 +1,66 @@
+----------------------------------------
+-- File: 'enclavesherobarrackstactic.ai'
+-- Edited by Capt JoJo (meatshi3ld)		@ 31.10.2021
+-- Edited by Thudmeizer				@ 24.09.2022
+
+class 'EnclavesHeroBarracksTactic' (BaseTactic)
+
+EnclavesHeroBarracks = {}
+
+function EnclavesHeroBarracksTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Enclaves Hero Barracks Tactic")
+
+	self.m_iArmouryID = cpu_manager.stats:GetBuildingID("enclaves_generator")
+end
+
+function EnclavesHeroBarracksTactic:CanDeepStrikeTroops()
+
+   	if (cpu_manager:GetTierLevel() >= 3) then 
+		return (cpu_manager.player_stats:GetNumBasesByBPID(self.m_iArmouryID, true) > 0)
+	end
+end
+
+function EnclavesHeroBarracksTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (EnclavesHeroBarracks.summon_id == nil) then
+		EnclavesHeroBarracks.summon_id = cpu_manager.stats:GetAbilityID( "enclaves_beacon_summon_cadre" )
+	end
+end
+
+function EnclavesHeroBarracksTactic:DoAbilities()
+
+	-- Try to summon an Orca if we have the needed resources 
+      if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 300 then
+
+    		if self.base_ai:CanDoAbility(EnclavesHeroBarracks.summon_id) then
+
+			-- Condition 1: Search for a nearby hurt squad
+        		local iRange = self.base_ai:GetAbilityRange(EnclavesHeroBarracks.summon_id)
+        		local oUnit = Ability.Filters.CloseHurt(self.base_ai:GetPosition(), iRange, 1)
+        		if (oUnit ~= nil) then
+				--print("Using Barracks Close Hurt Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            		if self.base_ai:DoSpecialAbilitySquad(EnclavesHeroBarracks.summon_id, oUnit:GetSquad()) then
+                			return
+            		end
+        		end
+
+        		-- Condition 2: Check for low Power (lower than 250, for example)
+        		if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power) < 250 then
+				--print("Using Barracks Low Power Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            		if self.base_ai:DoSpecialAbilityPos(EnclavesHeroBarracks.summon_id, self.base_ai:GetPosition()) then
+                			return
+            		end
+       		end
+
+        		-- Condition 3: Random calling, just for the sake of creating new squads
+        		if math.random(1,30) == 1 then
+				--print("Using Barracks Random Orca Drop for player "..tostring(cpu_manager.player_id).."")
+            		if self.base_ai:DoSpecialAbilityPos(EnclavesHeroBarracks.summon_id, self.base_ai:GetPosition()) then
+                			return
+            		end
+        		end
+    		end
+	end
+end

@@ -1,0 +1,28 @@
+----------------------------------------
+-- File: 'VisitorTactic.ai'
+-- Created by fuggles 	@	10/01/2014
+-- Edited by Thudmeizer	@	01/12/2015
+
+class 'VisitorTactic' (MechInfantryTactic)
+
+AdMechVisitor = {}
+
+function VisitorTactic:__init( squad_ai ) super( squad_ai )
+	self:SetName("VisitorTactic")
+end
+
+
+function VisitorTactic:InitAbilities()
+	if (AdMechVisitor.iRestoreID == nil) then
+		AdMechVisitor.iRestoreID = cpu_manager.stats:GetAbilityID( "mechanicus_reload" )
+	end
+end
+
+
+function VisitorTactic:DoAbilities()
+	if (self.squad_ai:CanDoAbility(AdMechVisitor.iRestoreID) and self.squad_ai:IsBroken()) then
+		self.squad_ai:DoSpecialAbility(AdMechVisitor.iRestoreID)
+	end
+
+	MechInfantryTactic.DoAbilities( self )
+end

@@ -1,0 +1,65 @@
+----------------------------------------
+-- File: 'kZhufortactic.ai'
+-- Created by I_Chample
+-- Edited by Thudmeizer  @ 13.10.2023
+
+class 'kZhuforTactic' (kInfantryTactic)
+
+kZhufor = {}
+
+function kZhuforTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("k Zhufor Tactic")
+end
+
+function kZhuforTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function kZhuforTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function kZhuforTactic:InitAbilities()
+
+	if (kZhufor.regen_id == nil) then
+		kZhufor.regen_id = cpu_manager.stats:GetAbilityID( "khm_hero_regeneration" )
+	end
+end
+
+function kZhuforTactic:DoAbilities()
+
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		if self.squad_ai:CanDoAbility(kZhufor.regen_id) then
+			self.squad_ai:DoSpecialAbility(kZhufor.regen_id)
+		end
+	end
+end
+
+function kZhuforTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+		-- Attach to melee in tier3+
+		if (cpu_manager:GetTierLevel() > 2) then
+			if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+				return
+			end
+		end
+		if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

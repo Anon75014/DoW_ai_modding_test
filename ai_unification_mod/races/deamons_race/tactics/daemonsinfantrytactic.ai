@@ -1,0 +1,254 @@
+----------------------------------------
+-- File: 'daemonsinfantrytactic.ai'
+-- Edited by Cylarne_		@ 04.2011
+-- Edited by fuggles 		@ 05.06.2013
+-- Edited by CornCobMan 	@ 28.05.2013
+-- Edited by Gambit		@ 26.02.2016
+-- Edited by Thudmeizer         @ 10.03.2024
+
+class 'DaemonsInfantryTactic' (InfantryTactic)
+
+function DaemonsInfantryTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemons Infantry Tactic")	
+	-- Basic daemon infantry is able to enter transport vehicles
+	local sSquadName = squad_ai:GetSquadName()
+
+	if ( sSquadName == "daemon_squad_jugg" or sSquadName == "daemon_squad_juggernaut" ) then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("daemon_sacrificial_circle")
+
+	elseif ( sSquadName == "daemon_squad_bloodthirster" or sSquadName == "daemon_squad_guo" or
+		sSquadName == "daemon_squad_keeper_of_secrets" or sSquadName == "daemon_squad_lord_of_change" ) then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("daemon_daemon_pit")
+	end
+--[[
+	if ( sSquadName == "daemon_squad_bloodletters" or
+		sSquadName == "daemon_squad_bloodletter_iron" or
+		sSquadName == "daemon_squad_bloodletter_elites" or
+		sSquadName == "daemon_squad_daemonettes" or
+		sSquadName == "daemon_squad_screamers" or
+		sSquadName == "daemon_squad_horror" or
+		sSquadName == "daemon_squad_plague_bearers" ) then
+		self.m_iDeepStrikeBlueprintID = cpu_manager.stats:GetBuildingID("daemon_sacrificial_circle")
+	end
+]]
+end
+
+function DaemonsInfantryTactic:AddCommanders()
+	table.insert(self.commander, { "daemon_squad_lord", true })
+	table.insert(self.commander, { "daemon_squad_lord_advance_sp", true })
+	table.insert(self.commander, { "daemon_squad_lord_ktgm", true })
+	table.insert(self.commander, { "daemon_squad_lord_nurgle", true })
+	table.insert(self.commander, { "daemon_squad_lord_tzeentch", true })
+	table.insert(self.commander, { "daemon_squad_lord_khorne", true })
+	table.insert(self.commander, { "daemon_squad_lord_slaanesh", true })
+	table.insert(self.commander, { "daemon_squad_lord_stature", true })
+	table.insert(self.commander, { "daemon_squad_lord_stature_nurgle", true })
+	table.insert(self.commander, { "daemon_squad_lord_stature_tzeentch", true })
+	table.insert(self.commander, { "daemon_squad_lord_stature_khorne", true })
+	table.insert(self.commander, { "daemon_squad_lord_stature_slaanesh", true })
+	table.insert(self.commander, { "daemon_squad_khorne_herald", true })
+	table.insert(self.commander, { "daemon_squad_khorne_herald_advance_sp", true })
+	table.insert(self.commander, { "daemon_squad_nurgle_herald", true })
+	table.insert(self.commander, { "daemon_squad_nurgle_herald_advance_sp", true })
+	table.insert(self.commander, { "daemon_squad_slaanesh_herald", true })
+	table.insert(self.commander, { "daemon_squad_slaanesh_herald_advance_sp", true })
+	table.insert(self.commander, { "daemon_squad_tzeentch_herald", true })
+	table.insert(self.commander, { "daemon_squad_tzeentch_herald_advance_sp", true })
+end
+
+function DaemonsInfantryTactic:CheckForDetach()
+	
+	if( self.squad_ai:IsAttached() and self.squad_ai:HasSquadAttached( "daemon_squad_lost_soul" ) ) then
+		local oBuildingToFinish = cpu_manager:GetUnfinishedBuildingInRange()
+		if (oBuildingToFinish ~= nil) then
+			if( distance ( oBuildingToFinish:GetPosition(), self.squad_ai:GetPosition() ) <= 50) then
+				self.squad_ai:DoDetachSquad()
+			end
+		end
+	elseif( self.squad_ai:IsAttached() ) then
+		 -- Detach healthy commanders after combat.
+		if (not self.squad_ai:IsInCombat() and not self.squad_ai:WasRecentlyHurt() and
+			self:CommanderAttached() and self.squad_ai:GetAttachedHealthPercentage() > 0.7) then
+			self.squad_ai:DoDetachSquad()
+			self.squad_ai:DoSetDefaultMeleeStance()
+		end
+		
+		-- Detach commander from broken/capturing
+		if ( self.squad_ai:IsBroken() or self.squad_ai:IsCapturing() ) then 
+			
+			self.squad_ai:DoDetachSquad()
+			self.squad_ai:DoSetDefaultMeleeStance()
+		end
+	end
+end
+
+function DaemonsInfantryTactic:DoAbilities()
+
+	-- I might have these attached
+	if (self.squad_ai:IsAttached()) then
+	
+		if (self.squad_ai:HasSquadAttached("daemon_squad_lord")) or (self.squad_ai:HasSquadAttached("daemon_squad_lord_slaanesh")) 
+			or (self.squad_ai:HasSquadAttached("daemon_squad_lord_nurgle")) or (self.squad_ai:HasSquadAttached("daemon_squad_lord_khorne")) 
+			or (self.squad_ai:HasSquadAttached("daemon_squad_lord_tzeentch")) or (self.squad_ai:HasSquadAttached("daemon_squad_lord_advance_sp")) 
+			or (self.squad_ai:HasSquadAttached("daemon_squad_lord_ktgm")) then
+			DaemonsLordTactic.InitAbilities( self )
+			DaemonsLordTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("daemon_squad_lord_stature")) or (self.squad_ai:HasSquadAttached("daemon_squad_lord_stature_slaanesh")) 
+			or (self.squad_ai:HasSquadAttached("daemon_squad_lord_stature_nurgle")) or (self.squad_ai:HasSquadAttached("daemon_squad_lord_stature_khorne")) 
+			or (self.squad_ai:HasSquadAttached("daemon_squad_lord_stature_tzeentch")) then
+			DaemonsLordStatureTactic.InitAbilities( self )
+			DaemonsLordStatureTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("daemon_squad_lost_soul")) then
+			DaemonsLostSoulTactic.InitAbilities( self )
+			DaemonsLostSoulTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("daemon_squad_khorne_herald")) or (self.squad_ai:HasSquadAttached("daemon_squad_khorne_herald_advance_sp")) then
+			DaemonsHeraldKhorneTactic.InitAbilities( self )
+			DaemonsHeraldKhorneTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("daemon_squad_tzeentch_herald")) or (self.squad_ai:HasSquadAttached("daemon_squad_tzeentch_herald_advance_sp")) then
+			DaemonsHeraldTzeentchTactic.InitAbilities( self )
+			DaemonsHeraldTzeentchTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("daemon_squad_herald_slaanesh")) or (self.squad_ai:HasSquadAttached("daemon_squad_slaanesh_herald_advance_sp")) then
+			DaemonsHeraldSlaaneshTactic.InitAbilities( self )
+			DaemonsHeraldSlaaneshTactic.DoAbilities( self )
+		elseif (self.squad_ai:HasSquadAttached("daemon_squad_herald_nurgle")) or (self.squad_ai:HasSquadAttached("daemon_squad_nurgle_herald_advance_sp")) then
+			DaemonsHeraldNurgleTactic.InitAbilities( self )
+			DaemonsHeraldNurgleTactic.DoAbilities( self )
+		end
+	end
+
+	-- Call basic DoAbilities methods
+	InfantryTactic.DoAbilities(self)
+end
+
+function DaemonsInfantryTactic:CheckForBroken()
+	-- Call basic broken check method
+	InfantryTactic.CheckForBroken(self)
+end
+
+function DaemonsInfantryTactic:CheckDance(oSquad)
+	-- Check opponent
+	if (oSquad == nil) then
+		return false
+	end
+	
+	-- Compare opponents
+	local sSquadName = self.squad_ai:GetSquadName()
+	if (sSquadName == "daemon_squad_obliterator") then
+		
+		-- Check opponent
+		if (oSquad:GetSquadName() == "chaos_squad_cultist") then
+			return false
+		end
+	end
+	return true
+end
+
+--------------------------------------------------------------------------------------------------------------------------
+-- CORE function override for Daemons' broken morale (retreating), since Daemons must ONLY retreat to "special" safepoints.
+
+function DaemonsInfantryTactic:BrokenMorale()
+	-- Find closest allied Daemon Gate
+	local oBuilding = FindClosestFriendlyDaemonAllyBase(self.squad_ai:GetPosition(), 1024)
+	if oBuilding ~= nil then
+--print(oBuilding:GetEntity():GetBlueprintName())
+		self.squad_ai:DoMove(oBuilding:GetPosition())
+	end
+
+	-- Increase safe tolerance
+	if (self.last_time ~= nil and self.squad_ai:WasAttackedSince(self.last_time))  then
+		self.tolerance = self.tolerance + 10
+	end
+	self.last_time = g_iGMT
+	
+	-- Check if I have enough morale or health if attached
+	if (not self.squad_ai:IsBroken() and self.squad_ai:GetMoralePercentage() > 0.9) then
+	
+		self.m_eSubStateID = Tactic.StateID.NoState
+		self.stateID = Tactic.StateID.NoState
+		
+		-- Go back in the fray - reset my state
+		self.last_time = nil
+		Tactic.SetState(self, self:GetState())
+	else
+		self.m_eSubStateID = self.stateID
+	end
+end
+
+-- Broken Tzeentch Daemons should BEST retreat to a Daemon Gate (allied) to restore morale. This function returns the closest.
+-- Included option for retreating to allied Chaos Daemons race buildings.
+function FindClosestFriendlyDaemonAllyBase( from_pos, min_displacement )
+	local min_displacement_sqr = min_displacement * min_displacement
+	local best_base = nil
+	local best_distance = -1
+	local candidate_bases = {}
+
+	-- Get candidate bases (allied or own)
+	for player in cpu_manager.stats:GetPlayerStats() do
+		if not (cpu_manager.player_stats:IsEnemy(player) or player:IsPlayerDead()) then
+			local race_name = player:GetPlayerRaceName()
+			-- Check for TS valid buildings
+			if race_name == "thousand_sons_race" then
+				for base in player:GetBases() do
+					-- Check for valid building
+					if (base ~= nil and base:IsValid()) then
+						if base:GetEntity():GetBlueprintName() == "thousand_sons_gate" then
+							if base:IsConstructionDone() then
+								local base_pos = base:GetPosition()
+								if (distance_sqr( base_pos, from_pos ) <= min_displacement_sqr) then
+									local base_info = {}
+									base_info.base = base
+									base_info.pos = base_pos
+									base_info.distance = distance(base_info.pos,from_pos)
+									table.insert(candidate_bases,base_info)
+								end
+							end
+						end
+					end
+				end
+			-- Check for CD valid buildings
+			elseif race_name == "deamons_race" then
+				for base in player:GetBases() do
+					-- Check for valid building
+					if (base ~= nil and base:IsValid()) then
+						local base_name = base:GetEntity():GetBlueprintName()
+						if (base_name ~= "daemon_eye_of_terror" and base_name ~= "daemon_maledictum" and
+						base_name ~= "daemon_turret" and base_name ~= "daemon_turret_maledictum") then
+							if base:IsConstructionDone() then
+								local base_pos = base:GetPosition()
+								if (distance_sqr( base_pos, from_pos ) <= min_displacement_sqr) then
+									local base_info = {}
+									base_info.base = base
+									base_info.pos = base_pos
+									base_info.distance = distance(base_info.pos,from_pos)
+									table.insert(candidate_bases,base_info)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+
+	-- Sort candidates so we start with closest
+	table.sort(candidate_bases,function(e1,e2) return e1.distance < e2.distance end)
+	
+	-- Find best
+	for i,candidate in candidate_bases do
+		local base = candidate.base
+		local base_pos = base:GetPosition()
+		
+		if best_base == nil then
+			best_base = base
+			best_distance = cpu_manager:GetShortestPathingDistance(base_pos, from_pos)
+		elseif (candidate.distance < best_distance or best_distance == -1) then
+			local new_distance = cpu_manager:GetShortestPathingDistance(base_pos, from_pos)
+			if new_distance < best_distance or best_distance == -1 then
+				best_base = base
+				best_distance = new_distance
+			end
+		end
+	end
+	return best_base
+end

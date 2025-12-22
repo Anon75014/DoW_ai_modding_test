@@ -1,0 +1,96 @@
+----------------------------------------
+-- File: 'fallenangelsluthertactic.ai'
+-- Edited by Thudmeizer @ 02.01.2025
+
+class 'FallenAngelsLutherTactic' (FallenAngelsInfantryTactic)
+
+FallenAngelsLuther = {}
+
+function FallenAngelsLutherTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Luther Tactic")
+end
+
+function FallenAngelsLutherTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FallenAngelsLutherTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function FallenAngelsLutherTactic:InitAbilities()
+	if FallenAngelsLuther.lifebane_id == nil then
+		FallenAngelsLuther.lifebane_id = cpu_manager.stats:GetAbilityID( "fallen_luther_lifebane" )
+		FallenAngelsLuther.retribution_id = cpu_manager.stats:GetAbilityID( "fallen_luther_retribution" )
+		FallenAngelsLuther.tactics_id = cpu_manager.stats:GetAbilityID( "fallen_luther_shrouded_tactics" )
+		FallenAngelsLuther.shards_id = cpu_manager.stats:GetAbilityID( "fallen_shards_of_caliban" )
+	end
+end
+
+function FallenAngelsLutherTactic:DoAbilities()
+
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsLuther.lifebane_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsLuther.lifebane_id, Ability.Filters.CloseMonsterEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsLuther.lifebane_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityPos (self.squad_ai, FallenAngelsLuther.shards_id, Ability.Filters.CloseEnemy, 12)
+		Ability.DoAbilityPos (self.squad_ai, FallenAngelsLuther.shards_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+	else
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsLuther.lifebane_id, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsLuther.lifebane_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, FallenAngelsLuther.lifebane_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityPos (self.squad_ai, FallenAngelsLuther.shards_id, Ability.Filters.CloseEnemy, 24)
+		Ability.DoAbilityPos (self.squad_ai, FallenAngelsLuther.shards_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+	end
+
+	if self.squad_ai:IsInCombat() then
+
+		-- If we are dying while in combat, lower prequisites if enemies are nearby
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			local oUnit = cpu_manager.cpu_player:FindFirstEnemy(self.squad_ai:GetPosition(), 25, 1)
+			if (oUnit ~= nil) then
+				if self.squad_ai:CanDoAbility(FallenAngelsLuther.retribution_id) then
+					self.squad_ai:DoSpecialAbility(FallenAngelsLuther.retribution_id)
+				end
+			end
+		end
+
+		-- Check if we can initiate shrouded tactics against our struggling fighters, monsters, and commanders
+		if self.squad_ai:CanDoAbility(FallenAngelsLuther.tactics_id) then
+			-- Find: nearby (25) + wounded + non-vehicle + more that 3 members squad. For Commanders apply even for 1 member.
+			local oSquad = cpu_manager.cpu_player:FindFirstHurtSquad(self.squad_ai:GetPosition(), 25)
+			if oSquad ~= nil and oSquad:GetHealthPercentage() < 0.75 then
+				local oStats = oSquad:GetStats()
+				local oClass = nil
+				if oStats ~= nil then oClass = oStats:GetClass() end
+					if oClass ~= nil then
+						if oClass == UnitStatsAI.UC_Commander then
+							self.squad_ai:DoSpecialAbility(FallenAngelsLuther.tactics_id)
+						elseif oSquad:GetNumTroopers() > 3 then
+							if oClass ~= UnitStatsAI.UC_VehicleLow and oClass ~= UnitStatsAI.UC_VehicleMed
+							and oClass ~= UnitStatsAI.UC_VehicleHigh and oClass ~= UnitStatsAI.UC_AirMed then
+							self.squad_ai:DoSpecialAbility(FallenAngelsLuther.tactics_id)
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function FallenAngelsLutherTactic:Update()
+
+    	if (self:IsComplete()) then
+        	return
+    	end
+
+    	-- State machine
+    	if (not InfantryTactic.Update(self)) then
+        	return
+    	end
+    
+	-- Check if we are in serious trouble
+	self:EmergencyRetreat()
+end

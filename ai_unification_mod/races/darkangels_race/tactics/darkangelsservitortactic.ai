@@ -1,0 +1,30 @@
+----------------------------------------
+-- File: 'darkangelsservitortactic.ai'
+-- Edited by Thudmeizer   @ 16.01.2011
+
+class 'DarkAngelsServitorTactic' (EngineerTactic)
+
+DarkAngelsServitor = {}
+
+function DarkAngelsServitorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Dark Angels Servitor Tactic")
+end
+
+function DarkAngelsServitorTactic:InitAbilities()
+
+	if (DarkAngelsServitor.sabotage_id == nil) then
+	   	DarkAngelsServitor.sabotage_id = cpu_manager.stats:GetAbilityID( "darkangels_rites_of_sabotage" )	
+	end
+end
+
+function DarkAngelsServitorTactic:DoAbilities()
+
+	Ability.DoAbilityTarget( self.squad_ai, DarkAngelsServitor.sabotage_id, Ability.Filters.CloseVehicleEnemy, 1 ) 
+        Ability.DoAbilityTargetEntity( self.squad_ai, DarkAngelsServitor.sabotage_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+end
+
+function DarkAngelsServitorTactic:IsAffectedByMorale()
+	return false
+end
+

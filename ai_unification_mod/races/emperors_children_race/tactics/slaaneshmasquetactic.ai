@@ -1,0 +1,67 @@
+----------------------------------------
+-- File: 'slaaneshmasquetactic.ai'
+-- Edited by Thudmeizer @ 23.07.2018
+
+class 'SlaaneshMasqueTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshMasque = {}
+
+function SlaaneshMasqueTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Masque Tactic")
+	self.allureTime = 0
+end
+
+function SlaaneshMasqueTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshMasque.pavane_id == nil) then
+		SlaaneshMasque.pavane_id = cpu_manager.stats:GetAbilityID( "emperors_children_pavane_of_slaanesh_greater" )
+		SlaaneshMasque.alure_id = cpu_manager.stats:GetAbilityID( "emperors_children_allure_masque" )
+	end
+end
+
+function SlaaneshMasqueTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(SlaaneshMasque.alure_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, SlaaneshMasque.alure_id, Ability.Filters.CloseInfantryEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMasque.alure_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshMasque.alure_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				self.allureTime = g_iGMT
+				return
+			end
+		end
+
+		if g_iGMT > self.allureTime + 8 and self.squad_ai:CanDoAbility(SlaaneshMasque.pavane_id) then
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshMasque.pavane_id, Ability.Filters.CloseEnemy, 10, 3 )
+		end
+
+		-- Activate dance of death
+		if self.squad_ai:CanMeleeDance() then
+			self.squad_ai:DoMeleeDance()
+		end
+	end
+end
+
+function SlaaneshMasqueTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+
+	-- Attach to melee
+	if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+		return
+	end
+	if (self:TryAttachSquad(false, true, 50, nil, nil) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

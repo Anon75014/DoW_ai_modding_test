@@ -1,0 +1,93 @@
+----------------------------------------
+-- File: 'templaremperorschampiontactic.ai'
+-- Edited by Melooo   @ 02.01.2008
+-- Edited by Thudmeizer @ 27.02.2023
+
+class 'TemplarEmperorsChampionTactic' (TemplarInfantryTactic)
+
+TemplarEmperorsChampion = {}
+
+function TemplarEmperorsChampionTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Templar EmperorsChampion Tactic")
+end
+
+function TemplarEmperorsChampionTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function TemplarEmperorsChampionTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function InfantryTactic:IsAffectedByMorale()
+	return false
+end
+
+function TemplarEmperorsChampionTactic:IsCommanderAttacker()
+
+	-- Check if we are attacking
+	if (self.squad_ai:IsLocked()) then
+	
+		-- Retreat if almost dead and not part of a large army
+		if (self.squad_ai:GetHealthPercentage() < 0.3 and cpu_manager:GetArmyStrength() < 4000) then
+			return false
+		end
+	else
+		-- Don't join attacks if severly hurt
+		if (self.squad_ai:GetHealthPercentage() < 0.3) then
+			return false
+		end
+	end
+	return true
+end
+
+function TemplarEmperorsChampionTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (TemplarEmperorsChampion.frag_grenade_id == nil) then
+		TemplarEmperorsChampion.frag_grenade_id = cpu_manager.stats:GetAbilityID( "templar_frag_grenades_blessed" )
+	end
+end
+
+function TemplarEmperorsChampionTactic:DoAbilities()
+
+	-- Try to dispel psykers in local area
+	Ability.DoAbilityPos(self.squad_ai, TemplarEmperorsChampion.frag_grenade_id, Ability.Filters.CloseCommanderEnemy, 1)
+	Ability.DoAbilityPos(self.squad_ai, TemplarEmperorsChampion.frag_grenade_id, Ability.Filters.CloseEnemy, 5)
+end
+
+function TemplarEmperorsChampionTactic:Update()
+
+	if (self:IsComplete()) then
+      		return
+  	end
+  
+  	-- State machine
+  	if (not InfantryTactic.Update( self )) then
+      		return
+  	end
+    
+  	-- Check health
+  	if (self.squad_ai:GetHealthPercentage() > 0.3) then
+    		self.squad_ai:DoSetDefaultMeleeStance()
+    
+    		-- Check for close commander
+    		local vSquadPos = self.squad_ai:GetPosition()
+    		local oEnemyCommander = Ability.Filters.CloseCommanderEnemy(vSquadPos, 35, 1)
+    		if (oEnemyCommander ~= nil) then
+       			self.squad_ai:DoAttackMove(oEnemyCommander:GetPosition())
+       			return
+		else
+       			-- Check for close attached commander
+    			local oSquad = Ability.Filters.CloseInfantryEnemy(vSquadPos, 20, 4)
+    			if (oSquad ~= nil and oSquad:IsAttached()) then
+				self.squad_ai:DoAttackMove(oSquad:GetPosition())
+    			end
+    		end
+    
+    		if (self:TryAttachSquad(true, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+      			self:TryAttachSquadMelee()
+    		end
+  	end
+end

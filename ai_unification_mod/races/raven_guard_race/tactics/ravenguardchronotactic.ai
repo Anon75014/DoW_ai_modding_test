@@ -1,0 +1,35 @@
+----------------------------------------
+-- File: 'ravenguardchronotactic.ai'
+-- Edited by Thudmeizer @ 31.08.2025
+
+class 'RavenGuardChronoTactic' (RavenGuardSpaceMarineInfantryTactic)
+
+RavenGuardChrono = {}
+
+function RavenGuardChronoTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Chrono Legionnaire Tactic")
+end
+
+function RavenGuardChronoTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (RavenGuardChrono.blink == nil) then
+		RavenGuardChrono.blink = cpu_manager.stats:GetAbilityID( "raven_guard_clerg_blink" )
+	end
+end
+
+function RavenGuardChronoTactic:DoAbilities()
+	
+	-- Enable Blink when health is low or broken and while not in combat but under attack
+	if not (self.squad_ai:IsInCombat()) and (self.squad_ai:IsUnderAttack()) then
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.5) or (self.squad_ai:IsBroken()) then
+			if (self.squad_ai:CanDoAbility( RavenGuardChrono.blink )) then
+				self.squad_ai:DoSpecialAbility( RavenGuardChrono.blink)
+			end
+		end
+	end
+
+	-- Call standard method
+	RavenGuardSpaceMarineInfantryTactic.DoAbilities(self)
+end

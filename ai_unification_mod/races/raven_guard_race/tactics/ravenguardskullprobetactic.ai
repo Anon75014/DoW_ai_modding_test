@@ -1,0 +1,61 @@
+----------------------------------------
+-- File: 'RavenGuardSkullProbeTactic.ai'
+-- Edited by Thudmeizer   @ 14.10.2006
+
+class 'RavenGuardSkullProbeTactic' (RavenGuardSpaceMarineInfantryTactic)
+
+RavenGuardSkullProbe = {}
+
+function RavenGuardSkullProbeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Raven Guard Skull Probe Tactic")
+end
+
+function RavenGuardSkullProbeTactic:IsSupportDetector()
+	return true
+end
+
+-- Should only attack when attached
+function RavenGuardSkullProbeTactic:IsAttacker()
+	return false
+end
+
+-- Should only defend when attached
+function RavenGuardSkullProbeTactic:IsDefender()
+	return false
+end
+
+function RavenGuardSkullProbeTactic:InitAbilities()
+
+	if (RavenGuardSkullProbe.sabotage_id == nil) then
+		RavenGuardSkullProbe.sabotage_id = cpu_manager.stats:GetAbilityID( "raven_guard_sabotage" )	
+	end
+end
+
+function RavenGuardSkullProbeTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+		-- Send pulse which temporarily shuts down enemy vehicle/building
+		if self.squad_ai:CanDoAbility(RavenGuardSkullProbe.sabotage_id) then
+			Ability.DoAbilityTarget( self.squad_ai, RavenGuardSkullProbe.sabotage_id, Ability.Filters.CloseVehicleEnemy, 1 ) 
+			Ability.DoAbilityTargetEntity( self.squad_ai, RavenGuardSkullProbe.sabotage_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1)
+		end
+	end
+end
+
+function RavenGuardSkullProbeTactic:Update()
+
+	if self:IsComplete() then
+      		return
+   	end
+   
+	--state machine
+	if not InfantryTactic.Update( self ) then
+		return
+	end
+
+   	--attach to squad
+   	self:TryAttachSquad( false, false, 1000, 150, nil )
+end
+
+

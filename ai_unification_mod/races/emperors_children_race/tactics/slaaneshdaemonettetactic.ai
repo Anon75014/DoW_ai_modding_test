@@ -1,0 +1,54 @@
+----------------------------------------
+-- File: 'slaaneshdaemonettetactic.ai'
+-- Edited by Thudmeizer @ 23.07.2018
+
+class 'SlaaneshDaemonetteTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshDaemonette = {}
+
+function SlaaneshDaemonetteTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Daemonette Tactic")
+end
+
+function SlaaneshDaemonetteTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshDaemonette.pavane_id == nil) then
+		SlaaneshDaemonette.pavane_id = cpu_manager.stats:GetAbilityID( "emperors_children_pavane_of_slaanesh_greater" )
+		SlaaneshDaemonette.pavanealpha_id = cpu_manager.stats:GetAbilityID( "emperors_children_pavane_of_slaanesh" )
+		SlaaneshDaemonette.allure_id = cpu_manager.stats:GetAbilityID( "emperors_children_allure_greater" )
+		SlaaneshDaemonette.allurealpha_id = cpu_manager.stats:GetAbilityID( "emperors_children_allure" )
+	end
+end
+
+function SlaaneshDaemonetteTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+
+		if self.squad_ai:CanDoAbility(SlaaneshDaemonette.pavane_id) then
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshDaemonette.pavane_id, Ability.Filters.CloseEnemy, 10, 3 )
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshDaemonette.pavanealpha_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshDaemonette.pavanealpha_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshDaemonette.allure_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, SlaaneshDaemonette.allure_id, Ability.Filters.CloseInfantryEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshDaemonette.allure_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshDaemonette.allure_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+
+		if self.squad_ai:CanDoAbility(SlaaneshDaemonette.allurealpha_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, SlaaneshDaemonette.allurealpha_id, Ability.Filters.CloseInfantryEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshDaemonette.allurealpha_id, Ability.Filters.CloseCommanderEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SlaaneshDaemonette.allurealpha_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+	end
+end

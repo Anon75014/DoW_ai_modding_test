@@ -1,0 +1,41 @@
+----------------------------------------
+-- File: 'daemonsdefilertactic.ai'
+-- Edited by CornCobMan 11/06/2013
+
+class 'DaemonsDefilerTactic' (VehicleTactic)
+
+DaemonsDefiler = {}
+
+function DaemonsDefilerTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Daemons Defiler Tactic")
+end
+
+-- Check if the vehicle should dance away in melee
+function DaemonsDefilerTactic:CheckDefilerDance(sName)
+
+	--[[if (sName == "" or
+		sName == "" or
+		sName == "") then
+		return true
+	end]]
+	return false
+end
+
+function DaemonsDefilerTactic:InitAbilities()
+	if (DaemonsDefiler.rot_id == nil) then
+		DaemonsDefiler.rot_id = cpu_manager.stats:GetAbilityID( "daemons_nurgles_rot" )	
+	end
+end
+
+function DaemonsDefilerTactic:DoAbilities()
+
+	if ( self.squad_ai:IsInCombat() ) then
+		if (self.squad_ai:CanDoAbility( DaemonsDefiler.rot_id )) then
+			self.squad_ai:DoSpecialAbility( DaemonsDefiler.rot_id)
+		end		
+	end
+
+	-- Call standard method
+	VehicleTactic.DoAbilities(self)
+end

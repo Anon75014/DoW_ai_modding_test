@@ -1,0 +1,354 @@
+----------------------------------------
+-- File: 'praetorianStrategyInfo.ai'
+-- Edited by Thudmeizer	@ 21.12.2024
+
+BuildBaseStrategyInfo = 
+{
+	praetorian_race =
+	{
+		post_builder = 1,
+		flag_capture = 1,
+
+		-- Reserve this amount for building units, reinforcing and upgrading
+		req_reserve = 150,
+		
+		-- need at least this at all times
+		squad_cap_threshold = 3,
+
+		-- need at least this at all times
+		support_cap_threshold = 4,
+		
+		-- used to calculate wants for engineers
+		Engineers =
+		{
+			--number of engineers we're aiming for
+			want = 3,
+		},
+		
+		-- Is used to modify the army strength in the build programs (Allows faster balancing adjustments)
+		ArmyStrengthModifier = 1.0,
+		
+		-- Item-Syntax: Min. Tier, Min. Requisition, Min. Power, Min. ArmyStrength, Object-Count, Object-Type, Object-Name
+		BuildPrograms =
+		{
+			-- Research Total: 15
+			-- Allround strategy
+			--all round, gm heavy, ork heavy, another?
+		{
+				{ 1, 144, 0, 0, 1,	"Unit",			"praetorian_squad_praetorian_conscript" }, -- Force a capturing squad
+				{ 1, 160, 0, 0, 2,	"Unit",			"praetorian_squad_praetorian_guardsmen" },
+				{ 1, 160, 0, 0, 4,	"Unit",			"praetorian_squad_praetorian_guardsmen" },
+				{ 1, 300, 0, 0, 1,	"Building",		"praetorian_hq" },
+				{ 1, 70, 0, 0, 1,	"Building",		"praetorian_orks" },
+				{ 1, 100, 0, 0, 1,	"Building",		"praetorian_generator" },
+				{ 1, 100, 0, 0, 2,	"Building",		"praetorian_generator" },
+				{ 1, 100, 55, 700, 60,	"Addon",		"praetorian_list_post_addon_1" },
+				{ 1, 250, 0, 0, 1,	"Building",		"praetorian_mess" },
+				{ 1, 300, 175, 800, 1,	"Addon",		"praetorian_hq_addon" },
+				{ 1, 100, 0, 500, 4,	"Building",		"praetorian_generator" },
+				{ 1, 100, 50, 950, 1,	"Building",		"praetorian_turret_ork" },
+				{ 1, 100, 55, 1000, 100,"Addon",		"praetorian_list_post_addon_1" },
+
+				{ 2, 70, 100, 0, 1,	"Unit",			"praetorian_squad_kronus" },
+				{ 2, 150, 150, 0, 1,	"Unit",			"praetorian_squad_griffon" },
+				{ 2, 240, 275, 0, 1,	"Unit",			"praetorian_squad_killa_kan" },
+				{ 2, 5, 10, 0, 100,	"Addon",		"praetorian_mess_addon_1" },
+				{ 2, 250, 150, 250, 1,	"Building",		"praetorian_labratory" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_2" },
+				{ 2, 150, 50, 250, 1,	"Building",		"praetorian_facility" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_3" },
+				{ 2, 100, 20, 250, 1,	"Building",		"praetorian_aid_station" },
+				{ 2, 100, 0, 1000, 6,	"Building",		"praetorian_generator" },
+				{ 2, 100, 50, 1000, 1,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 200, 100, 1000, 40,"Addon",		"praetorian_list_post_addon_2" },
+				{ 2, 75, 250, 1000, 1,	"Research",		"praetorian_upgrade_requisition_1" },
+				{ 2, 200, 50, 1000, 1,	"Research",		"praetorian_upgrade_power_1" },
+				{ 2, 250, 150, 1500, 2,	"Building",		"praetorian_labratory" },
+				{ 2, 25, 10, 1500, 100,	"Addon",		"praetorian_mess_addon_4" },
+				{ 2, 100, 50, 1750, 2,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 100, 50, 2000, 2,	"Building",		"praetorian_turret_ork" },
+
+				{ 3, 70, 100, 0, 1,	"Unit",			"praetorian_squad_kronus" },
+				{ 3, 150, 100, 0, 1,	"Unit",			"praetorian_squad_sentinel" },
+				{ 3, 50, 0, 0, 1,	"Unit",			"praetorian_squad_ork_bombsquigs" },
+				{ 3, 150, 50, 1000, 2,	"Building",		"praetorian_facility" },
+				{ 3, 200, 100, 2000, 75,"Addon",		"praetorian_list_post_addon_2" },
+				{ 3, 100, 50, 2000, 3,	"Building",		"praetorian_turret_ork" },
+				{ 3, 340, 340, 2000, 1,	"Research",		"praetorian_full_scale_war" },
+
+				{ 4, 150, 30, 0, 1,	"Unit",			"praetorian_squad_specialist_weapons" },
+				{ 4, 260, 100, 0, 1,	"Unit",			"praetorian_squad_orka_kommando" },
+				{ 4, 125, 325, 0, 1,	"Unit",			"praetorian_squad_burna_bomba" },
+				{ 4, 100, 300, 2000, 1,	"Research",		"praetorian_upgrade_requisition_2" },
+				{ 4, 250, 100, 2000, 1,	"Research",		"praetorian_upgrade_power_2" },
+				{ 4, 450, 450, 2000, 1,	"Building",		"praetorian_company_standard" },
+				{ 4, 150, 50, 2000, 100,"TurretAddon",		"praetorian_turret_addon" },
+				{ 4, 200, 100, 2000, 100,"Addon",		"praetorian_list_post_addon_2" },
+				{ 4, 100, 50, 2000, 4,	"Building",		"praetorian_turret_ork" },
+				{ 4, 700, 150, 4000, 2,	"Building",		"praetorian_hq" }
+			},
+			
+			-- Mass praetorian strategy
+			{
+				{ 1, 144, 0, 0, 1,	"Unit",			"praetorian_squad_praetorian_conscript" }, -- Force a capturing squad
+				{ 1, 160, 0, 0, 2,	"Unit",			"praetorian_squad_praetorian_guardsmen" },
+				{ 1, 160, 0, 0, 3,	"Unit",			"praetorian_squad_praetorian_guardsmen" },
+				{ 1, 300, 0, 0, 1,	"Building",		"praetorian_hq" },
+				{ 1, 100, 0, 0, 1,	"Building",		"praetorian_generator" },
+				{ 1, 100, 0, 0, 2,	"Building",		"praetorian_generator" },
+				{ 1, 100, 55, 700, 60,	"Addon",		"praetorian_list_post_addon_1" },
+				{ 1, 300, 175, 1000, 1,	"Addon",		"praetorian_hq_addon" },
+				{ 1, 100, 0, 500, 4,	"Building",		"praetorian_generator" },
+				{ 1, 100, 50, 950, 1,	"Building",		"praetorian_turret_ork" },
+				{ 1, 100, 55, 1000, 100,"Addon",		"praetorian_list_post_addon_1" },
+
+				{ 2, 70, 100, 0, 2,	"Unit",			"praetorian_squad_kronus" },
+				{ 2, 150, 150, 0, 1,	"Unit",			"praetorian_squad_griffon" },
+				{ 2, 150, 100, 0, 1,	"Unit",			"praetorian_squad_sentinel" },
+				{ 2, 5, 10, 0, 100,	"Addon",		"praetorian_mess_addon_1" },
+				{ 2, 250, 150, 250, 1,	"Building",		"praetorian_labratory" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_2" },
+				{ 2, 150, 50, 250, 1,	"Building",		"praetorian_facility" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_3" },
+				{ 2, 100, 20, 250, 1,	"Building",		"praetorian_aid_station" },
+				{ 2, 100, 0, 1000, 6,	"Building",		"praetorian_generator" },
+				{ 2, 100, 50, 1000, 1,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 200, 100, 1000, 40,"Addon",		"praetorian_list_post_addon_2" },
+				{ 2, 75, 250, 1000, 1,	"Research",		"praetorian_upgrade_requisition_1" },
+				{ 2, 25, 10, 1000, 100,	"Addon",		"praetorian_mess_addon_4" },
+				{ 2, 200, 50, 1000, 1,	"Research",		"praetorian_upgrade_power_1" },
+				{ 2, 250, 150, 1500, 2,	"Building",		"praetorian_labratory" },
+				{ 2, 100, 50, 1750, 2,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 100, 50, 2000, 2,	"Building",		"praetorian_turret_ork" },
+
+			        { 3, 0, 0, 0, 1,	"Restrict",		"praetorian_squad_lieutenant" },
+				{ 3, 150, 100, 0, 2,	"Unit",			"praetorian_squad_sentinel" },
+				{ 3, 100, 50, 2000, 3,	"Building",		"praetorian_turret_ork" },
+				{ 3, 200, 100, 2000, 75,"Addon",		"praetorian_list_post_addon_2" },
+				{ 3, 340, 340, 2000, 1,	"Research",		"praetorian_full_scale_war" },
+
+				{ 4, 150, 30, 0, 1,	"Unit",			"praetorian_squad_specialist_weapons" },
+				{ 4, 150, 200, 0, 1,	"Unit",			"praetorian_squad_vulture" },
+				{ 4, 100, 300, 2000, 1,	"Research",		"praetorian_upgrade_requisition_2" },
+				{ 4, 250, 100, 2000, 1,	"Research",		"praetorian_upgrade_power_2" },
+				{ 4, 450, 450, 2000, 1,	"Building",		"praetorian_company_standard" },
+				{ 4, 150, 50, 2000, 100,"TurretAddon",		"praetorian_turret_addon" },
+				{ 4, 200, 100, 2000, 100,"Addon",		"praetorian_list_post_addon_2" },
+				{ 4, 100, 50, 2000, 4,	"Building",		"praetorian_turret_ork" },
+				{ 4, 700, 150, 4000, 2,	"Building",		"praetorian_hq" }
+			},
+
+			-- Ork
+			{
+				{ 1, 144, 0, 0, 1,	"Unit",			"praetorian_squad_praetorian_conscript" }, -- Force a capturing squad
+				{ 1, 0, 0, 0, 0,	"Rush",			"Prepare" },
+			        { 1, 120, 25, 0, 1,	"Unit",			"praetorian_squad_lieutenant" },
+				{ 1, 200, 0, 0, 3,	"Unit",			"praetorian_squad_blood_axe" },
+				{ 1, 50, 0, 0, 1,	"Unit",			"praetorian_squad_ork_bombsquigs" },
+				{ 1, 300, 0, 0, 1,	"Building",		"praetorian_hq" },
+				{ 1, 135, 0, 0, 1,	"Building",		"praetorian_orks" },
+				{ 1, 250, 0, 0, 1,	"Building",		"praetorian_mess" },
+				{ 1, 100, 55, 700, 60,	"Addon",		"praetorian_list_post_addon_1" },
+				{ 1, 100, 0, 0, 1,	"Building",		"praetorian_generator" },
+				{ 1, 100, 0, 0, 2,	"Building",		"praetorian_generator" },
+				{ 1, 300, 175, 1000, 1,	"Addon",		"praetorian_hq_addon" },
+				{ 1, 100, 0, 500, 4,	"Building",		"praetorian_generator" },
+				{ 1, 100, 50, 950, 1,	"Building",		"praetorian_turret_ork" },
+				{ 1, 100, 55, 1000, 100,"Addon",		"praetorian_list_post_addon_1" },
+
+				{ 2, 70, 100, 0, 2,	"Unit",			"praetorian_squad_kronus" },
+				{ 2, 240, 275, 0, 1,	"Unit",			"praetorian_squad_killa_kan" },
+				{ 2, 150, 100, 0, 1,	"Unit",			"praetorian_squad_sentinel" },
+				{ 2, 5, 10, 0, 100,	"Addon",		"praetorian_mess_addon_1" },
+				{ 2, 250, 150, 250, 1,	"Building",		"praetorian_labratory" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_2" },
+				{ 2, 150, 50, 250, 1,	"Building",		"praetorian_facility" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_3" },
+				{ 2, 100, 20, 250, 1,	"Building",		"praetorian_aid_station" },
+				{ 2, 100, 0, 1000, 6,	"Building",		"praetorian_generator" },
+				{ 2, 100, 50, 1000, 1,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 200, 100, 1000, 40,"Addon",		"praetorian_list_post_addon_2" },
+				{ 2, 75, 250, 1000, 1,	"Research",		"praetorian_upgrade_requisition_1" },
+				{ 2, 25, 10, 1000, 100,	"Addon",		"praetorian_mess_addon_4" },
+				{ 2, 200, 50, 1000, 1,	"Research",		"praetorian_upgrade_power_1" },
+				{ 2, 250, 150, 1500, 2,	"Building",		"praetorian_labratory" },
+				{ 2, 100, 50, 1750, 2,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 100, 50, 2000, 2,	"Building",		"praetorian_turret_ork" },
+
+			        { 3, 0, 0, 0, 1,	"Restrict",		"praetorian_squad_lieutenant" },
+				{ 3, 240, 275, 0, 2,	"Unit",			"praetorian_squad_killa_kan" },
+				{ 3, 100, 50, 2000, 3,	"Building",		"praetorian_turret_ork" },
+				{ 3, 200, 100, 2000, 75,"Addon",		"praetorian_list_post_addon_2" },
+				{ 3, 340, 340, 2000, 1,	"Research",		"praetorian_full_scale_war" },
+
+				{ 4, 260, 100, 0, 1,	"Unit",			"praetorian_squad_orka_kommando" },
+				{ 4, 150, 300, 0, 1,	"Unit",			"praetorian_squad_ork_looted_tank" },
+				{ 4, 125, 325, 0, 1,	"Unit",			"praetorian_squad_burna_bomba" },
+				{ 4, 100, 300, 2000, 1,	"Research",		"praetorian_upgrade_requisition_2" },
+				{ 4, 250, 100, 2000, 1,	"Research",		"praetorian_upgrade_power_2" },
+				{ 4, 450, 450, 2000, 1,	"Building",		"praetorian_company_standard" },
+				{ 4, 150, 50, 2000, 100,"TurretAddon",		"praetorian_turret_addon" },
+				{ 4, 200, 100, 2000, 100,"Addon",		"praetorian_list_post_addon_2" },
+				{ 4, 100, 50, 2000, 4,	"Building",		"praetorian_turret_ork" },
+				{ 4, 700, 150, 4000, 2,	"Building",		"praetorian_hq" }
+			},
+		
+			-- Hellhound strategy
+			{
+				{ 1, 144, 0, 0, 1,	"Unit",			"praetorian_squad_praetorian_conscript" }, -- Force a capturing squad
+			        { 1, 120, 25, 0, 1,	"Unit",			"praetorian_squad_lieutenant" },
+				{ 1, 160, 0, 0, 2,	"Unit",			"praetorian_squad_praetorian_guardsmen" },
+				{ 1, 300, 0, 0, 1,	"Building",		"praetorian_hq" },
+				{ 1, 250, 0, 0, 1,	"Building",		"praetorian_mess" },
+				{ 1, 135, 0, 0, 1,	"Building",		"praetorian_orks" },
+				{ 1, 100, 0, 0, 1,	"Building",		"praetorian_generator" },
+				{ 1, 100, 0, 0, 2,	"Building",		"praetorian_generator" },
+				{ 1, 100, 55, 700, 60,	"Addon",		"praetorian_list_post_addon_1" },
+				{ 1, 100, 0, 750, 3,	"Building",		"praetorian_generator" },
+				{ 1, 300, 175, 1000, 1,	"Addon",		"praetorian_hq_addon" },
+				{ 1, 100, 0, 500, 4,	"Building",		"praetorian_generator" },
+				{ 1, 100, 50, 950, 1,	"Building",		"praetorian_turret_ork" },
+				{ 1, 100, 55, 1000, 100,"Addon",		"praetorian_list_post_addon_1" },
+
+				{ 2, 180, 30, 0, 1,	"Unit",			"praetorian_squad_infantry_mortar" },
+				{ 2, 150, 150, 0, 1,	"Unit",			"praetorian_squad_griffon" },
+				{ 2, 240, 275, 0, 1,	"Unit",			"praetorian_squad_killa_kan" },
+				{ 2, 5, 10, 0, 100,	"Addon",		"praetorian_mess_addon_1" },
+				{ 2, 250, 150, 250, 1,	"Building",		"praetorian_labratory" },
+				{ 2, 150, 50, 250, 1,	"Building",		"praetorian_facility" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_2" },
+				{ 2, 100, 20, 250, 1,	"Building",		"praetorian_aid_station" },
+				{ 2, 25, 10, 0, 100,	"Addon",		"praetorian_mess_addon_3" },
+				{ 2, 100, 20, 250, 1,	"Building",		"praetorian_aid_station" },
+				{ 2, 100, 0, 1000, 6,	"Building",		"praetorian_generator" },
+				{ 2, 100, 50, 1000, 1,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 200, 100, 1000, 40,"Addon",		"praetorian_list_post_addon_2" },
+				{ 2, 75, 250, 1000, 1,	"Research",		"praetorian_upgrade_requisition_1" },
+				{ 2, 200, 50, 1000, 1,	"Research",		"praetorian_upgrade_power_1" },
+				{ 2, 250, 150, 1500, 2,	"Building",		"praetorian_labratory" },
+				{ 2, 25, 10, 1500, 100,	"Addon",		"praetorian_mess_addon_4" },
+				{ 2, 100, 50, 1750, 2,	"Building",		"praetorian_turret_earthshaker" },
+				{ 2, 100, 50, 2000, 2,	"Building",		"praetorian_turret_ork" },
+
+			        { 3, 0, 0, 0, 1,	"Restrict",		"praetorian_squad_lieutenant" },
+				{ 3, 275, 0, 0, 1,	"Unit",			"praetorian_squad_afriel" },
+				{ 3, 150, 100, 0, 1,	"Unit",			"praetorian_squad_sentinel" },
+				{ 3, 100, 50, 2000, 3,	"Building",		"praetorian_turret_ork" },
+				{ 3, 200, 100, 2000, 75,"Addon",		"praetorian_list_post_addon_2" },
+				{ 3, 340, 340, 2000, 1,	"Research",		"praetorian_full_scale_war" },
+
+				{ 4, 150, 200, 0, 1,	"Unit",			"praetorian_squad_vulture" },
+				{ 4, 260, 100, 0, 1,	"Unit",			"praetorian_squad_orka_kommando" },
+				{ 4, 125, 325, 0, 1,	"Unit",			"praetorian_squad_burna_bomba" },
+				{ 4, 100, 300, 2000, 1,	"Research",		"praetorian_upgrade_requisition_2" },
+				{ 4, 250, 100, 2000, 1,	"Research",		"praetorian_upgrade_power_2" },
+				{ 4, 450, 450, 2000, 1,	"Building",		"praetorian_company_standard" },
+				{ 4, 150, 50, 2000, 100,"TurretAddon",		"praetorian_turret_addon" },
+				{ 4, 100, 50, 2000, 4,	"Building",		"praetorian_turret_ork" },
+				{ 4, 200, 100, 2000, 100,"Addon",		"praetorian_list_post_addon_2" },
+				{ 4, 700, 150, 4000, 2,	"Building",		"praetorian_hq" }
+			},
+		},
+		
+		SquadLimits = 
+		{
+			standard = 
+			{
+				praetorian_squad_builder = 0,
+				praetorian_squad_praetorian_conscript = math.random( 1,3 ),
+				praetorian_squad_praetorian_guardsmen = math.random( 3,5 ),
+				praetorian_squad_ork_bombsquigs = math.random( 2,3 ),
+				praetorian_squad_blood_axe = math.random( 2,3 ),
+				praetorian_squad_team = math.random( 2,3 ),
+				praetorian_squad_team_entrenched_sp = 0,
+				praetorian_squad_infantry_missile = math.random( 2,3 ),
+				praetorian_squad_infantry_mortar = math.random( 2,3 ),
+				praetorian_squad_afriel = 1,
+				praetorian_squad_specialist_weapons = 1,
+				praetorian_squad_orka_kommando = 1,
+				praetorian_squad_commissar = 3,
+				praetorian_squad_medic = 2,
+				praetorian_squad_bugler = 1,
+				praetorian_squad_banner = 1,
+				praetorian_squad_inquisitor = 1,
+				praetorian_squad_tardis = 1,
+				praetorian_squad_lieutenant = 1,
+				praetorian_squad_major = 1,
+				praetorian_squad_grot_tank = math.random( 2,3 ),
+				praetorian_squad_sentinel = math.random( 2,3 ),
+				praetorian_squad_vulture = math.random( 2,4 ),
+				praetorian_squad_burna_bomba = math.random( 2,4 ),
+				praetorian_squad_griffon = 3,
+				praetorian_squad_killa_kan = math.random( 2,3 ),
+				praetorian_squad_kronus = math.random( 4,6 ),
+				praetorian_squad_lemanruss = math.random( 2,3 ),
+				praetorian_squad_leader = 1,
+				praetorian_squad_leader_female = 1,
+				praetorian_squad_ork_looted_tank = math.random( 2,3 ),
+				praetorian_squad_grot_stompa = 1,
+				praetorian_squad_ork_battlewagon = 1,
+				praetorian_squad_stormhammer = 1,
+				praetorian_squad_stormhammer_arkurian = 1,
+				praetorian_squad_shadowsword_titanicus = 1,
+			}
+		}
+	}
+}
+
+BuildOrderStrategyInfo = 
+{
+	praetorian_race =
+	{
+		Basic =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_builder" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "praetorian_mess", true },
+			{ "building", "praetorian_generator" }
+		},
+		
+		QuickStart =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_builder" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_builder" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "praetorian_mess", true },
+			{ "building", "praetorian_orks", true },
+			{ "building", "praetorian_generator" }
+		},
+		
+		LargeMap =
+		{
+			{ "flag_capture" }, { "flag_capture" },
+			{ "flag_capture" }, { "flag_capture" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_builder" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "squad", "praetorian_squad_praetorian_conscript" },
+			{ "post_builder" }, { "post_builder" },
+			{ "building", "praetorian_mess", true },
+			{ "building", "praetorian_orks", true },
+			{ "building", "praetorian_generator" }
+		}
+	}
+}
+
+AttackStrategyInfo = 
+{
+	praetorian_race =
+	{
+		MinArmyStrength = 750,
+	},
+}

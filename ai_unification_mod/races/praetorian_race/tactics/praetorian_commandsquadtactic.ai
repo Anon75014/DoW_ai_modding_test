@@ -1,0 +1,141 @@
+----------------------------------------
+-- File: 'Praetorian_CommandSquadTactic.ai'
+-- Edited by Thudmeizer 11.08.2023
+
+class 'Praetorian_CommandSquadTactic' (Praetorian_InfantryTactic)
+
+Praetorian_CommandSquad = {}
+
+function Praetorian_CommandSquadTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Praetorian Leader Tactic")
+end
+
+-- Assassinate win condition -- never attack
+function Praetorian_CommandSquadTactic:IsAttacker()
+
+	-- Never attack in assassinate game mode
+	if (cpu_manager.assassinate) then
+		return false
+	end
+	
+	-- Attack if we have more than one squad member
+	if (self.squad_ai:GetNumTroopers() > 1) then
+		return true
+	end
+	return self:IsCommanderAttacker()
+end
+
+-- Assassinate win condition -- never defend
+function Praetorian_CommandSquadTactic:IsDefender()
+
+	-- Never defend in assassinate game mode
+	if (cpu_manager.assassinate) then
+		return false
+	end
+	
+	-- Defend if we have more than one squad member
+	if (self.squad_ai:GetNumTroopers() > 1) then
+		return true
+	end
+	return self:IsCommanderDefender()
+end
+
+function Praetorian_CommandSquadTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Praetorian_CommandSquad.hailers_id == nil then
+		Praetorian_CommandSquad.hailers_id = cpu_manager.stats:GetAbilityID( "praetorian_laud_hailers" )
+	        Praetorian_CommandSquad.grenades_id = cpu_manager.stats:GetAbilityID( "praetorian_kasrkin_frag_grenades" )
+		Praetorian_CommandSquad.detection_id = cpu_manager.stats:GetAbilityID( "praetorian_detection_field" )
+		--Praetorian_CommandSquad.track_id = cpu_manager.stats:GetAbilityID( "praetorian_tracking_device" )
+	end
+end
+
+function Praetorian_CommandSquadTactic:DoAbilities()
+
+	Ability.DoAbilityPos( self.squad_ai, Praetorian_CommandSquad.grenades_id, Ability.Filters.CloseSquadEnemy, 1 )
+
+	-- Deploy tracking device to enemy infantry/vehicles -- SS 1.20+: Still crashes the game so disabled
+	--Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.track_id, Ability.Filters.CloseInfantryEnemy, 1 )
+
+	-- Check for infiltrated enemy
+	local oEnemy = Ability.Filters.CloseInfiltratedEnemy(self.squad_ai:GetPosition(), 120, 1)
+	if oEnemy ~= nil then
+		local vEnemyPos = Vector3f(oEnemy:GetPosition())
+		self.squad_ai:DoSpecialAbilityPos(Praetorian_CommandSquad.detection_id, vEnemyPos)
+	end
+
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.hailers_id, Ability.Filters.CloseInfantryEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.hailers_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.hailers_id, Ability.Filters.CloseMonsterEnemy, 2 )
+	else
+		Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.hailers_id, Ability.Filters.CloseInfantryEnemy, 4 )
+		Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.hailers_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, Praetorian_CommandSquad.hailers_id, Ability.Filters.CloseMonsterEnemy, 4 )
+	end
+end
+
+function Praetorian_CommandSquadTactic:Reinforce()
+
+	if not Tactic.Options.can_reinforce then
+		return
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+		-- Always try for the actual leader first
+		if self.squad_ai:CanReinforce( false, 0 ) then
+			self.squad_ai:DoReinforce( false, 0 )
+			return
+		end
+
+		-- Try for different types of squad members
+		local medicIndex = 0
+		local buglrIndex = 1
+		local majorIndex = 2
+		local comisIndex = 3
+	
+		-- Get current leader count
+		local numMedics = self.squad_ai:GetLeaderCount( medicIndex )
+		local numBuglrs = self.squad_ai:GetLeaderCount( buglrIndex )
+		local numMajors = self.squad_ai:GetLeaderCount( majorIndex )
+		local numCommis = self.squad_ai:GetLeaderCount( comisIndex )
+
+		-- Desired number of each leader type
+		local desiredMedics = 1
+		local desiredBuglrs = 1
+		local desiredMajors = 0
+		local desiredCommis = 0
+
+		-- If squad size research is done want a psyker
+		local squadMax = self.squad_ai:GetMaxLeaderCount()
+		if (squadMax >= 4) then
+			desiredMajors = 1
+			desiredCommis = 1
+		end
+		
+		-- Desired order of reinforcing
+		if (numMedics < desiredMedics) then
+			if self.squad_ai:CanReinforce( true, medicIndex ) then
+				self.squad_ai:DoReinforce( true, medicIndex )
+			end
+		elseif (numBuglrs < desiredBuglrs) then
+			if self.squad_ai:CanReinforce( true, buglrIndex ) then
+				self.squad_ai:DoReinforce( true, buglrIndex )
+			end
+
+		elseif (numCommis < desiredCommis) then
+			if self.squad_ai:CanReinforce( true, comisIndex ) then
+				self.squad_ai:DoReinforce( true, comisIndex )
+			end
+
+		elseif (numMajors < desiredMajors) then
+			if self.squad_ai:CanReinforce( true, majorIndex ) then
+				self.squad_ai:DoReinforce( true, majorIndex )
+			end
+		end
+	end
+end
+

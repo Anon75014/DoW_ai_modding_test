@@ -1,0 +1,50 @@
+----------------------------------------
+-- File: 'firstbornpraetortactic.ai'
+-- Edited by Thudmeizer		@ 28.08.2025
+
+class 'FirstbornPraetorTactic' (FirstbornVehicleTactic)
+
+FirstbornPraetor = {}
+
+function FirstbornPraetorTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Praetor Tactic")
+
+	-- Vehicle is a medium transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 4
+end
+
+function FirstbornPraetorTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (FirstbornPraetor.switch_id == nil) then
+		FirstbornPraetor.switch_id = cpu_manager.stats:GetAbilityID( "firstborn_praetor_aa_switch" )
+	end
+end
+
+function FirstbornPraetorTactic:DoAbilities()
+
+	-- Search a squad
+	local oFunctor = function(oSquad, iCount)
+	local oStats = oSquad:GetStats()
+	if (oStats == nil) then
+		return false
+	end
+	
+	local oClass = oStats:GetClass()
+	local is_aircraft = (oClass == UnitStatsAI.UC_AirLow or oClass == UnitStatsAI.UC_AirMed or oClass == UnitStatsAI.UC_AirHigh)
+		return is_aircraft
+	end
+
+	local oUnit = cpu_manager:GetClosestSquad(self.squad_ai:GetPosition(), 20, oFunctor, 1)
+	local do_it = self.squad_ai:IsInCombat() and self.squad_ai:IsAttacking() and oUnit ~= nil and oUnit:IsValid()
+
+	-- Use AA if the conditions are met
+	if do_it then
+		-- Enable AA ability
+		self.squad_ai:DoSpecialAbility(FirstbornPraetor.switch_id)
+		--print("Using AA timed ability for player "..tostring(cpu_manager.player_id).."")
+	end
+end
+

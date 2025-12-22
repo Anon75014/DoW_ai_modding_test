@@ -1,0 +1,347 @@
+------------------------------------------
+-- File: 'TSBlueScribetactic.ai'
+-- Edited by Thudmeizer @ 08.02.2024
+
+class 'TSBlueScribeTactic' (TSInfantryTactic)
+
+TSBlueScribe = {}
+
+function TSBlueScribeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("TS Blue Scribe Tactic")
+
+	self.boltLastUse = g_iGMT
+	self.fearLastUse = g_iGMT
+	self.intimidateLastUse = 0
+	self.pavoniLastUse = g_iGMT
+	self.warpLightningLastUse = 0
+end
+
+function TSBlueScribeTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+
+function TSBlueScribeTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function TSBlueScribeTactic:InitAbilities()
+
+	if (TSBlueScribe.befoul_id == nil) then
+	   	TSBlueScribe.befoul_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_befoul" )	
+	end
+
+	if (TSBlueScribe.bolt_id == nil) then
+		TSBlueScribe.bolt_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_bolt_of_change_icon_bearer" )
+	end
+
+	if (TSBlueScribe.unlife_id == nil) then
+	  	 TSBlueScribe.unlife_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_breath_of_unlife" )	
+	end
+
+	if (TSBlueScribe.discs_id == nil) then
+	   	TSBlueScribe.discs_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_discs_of_tzeentch" )	
+	end
+
+	if (TSBlueScribe.doombolt_id == nil) then
+	   	TSBlueScribe.doombolt_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_doombolt" )	
+	end
+
+	if (TSBlueScribe.dreadbolt_id == nil) then
+	   	TSBlueScribe.dreadbolt_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_entropy_bolt_dread" )	
+	end
+
+	if (TSBlueScribe.fear_id == nil) then
+		TSBlueScribe.fear_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_fear_roar" )	
+	end
+
+	if (TSBlueScribe.shield_id == nil) then
+	   	TSBlueScribe.shield_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_fire_shield_lvl1" )
+	end
+
+	if (TSBlueScribe.furious_id == nil) then
+	  	 TSBlueScribe.furious_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_furious_charge" )	
+	end
+
+	if (TSBlueScribe.gasps_id == nil) then
+	  	 TSBlueScribe.gasps_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_gasps_of_chaos" )	
+	end
+
+	if (TSBlueScribe.gift_id == nil) then
+		TSBlueScribe.gift_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_gift_of_tzeentch" )
+	end
+
+	if (TSBlueScribe.intimidate_id == nil) then
+		TSBlueScribe.intimidate_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_intimidate" )
+	end
+
+	if (TSBlueScribe.invisibility_id == nil) then
+	   	TSBlueScribe.invisibility_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_invisibility_lvl1" )
+	end
+
+	if (TSBlueScribe.drain_id == nil) then
+		TSBlueScribe.drain_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_life_drain" )	
+	end
+
+	if (TSBlueScribe.spirit_id == nil) then
+		TSBlueScribe.spirit_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_machine_spirit" )
+	end
+
+	if (TSBlueScribe.pavoni_id == nil) then
+	   	TSBlueScribe.pavoni_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_malficio_pavoni_lvl1" )
+	end
+
+	if (TSBlueScribe.phantasmal_killer_id == nil) then
+	   	TSBlueScribe.phantasmal_killer_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_phantasmal_killer" )	
+	end
+
+	if (TSBlueScribe.power_id == nil) then
+		TSBlueScribe.power_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_power_of_change" )
+	end
+
+	if (TSBlueScribe.lance_id == nil) then
+		TSBlueScribe.lance_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_psychic_lance" )
+	end
+
+	if (TSBlueScribe.rot_id == nil) then
+		TSBlueScribe.rot_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_rot" )
+	end
+
+	if (TSBlueScribe.sacrifice_id == nil) then
+		TSBlueScribe.sacrifice_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_sacrifice" )	
+	end
+
+	if (TSBlueScribe.lightning_id == nil) then
+		TSBlueScribe.lightning_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_warp_lightning" )	
+	end
+
+	if (TSBlueScribe.warp_storm_id == nil) then
+	   	TSBlueScribe.warp_storm_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_warp_storm" )	
+	end
+
+	if (TSBlueScribe.winds_id == nil) then
+	  	 TSBlueScribe.winds_id = cpu_manager.stats:GetAbilityID( "herald_thousand_sons_wind_of_chaos" )	
+	end
+end
+
+function TSBlueScribeTactic:DoAbilities()
+
+	-- Check if I can use Befoul on attacking enemy buildings
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.befoul_id)) then
+		-- Get closest enemy building in range
+		local iRange = self.squad_ai:GetAbilityRange(TSBlueScribe.befoul_id)
+		local oBuilding = cpu_manager.cpu_player:FindFirstBaseEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if (oBuilding ~= nil) then
+			if (oBuilding:IsAttacking()) then
+				-- Cast befoul on building
+				self.squad_ai:DoSpecialAbilityEntity(TSBlueScribe.befoul_id, oBuilding:GetEntity())
+			end
+		end
+	end
+
+	-- Check if I can use Bolt of Change on enemy vehicles or buildings
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.bolt_id)) then
+		if Ability.DoAbilityTarget(self.squad_ai, TSBlueScribe.bolt_id, Ability.Filters.CloseVehicleEnemy, 1)
+		or Ability.DoAbilityTargetEntity(self.squad_ai, TSBlueScribe.bolt_id, Ability.EntityFilters.CloseBaseEntityEnemy, 1) then
+			self.boltLastUse = g_iGMT
+		end
+	end
+
+	-- Cast Breath of Unlife on enemy Commanders
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.unlife_id)) then
+
+		-- Get closest squad in range
+		local iRange = self.squad_ai:GetAbilityRange(TSBlueScribe.unlife_id)
+		local oSquad = cpu_manager.cpu_player:FindFirstHurtSquad(self.squad_ai:GetPosition(), iRange)
+		if (oSquad ~= nil) then
+		
+			-- Get stats
+			local oStats = oSquad:GetStats()
+			if (oStats ~= nil) then
+			
+				-- Check unit type
+				local eClass = oStats:GetClass()
+				if (eClass == UnitStatsAI.UC_Commander) then
+					
+					-- Cast Heal on Commanders
+					self.squad_ai:DoSpecialAbilitySquad(TSBlueScribe.unlife_id, oSquad:GetSquad())
+				end
+			end	
+		end
+	end 
+
+	-- Check if I can use Discs of Tzeentch on enemy infantry or commanders
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.discs_id)) then
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.discs_id, Ability.Filters.CloseInfantryEnemy, 3 )
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.discs_id, Ability.Filters.CloseMonsterEnemy, 2 )
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.discs_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+
+	-- Check if I can use Doombolt on enemy squads
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.doombolt_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.doombolt_id, Ability.Filters.CloseSquadEnemy, 1 ) 
+	end
+
+	-- Check if I can use Dread Bolt on enemy vehicles
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.dreadbolt_id)) then
+		Ability.DoAbilityTarget(self.squad_ai, TSBlueScribe.dreadbolt_id, Ability.Filters.CloseVehicleEnemy, 1)
+	end
+
+	-- Check if I can use Fear Roar on enemy commanders or squads
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.fear_id)) then
+		if Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.fear_id, Ability.Filters.CloseCommanderEnemy, 1 )
+		or Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.fear_id, Ability.Filters.CloseSquadEnemy, 1 ) then
+			self.fearLastUse = g_iGMT
+		end
+	end
+
+	-- Check if I can use Fire Shield on self while in combat
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.shield_id)) then
+		Ability.DoAbility( self.squad_ai, TSBlueScribe.shield_id, Ability.Filters.IsInCombat )
+	end
+
+	-- Check if I can use Furious Charge while in combat
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.furious_id)) then
+		if (self.squad_ai:IsInCombat() and not self.squad_ai:IsCapturing() and not self.squad_ai:IsBroken()) then
+			self.squad_ai:DoSpecialAbility( TSBlueScribe.furious_id )
+		end
+	end
+
+	-- Check if I can use Gasps of Chaos against enemy infantry
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.gasps_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.gasps_id, Ability.Filters.CloseSquadEnemy, 1 )
+	end
+
+	-- Check if I can use Gifts of Tzeentch against both enemy squads and commanders
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.gift_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.gift_id, Ability.Filters.CloseSquadEnemy, 2 )
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.gift_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+
+	-- Check if I can use Intimidate against enemy infantry when in range
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.intimidate_id)) then
+		if Ability.DoAbilityArea( self.squad_ai, TSBlueScribe.intimidate_id, Ability.Filters.CloseInfantryEnemy, 14, 2) then
+			self.intimidateLastUse = g_iGMT
+		end
+	end
+
+	-- Check if I can use Invisibility when in combat
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.invisibility_id)) then
+		Ability.DoAbility( self.squad_ai, TSBlueScribe.invisibility_id, Ability.Filters.IsInCombat )
+	end
+
+	-- Cast Life Drain on enemy infantry
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.drain_id)) then
+		if self.squad_ai:WasRecentlyHurt() then
+			local health = self.squad_ai:GetHealthPercentage()
+			if health < 0.75 then
+				Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.drain_id, Ability.Filters.CloseInfantryEnemy, 3 )
+			elseif health < 0.4 then
+				Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.drain_id, Ability.Filters.CloseInfantryEnemy, 1 )
+			end
+		end
+	end
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Check if I can use Machine Spirit while stationary and recently hurt
+		if (self.squad_ai:CanDoAbility(TSBlueScribe.spirit_id)) then
+			if (self.squad_ai:WasRecentlyHurt() and not self.squad_ai:IsInStateMove() and not self.squad_ai:IsInStateAttackMove()) then
+				self.squad_ai:DoSpecialAbility(TSBlueScribe.spirit_id)
+			end
+		end
+
+		-- Check if I can use Power Of Change when hurt units are nearby
+		if (self.squad_ai:CanDoAbility(TSBlueScribe.power_id)) then
+			local oSquad = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 20, 1)
+			if oSquad ~= nil and oSquad:IsInCombat() then
+				self.squad_ai:DoSpecialAbility(TSBlueScribe.power_id)
+			end
+		end
+
+		-- Cast Warp Storm if enemies nearby, but NOT allies due to adverse impacts!
+		if (self.squad_ai:CanDoAbility(TSBlueScribe.warp_storm_id)) then
+			if (Ability.Filters.CloseEnemy(self.squad_ai:GetPosition(), 15, 2) ~= nil and Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), 20, 4) == nil) then
+				self.squad_ai:DoSpecialAbility(TSBlueScribe.warp_storm_id)
+			end
+		end
+	end
+
+	-- Check if I can use Malficio Pavoni against enemy squads or monsters
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.pavoni_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.pavoni_id, Ability.Filters.CloseInfantryEnemy, 8 )
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.pavoni_id, Ability.Filters.CloseMonsterEnemy, 3 )
+	end
+
+	-- Check if I can use Phantasmal Killer against enemy squads or commanders
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.phantasmal_killer_id)) then
+		local iRange = self.squad_ai:GetAbilityRange(TSBlueScribe.phantasmal_killer_id)
+		local oSquad = cpu_manager.cpu_player:FindFirstInfantryEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		local oSquadB = cpu_manager.cpu_player:FindFirstCommanderEnemy(self.squad_ai:GetPosition(), iRange, 1)
+		if ( oSquad ~= nil ) then
+			if ( oSquad:GetNumTroopers() > 4 ) then
+				self.squad_ai:DoSpecialAbilitySquad(TSBlueScribe.phantasmal_killer_id, oSquad:GetSquad())
+			end
+		elseif ( oSquadB ~= nil ) then
+			self.squad_ai:DoSpecialAbilitySquad(TSBlueScribe.phantasmal_killer_id, oSquadB:GetSquad())
+		end
+	end
+
+	-- Check if I can use Psychic Lance against enemy squads or monsters
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.lance_id)) then
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.lance_id, Ability.Filters.CloseSquadEnemy, 1 )
+		Ability.DoAbilityTarget( self.squad_ai, TSBlueScribe.lance_id, Ability.Filters.CloseMonsterEnemy, 1 )
+	end
+
+	-- Check if I can use Rot against enemy infantry, monsters, or commanders
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.rot_id)) then
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.rot_id, Ability.Filters.CloseInfantryEnemy, 6 )
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.rot_id, Ability.Filters.CloseMonsterEnemy, 3 )
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.rot_id, Ability.Filters.CloseCommanderEnemy, 1 )
+	end
+
+	-- Cast Sacrifice on nearby allied  monster squads with either a specific number of members or outside of combat
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.sacrifice_id)) then
+		local range = self.squad_ai:GetAbilityRange( TSBlueScribe.sacrifice_id ) - 2
+		local squad_filter = function( squad_ai )
+			local oStats = squad_ai:GetStats()
+			if oStats~= nil then
+				local troops = squad_ai:GetNumTroopers()
+				return oStats:GetClass() == UnitStatsAI.UC_MonsterMed and
+				((troops < 5 and troops > 1) or (troops > 4 and (squad_ai:IsBroken() or not squad_ai:IsInCombat())))
+			end
+		end
+   		local oSquad = cpu_manager:GetClosestSquad( self.squad_ai:GetPosition(), range, squad_filter )
+		if oSquad ~= nil then
+			self.squad_ai:DoSpecialAbilitySquad( TSBlueScribe.sacrifice_id, oSquad:GetSquad() )
+ 		end
+	end
+
+	-- Check if I can use Warp Lightning agsinst enemy squads or monsters
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.lightning_id)) then
+		if Ability.DoAbilityTarget(self.squad_ai, TSBlueScribe.lightning_id, Ability.Filters.CloseSquadEnemy, 1)
+		or Ability.DoAbilityTarget(self.squad_ai, TSBlueScribe.lightning_id, Ability.Filters.CloseMonsterEnemy, 1) then
+			self.warpLightningLastUse = 2*g_iGMT/3 
+		end
+	end
+
+	-- Cast Winds of Chaos against a medium enemy gathering
+	if (self.squad_ai:CanDoAbility(TSBlueScribe.winds_id)) then
+		Ability.DoAbilityPos( self.squad_ai, TSBlueScribe.winds_id, Ability.Filters.CloseEnemy, 10 )
+	end
+		
+	InfantryTactic.DoAbilities(self)
+end
+
+function TSBlueScribeTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end

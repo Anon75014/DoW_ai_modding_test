@@ -1,0 +1,972 @@
+----------------------------------------
+-- File: 'tsbuildbasestrategy.ai'
+-- Heavily edited by Gambit @ 27.08.2015
+-- Edited by Thudmeizer @ 27.10.2025
+
+class 'TSBuildBaseStrategy' (BuildBaseStrategy)
+
+function TSBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+
+	-- Add detector units (Best first, worst last)
+	self:AddDetectorUnit("thousand_sons_squad_lord")
+	self:AddDetectorUnit("thousand_sons_squad_chosen")
+	self:AddDetectorUnit("thousand_sons_squad_loc")
+	self:AddDetectorUnit("thousand_sons_squad_dreadnought_sorc")
+
+	-- AI warning removal, for the special Epic Spell researches of Ahriman
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ahriman_spell_02", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ahriman_spell_03", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("0titan_building_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("0titans_tier_ii_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_01", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_02", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_03", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_04", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_05", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_06", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_07", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_08", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_09", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_10", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_ls_ahriman_spell_11", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_hoverblade", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn01", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn02", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn03", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn04", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn05", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn06", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn07", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn08", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn09", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn10", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("thousand_sons_squad_armn11", CpuPrerequisites.BT_Squad)
+
+	-- Choose a spell path for the Sorcerer Lord, unless already chosen (Save, Wincondition, etc.)
+	if cpu_manager.cpu_player:IsResearchComplete("thousand_sons_path_illusionist_research") then
+		self.m_iSpellPathResearch = 1
+	elseif cpu_manager.cpu_player:IsResearchComplete("thousand_sons_path_summoner_research") then
+		self.m_iSpellPathResearch = 2
+	elseif cpu_manager.cpu_player:IsResearchComplete("thousand_sons_path_warlock_research") then
+		self.m_iSpellPathResearch = 3
+	else
+		self.m_iSpellPathResearch = math.random(1, 3)
+	end
+	LordSpellResearchSelector = math.random(1, 100)
+	AhrimanSpellArray = {"","",""}
+
+    	-- The switch for the Commander LS/KTGM WarGear Researches
+    	G_KTGM_Commander_WG_Choice_Made = false
+end
+
+function TSBuildBaseStrategy:ChooseBuildProgram()
+	-- NOTE: The actual strategy is chosen in tsstrategyinfo !! See there.
+	-- Return a valid strategy on AI re-initiation
+	if TSons_AI_StrategyChosen == 1 or TSons_AI_StrategyChosen == 2 then
+		return TSons_AI_StrategyChosen
+	else
+		print("Something is wrong with the AI Strategy calculation!")
+		TSons_AI_StrategyChosen = math.random(1,2)
+		return TSons_AI_StrategyChosen
+	end
+end
+
+function TSBuildBaseStrategy:EvaluateSquadCap()
+	
+	-- Check squad cap
+	if (self:CheckSquadCap(300, 0)) then
+		
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		
+		if (not cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_squad_cap_research" )) then
+			tBuildType.name = "thousand_sons_squad_cap_research"
+		elseif not cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_squad_cap_research_1" ) then
+			tBuildType.name = "thousand_sons_squad_cap_research_1"
+		else
+			return
+		end
+		
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+		
+	-- Check support cap
+	if (self:CheckSupportCap(150, 300)) then
+		
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Research
+		
+		if (not cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_support_cap_research" )) then
+			tBuildType.name = "thousand_sons_support_cap_research"
+		elseif (not cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_support_cap_research_1" )) then
+			tBuildType.name = "thousand_sons_support_cap_research_1"
+		elseif (not cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_support_cap_research_2" )) then
+			tBuildType.name = "thousand_sons_support_cap_research_2"
+		elseif (not cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_support_cap_research_3" )) then
+			tBuildType.name = "thousand_sons_support_cap_research_3"
+		else
+			return
+		end
+		
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic research of "..tBuildType.name)
+		end
+	end
+end
+
+function TSBuildBaseStrategy:GetBuildingName( sType )
+
+	-- Return race specific object string
+	if (sType == "HQ") then
+		return "thousand_sons_hq"
+		
+	elseif (sType == "Generator") then
+		return "thousand_sons_generator"
+		
+	elseif (sType == "BiggerGenerator") then
+		return "thousand_sons_thermo_generator"
+		
+	elseif (sType == "VehicleBuilding") then
+		return "thousand_sons_machine_altar"
+		
+	elseif (sType == "ListeningPost") then
+		return "thousand_sons_listening_post"
+		
+	elseif (sType == "Turret") then
+		return "thousand_sons_turret_bolter"
+		
+	elseif (sType == "Mine") then
+		return "thousand_sons_mine_field"
+	end
+	
+	return nil
+end
+
+function TSBuildBaseStrategy:GetAddonBuilding( sType )
+
+	if ( sType == "thousand_sons_turret_addon" or sType == "thousand_sons_turret_invisibility_addon" ) then
+		return "thousand_sons_turret_bolter"
+
+	elseif ( sType == "thousand_sons_turret_addon" or sType == "thousand_sons_turret_invisibility_addon" ) then
+		return "thousand_sons_turret_bolter_no_limit"
+
+	elseif (sType == "thousand_sons_list_post_addon_1") then
+		return "thousand_sons_listening_post"
+
+	elseif (sType == "thousand_sons_list_post_addon_2") then
+		return "thousand_sons_listening_post"
+
+	elseif (sType == "thousand_sons_hq_addon_1") then
+		return "thousand_sons_hq"
+
+	elseif (sType == "thousand_sons_hq_addon_2") then
+		return "thousand_sons_hq"
+	end
+	return nil
+end
+
+-- Arkhan 01.2006: Inherited method to check if an addon is a tier addon
+function TSBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+
+	-- Check addon name and target tier
+	if (sName == "thousand_sons_hq_addon_1" and iTargetTier == 2) then
+		return true
+	elseif (sName == "thousand_sons_hq_addon_2" and iTargetTier == 3) then
+		return true
+	end
+	return false
+end
+
+-- Arkhan 11.2005: Returns the squad cap and support cap of the given squad
+function TSBuildBaseStrategy:GetUnitStats(sSquadName)
+
+	if (sSquadName == "thousand_sons_squad_tzeentch_cultist") then
+		return 1, 0
+	elseif (sSquadName == "thousand_sons_squad_spawn_1" or sSquadName == "thousand_sons_squad_spawn_1_lvl2" or sSquadName == "thousand_sons_squad_spawn_2" or sSquadName == "thousand_sons_squad_spawn_2_lvl2" or sSquadName == "thousand_sons_squad_spawn_3" or sSquadName == "thousand_sons_squad_spawn_3_lvl2" or sSquadName == "thousand_sons_squad_spawn_4" or sSquadName == "thousand_sons_squad_spawn_4_lvl2" or sSquadName == "thousand_sons_squad_spawn_5" or sSquadName == "thousand_sons_squad_spawn_5_lvl2") then
+		return 1, 0
+	elseif (sSquadName == "thousand_sons_squad_screamer") then
+		return 2, 0
+	elseif (sSquadName == "thousand_sons_squad_horror") then
+		return 2, 0
+	elseif (sSquadName == "thousand_sons_squad_flamers_of_tzeentch") then
+		return 2, 0
+	elseif (sSquadName == "thousand_sons_squad_spawn_1_lvl3" or sSquadName == "thousand_sons_squad_spawn_2_lvl3" or sSquadName == "thousand_sons_squad_spawn_3_lvl3" or sSquadName == "thousand_sons_squad_spawn_4_lvl3" or sSquadName == "thousand_sons_squad_spawn_5_lvl3") then
+		return 2, 0
+	elseif (sSquadName == "thousand_sons_squad_burning_chariot") then
+		return 2, 0
+	elseif (sSquadName == "thousand_sons_squad_daemon_prince_tzeentch") then
+		return 2, 0
+	elseif (sSquadName == "thousand_sons_squad_marine") then
+		return 3, 0
+	elseif (sSquadName == "thousand_sons_squad_marine_favoured") then
+		return 3, 0
+	elseif (sSquadName == "thousand_sons_squad_chosen") then
+		return 3, 0
+	elseif (sSquadName == "thousand_sons_squad_terminator") then
+		return 4, 0
+	elseif (sSquadName == "thousand_sons_squad_terminator_veteran") then
+		return 4, 0
+	elseif (sSquadName == "thousand_sons_squad_mutated_marine") then
+		return 4, 0
+	elseif (sSquadName == "thousand_sons_squad_loc") then
+		return 5, 0
+	elseif (sSquadName == "thousand_sons_squad_rhino") then
+		return 0, 1
+	elseif (sSquadName == "thousand_sons_squad_disc_sorcerer") then
+		return 0, 2
+	elseif (sSquadName == "thousand_sons_squad_dreadnought") then
+		return 0, 3
+	elseif (sSquadName == "thousand_sons_squad_dreadnought_sorc") then
+		return 0, 3
+	elseif (sSquadName == "thousand_sons_squad_hell_blade") then
+		return 0, 3
+	elseif (sSquadName == "thousand_sons_squad_sekhetar_robots") then
+		return 0, 4
+	elseif (sSquadName == "thousand_sons_squad_deceiver") then
+		return 0, 4
+	elseif (sSquadName == "thousand_sons_squad_whirlwind") then
+		return 0, 4
+	elseif (sSquadName == "thousand_sons_squad_rubric_dreadnought") then
+		return 0, 5
+	elseif (sSquadName == "thousand_sons_squad_predator") then
+		return 0, 5
+	elseif (sSquadName == "thousand_sons_squad_grav_raider") then
+		return 0, 5
+	elseif (sSquadName == "thousand_sons_squad_hoverblade") then
+		return 0, 8
+	elseif (sSquadName == "thousand_sons_squad_silver_tower") then
+		return 0, 10
+	end
+	return 0, 0
+end
+
+function TSBuildBaseStrategy:UpdateTierLevel()
+
+	-- Reset tier level
+	self.tierLevel = 1
+	
+	-- Prepare
+	local iHQAddon1ID = cpu_manager.stats:GetAddOnID("thousand_sons_hq_addon_1")
+	local iHQAddon2ID = cpu_manager.stats:GetAddOnID("thousand_sons_hq_addon_2")
+	local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+	
+	-- Check HQ's for addons
+	for oBase in oStats:GetBases() do
+
+		-- Check for valid building
+		if (oBase:IsValid() and not oBase:IsListeningPost()) then
+
+		-- Check for HQ addon 2
+		if (oBase:HasAddOn(iHQAddon2ID)) then
+		
+			-- We still have the proper add-on
+			if (cpu_manager.cpu_player:IsResearchComplete("thousand_sons_tier4")) then
+				self.tierLevel = 4
+				return
+			else
+				self.tierLevel = 3
+				return
+			end
+		
+		-- Check for HQ addon 1 
+		elseif (oBase:HasAddOn(iHQAddon1ID)) then
+			self.tierLevel = 2
+		end
+	end
+    end
+end
+
+function TSBuildBaseStrategy:BuildFlexible()
+
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	self:BuildFirstBuilder("thousand_sons_squad_thrall")
+
+	-- Sorcerer Lord's Spells
+	-- Dynamic research item syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+	if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+		if (self.m_iSpellPathResearch == 1) then
+		--Illusionist
+			self:DynamicResearch("thousand_sons_path_illusionist_research", 1, 0, 0, 0, 0, nil, 0)
+			self.m_iGiftsResearch = 1
+		elseif (self.m_iSpellPathResearch == 2) then
+		--Summoner
+			self:DynamicResearch("thousand_sons_path_summoner_research", 1, 0, 0, 0, 0, nil, 0)
+			self.m_iGiftsResearch = 2
+		elseif (self.m_iSpellPathResearch == 3) then
+		--Warlock
+			self:DynamicResearch("thousand_sons_path_warlock_research", 1, 0, 0, 0, 0, nil, 0)
+			self.m_iGiftsResearch = 3
+		end
+	end
+
+	if ( cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_path_illusionist_research" ) ) then
+	--Illusionist
+		if ( LordSpellResearchSelector <= 25 ) then
+		--"cloner"
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_clone_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_invisibility_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_clone_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2a_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_clone_lvl3_research", 3, 50, 50, 0, 0, nil, 0)
+			end
+
+		elseif ( LordSpellResearchSelector >= 26 and LordSpellResearchSelector <= 50 ) then
+		--"cloaker"
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_invisibility_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_confusion_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_invisibility_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2a_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_invisibility_lvl3_research", 3, 50, 50, 0, 0, nil, 0)
+
+			end
+
+		elseif ( LordSpellResearchSelector >= 51 and LordSpellResearchSelector <= 75 ) then
+		--"confusionist"
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_confusion_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_clone_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_confusion_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_clone_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2a_research", 2, 50, 50, 0, 0, nil, 0)
+			end
+
+		elseif ( LordSpellResearchSelector >= 76 and LordSpellResearchSelector <= 100 ) then
+		--"mixed"
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_clone_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_invisibility_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_confusion_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2a_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_clone_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			end
+
+		end
+	elseif ( cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_path_summoner_research" ) ) then
+	--Summoner
+		if ( LordSpellResearchSelector <= 25 ) then
+		--skull/spawn
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2b_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_seeing_skull_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_seeing_skull_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			end
+		elseif ( LordSpellResearchSelector >= 26 and LordSpellResearchSelector <= 50 ) then
+		--spawner
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2b_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_seeing_skull_lvl1_research", 1, 50, 50, 0, 0, nil, 0)			
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl3_research", 3, 50, 50, 0, 0, nil, 0)
+			end
+		elseif ( LordSpellResearchSelector >= 51 and LordSpellResearchSelector <= 75 ) then
+		--spiteful
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2b_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_spiteful_tutelary_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_spiteful_tutelary_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_spiteful_tutelary_lvl3_research", 3, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			end
+		elseif ( LordSpellResearchSelector >= 76 and LordSpellResearchSelector <= 100 ) then
+		--skull/spite/spawn
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_summon_spawn_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_seeing_skull_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_seeing_skull_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_spiteful_tutelary_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_spiteful_tutelary_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			end
+		end
+	elseif ( cpu_manager.cpu_player:IsResearchComplete( "thousand_sons_path_warlock_research" ) ) then
+	--Warlock
+		if ( LordSpellResearchSelector <= 25 ) then
+		--shield
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_malficio_pavoni_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_fire_shield_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2c_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_fire_shield_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_fire_shield_lvl3_research", 3, 50, 50, 0, 0, nil, 0)
+			end
+		elseif ( LordSpellResearchSelector >= 26 and LordSpellResearchSelector <= 50 ) then
+		--tainted bolt
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_fire_shield_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_tainting_bolt_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_malficio_pavoni_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_tainting_bolt_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_tainting_bolt_lvl3_research", 3, 50, 50, 0, 0, nil, 0)
+			end
+		elseif ( LordSpellResearchSelector >= 51 and LordSpellResearchSelector <= 75 ) then
+		--malficio
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_tainting_bolt_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_malficio_pavoni_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_fire_shield_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2c_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_malficio_pavoni_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			end
+		elseif ( LordSpellResearchSelector >= 76 and LordSpellResearchSelector <= 100 ) then
+		--"warlock mix"
+			if (self:CountSquads("thousand_sons_squad_lord") >= 1) then
+			self:DynamicResearch("thousand_sons_spell_fire_shield_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_tainting_bolt_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_malficio_pavoni_lvl1_research", 1, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_doombolt_lord_lvl2c_research", 2, 50, 50, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_spell_tainting_bolt_lvl2_research", 2, 50, 50, 0, 0, nil, 0)
+			end
+		end
+	end
+
+--Ahriman's spells
+--[[				NEW SYSTEM, research-based.
+					AHRIMAN SPELL RESEARCH LIST
+		SPELL NAME				RESEARCH NAME
+		Discs of Tzeentch		thousand_sons_ahriman_spell_01
+		Meteor Swarm			thousand_sons_ahriman_spell_02
+		Nightmare Prophecy		thousand_sons_ahriman_spell_03
+		Phantasmal Killer		thousand_sons_ahriman_spell_04
+		Blur Reality			thousand_sons_ahriman_spell_05
+		Mass Slow				thousand_sons_ahriman_spell_06
+		Time Dilation			thousand_sons_ahriman_spell_07
+		Summon Damned Marines	thousand_sons_ahriman_spell_08
+		Tzeentch's Boon			thousand_sons_ahriman_spell_09
+		Tzeentch's Curse		thousand_sons_ahriman_spell_10
+		Wind of Chaos			thousand_sons_ahriman_spell_11
+]]
+	-- Pre-determine the spell-list
+	if self:CountSquads("thousand_sons_squad_ahriman") > 0 then
+		-- Do it only once for every new Ahriman
+		if AhrimanSpellArray[1] == "" then
+			local spellCounter = 1
+			-- First, see if we can get an Epic spell. Based on resources availability
+			if resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 1200 then
+				if math.random(1, 2) == 1 then AhrimanSpellArray[1] = "thousand_sons_ahriman_spell_02"
+				else AhrimanSpellArray[1] = "thousand_sons_ahriman_spell_03"
+				end
+				spellCounter = 2
+			end
+			-- Second, see if we can get a Ritual. Based on chance (33%)
+			if  math.random(1, 3) == 1 then
+				local ritualType = math.random(1, 3)
+				if ritualType == 1 then
+					AhrimanSpellArray[spellCounter] = "thousand_sons_ahriman_spell_05"
+				elseif ritualType == 2 then
+					AhrimanSpellArray[spellCounter] = "thousand_sons_ahriman_spell_06"
+				else
+					AhrimanSpellArray[spellCounter] = "thousand_sons_ahriman_spell_07"
+				end
+				spellCounter = spellCounter + 1
+			end
+			-- Third, fill with spells the remaining slots
+			local slots = {0,0,0}
+			for i=spellCounter, 3 do
+				local done = false
+				repeat
+					local slot = math.random(1, 6)
+					if slot == 1 then
+						AhrimanSpellArray[i] = "thousand_sons_ahriman_spell_01"
+					elseif slot == 2 then
+						AhrimanSpellArray[i] = "thousand_sons_ahriman_spell_04"
+					elseif slot == 3 then
+						AhrimanSpellArray[i] = "thousand_sons_ahriman_spell_08"
+					elseif slot == 4 then
+						AhrimanSpellArray[i] = "thousand_sons_ahriman_spell_09"
+					elseif slot == 5 then
+						AhrimanSpellArray[i] = "thousand_sons_ahriman_spell_10"
+					else
+						AhrimanSpellArray[i] = "thousand_sons_ahriman_spell_11"
+					end
+					if i == 2 then
+						if AhrimanSpellArray[2] ~= AhrimanSpellArray[1] then
+							done = true
+						end
+					elseif i == 3 then
+						if AhrimanSpellArray[3] ~= AhrimanSpellArray[2] and AhrimanSpellArray[3] ~= AhrimanSpellArray[1] then
+							done = true
+						end
+					else
+						done = true
+					end
+				until done
+			end
+		end
+	else
+		-- First entry has also the role of the one-time calculation "switch"
+		AhrimanSpellArray[1] = ""
+	end
+	-- Done. Now, perform the 3 researches
+	if self:CountSquads("thousand_sons_squad_ahriman") > 0 then
+		self:DynamicResearch(AhrimanSpellArray[1], 1, 0, 0, 0, 0, nil, 0)
+		self:DynamicResearch(AhrimanSpellArray[2], 1, 0, 0, 0, 0, nil, 0)
+		self:DynamicResearch(AhrimanSpellArray[3], 1, 0, 0, 0, 0, nil, 0)
+	end
+
+	-- Chaos Last Standing Hero Wargear
+	local iHeroLSCommanderSquads = self:CountSquads("thousand_sons_squad_ahriman_ktgm")
+	if iHeroLSCommanderSquads > 0 then
+		self:DynamicResearch("thousand_sons_ls_ahriman_lord_health_research_1", 1, 50, 50, 0, 0, nil, 0)
+		self:DynamicResearch("thousand_sons_ls_ahriman_lord_health_research_2", 1, 75, 75, 0, 0, nil, 0)
+
+		if not G_KTGM_Commander_WG_Choice_Made then
+			 -- WARNING: Below, ALWAYS insert numbers <= of the total in each table!
+           		 -- I used the actual total of each table, so that ALL will be randomly available
+            		i_WG_Selection_number1 = 11	-- The number of researches to randomize, from the 1st table
+            		i_WG_Selection_number2 = 9	-- The number of researches to randomize, from the 2nd table
+
+            		i_WG_Selections1 = {
+                	{"thousand_sons_ls_ahriman_damage_recharge", 1, 150, 150, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_health_recharge", 1, 150, 150, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_inferno_bolts_1_research", 1, 150, 150, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_inferno_bolts_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_massive_health", 1, 150, 150, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_morale", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_resist_damage", 1, 150, 150, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_teleport", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_tzeentch_silence_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_02", 1, 150, 150, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_03", 1, 150, 150, 0, 0, nil, 0}}
+
+            		i_WG_Selections2 = {
+                	{"thousand_sons_ls_ahriman_spell_01", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_04", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_05", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_06", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_07", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_08", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_09", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_10", 1, 125, 125, 0, 0, nil, 0},
+                	{"thousand_sons_ls_ahriman_spell_11", 1, 125, 125, 0, 0, nil, 0}}
+
+            		-- The switch ensures we make the choice only ONCE
+            		G_KTGM_Commander_WG_Choice_Made = true
+            		i_WG_Rdm1 = {}          -- The random Selections from the 1st table
+            		i_WG_Rdm2 = {}          -- The random Selections from the 2nd table
+
+            		-- Populate the two random tables with the number of researches we need for each
+            		for i = 1, i_WG_Selection_number1 do
+                		local selection = math.random(1, table.getn(i_WG_Selections1))
+                		table.insert(i_WG_Rdm1, i_WG_Selections1[selection])
+                		table.remove(i_WG_Selections1, selection)
+            		end
+
+            		for i = 1, i_WG_Selection_number2 do
+                		local selection = math.random(1, table.getn(i_WG_Selections2))
+                		table.insert(i_WG_Rdm2, i_WG_Selections2[selection])
+                		table.remove(i_WG_Selections2, selection)
+            		end
+		end
+
+       		-- We are done. Perform the Researches
+        	for i = 1, table.getn(i_WG_Rdm1) do
+            		self:DynamicResearch(i_WG_Rdm1[i][1], 0, i_WG_Rdm1[i][3], i_WG_Rdm1[i][4], 0, 0, nil, 0)
+        	end
+
+    		for i = 1, table.getn(i_WG_Rdm2) do
+       			self:DynamicResearch(i_WG_Rdm2[i][1], 0, i_WG_Rdm2[i][3], i_WG_Rdm2[i][4], 0, 0, nil, 0)
+       		end
+	end
+
+	-- Dynamic research
+	-- Item-Syntax: ResearchName, MinTier, RequisitionCost, PowerCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+	local iArmyStrength = cpu_manager:GetArmyStrength()
+	local iCommanderSquads = self:CountSquads("thousand_sons_squad_lord") + self:CountSquads("thousand_sons_squad_ahriman")
+	local iInfantrySquads = self:CountSquads("thousand_sons_squad_marine") + self:CountSquads("thousand_sons_squad_chosen") + self:CountSquads("thousand_sons_squad_icon_bearer") + self:CountSquads("thousand_sons_squad_terminator") + self:CountSquads("thousand_sons_squad_terminator_veteran")
+	local iDaemonSquads = self:CountSquads("thousand_sons_squad_screamer") + self:CountSquads("thousand_sons_squad_horror") + self:CountSquads("thousand_sons_squad_flamers_of_tzeentch")
+	local iVehicleSquads = self:CountSquads("thousand_sons_squad_dreadnought") + self:CountSquads("thousand_sons_squad_dreadnought_sorc") + self:CountSquads("thousand_sons_squad_predator") + self:CountSquads("thousand_sons_squad_whirlwind")
+	
+	-- Compute tier 1 researches
+	if (self.tierLevel >= 1) then
+		
+		-- Compute infantry researches
+		if (iInfantrySquads >= 3) then
+			self:DynamicResearch("thousand_sons_rubric_health_research", 1, 50, 50, 0, 0, nil, 0)
+		end
+		
+		-- Compute secondary researches
+		if (iArmyStrength >= 750) then
+		
+			-- Compute infantry researches
+			if (iInfantrySquads >= 3) then
+				self:DynamicResearch("thousand_sons_officer_health_research", 1, 25, 25, 0, 0, nil, 0)
+			end
+		end
+		
+		-- Compute bonus researches
+		if (iArmyStrength >= 1250) then
+	
+			-- Compute daemon researches
+			if (iDaemonSquads >= 2) then
+				self:DynamicResearch("thousand_sons_daemon_health_research", 1, 50, 100, 0, 0, nil, 0)
+			end
+		end
+	end
+	
+	-- Compute tier 2 researches
+	if (self.tierLevel >= 2) then
+	
+		-- Compute commander researches
+		if (iCommanderSquads >= 1) then
+			self:DynamicResearch("thousand_sons_lord_health_research_1", 2, 100, 25, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_tzeentch_minor_psychic_research", 2, 50, 75, 0, 0, nil, 0)
+		end
+	
+		-- Compute infantry researches
+		if (iInfantrySquads >= 3) then
+			self:DynamicResearch("thousand_sons_rubric_strength_research", 2, 100, 125, 0, 0, nil, 0)
+		end
+
+		-- Compute daemon researches
+		if (iDaemonSquads >= 2) then
+			self:DynamicResearch("thousand_sons_daemon_strength_research", 2, 100, 125, 0, 0, nil, 0)
+		end
+		
+		-- Compute bonus researches
+		if (iArmyStrength >= 1750) then
+		
+			-- Compute infantry researches
+			if (iInfantrySquads >= 3) then
+				self:DynamicResearch("thousand_sons_officer_strength_research", 2, 100, 125, 0, 0, nil, 0)
+				self:DynamicResearch("thousand_sons_tzeentch_twisted_path_research", 2, 50, 75, 0, 0, nil, 0)
+				self:DynamicResearch("thousand_sons_warptime_research", 2, 50, 75, 0, 0, nil, 0)
+			end
+
+			-- Compute chosen researches
+			if (self:CountSquads("thousand_sons_squad_chosen") >= 1) then
+				self:DynamicResearch("thousand_sons_warding_raptora_research", 2, 55, 70, 0, 0, nil, 0)
+				self:DynamicResearch("thousand_sons_telekinesis_research", 2, 55, 85, 0, 0, nil, 0)
+			end
+
+			-- Compute commander researches
+			if (iCommanderSquads >= 1) then
+				self:DynamicResearch("thousand_sons_tzeentch_silence_research", 2, 50, 75, 0, 0, nil, 0)
+				
+			end
+			
+			-- Compute screamer researches
+			if (self:CountSquads("thousand_sons_squad_screamer") >= 1) then
+				self:DynamicResearch("thousand_sons_tzeentch_furious_charge_research", 2, 50, 75, 0, 0, nil, 0)
+			end
+
+			-- Compute rhino researches
+			if (self:CountSquads("thousand_sons_squad_rhino") >= 1) then
+				self:DynamicResearch("thousand_sons_smoke_launcher_research", 2, 75, 25, 0, 0, nil, 0)
+			end
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("thousand_sons_turret_bolter_no_limit", 2, 2, 200, 100, 0, 0)
+	end
+
+	-- Compute tier 3 researches
+	if (self.tierLevel >= 3) then
+	
+		-- Compute commander researches
+		if (iCommanderSquads >= 1) then
+			self:DynamicResearch("thousand_sons_lord_health_research_2", 3, 100, 25, 0, 0, nil, 0)
+		end
+
+		-- Compute infantry researches
+		if (iInfantrySquads >= 3) then
+			self:DynamicResearch("thousand_sons_officer_special_research", 3, 100, 125, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_thrall_upgrade_research", 3, 160, 135, 0, 0, nil, 0)
+		end
+
+		-- Compute special infantry and commander researches
+		if (iInfantrySquads >= 3 or iCommanderSquads >= 1) then
+			self:DynamicResearch("thousand_sons_inferno_bolts_research", 3, 80, 150, 0, 0, nil, 0)
+		end
+
+		-- Compute terminator researches
+		if (self:CountSquads("thousand_sons_squad_terminator") + self:CountSquads("thousand_sons_squad_terminator_veteran") >= 1) then
+			self:DynamicResearch("thousand_sons_personalteleporters_research", 3, 75, 125, 0, 0, nil, 0)
+		end
+
+		-- Compute daemon researches
+		if (iDaemonSquads >= 2) then
+			self:DynamicResearch("thousand_sons_daemon_special_research", 3, 124, 175, 0, 0, nil, 0)
+		end
+
+		-- Compute mutated researches
+		if (self:CountSquads("thousand_sons_squad_mutated_marine") >= 1) or (self:CountSquads("thousand_sons_squad_mutated_sorcerer") >= 1) then
+			self:DynamicResearch("thousand_sons_mutated_squad_health_research", 3, 60, 80, 0, 0, nil, 0)
+			self:DynamicResearch("thousand_sons_mutated_squad_special_research", 3, 75, 100, 0, 0, nil, 0)
+		end
+		
+		-- Compute secondary researches
+		if (iArmyStrength >= 1750) then
+		
+			-- Compute vehicle researches
+			if (iVehicleSquads >= 2) then
+				self:DynamicResearch("thousand_sons_coruscating_flame_research", 3, 150, 100, 0, 0, nil, 0)
+				self:DynamicResearch("thousand_sons_mutated_hulls_research", 3, 150, 80, 0, 0, nil, 0)
+			end
+		end
+		
+		-- Compute bonus researches
+		if (iArmyStrength >= 2250) then
+		
+			-- Compute infantry researches
+			if (iInfantrySquads >= 3) then
+				self:DynamicResearch("thousand_sons_rubric_special_research", 3, 125, 175, 0, 0, nil, 0)
+			end
+		end
+
+		-- Force build additional generators in late game if we can with enough requisition and when low on power
+                local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+                local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+                if iReq > 400 and iReq/iPow > 1.6 then
+
+                	-- Check if a plan exists
+                	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("Generator"))
+                    	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+                       		return
+                    	end
+
+             		-- Check if any generators are in production
+                    	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+                        	-- Check building ID
+                        	if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+                            		return
+                        	end
+                    	end
+
+             		-- Build a Generator
+                    	local tBuildType = CpuBuildType()
+                    	tBuildType.btype = CpuPrerequisites.BT_Building
+                    	tBuildType.name = self:GetBuildingName("Generator")
+                    	if (self:TryBuild( tBuildType )) then
+               			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+			end
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("thousand_sons_turret_bolter_no_limit", 4, 3, 300, 200, 0, 0)
+	end
+
+	-- Build more Addons
+	if (self.tierLevel >= 4) then
+
+		-- Compute HQ Tier2 and Tier3 Addons for future HQs
+       		if self:GetBuildingCountByName(self:GetBuildingName("HQ")) > 1 then
+			self:DynamicAddon("thousand_sons_hq_addon_1", 100, 4, 500, 500, 0, 0, nil, nil, false)
+			self:DynamicAddon("thousand_sons_hq_addon_2", 50, 4, 1000, 1000, 0, 0, nil, nil, false)
+		end
+
+		-- Try to build no-limit defensive turrets
+		self:DynamicBuild("thousand_sons_turret_bolter_no_limit", 10, 4, 400, 300, 0, 0)
+	end
+
+	-- Restrict dynamic builds to hard difficulty or higher
+	if (CpuManager.AISettings.bMultiBuildings) then
+	
+		-- Dynamic buildings
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinPower, MinSquadCap, MinSupportCap
+		self:DynamicBuild("thousand_sons_hq", 2, 3, 900, 0, 0, 0)
+		self:DynamicBuild("thousand_sons_hq", 3, 4, 1500, 0, 0, 0)
+		self:DynamicBuild("thousand_sons_tomb", 2, 3, 600, 0, 0, 0)
+		self:DynamicBuild("thousand_sons_tomb", 3, 4, 9000, 0, 0, 0)
+		self:DynamicBuild("thousand_sons_machine_altar", 2, 3, 600, 400, 0, 0)
+		self:DynamicBuild("thousand_sons_machine_altar", 3, 4, 1200, 600, 0, 0)
+		self:DynamicBuild("thousand_sons_gate", 2, 3, 700, 100, 0, 0)
+		self:DynamicBuild("thousand_sons_gate", 3, 4, 1400, 200, 0, 0)
+		self:DynamicBuild("thousand_sons_altar_of_tzeentch", 1, 4, 200, 250, 0, 0)
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function TSBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function TSBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+-- Arkhan 01.2006: Method to check if force tech should be computed
+function TSBuildBaseStrategy:ForceTech()
+
+	-- Check time
+	if (g_iGMT < 60 * CpuManager.ForceTech.StartTier1) then
+		return false
+	end
+	
+	-- Check ressources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+
+	-- Check tier
+	local iTierLevel = self:GetTierLevel()
+	if (iTierLevel == 1) then
+
+		-- Check resources
+		if (iRequisition > 600 and iPower > 200) then
+			return false
+		end
+		return not self.m_bHQAddon1
+
+	elseif (iTierLevel == 2) then
+
+		-- Check build channel for machine altar
+		iID = cpu_manager.stats:GetBuildingID("thousand_sons_machine_altar")
+		local bHasVehicleBuilding = false
+		for oBuildChannel in build_manager:GetBuildChannelAIs() do
+		
+			-- Check building ID
+			if (oBuildChannel:GetBlueprintID() == iID) then
+				bHasVehicleBuilding = true
+				break
+			end
+		end
+		if (not bHasVehicleBuilding) then
+			return true
+		end
+		
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier2 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+		
+	elseif (iTierLevel == 3) then	
+
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 600 or iPower < 600)) then
+			return true
+		end
+	end
+	return false
+end
+
+-- Arkhan Nov.2006: Return placement type for buildings
+function TSBuildBaseStrategy:GetPlacementType(iBuildingID)
+	-- Check building
+	if (cpu_manager:IsHQ(iBuildingID)) then
+		local count = self:GetBuildingCountByName(self:GetBuildingName("HQ"), false)
+		local friend = cpu_manager:FindClosestFriendPlayer()
+		if friend == nil then
+		-- Lone Player
+			if count == 0 and not cpu_manager:HQThreat() then
+				return "HQ"
+			else
+				return "Safeplace"
+			end
+		else
+		-- Has allies
+			if count > 0 or cpu_manager:HQThreat() then
+ 				return "HQ"
+			else
+				return "Safeplace"
+			end
+		end
+	elseif (iBuildingID == cpu_manager.stats:GetBuildingID("thousand_sons_tomb") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("thousand_sons_machine_altar") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("thousand_sons_gate")) then
+		return "Military"
+	elseif (cpu_manager:IsTurret(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("thousand_sons_turret_bolter_no_limit")) then
+		return "Front2"
+	elseif (cpu_manager:IsMine(iBuildingID)) then
+		return "Mine"
+	elseif (cpu_manager:IsGenerator(iBuildingID) or
+			iBuildingID == cpu_manager.stats:GetBuildingID("thousand_sons_library") or
+			iBuildingID == cpu_manager.stats:GetBuildingID("thousand_sons_altar_of_tzeentch")) then
+		return "BaseBack"
+	end
+	return "Basic"
+end
+
+-- Arkhan 03.2006: Inherited method to modify squad demand
+function TSBuildBaseStrategy:ModifySquadDemand(iUnitID)
+
+	-- No more icon bearers then squads 
+	if (iUnitID == cpu_manager.stats:GetSquadID("thousand_sons_squad_icon_bearer")) then
+		
+		-- Check number of attachable squads 
+		local icon_attach = function ( squad_ai )
+			return (squad_ai:GetTactic():GetUnitStrength() >= 250 and squad_ai:CanReceiveAttachment())
+		end
+		local num_attach = self:CountSquads("thousand_sons_squad_marine", icon_attach) +
+				   self:CountSquads("thousand_sons_squad_terminator", icon_attach) +
+				   self:CountSquads("thousand_sons_squad_terminator_veteran", icon_attach) +
+				   self:CountSquads("thousand_sons_squad_chosen", icon_attach)
+
+ 		-- Check bearer count
+		local num_icon = self:CountSquads("thousand_sons_squad_icon_bearer")
+		if (num_icon >= num_attach) then
+			return 0
+		end	
+	end
+
+	-- Only build TS rhinos if we've full support cap
+	if (iUnitID == cpu_manager.stats:GetSquadID("thousand_sons_squad_rhino")) then
+		
+		-- Check army strength
+		if (cpu_manager:GetArmyStrength() < 4000) then
+			return 0
+		end
+	end
+	return BuildBaseStrategy.ModifySquadDemand(self, iUnitID)
+end
+
+-- Arkhan 11.2006: Virtual method for checking out relic units
+function TSBuildBaseStrategy:RelicRequired(sName)
+
+	-- Check name
+	if (sName == "thousand_sons_squad_loc")
+	or (sName == "thousand_sons_squad_grav_raider")
+	or (sName == "thousand_sons_squad_hoverblade")
+	or (sName == "thousand_sons_squad_daemon_prince_tzeentch")
+	or (sName == "thousand_sons_lord_of_change_research") 
+	or (sName == "thousand_sons_squad_silver_tower") then
+		return true
+	end
+	return false
+end

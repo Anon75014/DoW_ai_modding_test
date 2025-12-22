@@ -1,0 +1,38 @@
+----------------------------------------
+-- File: 'slaaneshdaemonprincetactic.ai'
+-- Edited by Thudmeizer @ 21.07.2018
+
+class 'SlaaneshDaemonPrinceTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshDaemonPrince = {}
+
+function SlaaneshDaemonPrinceTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Daemon Prince Tactic")
+end
+
+function SlaaneshDaemonPrinceTactic:AlwaysAttack()
+	return true
+end
+
+function SlaaneshDaemonPrinceTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshDaemonPrince.roar_id == nil) then
+		SlaaneshDaemonPrince.roar_id = cpu_manager.stats:GetAbilityID( "emperors_children_fear_roar" )	
+	end
+
+	if (SlaaneshDaemonPrince.winds_id == nil) then
+		SlaaneshDaemonPrince.winds_id = cpu_manager.stats:GetAbilityID( "emperors_children_winds_of_slaanesh" )	
+	end
+end
+
+function SlaaneshDaemonPrinceTactic:DoAbilities()
+
+	-- Use Fear Roar
+	Ability.DoAbilityArea(self.squad_ai, SlaaneshDaemonPrince.roar_id, Ability.Filters.CloseSquadEnemy, 10, 4)
+
+	-- Use Winds of Slaanesh
+	Ability.DoAbilityPos(self.squad_ai, SlaaneshDaemonPrince.winds_id, Ability.Filters.CloseInfantryEnemy, 6)
+	Ability.DoAbilityPos(self.squad_ai, SlaaneshDaemonPrince.winds_id, Ability.Filters.CloseCommanderEnemy, 1)
+end

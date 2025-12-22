@@ -1,0 +1,99 @@
+----------------------------------------
+-- File: 'firstbornharazimtactic.ai'
+-- Edited by Thudmeizer @ 24.01.2023
+
+class 'FirstbornHarazimTactic' (FirstbornInfantryTactic)
+
+FirstbornHarazim = {}
+
+function FirstbornHarazimTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Harazim Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function FirstbornHarazimTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FirstbornHarazimTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function FirstbornHarazimTactic:InitAbilities()
+
+	-- Init ability ID's
+--[[	if (FirstbornHarazim.banish_id == nil) then
+		FirstbornHarazim.banish_id = cpu_manager.stats:GetAbilityID( "firstborn_banish" )
+	end
+	if (FirstbornHarazim.battlecry_id == nil) then
+		FirstbornHarazim.battlecry_id = cpu_manager.stats:GetAbilityID( "firstborn_battlecry" )
+	end
+]]
+	if (FirstbornHarazim.smoke_id == nil) then
+		FirstbornHarazim.smoke_id = cpu_manager.stats:GetAbilityID( "firstborn_gamer_impact" )
+	end
+
+	if (FirstbornHarazim.orbital_b == nil) then
+		FirstbornHarazim.orbital_b = cpu_manager.stats:GetAbilityID( "firstborn_orbital_bombardment" )
+	end
+
+	if (FirstbornHarazim.rally_id == nil) then
+		FirstbornHarazim.rally_id = cpu_manager.stats:GetAbilityID( "firstborn_rally" )
+	end
+end
+
+function FirstbornHarazimTactic:DoAbilities()
+--[[
+	-- Try to use banish
+	Ability.DoAbilityTarget( self.squad_ai, FirstbornHarazim.banish_id, Ability.Filters.CloseMonsterEnemy, 1 )
+	
+	-- Try to use battlecry
+	Ability.DoAbilityArea( self.squad_ai, FirstbornHarazim.battlecry_id, Ability.Filters.CloseInCombat, 10 )
+]]
+	-- If we are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+
+		-- Try to use Smoke/Gas Grenade
+		Ability.DoAbilityPos( self.squad_ai, FirstbornHarazim.smoke_id, Ability.Filters.CloseEnemy, 2 )
+	else
+		Ability.DoAbilityPos( self.squad_ai, FirstbornHarazim.smoke_id, Ability.Filters.CloseEnemy, 4 )
+	end
+
+	-- Try to use orbital lance
+	Ability.DoAbilityPos(self.squad_ai, FirstbornHarazim.orbital_b, Ability.Filters.CloseEnemy, 24)
+	Ability.DoAbilityPos(self.squad_ai, FirstbornHarazim.orbital_b, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+
+	if (self.squad_ai:IsBroken() and self.squad_ai:IsAttached()) then
+
+		-- Check if I can repair my morale
+		if (self.squad_ai:CanDoAbility( FirstbornHarazim.rally_id )) then
+			self.squad_ai:DoSpecialAbility( FirstbornHarazim.rally_id )
+		end
+	end
+end
+
+function FirstbornHarazimTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier3+
+	if (cpu_manager:GetTierLevel() > 2) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

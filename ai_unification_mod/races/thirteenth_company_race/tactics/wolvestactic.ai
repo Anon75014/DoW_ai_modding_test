@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'wolvestactic.ai'
+-- Edited by Thudmeizer         @ 21.06.2023
+
+class 'WolvesTactic' (ThirteenthcomInfantryTactic)
+
+Wolves = {}
+
+function WolvesTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Thirteenth Company Fenrisian Wolves Tactic")
+end
+
+function WolvesTactic:InitAbilities()
+
+	-- Init ability ID's
+	if Wolves.howl_id == nil then
+		Wolves.howl_id = cpu_manager.stats:GetAbilityID( "thirteenthcom_wolves_howl" )
+	end
+end
+
+function WolvesTactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Try to use wolf howl while in combat
+		if (self.squad_ai:CanDoAbility(Wolves.howl_id)) then
+	
+			local iRange = self.squad_ai:GetAbilityRange(Wolves.howl_id)
+			local oSquad = Ability.Filters.CloseInfantryEnemy(self.squad_ai:GetPosition(), 10, 1)
+			if (oSquad ~= nil) then
+			
+				-- Use wolf howl only when attacking
+				if (oSquad:IsAttacking()) then
+					self.squad_ai:DoSpecialAbility(Wolves.howl_id)
+				end
+			end
+		end
+	end
+end

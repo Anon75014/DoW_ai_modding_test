@@ -1,0 +1,46 @@
+----------------------------------------
+-- File: 'firstbornlieutenanttactic.ai'
+-- Edited by Thudmeizer @ 06.06.2008
+
+class 'FirstbornLieutenantTactic' (FirstbornInfantryTactic)
+
+FirstbornLieutenant = {}
+
+function FirstbornLieutenantTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Firstborn Lieutenant Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function FirstbornLieutenantTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function FirstbornLieutenantTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function FirstbornLieutenantTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Attach to melee in tier1+
+	if (cpu_manager:GetTierLevel() > 1) then
+	
+		if (self:TryAttachSquad(true, true, 50, 100, nil) ~= nil) then
+			return
+		end
+	end
+	if (self:TryAttachSquad(false, true, 50, 100, self.m_fCommanderAttachHealth) == nil) then
+		self:TryAttachSquadMelee()
+	end
+end

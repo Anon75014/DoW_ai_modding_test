@@ -1,0 +1,16 @@
+----------------------------------------
+-- File: 'renegades_chimera_tactic.ai'
+-- Edited by Arkhan		@ 23.11.2007
+-- Edited by Gambit 		@ 26.11.2014
+-- Edited by Thudmeizer 	@ 05.05.2023
+
+class 'Renegades_Chimera_Tactic' (Renegades_Vehicle_Tactic)
+
+function Renegades_Chimera_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Chimera Tactic")
+
+	-- Vehicle is a light transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end

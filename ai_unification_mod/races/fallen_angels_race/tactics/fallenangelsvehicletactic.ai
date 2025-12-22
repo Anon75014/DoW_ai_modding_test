@@ -1,0 +1,68 @@
+----------------------------------------
+-- File: 'fallenangelsvehicletactic.ai'
+-- Updated by Gambit	@ 15.07.2016
+-- Edited by Thudmeizer	@ 29.12.2024
+
+class 'FallenAngelsVehicleTactic' (VehicleTactic)
+
+function FallenAngelsVehicleTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Fallen Angels Vehicle Tactic")
+end
+
+function FallenAngelsVehicleTactic:DoAbilities()
+
+	-- Call basic DoAbilities methods
+	VehicleTactic.DoAbilities(self)
+end
+
+
+-- Check if the vehicle should dance away in melee
+function FallenAngelsVehicleTactic:CheckVehicleDance(sName)
+
+	if (sName == "fa_squad_rhino" or
+		sName == "fa_squad_razorback" or
+		sName == "fa_squad_dreadnought" or
+		sName == "fa_squad_vindicator" or
+		sName == "fa_squad_whirlwind" or
+		sName == "fa_squad_predator" or
+		sName == "fa_squad_leman_russ" or
+		sName == "fa_squad_land_raider" or
+		sName == "fa_squad_land_raider_ares") then
+		return true
+	end
+	return false
+end
+
+function FallenAngelsVehicleTactic:Reinforce()
+
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- Reinforce right away!
+	if (not self.squad_ai:IsReinforcing()) then
+			
+		if (self.squad_ai:CanReinforce( true, 0 )) then
+			self.squad_ai:DoReinforce( true, 0 )
+		elseif (self.squad_ai:CanReinforce( false, 0 )) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+end
+--[[
+-- Updated function that takes the number of occupied slots per squad, into account.
+function FallenAngelsVehicleTactic:LoadSquad(oSquad, iSquadStrength)
+	-- Update transport data
+	self.m_iLoadedTroopStrength = self.m_iLoadedTroopStrength + iSquadStrength
+	self.m_iUsedTransportSlots = self.m_iUsedTransportSlots + (OccupiedSlotsDA[oSquad:GetSquadName()] or 1)
+	self.m_iUnloadTries = 2
+	-- Load squad
+	cpu_manager:DoMove(self.squad_ai, oSquad:GetPosition(), false, "Load troops")
+	for oEntity in self.squad_ai:GetEntities() do
+		oSquad:DoDefault(oEntity)
+		break
+	end
+	self.m_iMoveDelay = g_iGMT - 3
+end
+]]

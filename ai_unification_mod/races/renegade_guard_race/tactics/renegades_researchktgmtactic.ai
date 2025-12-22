@@ -1,0 +1,79 @@
+----------------------------------------
+-- File: 'renegades_researchktgmtactic.ai'
+-- Edited by Thudmeizer		@ 06.08.2024
+
+class 'Renegades_ResearchKtgm_Tactic' (BaseTactic)
+
+Renegades_ResearchKtgm = {}
+
+function Renegades_ResearchKtgm_Tactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Renegades Research Kill Team Tactic")
+
+	-- The name of the squad to target
+	self.squad1_name = "renegade_guard_squad_mutant_overlord_ktgm"
+	self.squad2_name = "renegade_guard_squad_herrscher_ktgm"
+end
+
+function Renegades_ResearchKtgm_Tactic:InitAbilities()
+	
+	-- Init abilities
+	if (Renegades_ResearchKtgm_Strongheal_id == nil) then
+		Renegades_ResearchKtgm_Strongheal_id = cpu_manager.stats:GetAbilityID( "ls_healing_1000" )
+	end
+
+	if (Renegades_ResearchKtgm_Lightheal_id == nil) then
+		Renegades_ResearchKtgm_Lightheal_id = cpu_manager.stats:GetAbilityID( "ls_healing_500" )
+	end
+end
+
+function Renegades_ResearchKtgm_Tactic:DoAbilities()
+	
+	aitrace("Renegades_ResearchKtgm_Tactic: Do abilities...")
+
+	-- Check if squad is valid
+    	for oSquad in military_manager:GetSquads() do
+        	if oSquad:IsValid() then
+            		if oSquad:GetSquadName() == self.squad1_name or oSquad:GetSquadName() == self.squad2_name then
+
+				-- Try to use Strong Heal ability on squad (restores target's health by 1000 HP)
+				if (self.base_ai:CanDoAbility(Renegades_ResearchKtgm_Strongheal_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() < 0.3) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 100 and iPower >= 100 then		
+		
+							-- Use strong heal ability on commander
+							self.base_ai:DoSpecialAbility(Renegades_ResearchKtgm_Strongheal_id)
+							--print("Using Heavy Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+-- Disabled light health to save on resources
+--[[
+				-- Try to use Light Heal ability on commander1 (restores target's health by 500 HP)
+				if (self.base_ai:CanDoAbility(Renegades_ResearchKtgm_Lightheal_id)) then
+	
+					-- Check if health needs an energency boost
+					if (oSquad:WasRecentlyHurt() and oSquad:GetHealthPercentage() > 0.7) then
+
+						-- Check if we have the needed resources
+						local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+						local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+      						if iReq >= 50 and iPower >= 50 then	
+				
+							-- Use light heal ability on commander
+							self.base_ai:DoSpecialAbility(Renegades_ResearchKtgm_Lightheal_id)
+							--print("Using Light Heal ability for player "..tostring(cpu_manager.player_id).."")
+						end
+					end
+				end
+]]
+			end
+		end
+	end
+end

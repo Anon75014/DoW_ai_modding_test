@@ -1,0 +1,30 @@
+----------------------------------------
+-- File: 'faithbladetactic.ai'
+-- Edited by Thudmeizer @ 14.10.2025
+
+class 'FaithbladeTactic' (WitchHuntersVehicleTactic)
+
+Faithblade = {}
+
+function FaithbladeTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Faithblade Tactic")
+end
+
+function FaithbladeTactic:InitAbilities()
+
+	if (Faithblade.smoke_id == nil) then
+		Faithblade.smoke_id = cpu_manager.stats:GetAbilityID( "witch_hunters_rhino_smoke_launchers" )
+	end
+end
+
+function FaithbladeTactic:DoAbilities()
+
+	if self.squad_ai:CanDoAbility(Faithblade.smoke_id) then
+		local iRange = self.squad_ai:GetAbilityRange(Faithblade.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(Faithblade.smoke_id, oUnit:GetSquad())
+		end
+	end
+end

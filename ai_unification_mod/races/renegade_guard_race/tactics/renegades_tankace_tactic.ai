@@ -1,0 +1,40 @@
+----------------------------------------
+-- File: 'renegades_tankace_tactic.ai'
+-- Edited by Thudmeizer	@ 19.10.2025
+
+class 'Renegades_TankAce_Tactic' (Renegades_Vehicle_Tactic)
+
+Renegades_TankAce = {}
+
+function Renegades_TankAce_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Tank Ace Tactic")
+
+	-- Used for the stuck check code for the squads that can jump
+	self.initialPosition = self.squad_ai:GetPosition()
+end
+
+function Renegades_TankAce_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Renegades_TankAce.melta_id == nil) then
+		Renegades_TankAce.melta_id = cpu_manager.stats:GetAbilityID( "renegade_guard_tank_ace_f35_passive" )
+	end
+end
+
+function Renegades_TankAce_Tactic:DoAbilities()
+
+	-- Check if I can launch Melta Attack
+	-- We are dying, lower requisites for attacks
+	if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+		Ability.DoAbilityPos(self.squad_ai, Renegades_TankAce.melta_id, Ability.Filters.CloseEnemy, 8)
+		Ability.DoAbilityPos(self.squad_ai, Renegades_TankAce.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 2)
+	else
+		Ability.DoAbilityPos(self.squad_ai, Renegades_TankAce.melta_id, Ability.Filters.CloseEnemy, 16)
+		Ability.DoAbilityPos(self.squad_ai, Renegades_TankAce.melta_id, Ability.EntityFilters.CloseBaseEntityEnemy, 3)
+	end
+
+	-- New code to unstuck units with pathing issues, that can jump.
+	-- Call it with [true], only for multi-membered squads.
+	self:SolveStuckCase(false)
+end

@@ -62,9 +62,9 @@ function ChaosBuildBaseStrategy:ChooseBuildProgram()
 	if (sMapSize == "small" or iClosestEnemyDistance <= 70 or cpu_manager.iPlayerCount == 2) then
 	
 		iBuildProgram1 = 40
-		iBuildProgram2 = 30
-		iBuildProgram3 = 30
-		iBuildProgram4 = 0
+		iBuildProgram2 = 20
+		iBuildProgram3 = 20
+		iBuildProgram4 = 20
 		
 	elseif (sMapSize == "large" and cpu_manager.iPlayerCount >= 6) then
 	

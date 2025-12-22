@@ -1,0 +1,55 @@
+----------------------------------------
+-- File: 'afchimeratactic.ai'
+-- Edited by Thudmeizer @ 04.10.2023
+
+class 'AFChimeraTactic' (SteelLegionVehicleTactic)
+
+AFChimera = {}
+
+function AFChimeraTactic:__init( squad_ai ) super( squad_ai )
+	
+	self.timedDirectSpawnAbility = Timer( AFChimeraTactic.DoDirectSpawnAbility, self, 5 )
+
+	self:SetName("AFChimera Tactic")
+
+	-- Vehicle is a heavy transport
+	self.m_iTransportVehicle = 1
+	self.m_iTransportSlots = 2
+end
+
+function AFChimeraTactic:InitAbilities()
+
+	if (AFChimera.smoke_id == nil) then
+	    AFChimera.smoke_id = cpu_manager.stats:GetAbilityID( "steel_legion_smoke_launchers_chimera" )
+	end
+end
+
+function AFChimeraTactic:DoAbilities()
+
+	-- Check if we can deploy smoke grenades
+	if (self.squad_ai:CanDoAbility(AFChimera.smoke_id)) then
+	
+		-- Search a squad
+		local iRange = self.squad_ai:GetAbilityRange(AFChimera.smoke_id)
+		local oUnit = Ability.Filters.CloseHurt(self.squad_ai:GetPosition(), iRange, 1)
+		if (oUnit ~= nil and oUnit:IsInCombat() and cpu_manager:GetUnitStrength(oUnit) > 150) then
+			self.squad_ai:DoSpecialAbilitySquad(AFChimera.smoke_id, oUnit:GetSquad())
+		end
+	end
+
+	-- Try to spawn solider squads
+	if (self.timedDirectSpawnAbility ~= nil) then
+		self.timedDirectSpawnAbility:Call()
+	else
+		AFChimeraTactic.DoDirectSpawnAbility(self)
+	end
+end
+
+function AFChimeraTactic:DoDirectSpawnAbility()
+
+	-- Spawn soliders in combat
+	if (self.squad_ai:CanDirectSpawn()) then 
+		self.squad_ai:DoDirectSpawn()
+	end
+end
+

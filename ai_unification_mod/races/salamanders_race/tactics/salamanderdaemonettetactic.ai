@@ -1,0 +1,33 @@
+----------------------------------------
+-- File: 'salamanderdaemonettetactic.ai'
+-- Edited by Gambit 	@ 8.10.2019
+
+class 'SalamanderDaemonetteTactic' (SalamanderInfantryTactic)
+
+SalamandersDaemonette = {}
+
+function SalamanderDaemonetteTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Salamanders Lesser Daemonette Tactic")
+end
+
+function SalamanderDaemonetteTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SalamandersDaemonette.allure_id == nil then
+		SalamandersDaemonette.allure_id = cpu_manager.stats:GetAbilityID( "salamander_daemonette_allure" )
+	end
+end
+
+function SalamanderDaemonetteTactic:DoAbilities()
+
+	-- Check if I can use allure 
+	if self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility(SalamandersDaemonette.allure_id) then
+            if Ability.DoAbilityTarget( self.squad_ai, SalamandersDaemonette.allure_id, Ability.Filters.CloseInfantryEnemy, 1 )
+            or Ability.DoAbilityTarget( self.squad_ai, SalamandersDaemonette.allure_id, Ability.Filters.CloseMonsterEnemy, 1 ) then
+				return
+			end
+		end
+	end
+end

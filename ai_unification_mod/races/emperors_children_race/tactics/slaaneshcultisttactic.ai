@@ -1,0 +1,164 @@
+----------------------------------------
+-- File: 'slaaneshcultistactic.ai'
+-- Edited by Thudmeizer	@ 21.07.2018
+
+class 'SlaaneshCultistTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshCultist = {}
+
+function SlaaneshCultistTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Cultist Tactic")
+	self.isManagedByGenerator = false
+	SlaaneshPossession_Cultist = g_iGMT
+	self.abilityCast = g_iGMT
+	self.isPerformingPowerAbility = false
+end
+--[[
+function SlaaneshCultistTactic:IsAttacker()
+	return false
+end
+
+function SlaaneshCultistTactic:IsDefender()
+	return false
+end
+]]
+function SlaaneshCultistTactic:SetManagedByGenerator(value)
+	self.isManagedByGenerator = value
+end
+
+function SlaaneshCultistTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshCultist.rage_id == nil then
+		SlaaneshCultist.rage_id = cpu_manager.stats:GetAbilityID( "emperors_children_furious_rage_cultist" )
+		SlaaneshCultist.possession_id = cpu_manager.stats:GetAbilityID( "emperors_children_cultist_possession" )
+		SlaaneshCultist.blessing_id = cpu_manager.stats:GetAbilityID( "emperors_children_slaanesh_blessing" )
+		SlaaneshCultist.icon_id = cpu_manager.stats:GetAbilityID( "emperors_children_slaaneshi_icon" )
+		SlaaneshCultist.power_id = cpu_manager.stats:GetAbilityID( "emperors_children_power_boost_slaanesh" )
+	end
+end
+
+function SlaaneshCultistTactic:DoAbilities()
+
+	-- Try to call the Doomrider
+	if g_iGMT > SlaaneshPossession_Cultist + 4 and self.squad_ai:CanDoAbility( SlaaneshCultist.possession_id ) then
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		if iPow > 500 and iReq > 500 then
+			SlaaneshPossession_Cultist = g_iGMT
+			self.squad_ai:DoSpecialAbility( SlaaneshCultist.possession_id )
+		end
+	end
+
+	if g_iGMT > self.abilityCast + 6 and self.squad_ai:IsInCombat() then
+		if self.squad_ai:CanDoAbility( SlaaneshCultist.icon_id ) then
+			self.squad_ai:DoSpecialAbility( SlaaneshCultist.icon_id )
+			self.abilityCast = g_iGMT; return
+		end
+		if self.squad_ai:CanDoAbility( SlaaneshCultist.blessing_id ) then
+			self.squad_ai:DoSpecialAbility( SlaaneshCultist.blessing_id )
+			self.abilityCast = g_iGMT; return
+		end
+		if self.squad_ai:CanDoAbility( SlaaneshCultist.rage_id ) then
+			self.squad_ai:DoSpecialAbility( SlaaneshCultist.rage_id )
+			self.abilityCast = g_iGMT; return
+		end
+	end
+
+	if self.squad_ai:CanDoAbility(SlaaneshCultist.power_id) and not (self.squad_ai:IsCapturing() or self.squad_ai:IsInCombat() or self.squad_ai:WasRecentlyHurt() or cpu_manager.terrain_analyzer:HasThreat(self.squad_ai:GetPosition(), 45)) then
+		local iPow = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+		local iReq = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+		if iPow <= 0 then iPow = 1 end
+		if iReq/iPow > 2 and iReq > 800 then
+			if resource_manager:GetResourceRate( ResourceAmount.RT_Power ) < 300 then
+				self.squad_ai:DoSpecialAbilitySquad(SlaaneshCultist.power_id, self.squad_ai:GetSquad())
+				self.isPerformingPowerAbility = true
+				self.abilityCast = g_iGMT; return
+			end
+		end
+	end
+	if self:IsMoving() then self.isPerformingPowerAbility = false end
+	if self.isPerformingPowerAbility and self.squad_ai:WasRecentlyHurt() then
+		self.isPerformingPowerAbility = false
+		self.squad_ai:DoStop()
+	end
+end
+
+function SlaaneshCultistTactic:Upgrade()
+
+ 	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- If there are no resources available, don't upgrade!
+	if (not Tactic.Options.can_reinforce) then
+		return
+	end
+   
+	if (not self.squad_ai:IsReinforcing() and cpu_manager:GetTierLevel() >= 2) then
+	  
+		-- Try for upgrade if we've a leader and more than 3 troopers
+		if (self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetNumTroopers() > 2 and self.squad_ai:HasLeader()) then
+			local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()
+			self.squad_ai:DoBestUpgrade( class_type )
+		end
+	end
+end
+
+function SlaaneshCultistTactic:Reinforce()
+
+	-- Check if we are reinforcing
+	if (self.squad_ai:IsReinforcing()) then
+		return
+	end
+	
+	-- If I am broken, don't upgrade!
+	if (self:IsAffectedByMorale() and self.squad_ai:IsBroken()) then
+		return
+	end
+	
+	-- Don't reinforce squads in critical condition
+	if (self.squad_ai:GetNumTroopers() <= self.squad_ai:GetMaxTroopers() / 3 and self.squad_ai:IsUnderAttack()) then
+		return
+	end
+
+	-- Always try to get the leader first
+	if (self.squad_ai:CanReinforce(true, 0)) then
+		self.squad_ai:DoReinforce(true, 0)
+		return
+	end
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+	if ((iRequisition < 800 or self.m_bPowerCost) and not Tactic.Options.can_reinforce) then
+		return
+	end
+	
+	-- Always try to reinforce, as long as I have money
+	if (self.squad_ai:CanReinforce( false, 0 ) and self.squad_ai:HasLeader() and cpu_manager:GetTierLevel() >= 2) then
+		self.squad_ai:DoReinforce( false, 0 )
+	end
+end
+
+function SlaaneshCultistTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	if self.isManagedByGenerator then
+		return
+	end
+
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+	
+    -- Set unit on ranged stance in tier 3+
+    if (cpu_manager:GetTierLevel() >= 3 and self.squad_ai:GetMeleeStance() ~= SquadAI.MSTANCE_Ranged) then
+    	self.squad_ai:DoSetMeleeStance(SquadAI.MSTANCE_Ranged)
+    end
+end

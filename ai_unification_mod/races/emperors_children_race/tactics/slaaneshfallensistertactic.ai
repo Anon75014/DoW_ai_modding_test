@@ -1,0 +1,92 @@
+----------------------------------------
+-- File: 'slaaneshfallensistertactic.ai'
+-- Edited by Thudmeizer	@ 23.07.2018
+
+class 'SlaaneshFallenSisterTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshFallenSister = {}
+
+function SlaaneshFallenSisterTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Fallen Sister Tactic")
+end
+
+function SlaaneshFallenSisterTactic:InitAbilities()
+
+	-- Init ability ID's
+	if SlaaneshFallenSister.combatdrugs_id == nil then
+		SlaaneshFallenSister.combatdrugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )	
+		SlaaneshFallenSister.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren" )	
+	end
+end
+
+function SlaaneshFallenSisterTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+
+		-- Use siren
+		if self.squad_ai:CanDoAbility(SlaaneshFallenSister.siren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshFallenSister.siren_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+	
+		-- Use combat drugs
+		if self.squad_ai:CanDoAbility(SlaaneshFallenSister.combatdrugs_id) then
+			self.squad_ai:DoSpecialAbility( SlaaneshFallenSister.combatdrugs_id )
+		end
+	end
+
+    self:DoThrowGrenades()
+end
+
+function SlaaneshFallenSisterTactic:Reinforce()
+
+	-- always try for one veteran (regular) squad member first
+	if not self.squad_ai:IsReinforcing() then
+		if self.squad_ai:CanReinforce( false, 0 ) then
+			self.squad_ai:DoReinforce( false, 0 )
+		end
+	end
+
+	if not self.squad_ai:IsReinforcing() then
+
+		-- try for different types of squad members
+		local veteranIndex = 0
+		local slaveIndex = 1
+		local hospitallerIndex = 2
+	
+		local numVeterans = self.squad_ai:GetLeaderCount( veteranIndex )
+		local numSlaves = self.squad_ai:GetLeaderCount( slaveIndex )
+		local numHospitallers = self.squad_ai:GetLeaderCount( hospitallerIndex )
+
+		-- Desired order of reinforcing
+		if numVeterans < math.random(0,1) then
+			if self.squad_ai:CanReinforce( true, veteranIndex ) then
+				self.squad_ai:DoReinforce( true, veteranIndex )
+			end
+
+		elseif numSlaves < math.random(0,1) then
+			if self.squad_ai:CanReinforce( true, slaveIndex ) then
+				self.squad_ai:DoReinforce( true, slaveIndex )
+			end
+
+		elseif numHospitallers < math.random(0,1) then
+			if self.squad_ai:CanReinforce( true, hospitallerIndex ) then
+				self.squad_ai:DoReinforce( true, hospitallerIndex )
+			end
+		end
+	end
+end
+
+function SlaaneshFallenSisterTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+end
+

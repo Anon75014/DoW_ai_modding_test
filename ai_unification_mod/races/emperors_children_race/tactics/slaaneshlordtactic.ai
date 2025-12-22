@@ -1,0 +1,96 @@
+----------------------------------------
+-- File: 'slaaneshlordtactic.ai'
+-- Edited by Thudmeizer @ 24.07.2018
+
+class 'SlaaneshLordTactic' (EmperorsChildrenInfantryTactic)
+
+SlaaneshLord = {}
+
+function SlaaneshLordTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Slaanesh Lord Tactic")
+	
+	-- Summon Fallen Angels one out of three
+	if math.random(1,3) == 1 then
+		self.summon_angels = true
+	end
+end
+
+-- Assassinate win condition -- never attack
+function SlaaneshLordTactic:IsAttacker()
+	return (not cpu_manager.assassinate and self:IsCommanderAttacker())
+end
+
+-- Assassinate win condition -- never defend
+function SlaaneshLordTactic:IsDefender()
+	return (not cpu_manager.assassinate and self:IsCommanderDefender())
+end
+
+function SlaaneshLordTactic:InitAbilities()
+
+	-- Init ability ID's
+	if (SlaaneshLord.mutation_id == nil) then
+		SlaaneshLord.mutation_id = cpu_manager.stats:GetAbilityID( "emperors_children_daemon_mutation" )
+		SlaaneshLord.siren_id = cpu_manager.stats:GetAbilityID( "emperors_children_doom_siren" )
+		SlaaneshLord.drugs_id = cpu_manager.stats:GetAbilityID( "emperors_children_combat_drugs" )
+		SlaaneshLord.angels_id = cpu_manager.stats:GetAbilityID( "emperors_children_summon_fallen_angels_ability" )
+	end
+end
+
+function SlaaneshLordTactic:DoAbilities()
+
+	-- Check if I can use in-combat abilities 
+	if self.squad_ai:IsInCombat() then
+		-- First, try to possess
+		if self.squad_ai:CanPossess() and self.squad_ai:GetHealthPercentage() < 0.4 then
+			self.squad_ai:DoPossess()
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshLord.siren_id) then
+			Ability.DoAbilityArea(self.squad_ai, SlaaneshLord.siren_id, Ability.Filters.CloseEnemy, 10, 4 )
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshLord.mutation_id) then
+			Ability.DoAbilityArea( self.squad_ai, SlaaneshLord.mutation_id, Ability.Filters.CloseEnemy, 10, 3 )
+		end
+		if self.squad_ai:CanDoAbility(SlaaneshLord.drugs_id) then
+			self.squad_ai:DoSpecialAbility(SlaaneshLord.drugs_id)
+		end
+	end
+
+
+	-- Summon Noise Fallen Angels whenever possible
+	if self.summon_angels ~= nil and self.squad_ai:CanDoAbility( SlaaneshLord.angels_id ) then
+		local req = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition)
+		local pow = resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power)
+		if req > 400 and pow > 200 then
+			self.squad_ai:DoSpecialAbilityPos(SlaaneshLord.angels_id, self.squad_ai:GetPosition())
+			return
+		end
+	end
+end
+
+function SlaaneshLordTactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update( self )) then
+		return
+	end
+		
+	-- Assassinate win condition -- never attach to a squad
+	if (not cpu_manager.assassinate) then
+				
+		-- Attach to melee in tier2+
+		if (cpu_manager:GetTierLevel() > 1) then
+		
+			if (self:TryAttachSquad(true, true, 50, 150, nil) ~= nil) then
+				return
+			end
+		end
+		if (self:TryAttachSquad(false, true, 50, nil, self.m_fCommanderAttachHealth) == nil) then
+			self:TryAttachSquadMelee()
+		end
+	end
+end

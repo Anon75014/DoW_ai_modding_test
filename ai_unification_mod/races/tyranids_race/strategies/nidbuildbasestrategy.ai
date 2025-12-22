@@ -1,0 +1,1635 @@
+----------------------------------------
+-- File: 'tyranidbuildbasestrategy.ai'
+-- Edited by Miros 	@ 22.1.2013
+-- Edited by Gambit 	@ 22.7.2017
+-- Edited by Thudmeizer @ 28.08.2025
+
+class 'TyranidBuildBaseStrategy' (BuildBaseStrategy)
+
+
+function TyranidBuildBaseStrategy:__init( baseinfo ) super( baseinfo )
+
+	-- Add detector units (Best first, worst last)
+	self:AddDetectorUnit("tyranids_squad_lictor")
+	self:AddDetectorUnit("tyranids_squad_zoanthropes")
+	self:AddDetectorUnit("tyranids_squad_ripperswarm")
+
+	-- Global variable to see if we have to reserve Influence for tiering
+	TyranidsReserveFaithResource = false
+
+	CpuPrerequisites2.AddSpecialItem("0titan_building_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("0titans_tier_ii_enable", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_01", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_02", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_03", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_04", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_05", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_06", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_07", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_08", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_09", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_ls_hive_tyrant_wargear_upgrade_10", CpuPrerequisites.BT_Research)
+	CpuPrerequisites2.AddSpecialItem("tyranids_squad_hive_tyrant_advance_sp", CpuPrerequisites.BT_Squad)
+	CpuPrerequisites2.AddSpecialItem("tyranids_squad_hive_tyrant_ktgm", CpuPrerequisites.BT_Squad)
+
+    	-- The switch for the Commander LS/KTGM WarGear Researches
+    	G_KTGM_Commander_WG_Choice_Made = false
+end
+
+
+-- First attempt to fix the multi-building AI bug. Failed (it was not that)
+--[[function TyranidBuildBaseStrategy:GetBuildingCountByName(sName, bFinished)
+	local iCount = 0
+	self:UpdateBuildingCount()
+	for oBuilding in military_manager:GetBases() do
+		if oBuilding:IsValid() then
+			local oName = oBuilding:GetBaseName()
+			if oName == sName then
+				if bFinished then
+					if oBuilding:IsConstructionDone() then
+						iCount = iCount + 1
+					end
+				else
+					iCount = iCount + 1
+				end
+			end
+		end
+	end
+	print(sName.." "..iCount)
+	return iCount
+end
+
+-- Does not work if enabled. Strange. NOT needed anyway...
+function TyranidBuildBaseStrategy:GetBuildingCountByBPID(iBPID, bFinished)
+	local iCount = 0
+	-- (NOT NEEDED) local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+	for oBuilding in military_manager:GetBases() do
+		if oBuilding:IsValid() then
+			if oBuilding:GetID() == iBPID then
+				if bFinished then
+					if iBPID:GetBaseFromID():IsConstructionDone() then
+						iCount = iCount + 1
+					end
+				else
+					iCount = iCount + 1
+				end
+			end
+		end
+	end
+	print(iBPID.." "..iCount)
+	return iCount
+end]]
+
+
+-- Item-Syntax: ResearchName, MinTier, RequisitionCost, InfluenceCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+function TyranidBuildBaseStrategy:AltDynamicResearch(sResearchName, iMinTier, iMinRequisitionCost, iMinInfluenceCost, iMinSquadCap, iMinSupportCap, sSquadName, iSquadMinCount)
+
+	-- Check tier level
+	if (self.tierLevel < iMinTier) then
+		return
+	end
+
+	-- Check if research already exists
+	if (cpu_manager.cpu_player:IsResearchComplete(sResearchName)) then
+		return
+	end
+	
+	-- Check if research plan exists
+	local iID = cpu_manager.stats:GetResearchID(sResearchName)
+	if (self:PlanExists("Build Research Plan", iID)) then
+		return
+	end
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition ) / self.m_iTechBreak
+	local iInfluence = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+	if (iRequisition < iMinRequisitionCost or iInfluence < iMinInfluenceCost) then
+		return
+	end
+	
+	-- Check if Relic is required
+	if (not self:HasRelic() and self:RelicRequired(sResearchName)) then
+		return
+	end
+	
+	-- Check squad and support cap
+	local iSquadCap = self:GetSquadCap()
+	local iSupportCap = build_manager:GetSupportCapCurrentMax() - build_manager:GetSupportCapLeft()
+	if (iSquadCap < iMinSquadCap or iSupportCap < iMinSupportCap) then
+		return
+	end
+	
+	-- Check squad count
+	if (sSquadName ~= nil and self:CountSquads(sSquadName) < iSquadMinCount) then
+		return
+	end
+	
+	-- Start research
+	local tBuildType = CpuBuildType()
+	tBuildType.name = sResearchName
+	tBuildType.btype = CpuPrerequisites.BT_Research
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic research of "..sResearchName)
+	end
+end
+
+
+function TyranidBuildBaseStrategy:AltDynamicBuild(sBuildingName, iBuildingCount, iMinTier, iMinRequisition, iMinInfluence, iMinSquadCap, iMinSupportCap)
+
+	--[[ Don't build if we are not allowed to spend money
+	if (not self.m_bSpendMoney) then
+		return
+	end]]
+
+	-- Check tier level
+	if (self.tierLevel < iMinTier) then
+		return
+	end
+
+	-- Get building ID
+	local iID = cpu_manager.stats:GetBuildingID(sBuildingName)
+	-- Return if a build plan for the current building already exists
+	if (self:PlanExists("Build Building Plan", iID)) then
+		return
+	end
+
+	-- Check how many instances of this building exist
+	local iInstances = self:GetBuildingCountByBPID(iID, false)
+	-- Return if enough instances exist
+	if (iInstances >= iBuildingCount) then
+		return
+	end
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition ) / self.m_iTechBreak
+	local iInfluence = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+	if (iRequisition < iMinRequisition or iInfluence < iMinInfluence) then
+		return
+	end
+
+	-- Check if Relic is required
+	if (not self:HasRelic() and self:RelicRequired(sBuildingName)) then
+		return
+	end
+
+	-- Check squad and support cap
+	local iSquadCap = self:GetSquadCap()
+	local iSupportCap = build_manager:GetSupportCapCurrentMax() - build_manager:GetSupportCapLeft()
+	if (iSquadCap < iMinSquadCap or iSupportCap < iMinSupportCap) then
+		return
+	end
+
+	-- Add build plan
+	local tBuildType = CpuBuildType()
+	tBuildType.name = sBuildingName
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..sBuildingName)
+	end
+end
+
+
+function TyranidBuildBaseStrategy:ChooseBuildProgram()
+	-- Global variable for the strategy selected. Used to code specific buildings/tiering/squads selections
+	TyranidsStrategyChosenAI = 0
+
+	-- Check build program count
+	if (table.getn(self.info.BuildPrograms) ~= 3) then
+		return BuildBaseStrategy.ChooseBuildProgram(self)
+	end
+
+	-- Method to choose/test a specific strategy each time.
+	--if true then TyranidsStrategyChosenAI = 1 return 1 end
+
+	-- Get map size and closest enemy distance
+	local sMapSize, iClosestEnemyDistance = self:GetMapSize()
+		
+	-- Set probabilities of the strategies according to the map size
+	local iBuildProgram1 = 0	-- Allround
+	local iBuildProgram2 = 0	-- Fast swarming attack
+	local iBuildProgram3 = 0	-- Strong monsters
+	if (sMapSize == "small" or iClosestEnemyDistance <= 70 or cpu_manager.iPlayerCount == 2) then
+		iBuildProgram1 = 30
+		iBuildProgram2 = 60
+		iBuildProgram3 = 10
+	elseif (sMapSize == "large" and cpu_manager.iPlayerCount >= 6) then
+		iBuildProgram1 = 30
+		iBuildProgram2 = 20
+		iBuildProgram3 = 50
+	else
+		iBuildProgram1 = 30
+		iBuildProgram2 = 30
+		iBuildProgram3 = 40
+	end
+	
+	-- Modify probabilities according to the closest enemy player
+	local oEnemy = cpu_manager:FindClosestEnemyPlayer(false)
+	local sEnemy = oEnemy:GetPlayerRaceName()		
+	if (sEnemy == "ork_race" or sEnemy == "guard_race" or sEnemy == "eldar_race") then
+		iBuildProgram1 = iBuildProgram1 + 10
+		iBuildProgram2 = iBuildProgram2 + 40
+	end
+		
+	-- Now choose a program
+	local iRandom = math.random(1, iBuildProgram1+iBuildProgram2+iBuildProgram3)
+	if (iRandom <= iBuildProgram1) then
+		TyranidsStrategyChosenAI = 1
+		return 1
+	elseif (iRandom <= iBuildProgram1 + iBuildProgram2) then
+		TyranidsStrategyChosenAI = 2
+		return 2
+	else
+		TyranidsStrategyChosenAI = 3
+		return 3
+	end
+end
+
+
+function TyranidBuildBaseStrategy:EvaluateSquadCap()
+
+	-- Check squad cap
+	if (self:CheckSquadCap(350, 0)) then
+
+		-- Check if a plan exists
+		local iBuildingID2 = cpu_manager.stats:GetBuildingID("tyranids_gaunt_hive")
+		local iBuildingID3 = cpu_manager.stats:GetBuildingID("tyranids_warrior_hive")
+		if self:PlanExists("Build Building Plan", iBuildingID2) or
+		   self:PlanExists("Build Building Plan", iBuildingID3) then
+			return
+		end
+
+		-- Check if any Hives are in production
+		for oBuildChannel in build_manager:GetBuildChannelAIs() do
+			-- Check building ID
+			if (oBuildChannel:GetBlueprintID() == iBuildingID2 or oBuildChannel:GetBlueprintID() == iBuildingID3)
+			and not oBuildChannel:ConstructionDone() then
+				return
+			end
+		end
+		
+		-- Build a Gaunt/Warrior Hive based on strategy chosen
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Building
+		tBuildType.name = ""
+		if TyranidsStrategyChosenAI == 1 then
+			if math.random(2,3) == 2 then tBuildType.name = "tyranids_gaunt_hive"
+			else tBuildType.name = "tyranids_warrior_hive" end
+		elseif TyranidsStrategyChosenAI == 2 then
+			tBuildType.name = "tyranids_gaunt_hive"
+		elseif TyranidsStrategyChosenAI == 3 then
+			tBuildType.name = "tyranids_warrior_hive"
+		end
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+
+	-- Check support cap
+	if (self:CheckSupportCap(500, 0)) then
+	
+		-- Check if a plan exists
+		local iBuildingID2 = cpu_manager.stats:GetBuildingID("tyranids_xeno_hive")
+		local iBuildingID3 = cpu_manager.stats:GetBuildingID("tyranids_carnifex_hive")
+		if self:PlanExists("Build Building Plan", iBuildingID2) or
+		   self:PlanExists("Build Building Plan", iBuildingID3) then
+			return
+		end
+		
+		-- Check if any Hives are in production
+		for oBuildChannel in build_manager:GetBuildChannelAIs() do
+			-- Check building ID
+			if (oBuildChannel:GetBlueprintID() == iBuildingID2 or oBuildChannel:GetBlueprintID() == iBuildingID3)
+			and not oBuildChannel:ConstructionDone() then
+				return
+			end
+		end
+		
+		-- Build a Xeno/Carnifex Hive based on strategy chosen
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Building
+		tBuildType.name = ""
+		if TyranidsStrategyChosenAI == 1 then
+			if math.random(2,5) == 2 then tBuildType.name = "tyranids_xeno_hive"
+			else tBuildType.name = "tyranids_carnifex_hive" end
+		elseif TyranidsStrategyChosenAI == 2 then
+			tBuildType.name = "tyranids_xeno_hive"
+		elseif TyranidsStrategyChosenAI == 3 then
+			tBuildType.name = "tyranids_carnifex_hive"
+		end
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+
+function TyranidBuildBaseStrategy:GetBuildingName( sType )
+
+	-- Return race specific object string
+	if (sType == "HQ") then
+		return "tyranids_hq"
+
+	elseif (sType == "Generator") then
+		return "tyranids_adv_magma_vent"
+		
+	elseif (sType == "BiggerGenerator") then
+		return "tyranids_adv_magma_vent"
+		
+	elseif (sType == "VehicleBuilding") then
+		return "tyranids_carnifex_hive"
+		
+	elseif (sType == "ListeningPost") then
+		return "tyranids_spore_chimney"
+		
+	elseif (sType == "Turret") then
+		return nil
+
+	elseif (sType == "Mine") then
+		return nil
+	end
+	
+	return nil
+end
+
+
+function TyranidBuildBaseStrategy:GetAddonBuilding( sType )
+
+	if (sType == "tyranids_hq_addon_1") then
+		return "tyranids_hq"
+
+	elseif (sType == "tyranids_hq_addon_2") then
+		return "tyranids_hq"
+		
+	elseif (sType == "tyranids_list_post_addon_1") then
+		return "tyranids_spore_chimney"
+
+	elseif (sType == "tyranids_list_post_addon_2") then
+		return "tyranids_spore_chimney"
+
+	elseif (sType == "tyranids_turret_addon_bioacid") then
+		return "tyranids_bio_turret"
+
+	elseif (sType == "tyranids_turret_addon_bioacid") then
+		return "tyranids_bio_turret_no_limit"
+	end
+	return nil
+end
+
+
+-- Arkhan 11.2005: Returns the squad cap and support cap of the given squad
+function TyranidBuildBaseStrategy:GetUnitStats(sSquadName)
+
+	if (sSquadName == "tyranids_squad_spinegaunt") then
+		return 1, 0
+	elseif (sSquadName == "tyranids_squad_gargoyle") then
+		return 1, 0
+	elseif (sSquadName == "tyranids_squad_termagant") then
+		return 2, 0
+	elseif (sSquadName == "tyranids_squad_termagant_sp_dxp3_prisoner") then
+		return 2, 0
+	elseif (sSquadName == "tyranids_squad_genestealer") then
+		return 2, 0
+	elseif (sSquadName == "tyranids_squad_hormagaunt") then
+		return 2, 0
+	elseif (sSquadName == "tyranids_squad_hormagaunt_sp_dxp3_prisoner") then
+		return 2, 0
+	elseif (sSquadName == "tyranids_squad_ravener") then
+		return 3, 0
+	elseif (sSquadName == "tyranids_squad_ravener_sp_dxp3_prisoner") then
+		return 3, 0
+	elseif (sSquadName == "tyranids_squad_warrior") then
+		return 4, 0
+	elseif (sSquadName == "tyranids_squad_biovores") then
+		return 0, 2
+	elseif (sSquadName == "tyranids_squad_carnifex_khazi") then
+		return 0, 2
+	elseif (sSquadName == "tyranids_squad_carnifex_skiller") then
+		return 0, 2
+	elseif (sSquadName == "tyranids_squad_zoanthropes") then
+		return 0, 2
+	elseif (sSquadName == "tyranids_squad_carnifex_uber") then
+		return 0, 3
+	elseif (sSquadName == "tyranids_squad_carnifex") then
+		return 0, 4
+	elseif (sSquadName == "tyranids_squad_trygon") then
+		return 0, 4
+	elseif (sSquadName == "tyranids_squad_hierophant_titan") then
+		return 0, 6
+	end
+	return 0, 0
+end
+
+
+-- Arkhan 01.2006: Inherited method to check if an addon is a tier addon
+function TyranidBuildBaseStrategy:IsTierAddon( sName, iTargetTier )
+
+	-- Check addon name and target tier
+	if (sName == "tyranids_hq_addon_1" and iTargetTier == 2) then
+		return true
+	elseif (sName == "tyranids_hq_addon_2" and iTargetTier == 3) then
+		return true
+	end
+	return false
+end
+
+
+function TyranidBuildBaseStrategy:UpdateTierLevel()
+
+	-- Reset tier level
+	self.tierLevel = 1
+
+	-- Prepare
+	local iHQAddon1ID = cpu_manager.stats:GetAddOnID("tyranids_hq_addon_1")
+	local iHQAddon2ID = cpu_manager.stats:GetAddOnID("tyranids_hq_addon_2")
+	local oStats = cpu_manager.stats:GetPlayerStatsFromID( cpu_manager.player_id )
+
+	-- Check HQ's for addons
+	for oBase in oStats:GetBases() do
+		-- Check for valid building
+		if (oBase:IsValid() and not oBase:IsListeningPost()) then
+			-- Check for HQ addon 2
+			if (oBase:HasAddOn(iHQAddon2ID)) then
+			-- We still have the proper add-on
+				if self:GetBuildingCountByName("tyranids_relic_hive") > 0 then
+					self.tierLevel = 4
+					return
+				else
+					self.tierLevel = 3
+					return
+				end
+			-- Check for HQ addon 1
+			elseif (oBase:HasAddOn(iHQAddon1ID)) then
+				self.tierLevel = 2
+			end
+		end
+	end
+end
+
+
+function TyranidBuildBaseStrategy:BuildFlexible()
+
+	-- Always test first to see if there is at least one existing HQ
+	if self:GetBuildingCountByName(self:GetBuildingName("HQ")) < 1 then
+     		self:BuildFirstHQ()
+	end
+
+	-- Always test first to see if there is at least one existing builder unit
+	self:BuildFirstBuilder("tyranids_squad_woth")
+
+	-- Tyranid Hero Wargear
+	local iHeroCommanderSquads = self:CountSquads("tyranids_squad_hive_tyrant_advance_sp")
+	if iHeroCommanderSquads > 0 then
+		self:DynamicResearch("tyranids_wargear_upgrade_01", 1, 0, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_02", 1, 0, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_03", 1, 0, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_04", 2, 0, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_05_adrenal_glands", 2, 50, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_06_carapace", 2, 0, 0, 2, 0, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_07_toxic_miasma", 3, 0, 0, 2, 0, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_08_catalyst", 3, 0, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_09_warp_field", 3, 0, 0, 4, 2, nil, 0)
+		self:DynamicResearch("tyranids_wargear_upgrade_10_wings", 4, 0, 0, 2, 0, nil, 0)
+	end
+
+	-- Tyranid Last Standing Hero Wargear
+	local iHeroLSCommanderSquads = self:CountSquads("tyranids_squad_hive_tyrant_ktgm")
+	if iHeroLSCommanderSquads > 0 then
+
+		if not G_KTGM_Commander_WG_Choice_Made then
+			 -- WARNING: Below, ALWAYS insert numbers <= of the total in each table!
+           		 -- I used the actual total of each table, so that ALL will be randomly available
+            		i_WG_Selection_number1 = 9	-- The number of researches to randomize, from the 1st table
+            		i_WG_Selection_number2 = 10	-- The number of researches to randomize, from the 2nd table
+
+            		i_WG_Selections1 = {
+                	{"tyranids_ls_hive_tyrant_fast_ability_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_full_restore_research_ktgm", 1, 150, 150, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_accuracy_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_adrenal_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_carapace_research_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_extra_weapon_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_implant_research_ktgm", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_metamorphosis_research", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_synapse_aura_research", 1, 125, 125, 0, 0, nil, 0}}
+
+            		i_WG_Selections2 = {
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_01", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_02", 1, 100, 100, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_03", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_04", 1, 150, 150, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_05", 1, 125, 125, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_06", 1, 150, 150, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_07", 1, 150, 150, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_08", 1, 150, 150, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_09", 1, 150, 150, 0, 0, nil, 0},
+                	{"tyranids_ls_hive_tyrant_wargear_upgrade_10", 1, 150, 150, 0, 0, nil, 0}}
+
+            		-- The switch ensures we make the choice only ONCE
+            		G_KTGM_Commander_WG_Choice_Made = true
+            		i_WG_Rdm1 = {}          -- The random Selections from the 1st table
+            		i_WG_Rdm2 = {}          -- The random Selections from the 2nd table
+
+            		-- Populate the two random tables with the number of researches we need for each
+            		for i = 1, i_WG_Selection_number1 do
+                		local selection = math.random(1, table.getn(i_WG_Selections1))
+                		table.insert(i_WG_Rdm1, i_WG_Selections1[selection])
+                		table.remove(i_WG_Selections1, selection)
+            		end
+
+            		for i = 1, i_WG_Selection_number2 do
+                		local selection = math.random(1, table.getn(i_WG_Selections2))
+                		table.insert(i_WG_Rdm2, i_WG_Selections2[selection])
+                		table.remove(i_WG_Selections2, selection)
+            		end
+		end
+
+       		-- We are done. Perform the Researches
+        	for i = 1, table.getn(i_WG_Rdm1) do
+            		self:DynamicResearch(i_WG_Rdm1[i][1], 0, i_WG_Rdm1[i][3], i_WG_Rdm1[i][4], 0, 0, nil, 0)
+        	end
+
+    		for i = 1, table.getn(i_WG_Rdm2) do
+       			self:DynamicResearch(i_WG_Rdm2[i][1], 0, i_WG_Rdm2[i][3], i_WG_Rdm2[i][4], 0, 0, nil, 0)
+       		end
+	end
+
+	if self:GetBuildingCountByName("tyranids_hq", false) == 0 then
+		self:AltDynamicBuild("tyranids_hq", 1, 1, 0, 70, 0, 0)
+	end
+	if self.tierLevel == 1 then
+		if self:GetBuildingCountByName("tyranids_gaunt_hive", false) + self:GetBuildingCountByName("tyranids_warrior_hive", false) == 0 then
+			if TyranidsStrategyChosenAI == 3 then self:AltDynamicBuild("tyranids_warrior_hive", 1, 1, 0, 20, 0, 0)
+			else self:AltDynamicBuild("tyranids_gaunt_hive", 1, 1, 0, 16, 0, 0) end
+		end
+	elseif self.tierLevel == 2 then
+		if self:GetBuildingCountByName("tyranids_xeno_hive", false) + self:GetBuildingCountByName("tyranids_carnifex_hive", false) == 0 then
+			if TyranidsStrategyChosenAI == 2 then self:AltDynamicBuild("tyranids_xeno_hive", 2, 1, 0, 70, 0, 0)
+			else self:AltDynamicBuild("tyranids_carnifex_hive", 2, 1, 0, 70, 10, 0) end
+		end
+	elseif self.tierLevel == 3 then
+		if self:GetBuildingCountByName("tyranids_relic_hive", false) == 0 then
+			self:AltDynamicBuild("tyranids_relic_hive", 3, 1, 0, 70, 8, 4)
+		end
+	elseif self.tierLevel == 4 then
+		if self:GetBuildingCountByName("tyranids_capillary_tower", false) == 0 then
+			self:AltDynamicBuild("tyranids_capillary_tower", 4, 1, 0, 80, 10, 6)
+		end
+	end
+
+	-- Perform dynamic researches and builds, ONLY if we have all Buildings and Tier needs fulfilled per tier, and we have an HQ.
+	if not TyranidsReserveFaithResource then
+		-- Dynamic research
+		local num_homa_squads = self:CountSquads("tyranids_squad_hormagaunt") + self:CountSquads("tyranids_squad_hormagaunt_max")
+		local num_gaunt_squads = self:CountSquads("tyranids_squad_spinegaunt") + self:CountSquads("tyranids_squad_termagant") + self:CountSquads("tyranids_squad_spinegaunt_max") + self:CountSquads("tyranids_squad_termagant_max") + num_homa_squads
+		local num_genestealer_squads = self:CountSquads("tyranids_squad_genestealer") + self:CountSquads("tyranids_squad_genestealer_max")
+		local num_lictor_squads = self:CountSquads("tyranids_squad_lictor")
+		local num_warrior_squads = self:CountSquads("tyranids_squad_warrior")
+		local num_carnifex_squads = self:CountSquads("tyranids_squad_carnifex_skiller") + self:CountSquads("tyranids_squad_carnifex_khazi") + self:CountSquads("tyranids_squad_carnifex") + self:CountSquads("tyranids_squad_carnifex_uber")
+		local num_hive_tyrant_squads = self:CountSquads("tyranids_squad_hive_tyrant")
+		local num_brood_lord_squads = self:CountSquads("tyranids_squad_broodlord")
+		local num_ripper_squads = self:CountSquads("tyranids_squad_ripperswarm")
+
+		-- Item-Syntax: ResearchName, MinTier, RequisitionCost, InfluenceCost, MinSquadCap, MinSupportCap, SquadName, SquadMinCount
+		if (num_gaunt_squads > 2) then
+			self:AltDynamicResearch("tyranids_gaunt_upgrade_research_1", 1, 130, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_gaunt_upgrade_research_2", 2, 130, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_hormagaunt_adrenal_glands_research", 2, 40, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_gaunt_upgrade_research_3", 3, 130, 0, 0, 0, nil, 0)
+		end
+
+		if (num_genestealer_squads + num_brood_lord_squads > 1) then
+			self:AltDynamicResearch("tyranids_genestealer_upgrade_research_1", 1, 75, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_upgrade_research_2", 2, 75, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_bl_infiltration_research", 2, 80, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_heavy_armor", 2, 100, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_tendrils_research", 2, 75, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_scyth_research", 3, 80, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_upgrade_research_3", 3, 75, 0, 0, 0, nil, 0)
+		end
+
+		if (num_lictor_squads > 1) then
+			self:AltDynamicResearch("tyranids_lictor_upgrade_research_1", 1, 75, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_lictor_upgrade_research_2", 2, 75, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_lictor_upgrade_research_3", 3, 75, 0, 0, 0, nil, 0)
+		end
+
+		self:AltDynamicResearch("tyranids_xeno_upgrade_research_1", 2, 150, 0, 0, 0, "tyranids_squad_zoanthropes", 1)
+		self:AltDynamicResearch("tyranids_xeno_upgrade_research_1", 2, 150, 0, 0, 0, "tyranids_squad_biovores", 1)
+
+		if (num_warrior_squads > 1) then
+			self:AltDynamicResearch("tyranids_warrior_adrenal_glands_research", 3, 150, 0, 0, 0, nil, 0)
+		--	self:AltDynamicResearch("tyranids_warrior_ext_carapace_research", 3, 200, 0, 0, 0, nil, 0)
+		--	self:AltDynamicResearch("tyranids_warrior_leaping_research", 3, 100, 0, 0, 0, nil, 0)
+		end
+
+		if (num_carnifex_squads > 1) then
+			self:AltDynamicResearch("tyranids_carnifex_ext_carapace_research", 3, 200, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_carnifex_toxic_miasma_research", 3, 150, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_carnifex_implant_research", 3, 250, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_carnifex_regeneration_research", 3, 200, 0, 0, 0, nil, 0)
+		end
+
+		if (num_hive_tyrant_squads > 0) then
+			self:AltDynamicResearch("tyranids_hivetyrant_implant_research", 3, 180, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_hivetyrant_toxic_miasma_research", 3, 150, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_hivetyrant_carapace_research", 3, 200, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_hivetyrant_warp_field_research", 4, 200, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_hivetyrant_wings_research", 4, 250, 0, 0, 0, nil, 0)
+		end
+
+		if (num_ripper_squads > 0) then
+			self:AltDynamicResearch("tyranids_ripper_leaping_research", 3, 100, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_ripper_toxin_sacs_research", 3, 100, 0, 0, 0, nil, 0)
+		end
+
+		-- Last in the research order, and only on tier 3 and above, and only if we have enough 
+		if self.tierLevel > 2 then
+			self:AltDynamicResearch("tyranids_building_miasmax2_research", 3, 400, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_building_synapse_aurax2_research", 4, 250, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_genestealer_won", 4, 75, 0, 0, 0, nil, 0)
+			self:AltDynamicResearch("tyranids_gaunt_won", 4, 130, 0, 0, 0, nil, 0)
+		end
+
+		-- Dynamic research
+		-- Always perform dynamic buildings builds, if we have excessive Influence and we fulfil the 1 HQ requirement
+		-- Item-Syntax: BuildingName, BuildingCount, MinTier, MinRequisition, MinInfluence, MinSquadCap, MinSupportCap
+		self:AltDynamicBuild("tyranids_hq", 2, 3, 700, 95, 16, 16)
+		self:AltDynamicBuild("tyranids_hq", 3, 4, 1000, 95, 16, 16)
+		self:AltDynamicBuild("tyranids_gaunt_hive", 2, 2, 0, 50, 15, 0)
+		self:AltDynamicBuild("tyranids_warrior_hive", 2, 2, 0, 50, 15, 0)
+		self:AltDynamicBuild("tyranids_digest_pool", 8, 2, 0, 80, 0, 0)
+		self:AltDynamicBuild("tyranids_carnifex_hive", 2, 3, 0, 70, 0, 6)
+		self:AltDynamicBuild("tyranids_xeno_hive", 2, 3, 0, 70, 0, 6)
+		self:AltDynamicBuild("tyranids_relic_hive", 1, 4, 0, 70, 0, 0)
+
+		local iInf = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+		if iInf > 40 then
+			self:DynamicAddon("tyranids_hq_addon_1", 3, 1, 200, 100, 0, 0, nil, nil, false)
+		end
+		iInf = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+		if iInf > 40 and self.tierLevel > 1 then
+			self:DynamicAddon("tyranids_hq_addon_2", 3, 2, 200, 100, 0, 0, nil, nil, false)
+		end
+	end
+
+	-- Check resources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iInfluence = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+
+	if (iRequisition < 500 and iInfluence >= 10 and self.tierLevel < 3) or
+	   (iRequisition < 1000 and iInfluence >= 10 and self.tierLevel > 2) then
+
+		-- Check if a plan exists
+		local iBuildingID = cpu_manager.stats:GetBuildingID("tyranids_digest_pool")
+		if (self:PlanExists("Build Building Plan", iBuildingID)) then
+			return
+		end
+		
+		-- Check if any Hives are in production
+		for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+			-- Check building ID
+			if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+				return
+			end
+		end
+		
+		-- Build a Pool
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Building
+		tBuildType.name = "tyranids_digest_pool"
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+
+	-- Compute either standard or no-limit defensive turrets based on tiers
+	if (self.tierLevel >= 1) then
+
+		-- Try to build standard or no-limit defensive turrets
+		self:DynamicBuild("tyranids_bio_turret", 1, 1, 0, 0, 0, 0)
+	end
+
+	if (self.tierLevel >= 2) then
+
+		-- Try to build standard or no-limit defensive turrets
+		self:DynamicBuild("tyranids_bio_turret", 2, 2, 0, 0, 0, 0)
+		self:DynamicBuild("tyranids_bio_turret_no_limit", 2, 2, 0, 0, 0, 0)
+	end
+
+	if (self.tierLevel >= 3) then
+
+		-- Try to build standard or no-limit defensive turrets
+		self:DynamicBuild("tyranids_bio_turret", 4, 3, 0, 0, 0, 0)
+		self:DynamicBuild("tyranids_bio_turret_no_limit", 4, 3, 0, 0, 0, 0)
+
+		-- Dynamically build turret addon if possible
+		self:DynamicAddon("tyranids_turret_addon_bioacid", 50, 3, 25, 0, 0, 0, nil, nil, false)
+	end
+
+	if (self.tierLevel >= 4) then
+		
+		-- Try to build standard or no-limit defensive turrets
+		self:DynamicBuild("tyranids_bio_turret", 10, 4, 0, 0, 0, 0)
+		self:DynamicBuild("tyranids_bio_turret_no_limit", 10, 4, 0, 0, 0, 0)
+	end
+end
+
+-- Force AI to give priority to re-build HQ if lost and none are present
+function TyranidBuildBaseStrategy:BuildFirstHQ()
+
+	-- Check if a plan exists
+	local iBuildingID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	if (self:PlanExists("Build Building Plan", iBuildingID)) then
+		return
+	end
+
+	-- Check if any HQ are in production
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+
+		-- Check building ID
+		if (oBuildChannel:GetBlueprintID() == iBuildingID and not oBuildChannel:ConstructionDone()) then
+			return
+		end
+	end
+		
+	-- Build the HQ
+	local sHQName = self:GetBuildingName("HQ")
+	local tBuildType = CpuBuildType()
+	tBuildType.btype = CpuPrerequisites.BT_Building
+	tBuildType.name = sHQName
+	if (self:TryBuild( tBuildType )) then
+		aitrace("BuildController: Dynamic build of "..tBuildType.name)
+	end
+	return
+end
+
+-- Force AI to give priority to recruit a builder unit if none are present
+function TyranidBuildBaseStrategy:BuildFirstBuilder(iBuilderName)
+
+	if self:CountSquads(iBuilderName) < 1 then
+
+		-- Recruit a builder squad
+		local tBuildType = CpuBuildType()
+		tBuildType.btype = CpuPrerequisites.BT_Squad
+		tBuildType.name = iBuilderName
+		if (self:TryBuild( tBuildType )) then
+			aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		end
+		return
+	end
+end
+
+-- Arkhan 01.2006: Method to check if force tech should be computed
+function TyranidBuildBaseStrategy:ForceTech()
+
+	-- Check time
+	if (g_iGMT < 60 * CpuManager.ForceTech.StartTier1) then
+		return false
+	end
+	
+	-- Check ressources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition )
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power )
+	local iInfluence = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+
+	-- Check tier
+	local iTierLevel = self:GetTierLevel()
+	if (iTierLevel == 1) then
+	
+		-- Check resources
+		if (iInfluence > 30) then
+			return false
+		end
+		return not self.m_bHQAddon1
+		
+	elseif (iTierLevel == 2) then
+
+		-- Check build channel for machine cult
+		iID = cpu_manager.stats:GetBuildingID("tyranids_carnifex_hive")
+		local bHasVehicleBuilding = false
+		for oBuildChannel in build_manager:GetBuildChannelAIs() do
+		
+			-- Check building ID
+			if (oBuildChannel:GetBlueprintID() == iID) then
+				bHasVehicleBuilding = true
+				break
+			end
+		end
+		if (not bHasVehicleBuilding) then
+			return true
+		end
+		
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier2 and (iRequisition < 600 or iInfluence < 60)) then
+			return true
+		end
+		
+	elseif (iTierLevel == 3) then	
+
+		-- Check time
+		if (g_iGMT > 60 * CpuManager.ForceTech.StartTier3 and (iRequisition < 600 or iInfluence < 90)) then
+			return true
+		end
+	end
+	return false
+end
+
+-- Arkhan 03.2006: Return placement type for buildings
+function TyranidBuildBaseStrategy:GetPlacementType(iBuildingID)
+
+	local num = 0
+
+	-- Check building
+	if (cpu_manager:IsHQ(iBuildingID)) then
+		num = math.random(1,4)
+		if num < 3 then return "HQ"
+		elseif num == 3 then return "Military"
+		elseif num == 4 then return "Front1"
+		end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_gaunt_hive") then
+		num = self:GetBuildingCountByName("tyranids_gaunt_hive", false)
+		if num < 2 then return "BaseBack"
+		elseif num == 2 then return "Military"
+		else return "Front1" end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_warrior_hive") then
+		num = self:GetBuildingCountByName("tyranids_warrior_hive", false)
+		if num < 2 then return "BaseBack"
+		elseif num == 2 then return "Military"
+		else return "Front1" end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_xeno_hive") then
+		num = self:GetBuildingCountByName("tyranids_xeno_hive", false)
+		if num == 0 then return "BaseBack"
+		elseif num < 2 then return "Military"
+		else return "Front1" end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_carnifex_hive") then
+		num = self:GetBuildingCountByName("tyranids_carnifex_hive", false)
+		if num == 0 then return "BaseBack"
+		elseif num < 2 then return "Military"
+		else return "Front1" end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_relic_hive") then
+		num = self:GetBuildingCountByName("tyranids_relic_hive", false)
+		if num == 0 then return "BaseBack"
+		else return "Military" end
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_capillary_tower") or
+		iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_bio_turret") or
+		iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_bio_turret_no_limit") then
+		return "Front2"   
+	elseif iBuildingID == cpu_manager.stats:GetBuildingID("tyranids_digest_pool") then
+		num = self:GetBuildingCountByName("tyranids_digest_pool", false)
+		if num < 2 then return "BaseBack"
+		elseif num < 7 then return "Safeplace"
+		else return "Military" end
+	end
+	return "Basic"
+end
+
+-- Arkhan 11.2006: Check if we have enough resources for a bigger generator
+function TyranidBuildBaseStrategy:HasResourcesForBiggerGenerator(iRequisition, iPower)
+
+	-- Check requisition
+	if (iRequisition < 600) then
+		return false
+	end
+	return true
+end
+
+-- Arkhan 11.2006: Virtual method for checking out relic units
+function TyranidBuildBaseStrategy:RelicRequired(sName)
+
+	-- Check name
+	if (sName == "tyranids_squad_trygon")
+	or (sName == "tyranids_squad_hierophant_titan") then
+		return true
+	end
+	return false
+end
+
+
+-----------------------------------------------------------------
+-- Arkhan 10.2005: Compute build programs
+-- Updated by Gambit to include Faith, Souls and Pop.
+function TyranidBuildBaseStrategy:ComputeBuildProgram()
+	aitrace("BuildController: Compute build program...")
+
+	-- Check all types of resources
+	local iRequisition = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Requisition ) / self.m_iTechBreak
+	local iPower = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ) / self.m_iTechBreak
+	local iFaith = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+	local iSouls = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Souls )
+	local iPopulation = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Pop )
+
+	-- Check squad and support cap
+	local iSquadCapLeft		= self:GetSquadCapLeft()
+	local iSquadCap			= self:GetSquadCap()
+	local iSupportCapLeft	= build_manager:GetSupportCapLeft()
+	local iSupportCap		= build_manager:GetSupportCapCurrentMax() - iSupportCapLeft
+	
+	-- Get current tier
+	local iTier = self:GetTierLevel()
+	aitrace("BuildController: Current tier = "..tostring(iTier))
+	
+	-- Get current army strength
+	local iArmyStrength = cpu_manager:GetArmyStrength()
+	aitrace("BuildController: Current army strength = "..tostring(iArmyStrength))
+	
+	-- Check if we have a builder
+	local iBuilders = military_manager:GetNumEngineers()
+	
+	-- Check for massive battles mode
+	local fArmyCapModifier = 1.0
+	if (CpuManager.AISettings.bMassiveBattlesMode and g_fMassiveBattlesModifier ~= nil) then
+		fArmyCapModifier = g_fMassiveBattlesModifier
+	end
+			
+	-- Reset squad limits (for the moment)
+	local iIndex = 1
+	for iLoop1 in self.info.SquadLimits do
+		if (self.m_iSquadLimit == iIndex) then
+			for iLoop2 in self.info.SquadLimits[iLoop1] do
+				build_manager:SetSquadLimit(iLoop2, math.floor(self.info.SquadLimits[iLoop1][iLoop2] * fArmyCapModifier + 0.5))
+			end
+			break
+		end
+		iIndex = iIndex + 1
+	end
+	
+	-- HQ emergency check
+	if (self:HQEmergency()) then
+		self.m_bSpendMoney = false
+		Tactic.Options.can_reinforce = false
+	else
+		self.m_bSpendMoney = true
+		Tactic.Options.can_reinforce = self:CheckReinforce()
+	end
+	
+	-- Check for force teching
+	local bForceTech = false
+	if (self:ForceTech()) then
+	
+		-- Check HQ threat
+		if (cpu_manager:GetCriticalSituation() <= 0) then
+		
+			-- Force teching
+			aitrace("BuildController: Force teching!!!")
+			bForceTech = true
+	   		Tactic.Options.can_reinforce = false
+	   		self.m_bSpendMoney = false
+		end
+	end
+	
+	-- Check if we have to abort a rush program
+	if (self.m_iPrepareRush > 0 and cpu_manager:GetCriticalSituation() > 0) then
+
+    	-- Abort rush
+    	aitrace("ABORT RUSH")
+		self.m_iPrepareRush = 0
+		self.m_iFinishedRush = 4
+		
+	    -- Switch to standard build program
+	    self.m_iCurrentBuildProgram = 1
+	end
+		
+	-- Create building list and validate start point
+	self.m_aBuildings = {}
+	self.m_aListeningPosts = {}
+	local iHQID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("HQ"))
+	local vHQPos = nil
+	local bUpdateStartPoint = true
+	local iClosestHQDistance = sqr(1000)
+	for oBuilding in military_manager:GetBases() do
+	
+		-- Check for valid building
+		if (oBuilding:IsValid()) then
+		
+			-- Get blueprint ID
+			local iBlueprintID = oBuilding:GetBlueprintID()
+		
+			-- Add to building or post list
+			if (oBuilding:IsListeningPost()) then
+				table.insert(self.m_aListeningPosts, { oBuilding, iBlueprintID, oBuilding:IsConstructionDone() })
+			else
+	  			table.insert(self.m_aBuildings, { oBuilding, iBlueprintID, oBuilding:IsConstructionDone() })
+	  		end
+	  		
+	  		-- Get position
+			local vPos = oBuilding:GetPosition()
+		
+			-- Check for buildings in range of current start point
+			local iDistance = distance_sqr(vPos, cpu_manager.start_pos)
+			if (iDistance < sqr(35)) then
+				bUpdateStartPoint = false
+			end
+		
+			-- Check for HQ building
+			if (iBlueprintID == iHQID and iDistance < iClosestHQDistance) then
+				vHQPos = vPos
+				iClosestHQDistance = iDistance
+			end
+		end
+	end
+	
+	-- Create list of build channels
+	self.m_aBuildChannels = {}
+	for oBuildChannel in build_manager:GetBuildChannelAIs() do
+	
+		-- Only add complete build channels
+		if (oBuildChannel:ConstructionDone()) then
+			table.insert(self.m_aBuildChannels, { oBuildChannel, oBuildChannel:GetBlueprintID() })
+		end
+	end
+	
+	-- Update start point if necessary
+	if (bUpdateStartPoint and vHQPos ~= nil) then
+	
+		-- Validate position
+		aitrace("CpuManager: Reset start point")
+		cpu_manager.start_pos = vHQPos
+	end
+	
+	-- Make sure we've enough req in tier 1 to build posts
+	if (iTier == 1) then
+		iRequisition = iRequisition - 100
+	end
+	
+	-- Check if we are building a bigger generator
+	local iBiggerGeneratorID = cpu_manager.stats:GetBuildingID(self:GetBuildingName("BiggerGenerator"))
+	local oBiggerGeneratorPlan = self:GetPlan("Build Building Plan", iBiggerGeneratorID)
+	if (oBiggerGeneratorPlan ~= nil and not oBiggerGeneratorPlan.started_building and not self:HasResourcesForBiggerGenerator(iRequisition, iPower)) then
+		self:SaveRessources(true)
+		return
+	end
+
+	-- Compute build program
+	local aTurretPosition = {}
+	local bSaveRessources = true
+	local bBuildUnits = true
+	for iLoop1 = 1, table.getn(self.info.BuildPrograms[self.m_iCurrentBuildProgram]) do
+
+		-- Extract object data
+		-- Item-Syntax: MinTier, MinReq, MinPow, MinFaith, MinSouls, MinPop, MinArStrngth, MinCount, Type, Name, TierExclusive
+		local iMinTier			= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][1]
+		local iMinRequisition	= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][2]
+		local iMinPower			= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][3]
+		local iMinFaith			= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][4]
+		local iMinSouls			= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][5]
+		local iMinPopulation	= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][6]
+		local iMinArmyStrength	= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][7]
+		local iCount			= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][8]
+		local sType				= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][9]
+		local sName				= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][10]
+		-- dark40k 10.2008 -- 11th parameter added true if to be used only for this tier (was already the case for sType="Unit")
+		local bSingleTier		= self.info.BuildPrograms[self.m_iCurrentBuildProgram][iLoop1][11]
+		local iID				= 0
+		
+		-- Modify the army strength
+		if (self.info.ArmyStrengthModifier ~= nil) then
+			iMinArmyStrength = iMinArmyStrength * self.info.ArmyStrengthModifier
+		end
+		
+		-- If min Requisition is 0, then set it to -100 to avoid problems
+		if (iMinRequisition == 0) then
+			iMinRequisition = -100
+		end
+
+		-- If min Power is 0, then set it to -100 to avoid problems
+		if (iMinPower == 0) then
+			iMinPower = -100
+		end
+
+		-- If min Faith is 0, then set it to -100 to avoid problems
+		if (iMinFaith == 0) then
+			iMinFaith = -100
+		end
+
+		-- If min Souls is 0, then set it to -100 to avoid problems
+		if (iMinSouls == 0) then
+			iMinSouls = -100
+		end
+
+		-- If min Population is 0, then set it to -100 to avoid problems
+		if (iMinPopulation == 0) then
+			iMinPopulation = -100
+		end
+				
+		-- Check how many instances exist
+		local iCurrentInstances = 0
+
+		-- dark40k 10.2008 : no creation if wrong tier and singletier set
+		-- added first test to check Tier level
+		if (iTier~=iMinTier) and bSingleTier==true then
+			iCount = 0
+		elseif (sType == "Building") then
+
+			-- Check for turret
+			if (sName == self:GetBuildingName("Turret")) then
+				
+				-- Check special modes
+				if (not CpuManager.AISettings.bTurrets) then
+					iCount = 0
+				elseif (CpuManager.AISettings.bFortressMode) then
+					iCount = math.min(iCount * 2, math.max(iCount, 6))
+				end
+			end
+			
+			-- Check for mine
+			if (sName == self:GetBuildingName("Mine")) then
+				
+				-- Check special modes
+				if (not CpuManager.AISettings.bMines) then
+					iCount = 0
+				elseif (CpuManager.AISettings.bFortressMode) then
+					iCount = math.min(iCount * 2, math.max(iCount, 6))
+				end
+			end
+
+			-- Build building
+			if (iCount > 0) then
+			
+				-- Get building ID
+				iID = cpu_manager.stats:GetBuildingID(sName)
+
+				-- Check building list for current building
+				iCurrentInstances = self:GetBuildingCountByBPID(iID, false)
+
+				-- Check build plans for current building
+				local oBuildPlan = self:GetPlan("Build Building Plan", iID)
+				if (oBuildPlan ~= nil) then
+
+					-- Check if building was not started, yet
+					if (not oBuildPlan.started_building and (iRequisition < iMinRequisition + 100 or iPower < iMinPower + 100 or iFaith < iMinFaith + 100 or iSouls < iMinSouls + 100 or iPopulation < iMinPopulation + 100)) then
+						self:SaveRessources(bSaveRessources)
+						return
+					end
+
+					-- Don't build more than two buildings of the same type at the same time
+					if (self:PlanCount("Build Building Plan", iID) >= 2) then
+						iCurrentInstances = iCount
+					end
+				end
+			end
+			
+		elseif (sType == "Research") then
+
+			-- Get research ID
+			iID = cpu_manager.stats:GetResearchID(sName)
+			
+			-- Check if research exists
+			if (cpu_manager.cpu_player:IsResearchComplete(sName)) then
+				iCurrentInstances = iCurrentInstances + 1
+			end
+			
+			-- Check if research plan exists
+			local oBuildPlan = self:GetPlan("Build Research Plan", iID)
+			if (oBuildPlan ~= nil) then
+			
+				-- Check if research was not started, yet
+				if (not oBuildPlan.started_building and (iRequisition < iMinRequisition + 100 or iPower < iMinPower + 100 or iFaith < iMinFaith + 100 or iSouls < iMinSouls + 100 or iPopulation < iMinPopulation + 100)) then
+					self:SaveRessources(bSaveRessources)
+					return
+				end
+				iCurrentInstances = iCount
+			end
+			
+		elseif (sType == "Addon") then
+		
+			-- Get addon ID
+			iID = cpu_manager.stats:GetAddOnID(sName)
+			
+			-- Check existing addons
+			local sAddonBuilding = self:GetAddonBuilding(sName)
+			local iBuildingID = cpu_manager.stats:GetBuildingID(sAddonBuilding)
+			local iBuildingCount = 0
+			for iLoop2 in self.m_aBuildChannels do
+			
+				-- Check for addon building
+				if (self.m_aBuildChannels[iLoop2][2] == iBuildingID) then
+					iBuildingCount = iBuildingCount + 1
+					if (self.m_aBuildChannels[iLoop2][1]:CanAddToQueue(BuildChannelAI.PQ_AddOn, iID) ~= BuildChannelAI.CANBUILD_Ok) then
+						iCurrentInstances = iCurrentInstances + 1
+					end
+				end
+			end
+						
+			-- Check HQ tier addon 1
+			if (self:IsTierAddon(sName, 2) and not self.m_bHQAddon1) then
+				iCurrentInstances = 0
+				
+			-- Check HQ tier addon 2
+			elseif (self:IsTierAddon(sName, 3) and not self.m_bHQAddon2) then
+				iCurrentInstances = 0
+			end
+			
+	  		-- Calculate demand (one minimum)
+			iCount = math.max(math.floor(iCount * iBuildingCount / 100), 1)
+			
+			-- Check if addon plan exists
+			local oBuildPlan = self:GetPlan("Build AddOn Plan", iID)
+			if (oBuildPlan ~= nil) then
+			
+				-- Check if addon was not started, yet
+				if (not oBuildPlan.started_building and (iRequisition < iMinRequisition + 100 or iPower < iMinPower + 100 or iFaith < iMinFaith + 100 or iSouls < iMinSouls + 100 or iPopulation < iMinPopulation + 100)) then
+					self:SaveRessources(bSaveRessources)
+					return
+				end
+				iCurrentInstances = iCount
+			end
+
+		elseif (sType == "TurretAddon") then
+
+			-- Get addon ID
+			iID = cpu_manager.stats:GetAddOnID(sName)
+			
+			-- Check existing addons
+			local sAddonBuilding = self:GetAddonBuilding(sName)
+			local iTurretID = cpu_manager.stats:GetBuildingID(sAddonBuilding)
+			local iTurretCount = 0
+			aTurretPositions = {}
+			for iLoop2 in self.m_aBuildChannels do
+			
+				-- Check for addon building
+				if (self.m_aBuildChannels[iLoop2][2] == iTurretID) then
+					iTurretCount = iTurretCount + 1
+					if (self.m_aBuildChannels[iLoop2][1]:CanAddToQueue(BuildChannelAI.PQ_AddOn, iID) ~= BuildChannelAI.CANBUILD_Ok) then
+						iCurrentInstances = iCurrentInstances + 1
+						aTurretPositions[iCurrentInstances] = self.m_aBuildChannels[iLoop2][1]:GetEntity():GetPosition()
+					end
+				end
+			end
+
+			-- Check for fortress mode
+			if (CpuManager.AISettings.bFortressMode and sAddonBuilding == self:GetBuildingName("Turret")) then
+				iCount = math.max(iCount, 50)
+			end
+			
+	  		-- Calculate demand (one minimum)
+			iCount = math.max(math.floor(iCount * iTurretCount / 100), 1)
+			
+			-- Check if addon plan exists
+			local oBuildPlan = self:GetPlan("Build NotifiedAddOn Plan", iID)
+			if (oBuildPlan ~= nil) then
+			
+				-- Check if turret addon was not started, yet
+				if (not oBuildPlan.started_building and (iRequisition < iMinRequisition + 100 or iPower < iMinPower + 100 or iFaith < iMinFaith + 100 or iSouls < iMinSouls + 100 or iPopulation < iMinPopulation + 100)) then
+					self:SaveRessources(bSaveRessources)
+					return
+				end
+				iCurrentInstances = iCount
+			end
+			
+	  	elseif (sType == "Unit") then
+
+	  		-- Check tier level, squad and support cap
+	  		local iUnitSquadCap, iUnitSupportCap = self:GetUnitStats(sName)
+	  		if (iTier == iMinTier and iSquadCapLeft >= iUnitSquadCap and iSupportCapLeft >= iUnitSupportCap and not bForceTech and bBuildUnits) then
+	  		
+				-- Get unit ID
+				iID = cpu_manager.stats:GetSquadID(sName)
+		  		
+				-- Check how many units we have of the current type
+				iCurrentInstances = self:CountSquads(sName)
+				
+				-- Check unit count
+				if (iCurrentInstances < iCount) then
+				
+					-- Don't build dynamic units in harassing time
+					if (g_iGMT < DefendChokePointPlan.HarassingTime * 60) then
+						self.m_bSpendMoney = false
+					end
+					
+					-- Keep building order in first 2 minutes
+					if (g_iGMT < 2 * 60) then
+						bBuildUnits = false
+					end
+				end
+				
+				-- Check if a plan exists for the current unit
+				local oBuildPlan = self:GetPlan("Build Unit Plan", iID)
+				if (oBuildPlan ~= nil) then
+					
+					-- Check if unit was not started, yet
+					if (not oBuildPlan.started_building and (iRequisition < iMinRequisition + 100 or iPower < iMinPower + 100 or iFaith < iMinFaith + 100 or iSouls < iMinSouls + 100 or iPopulation < iMinPopulation + 100)) then
+						self:SaveRessources(bSaveRessources)
+						return
+					end
+					iCurrentInstances = iCount
+				end
+				
+				-- If max army strength is reached, then just don't build unit
+				if (iMinArmyStrength > 0 and iMinArmyStrength < iArmyStrength) then
+					iCount = 0
+				end
+				iMinArmyStrength = 0
+		  	else
+		  		iCount = 0
+	  		end
+	  		
+	  	elseif (sType == "Rush") then
+	  	
+	  		-- Check if rush was already finished
+	  		local bRestrictReinforcing = (iCount > 0)
+	  		iCount = 0
+	  		if (self.m_iFinishedRush < iMinTier) then
+	  		
+	  			-- Check tier level
+	  			if (iMinTier >= iTier) then
+	  			
+	  				-- Check rush state
+		  			if (sName == "Prepare") then
+		  			
+		  				-- Prepare rush
+		  				if (self.m_iPrepareRush < iMinTier) then	  				
+		  					aitrace("BuildController: Prepare tier"..tostring(iMinTier).." rush")
+		  					self.m_iPrepareRush = iMinTier
+		  				end
+		  				
+				  		-- Restrict unit building
+			  			self.m_bSpendMoney = false
+			  			
+			  			-- Restrict reinforcing if count is greater than zero
+			  			if (bRestrictReinforcing) then
+			  				Tactic.Options.can_reinforce = false
+			  			end
+		  			else
+		  			
+						-- Wait until we've reached the required army strength
+						if (iArmyStrength < iMinArmyStrength) then
+							Tactic.Options.can_reinforce = true
+							return
+						end
+			
+						-- Unleash rush
+						aitrace("BuildController: Unleash tier"..tostring(iMinTier).." rush")
+				   		self.m_iFinishedRush = self.m_iPrepareRush
+				   		self.m_iPrepareRush = 0
+		  			end
+		  			
+		  		-- Check if rush is still active
+		  		elseif (self.m_iPrepareRush == iMinTier) then
+		  		
+		  			-- Deactivate rush
+		  			aitrace("BuildController: Deactivate tier"..tostring(iMinTier).." rush")
+		  			self.m_iFinishedRush = iMinTier
+		  			self.m_iPrepareRush = 0
+		  		end
+	  		end
+	  		
+	  	elseif (sType == "Restrict") then
+
+			-- Restrict squad limit
+			aitrace("BuildController: Restrict squad limit for "..sName.." to "..tostring(iCount))
+			build_manager:SetSquadLimit(sName, math.floor(iCount * fArmyCapModifier + 0.5))
+  			iCount = 0
+		end
+		
+		-- Check if we need a Relic
+		if (iCurrentInstances < iCount and self:RelicRequired(sName)) then
+			
+			-- Check AI settings and relics
+			if (not CpuManager.AISettings.bRelicUnits or not self:HasRelic()) then
+				iCount = 0
+			end
+		end
+		
+		-- Check if object should be built
+		if (iCurrentInstances < iCount) then
+
+			-- Check tier level
+			if (iTier < iMinTier) then
+				return
+			end
+			
+			-- Check army power
+			if (iArmyStrength < iMinArmyStrength and not bForceTech) then
+				return
+			end
+			
+			-- If requisition or power is rare, don't spend any resources for units
+			if (iRequisition < iMinRequisition or iPower < iMinPower or iFaith < iMinFaith or iSouls < iMinSouls or iPopulation < iMinPopulation) then
+			
+				-- Restrict reinforcing and unit building if we have at least one builder
+				if (iBuilders > 0) then
+					self:SaveRessources(bSaveRessources)
+				end
+				return
+			end
+			
+			-- Build object
+			local bUpdateRessources = false
+			if (sType == "Building") then
+
+				-- Build building
+				local tBuildType = CpuBuildType()
+				tBuildType.name = sName
+				tBuildType.btype = CpuPrerequisites.BT_Building
+				if (self:TryBuild( tBuildType )) then
+					aitrace("BuildController: Building "..sName)
+					return
+				else
+					aitrace("BuildController: Building failed => "..sName)
+				end
+				
+			elseif (sType == "Research") then
+			
+				-- Start research
+				local tBuildType = CpuBuildType()
+				tBuildType.name = sName
+				tBuildType.btype = CpuPrerequisites.BT_Research
+				if (self:TryBuild( tBuildType )) then
+					aitrace("BuildController: Researching "..sName)
+				end
+				bUpdateRessources = true
+				
+			elseif (sType == "Addon") then
+			
+				-- Build addon
+				local tBuildType = CpuBuildType()
+				tBuildType.name = sName
+				tBuildType.btype = CpuPrerequisites.BT_AddOn
+				if (self:TryBuild( tBuildType )) then
+
+					-- Check HQ addons
+					if (self:IsTierAddon(sName, 2)) then
+						self.m_bHQAddon1 = true
+					elseif (self:IsTierAddon(sName, 3)) then
+						self.m_bHQAddon2 = true
+					end
+					aitrace("BuildController: Building addon "..sName)
+				end
+				bUpdateRessources = true
+
+			elseif (sType == "TurretAddon") then
+			
+				-- Upgrade turret
+				aitrace("BuildController: Building turret addon "..sName)
+				self.AddPlan( self, BuildNotifiedAddOnPlan( iID , 0, aTurretPositions) )
+				bUpdateRessources = true
+				
+			elseif (sType == "Unit") then
+					
+				-- Build unit
+				local tBuildType = CpuBuildType()
+				tBuildType.btype = CpuPrerequisites.BT_Squad
+				tBuildType.name = sName
+				if (self:TryBuild( tBuildType )) then
+					aitrace("BuildController: Force-building "..sName)
+					bBuildUnits = false
+					bUpdateRessources = true
+				end
+			end
+			
+			-- Update resources
+			if (bUpdateRessources) then
+				bSaveRessources = false
+				iRequisition = iRequisition - iMinRequisition
+				iPower = iPower - iMinPower
+				iFaith = iFaith - iMinFaith
+				iSouls = iSouls - iMinSouls
+				iPopulation = iPopulation - iMinPopulation
+			end
+		end
+	end
+end
+
+
+function TyranidBuildBaseStrategy:Update()
+
+	aitrace("BuildBaseStrategy: Update...", true)
+
+	-- Superclass
+	Strategy.Update(self)
+	
+	-- Always want more strategic points
+	if (self:PlanCount( "Resource Plan" ) < self.info.post_builder) then
+		self:AddPlan( ResourcePlan() )	
+	end
+	
+	-- Set capture plans
+	local iCapturePlans = self.info.flag_capture
+	if (cpu_manager:GetArmyStrength() > 2500) then
+		iCapturePlans = iCapturePlans + 1
+	end
+	if (self:PlanCount( "Capture Plan" ) < iCapturePlans) then
+		self:AddPlan( CapturePlan( cpu_manager.start_pos ) )	
+	end
+	
+	-- Check current tier
+	self:UpdateTierLevel()
+	
+	-- Update HQ count
+	self.num_hq = self:GetBuildingCountByName(self:GetBuildingName("HQ"))
+	
+	-- Build buildings, research and addons
+	self:ComputeBuildProgram()
+	
+	-- Check if we need more cap !
+	if (not cpu_manager:HQThreat() and self.m_bSpendMoney) then 
+		self:EvaluateSquadCap()
+	end
+	
+	-- Check last update
+	if (g_iGMT > self.m_iNextUpdate) then
+	
+		-- Build LP's if possible (Necessary because of DC 1.2 bug)
+		local sPostName = self:GetBuildingName("ListeningPost")
+		if (sPostName ~= nil and resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) > 100) then
+		
+			-- Check if post plan exist
+			local iID = cpu_manager.stats:GetBuildingID(sPostName)
+			if (not self:PlanExists("Build Building Plan", iID)) then
+			
+				-- Try to build post
+		        local tBuildType = CpuBuildType()
+		        tBuildType.btype = CpuPrerequisites.BT_Building
+		        tBuildType.name = sPostName
+		        if (self:TryBuild( tBuildType )) then
+		            aitrace("BuildController: Dynamic build of "..tBuildType.name)
+		        end
+			end
+		end
+
+		-- Race specific builds
+		self:BuildFlexible()
+		
+		-- Build generators
+		self:DoBuildGenerators()
+		
+		-- Finish buildings
+		self:FinishBuildings()
+		
+		-- Set next update time
+		self.m_iNextUpdate = g_iGMT + 10
+	end
+	
+	-- Build units
+	self:DoBuildUnits()
+	
+	-- (Gambit Update) See if we are ready to spend Influence for researches and stuff, or save it to speed up tiering
+	self:ReserveFaithResourceTest()
+
+	-- Either defend or check if I should attack
+	self.military_stance( self )
+end
+
+
+function TyranidBuildBaseStrategy:ReserveFaithResourceTest()
+
+	-- If we have no HQ,do not spend Influence
+	if self:GetBuildingCountByName("tyranids_hq", false) == 0 then
+		BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+		TyranidsReserveFaithResource = true
+		self:AltDynamicBuild("tyranids_hq", 1, 1, 0, 70, 0, 0)
+		return
+	end
+
+	-- Per tier requirements that must be fulfilled, in order to proceed to dynamically researching
+	local iInfluence = resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Faith )
+	if self.tierLevel == 1 and iInfluence < 45 then
+		if self:GetBuildingCountByName("tyranids_digest_pool", false) < 2 or
+			(self:GetBuildingCountByName("tyranids_gaunt_hive", false) +
+			self:GetBuildingCountByName("tyranids_warrior_hive", false)) == 0 then
+			TyranidsReserveFaithResource = true
+			BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+			return
+		else
+			local iID = cpu_manager.stats:GetAddOnID("tyranids_hq_addon_1")
+			if (self:PlanExists("Build AddOn Plan", iID)) then
+				TyranidsReserveFaithResource = true
+				BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+				return
+			end
+		end
+	elseif self.tierLevel == 2 and iInfluence < 70 then
+		if (self:GetBuildingCountByName("tyranids_xeno_hive", false) +
+			self:GetBuildingCountByName("tyranids_carnifex_hive", false)) == 0 then
+			BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+			TyranidsReserveFaithResource = true
+		else
+			local iID = cpu_manager.stats:GetAddOnID("tyranids_hq_addon_2")
+			if (self:PlanExists("Build AddOn Plan", iID)) then
+				TyranidsReserveFaithResource = true
+				BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+				return
+			end
+		end
+	elseif self.tierLevel == 3 and iInfluence < 90 then
+		if self:GetBuildingCountByName("tyranids_relic_hive", false) == 0 then
+			BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+			TyranidsReserveFaithResource = true
+			return
+		end
+	elseif self.tierLevel == 4 then
+		if self:GetBuildingCountByName("tyranids_capillary_tower", false) == 0 then
+			BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = 0
+			TyranidsReserveFaithResource = true
+			return
+		end
+	end
+
+	-- All good, if we have not "returned" so far - NO need to reserve Influence for other stuff...
+	TyranidsReserveFaithResource = false
+	BuildBaseStrategyInfo.tyranids_race.SquadLimits.standard.tyranids_squad_spore_cluster = math.random( 2,4 )
+end

@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'tslisteningposttactic.ai'
+-- Edited by Thudmeizer		@ 03.01.2012
+
+class 'TSListeningPostTactic' (BaseTactic)
+
+TSListeningPost = {}
+
+function TSListeningPostTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("TS Listening Post Tactic")
+end
+
+function TSListeningPostTactic:InitAbilities()
+	
+	-- Init abilities
+	if (self.m_iWarpDetonationID == nil) then
+		self.m_iWarpDetonationID = cpu_manager.stats:GetAbilityID( "thousand_sons_warp_detonation" )
+	end
+end
+
+function TSListeningPostTactic:DoAbilities()
+
+	-- We are dying, lower requisites for self-destruction
+	if (self.base_ai:WasRecentlyHurt() and self.base_ai:GetHealthPercentage() < 0.45) then
+		Ability.DoAbilityArea( self.base_ai, self.m_iWarpDetonationID, Ability.Filters.CloseInfantryEnemy, 5, 10)
+	end
+end
+

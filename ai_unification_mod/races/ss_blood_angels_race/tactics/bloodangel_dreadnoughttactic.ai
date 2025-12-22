@@ -1,0 +1,32 @@
+----------------------------------------
+-- File: 'bloodangel_dreadnoughttactic.ai'
+-- Edited by Gambit      @ 24.01.2015
+
+class 'BloodAngelDreadnoughtTactic' (BloodAngelsVehicleTactic)
+
+function BloodAngelDreadnoughtTactic:__init( squad_ai ) super( squad_ai )
+
+		self:SetName("Blood Angel Dreadnought Tactic")
+
+	self.upgradeWeaponLastcheck = g_iGMT
+end
+
+function BloodAngelDreadnoughtTactic:Upgrade()
+
+
+	-- Check if we have free resources and the option to upgrade
+	if not (Tactic.Options.can_reinforce and self.squad_ai:HasUpgradableTrooper() and self.squad_ai:GetHealthPercentage() > 0.4) then
+		return
+	end
+
+	-- Check regularly if we have to upgrade
+	if ( g_iGMT > self.upgradeWeaponLastcheck + 16 ) then
+		-- Figure out my closest enemy's favourite class
+		local class_type = cpu_manager:FindClosestEnemyPlayer():GetMajorityClassType()  
+		if (class_type == UnitStatsAI.UC_VehicleLow or class_type == UnitStatsAI.UC_VehicleMed or
+		class_type == UnitStatsAI.UC_VehicleHigh or class_type == UnitStatsAI.UC_AirMed or math.random( 1, 25 ) > 24) then
+			VehicleTactic.Upgrade(self)
+			self.upgradeWeaponLastcheck = g_iGMT
+		end
+	end
+end

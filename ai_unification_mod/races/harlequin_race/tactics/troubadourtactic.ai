@@ -1,0 +1,60 @@
+----------------------------------------
+-- File: 'troubadourtactic.ai'
+-- Edited by Thudmeizer @ 26.06.2010
+
+class 'TroubadourTactic' (HarlequinInfantryTactic)
+
+Troubadour = {}
+
+function TroubadourTactic:__init( squad_ai ) super( squad_ai )
+
+        self:SetName("Troubadour Tactic")
+end
+
+function TroubadourTactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function TroubadourTactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function TroubadourTactic:InitAbilities()
+
+	 if (Troubadour.song_id == nil) then
+		Troubadour.song_id = cpu_manager.stats:GetAbilityID( "harlequin_song_of_war" )
+	 end
+
+	 if (Troubadour.healing_id == nil) then
+		Troubadour.healing_id = cpu_manager.stats:GetAbilityID( "harlequin_song_of_healing" )
+	 end
+end
+
+function TroubadourTactic:DoAbilities()
+
+	--if self.squad_ai:IsAttached() then
+		-- First, try to heal self and attached squad
+		if ((self.squad_ai:GetHealthPercentage() < 0.65 or self.squad_ai:IsBroken()) and self.squad_ai:CanDoAbility(Troubadour.healing_id)) then
+			self.squad_ai:DoSpecialAbility(Troubadour.healing_id)
+		-- Second, attached squads get buffed
+		elseif (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(Troubadour.song_id)) then
+			self.squad_ai:DoSpecialAbility(Troubadour.song_id)
+		end
+	--end
+end
+
+function TroubadourTactic:Update()
+ 
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+   --attach to squad
+   self:TryAttachSquad( true, false, 1000, 100, nil )
+   
+end

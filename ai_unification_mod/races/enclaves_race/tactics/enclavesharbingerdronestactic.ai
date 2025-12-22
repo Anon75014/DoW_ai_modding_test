@@ -1,0 +1,74 @@
+----------------------------------------
+-- File: 'enclavesharbingerdronestactic.ai'
+-- Edited by Thudmeizer @ 09.09.2022
+
+class 'EnclavesHarbingerDronesTactic' (EnclavesVehicleTactic)
+
+function EnclavesHarbingerDronesTactic:__init( squad_ai ) super( squad_ai )
+
+	Tactic.AssignStateFunction( self, Tactic.States.Idle, EnclavesHarbingerDronesTactic.BeginIdleState )
+	Tactic.AssignStateFunction( self, Tactic.States.Hold, EnclavesHarbingerDronesTactic.BeginHoldState )
+	Tactic.AssignStateFunction( self, Tactic.States.Retreat, EnclavesHarbingerDronesTactic.BeginRetreatState )
+	Tactic.AssignStateFunction( self, Tactic.States.Attack, EnclavesHarbingerDronesTactic.BeginAttackState )
+	
+	self:SetName("Harbinger Drones Tactic")
+	self:SetState(Tactic.States.Attack)
+end
+
+function EnclavesHarbingerDronesTactic:AlwaysAttack()
+	return true
+end
+
+function EnclavesHarbingerDronesTactic:BeginIdleState()
+	EnclavesHarbingerDronesTactic.DoAttack(self)
+end
+
+function EnclavesHarbingerDronesTactic:BeginHoldState()
+	EnclavesHarbingerDronesTactic.DoAttack(self)
+end
+
+function EnclavesHarbingerDronesTactic:BeginAttackState()
+	EnclavesHarbingerDronesTactic.DoAttack(self)
+end
+
+function EnclavesHarbingerDronesTactic:BeginRetreatState()
+	EnclavesHarbingerDronesTactic.DoAttack(self)
+end
+
+function EnclavesHarbingerDronesTactic:DoAttack()
+
+	-- Check move delay
+	if (g_iGMT < self.m_iMoveDelay + 5 and self.squad_ai:IsInStateAttackMove() and not self.squad_ai:IsIdle()) then
+		return
+	end
+
+	-- Check if we are in combat
+	if (self.squad_ai:IsInCombat()) then
+		return
+	end
+
+	-- Get closest enemy
+	self.target = self:SearchTarget()
+	
+	-- Attack move to target
+	self.squad_ai:DoAttackMove(self.target)
+	self.m_iMoveDelay = g_iGMT	
+end
+
+function EnclavesHarbingerDronesTactic:SearchTarget()
+
+	-- Search closest enemy unit in range
+	local iProximityDistance = 70
+	local vDronePos = self.squad_ai:GetPosition()
+	local oEnemy = cpu_manager.cpu_player:FindFirstEnemy(vDronePos, iProximityDistance, 1)
+	if (oEnemy ~= nil) then
+		return oEnemy:GetPosition()
+	end
+	
+	-- Search closest enemy building in range
+	oEnemy = cpu_manager.cpu_player:FindFirstBaseEnemy(vDronePos, iProximityDistance, 1)
+	if (oEnemy ~= nil) then
+		return oEnemy:GetPosition()
+	end
+	return vDronePos
+end

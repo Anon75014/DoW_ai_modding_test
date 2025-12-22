@@ -1,0 +1,29 @@
+----------------------------------------
+-- File: 'ynnarilisteningposttactic.ai'
+-- Edited by Arkhan		@ 15.01.2007
+-- Edited by Thudmeizer		@ 20.06.2022
+
+class 'YnnariLPTactic' (BaseTactic)
+
+YnnariLP = {}
+
+function YnnariLPTactic:__init( base_ai ) super( base_ai )
+
+	self:SetName("Listening Post Tactic")
+
+	-- Not used, not necessary
+end
+
+function YnnariLPTactic:InitAbilities()
+
+	if YnnariLP.overload_id == nil then
+		YnnariLP.overload_id = cpu_manager.stats:GetAbilityID( "ynnari_requisition" )
+	end
+end
+
+function YnnariLPTactic:DoAbilities()
+
+	if self.base_ai:CanDoAbility(YnnariLP.overload_id) then
+		self.base_ai:DoSpecialAbility(YnnariLP.overload_id)
+	end
+end

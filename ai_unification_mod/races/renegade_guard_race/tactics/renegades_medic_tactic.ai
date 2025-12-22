@@ -1,0 +1,60 @@
+----------------------------------------
+-- File: 'renegades_bearer_tactic.ai'
+-- Edited by Thudmeizer @ 19.10.2023
+
+class 'Renegades_Medic_Tactic' (Renegades_Infantry_Tactic)
+
+Medic = {}
+
+function Renegades_Medic_Tactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("Renegades Medic Tactic")
+
+	-- Squad is able to occupy bunkers
+	self.m_bBunkerSquad = true
+end
+
+function Renegades_Medic_Tactic:IsAttacker()
+	return self:IsCommanderAttacker()
+end
+
+function Renegades_Medic_Tactic:IsDefender()
+	return self:IsCommanderDefender()
+end
+
+function Renegades_Medic_Tactic:InitAbilities()
+
+	-- Init ability ID's
+	if (Medic.drugs_id == nil) then
+		Medic.drugs_id = cpu_manager.stats:GetAbilityID( "renegade_guard_combat_drugs_vraks" )	
+	end
+end
+
+function Renegades_Medic_Tactic:DoAbilities()
+
+	if self.squad_ai:IsInCombat() then
+
+		-- Use combat drugs
+		if (self.squad_ai:WasRecentlyHurt() and self.squad_ai:GetHealthPercentage() < 0.4) then
+			if self.squad_ai:CanDoAbility(Medic.drugs_id) then
+				self.squad_ai:DoSpecialAbility(Medic.drugs_id)
+			end
+		end
+	end
+end
+
+function Renegades_Medic_Tactic:Update()
+
+	if (self:IsComplete()) then
+		return
+	end
+	
+	-- State machine
+	if (not InfantryTactic.Update(self)) then
+		return
+	end
+	
+	-- Attach to squad
+	self:TryAttachSquad(false, false, 1000, 60, nil)
+end
+ 

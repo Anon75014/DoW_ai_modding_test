@@ -1,0 +1,22 @@
+----------------------------------------
+-- File: 'TSRubrictactic.ai'
+-- Created by Thudmeizer @ 19.07.2011
+
+class 'TSRubricTactic' (TSInfantryTactic)
+
+TSRubric = {}
+
+function TSRubricTactic:__init( squad_ai ) super( squad_ai )
+
+       self:SetName("TS Rubric Tactic")
+end
+
+function TSRubricTactic:DoAbilities()
+
+	-- Try to possess and become Lord of Change
+	if (self.squad_ai:IsInCombat() and self.squad_ai:CanPossess()) then
+		self.squad_ai:DoPossess()
+	end
+
+	TSInfantryTactic.DoAbilities(self)
+end

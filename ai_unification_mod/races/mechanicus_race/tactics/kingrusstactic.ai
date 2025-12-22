@@ -1,0 +1,42 @@
+----------------------------------------
+-- File: 'KingRussTactic.ai'
+-- Created by Warboss-rus	@ 11.08.2011
+-- Edietd by Thudmeizer		@ 16.11.2015
+
+class 'KingRussTactic' (MechVehicleTactic)
+
+KingRuss = {}
+
+function KingRussTactic:__init( squad_ai ) super( squad_ai )
+
+	self:SetName("King Russ Tactic")
+end
+
+
+function KingRussTactic:InitAbilities()
+	
+	-- Init ability ID's
+	if (KingRuss.hkmissile_id == nil) then
+		KingRuss.hkmissile_id = cpu_manager.stats:GetAbilityID( "mechanicus_hunter_killer" )	
+	end
+
+	if (KingRuss.curse_id == nil) then
+		KingRuss.curse_id = cpu_manager.stats:GetAbilityID( "mechanicus_curse_machine_spirits" )	
+	end
+end
+
+
+function KingRussTactic:DoAbilities()
+
+	if (self.squad_ai:IsAttacking() and self.squad_ai:CanDoAbility(KingRuss.hkmissile_id)) then
+		-- Target infantry
+		Ability.DoAbilityTarget( self.squad_ai, KingRuss.hkmissile_id, Ability.Filters.CloseVehicleEnemy, 1 ) 
+	end
+
+	if (self.squad_ai:CanDoAbility(KingRuss.curse_id)) then 
+		-- Use EMP to affect close enemy vehicles when on low health
+		if self.squad_ai:GetHealthPercentage() < 0.2 and Ability.Filters.CloseVehicleEnemy(self.squad_ai:GetPosition(), 25, 1) ~= nil then
+			Ability.DoAbility( self.squad_ai, KingRuss.curse_id, Ability.Filters.IsInCombat )
+		end
+	end
+end
