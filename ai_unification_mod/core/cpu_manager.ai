@@ -137,7 +137,7 @@ CpuManager.RoadMap =
 
 function CpuManager:__init( cpu_player_id )
 
-	self.m_iLasteventLog = -10
+	self.m_iLastDetailedLog = -10
 	self.player_id =           cpu_player_id
 	self.cpu_player =          AI_GetCpuPlayerFromID( cpu_player_id )
 	self.stats =               self.cpu_player:GetStats()
