@@ -137,7 +137,7 @@ CpuManager.RoadMap =
 
 function CpuManager:__init( cpu_player_id )
 
-	self.m_iLastDetailedLog = 0
+	self.m_iLastDetailedLog = -10
 	self.player_id =           cpu_player_id
 	self.cpu_player =          AI_GetCpuPlayerFromID( cpu_player_id )
 	self.stats =               self.cpu_player:GetStats()
@@ -1449,7 +1449,7 @@ function CpuManager:Update()
 			" | Pop: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Pop )) )
 
 	-- Add detailed logging #Novawind 23-12-2025
-	if g_iGMT - self.m_iLastDetailedLog >= 10 then  -- Log every 10 seconds
+	if g_iGMT - self.m_iLastDetailedLog >= 5 then  -- Log every X seconds
 		self.m_iLastDetailedLog = g_iGMT
 		detailedlog("=== STATUS ===")
 		detailedlog("Resources - Req:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition))..

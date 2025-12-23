@@ -812,6 +812,16 @@ function AttackPlan:RemoveLosses()
 			local oTactic = oSquad:GetTactic()
 			local bWeak	= (oSquad:CanReinforce(false, 0) and oTactic:GetUnitStrength() < iMinStrength)
 			local bCanRetreat = (oSquad:IsRanged() or not oSquad:IsInCombat())
+
+			-- Log the decision factors for commanders and important units #Novawind 23-12-2025
+			if oTactic:GetUnitStrength() > 70 or oSquad:GetSquadName():find("commander") then
+				eventlog("RETREAT_CHECK", oSquad:GetSquadName().." IsAttacker:"..tostring(oTactic:IsAttacker())..
+						" Weak:"..tostring(bWeak).." CanRetreat:"..tostring(bCanRetreat)..
+						" AlwaysAttack:"..tostring(oTactic:AlwaysAttack())..
+						" InCombat:"..tostring(oSquad:IsInCombat())..
+						" Ranged:"..tostring(oSquad:IsRanged()))
+			end
+
 			if (not oTactic:IsAttacker() or (bWeak and bCanRetreat and not oTactic:AlwaysAttack())) then
 		
 				-- Send severly hurt squads back to base
