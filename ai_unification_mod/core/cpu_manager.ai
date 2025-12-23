@@ -1448,14 +1448,14 @@ function CpuManager:Update()
 			" | Pow: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ))..
 			" | Pop: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Pop )) )
 
-	-- Add detailed logging #Novawind 23-12-2025
-	if g_iGMT - self.m_iLasteventLog >= 5 then  -- Log every X seconds
-		self.m_iLasteventLog = g_iGMT
-		eventlog("=== STATUS ===")
-		eventlog("Resources - Req:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition))..
+	-- Add detailed logging #Novawind 12-2025
+	if g_iGMT - self.m_iLastDetailedLog >= 5 then  -- Log every X seconds
+		self.m_iLastDetailedLog = g_iGMT
+		eventlog("STATUS", "=== STATUS ===")
+		eventlog("STATUS","Resources - Req:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition))..
 				" Pow:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power))..
 				" Pop:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Pop)))
-		eventlog("Army Strength: "..tostring(self:GetArmyStrength()))
+		eventlog("STATUS","Army Strength: "..tostring(self:GetArmyStrength()))
 		
 		-- Count squads by type
 		local infantry_count = 0
@@ -1471,7 +1471,7 @@ function CpuManager:Update()
 				end
 			end
 		end
-		eventlog("Squads: Total="..total_squads.." Infantry="..infantry_count.." Vehicles="..vehicle_count)
+		eventlog("STATUS","Squads: Total="..total_squads.." Infantry="..infantry_count.." Vehicles="..vehicle_count)
 	end
 
 	-- Update managers
