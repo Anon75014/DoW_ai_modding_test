@@ -31,37 +31,41 @@ g_bDebugMode = false
 g_bDetailedLogging = true
 g_sLogPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dawn of War Definitive Edition\\Unification\\Data\\ai\\ai_logs\\"
 
-function detailedlog(msg)
+
+-- Limited logging to avoid lag
+g_LogBuffer = {}
+g_iLastFlush = 0
+
+function eventlog(event_type, msg)
     if not g_bDetailedLogging then return end
+    
+    local gmt = g_iGMT
+    local mint = math.floor(gmt / 60)
+    local sec = math.mod(gmt, 60)
+    local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
+    
+    -- Store in buffer instead of writing immediately
+    table.insert(g_LogBuffer, "AI"..player_id.." "..timestr.." ["..event_type.."] "..tostring(msg).."\n")
+    
+    -- Flush buffer every 10 seconds
+    if gmt - g_iLastFlush >= 10 then
+        flush_logs()
+        g_iLastFlush = gmt
+    end
+end
+
+function flush_logs()
+    if table.getn(g_LogBuffer) == 0 then return end
     
     local logfile = g_sLogPath.."ai_"..tostring(player_id)..".txt"
     local log = io.open(logfile, "a+")
     if log then
-        local gmt = g_iGMT
-        local mint = math.floor(gmt / 60)
-        local sec = math.mod(gmt, 60)
-        local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
-        
-        log:write("AI"..player_id.." "..timestr.." "..tostring(msg).."\n")
+        for i in g_LogBuffer do
+            log:write(g_LogBuffer[i])
+        end
         log:close()
     end
-end
-
--- Limited logging to avoid lag
-function eventlog(event_type, msg)
-    if not g_bDetailedLogging then return end
-    
-    local logfile = g_sLogPath.."ai_"..tostring(player_id).."_events.txt"
-    local log = io.open(logfile, "a+")
-    if log then
-        local gmt = g_iGMT
-        local mint = math.floor(gmt / 60)
-        local sec = math.mod(gmt, 60)
-        local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
-        
-        log:write("AI"..player_id.." "..timestr.." ["..event_type.."] "..tostring(msg).."\n")
-        log:close()
-    end
+    g_LogBuffer = {}
 end
 --
 

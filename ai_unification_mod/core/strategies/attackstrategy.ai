@@ -264,6 +264,7 @@ function AttackStrategy:CheckAttackSituation()
     local iEnemyArmyStrength = cpu_manager:GetArmyStrength(self.m_oEnemy)
     local fRatio = cpu_manager:GetRetreatRatio()
     if (iMyArmyStrength < fRatio * iEnemyArmyStrength) then
+		eventlog("ATTACK_ABORT", "Army too weak. My:"..iMyArmyStrength.." Enemy:"..iEnemyArmyStrength.." Ratio:"..string.format("%.2f", iMyArmyStrength/iEnemyArmyStrength).." Need:"..string.format("%.2f", fRatio))
     	return false
     end
     

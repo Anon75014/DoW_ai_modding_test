@@ -32,6 +32,8 @@ function AttackPlan:__init( enemy, attack_pos, start_pos, min_strength, max_perc
 
 	-- Set minimum number of units before I can start attacking
 	self.m_iRequiredArmyPower = min_strength
+	-- Log attack plan creation #Novawind
+	eventlog("ATTACK_PLAN_CREATED", "Target enemy. Required army:"..required_army_power.." Max%:"..max_army_percentage)
 	self.m_iAttackPower = 0
 
 	self.attack_units = {}
@@ -474,6 +476,8 @@ function AttackPlan:GatherForces()
 	if (bReadyForAttack or g_iGMT > self.m_iPlanStart + 120) then
 	
 		-- Start attack
+		-- Log attack start decision #Novawind
+		eventlog("ATTACK_START", "Gathered:"..iGatherStrength.."/"..self.m_iAttackPower.." Ready:"..tostring(bReadyForAttack).." TimeForced:"..(g_iGMT > self.m_iPlanStart + 120))
 		aitrace("AttackPlan: Start attack!!!")
 		Plan.SetState( self, "Attack!", AttackPlan.Attack )
 		
