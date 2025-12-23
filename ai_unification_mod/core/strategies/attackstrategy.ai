@@ -214,6 +214,7 @@ function AttackStrategy:UpdateStrategicObjective()
 
 	-- Add attack plan
 	aitrace("Init attack on critical point!!!")
+	eventlog("ATTACK_START", "Target chosen. MyArmy:"..iMyArmyStrength.." RequiredArmy:"..iRequiredAttackStrength.." EnemyAt Target:"..iEnemyStrength.." Type:"..sTargetType)
 	self.m_oAttackPlan = AttackPlan(self.m_oEnemy, self.m_vAttackPosition, cpu_manager.start_pos, iMinArmyPower, self.info.max_army_percentage)
 	self:AddPlan(self.m_oAttackPlan)
 end

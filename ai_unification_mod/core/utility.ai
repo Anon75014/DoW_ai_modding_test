@@ -23,9 +23,48 @@ INT_MAX				= 100000
 stack_trace_num = 0
 tracing = {}
 
-g_bAITrace = false
+g_bAITrace = true
 
 g_bDebugMode = false
+
+-- Custom detailed logging system  #Novawind 23-12-2025
+g_bDetailedLogging = true
+g_sLogPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dawn of War Definitive Edition\\Unification\\Data\\ai\\ai_logs\\"
+
+function detailedlog(msg)
+    if not g_bDetailedLogging then return end
+    
+    local logfile = g_sLogPath.."ai_"..tostring(player_id)..".txt"
+    local log = io.open(logfile, "a+")
+    if log then
+        local gmt = g_iGMT
+        local mint = math.floor(gmt / 60)
+        local sec = math.mod(gmt, 60)
+        local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
+        
+        log:write("AI"..player_id.." "..timestr.." "..tostring(msg).."\n")
+        log:close()
+    end
+end
+
+-- Limited logging to avoid lag
+function eventlog(event_type, msg)
+    if not g_bDetailedLogging then return end
+    
+    local logfile = g_sLogPath.."ai_"..tostring(player_id).."_events.txt"
+    local log = io.open(logfile, "a+")
+    if log then
+        local gmt = g_iGMT
+        local mint = math.floor(gmt / 60)
+        local sec = math.mod(gmt, 60)
+        local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
+        
+        log:write("AI"..player_id.." "..timestr.." ["..event_type.."] "..tostring(msg).."\n")
+        log:close()
+    end
+end
+--
+
 
 function aitrace( msg, bAILog, bReset )
 

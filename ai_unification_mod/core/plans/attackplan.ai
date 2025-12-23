@@ -751,6 +751,10 @@ end
 function AttackPlan:Retreat( retreat_pos )
 
 	aitrace("AttackPlan: Retreat!!!")
+	-- Log the retreat decision
+	local iArmyStrength, vArmyPos = self:GetArmyStrength()
+	local iEnemyStrength, iAlliedStrength = cpu_manager:GetArmyStrengthAtPos(self.attack_pos, 50)
+	eventlog("RETREAT", "Attacking. MyArmy:"..iArmyStrength.." Enemy:"..iEnemyStrength.." Allied:"..iAlliedStrength.." Ratio:"..(iArmyStrength/(iEnemyStrength+1)))
 
 	-- Retreat: move all my dudes to the closest base or start position
 	if (retreat_pos == nil) then
@@ -813,6 +817,7 @@ function AttackPlan:RemoveLosses()
 				-- Send severly hurt squads back to base
 				local vBasePos = cpu_manager:FindClosestFriendlyBaseOrStrategicPoint(self.attack_pos, cpu_manager.start_pos, true, false)
 				if (vBasePos ~= nil) then
+					eventlog("SQUAD_RETREAT", oSquad:GetSquadName().." Health:"..math.floor(oSquad:GetHealthPercentage()*100).."% Str:"..oTactic:GetUnitStrength().." InCombat:"..tostring(oSquad:IsInCombat()))
 					Plan.UnlockResource(self, oSquad)
 					table.remove(self.attack_units, iLoop1)
 					oTactic:SetState(Tactic.States.Retreat)
