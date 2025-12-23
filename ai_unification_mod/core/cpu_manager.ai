@@ -137,7 +137,7 @@ CpuManager.RoadMap =
 
 function CpuManager:__init( cpu_player_id )
 
-	self.m_iLastDetailedLog = -10
+	self.m_iLasteventLog = -10
 	self.player_id =           cpu_player_id
 	self.cpu_player =          AI_GetCpuPlayerFromID( cpu_player_id )
 	self.stats =               self.cpu_player:GetStats()
@@ -1449,13 +1449,13 @@ function CpuManager:Update()
 			" | Pop: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Pop )) )
 
 	-- Add detailed logging #Novawind 23-12-2025
-	if g_iGMT - self.m_iLastDetailedLog >= 5 then  -- Log every X seconds
-		self.m_iLastDetailedLog = g_iGMT
-		detailedlog("=== STATUS ===")
-		detailedlog("Resources - Req:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition))..
+	if g_iGMT - self.m_iLasteventLog >= 5 then  -- Log every X seconds
+		self.m_iLasteventLog = g_iGMT
+		eventlog("=== STATUS ===")
+		eventlog("Resources - Req:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition))..
 				" Pow:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power))..
 				" Pop:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Pop)))
-		detailedlog("Army Strength: "..tostring(self:GetArmyStrength()))
+		eventlog("Army Strength: "..tostring(self:GetArmyStrength()))
 		
 		-- Count squads by type
 		local infantry_count = 0
@@ -1471,7 +1471,7 @@ function CpuManager:Update()
 				end
 			end
 		end
-		detailedlog("Squads: Total="..total_squads.." Infantry="..infantry_count.." Vehicles="..vehicle_count)
+		eventlog("Squads: Total="..total_squads.." Infantry="..infantry_count.." Vehicles="..vehicle_count)
 	end
 
 	-- Update managers
