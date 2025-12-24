@@ -32,12 +32,22 @@ g_bDetailedLogging = true
 g_sLogPath = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dawn of War Definitive Edition\\Unification\\Data\\ai\\ai_logs\\"
 
 
--- Limited logging to avoid lag
-g_LogBuffer = {}
-g_iLastFlush = 0
+-- Limited logging to avoid lag and buffers per player
+g_LogBuffers = {}  -- Table of buffers per player
+g_iLastFlush = {}  -- Table of flush times per player
+g_LogFiles = {}
 
 function eventlog(event_type, msg)
-    if not g_bDetailedLogging then return end
+    if not g_bDetailedLogging or g_iGMT == nil then return end
+    
+    -- Initialize player buffer if needed
+    if not g_LogBuffers[player_id] then 
+        g_LogBuffers[player_id] = {} 
+        g_LogFiles[player_id] = g_sLogPath.."ai_"..player_id.."_"..os.date("%Y%m%d_%H%M%S")..".txt"
+    end
+    if not g_iLastFlush[player_id] then 
+        g_iLastFlush[player_id] = -10 
+    end
     
     local gmt = g_iGMT
     local mint = math.floor(gmt / 60)
@@ -45,27 +55,26 @@ function eventlog(event_type, msg)
     local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
     
     -- Store in buffer instead of writing immediately
-    table.insert(g_LogBuffer, "AI"..player_id.." "..timestr.." ["..event_type.."] "..tostring(msg).."\n")
+    table.insert(g_LogBuffers[player_id], "AI"..player_id.." "..timestr.." ["..event_type.."] "..msg.."\n")
     
-    -- Flush buffer every 10 seconds
-    if gmt - g_iLastFlush >= 10 then
-        flush_logs()
-        g_iLastFlush = gmt
+    -- Force flush if buffer too large or time elapsed
+    if table.getn(g_LogBuffers[player_id]) > 100 or gmt - g_iLastFlush[player_id] >= 10 then
+        flush_logs(player_id)
+        g_iLastFlush[player_id] = gmt
     end
 end
 
-function flush_logs()
-    if table.getn(g_LogBuffer) == 0 then return end
+function flush_logs(pid)
+    if not g_LogBuffers[pid] or table.getn(g_LogBuffers[pid]) == 0 then return end
     
-    local logfile = g_sLogPath.."ai_"..tostring(player_id)..".txt"
-    local log = io.open(logfile, "a+")
+    local log = io.open(g_LogFiles[pid], "a+")
     if log then
-        for i in g_LogBuffer do
-            log:write(g_LogBuffer[i])
+        for i = 1, table.getn(g_LogBuffers[pid]) do
+            log:write(g_LogBuffers[pid][i])
         end
         log:close()
     end
-    g_LogBuffer = {}
+    g_LogBuffers[pid] = {}
 end
 --
 
