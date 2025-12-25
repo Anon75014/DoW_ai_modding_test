@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 48
+Debug
+Release
+Skynet.suo
+Skynet.ncb
+Competition
+
+END

@@ -47,6 +47,11 @@ function AttackStrategy:Update()
 	-- Superclass
 	Strategy.Update(self)
 
+	-- Novawind 12-2025: TEST LOG
+	if self.m_oAttackPlan ~= nil then
+		eventlog("DEBUG", "AttackPlan exists and is active")
+	end
+
 	-- Check last update
 	if (g_iGMT < self.m_iNextUpdate or g_iGMT < CpuManager.AISettings.iAttackDelay * 60) then
 		return
@@ -214,6 +219,7 @@ function AttackStrategy:UpdateStrategicObjective()
 
 	-- Add attack plan
 	aitrace("Init attack on critical point!!!")
+	-- Novawind 12-2025 : logging
 	eventlog("ATTACK_START", "Target chosen. MyArmy:"..iMyArmyStrength.." RequiredArmy:"..iRequiredAttackStrength.." EnemyAt Target:"..iEnemyStrength.." Type:"..sTargetType)
 	self.m_oAttackPlan = AttackPlan(self.m_oEnemy, self.m_vAttackPosition, cpu_manager.start_pos, iMinArmyPower, self.info.max_army_percentage)
 	self:AddPlan(self.m_oAttackPlan)

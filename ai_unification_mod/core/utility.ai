@@ -38,29 +38,44 @@ g_iLastFlush = {}  -- Table of flush times per player
 g_LogFiles = {}
 
 function eventlog(event_type, msg)
-    if not g_bDetailedLogging or g_iGMT == nil then return end
+    -- Wrap everything in pcall to catch errors
+    local success, err = pcall(function()
+        if not g_bDetailedLogging or g_iGMT == nil then return end
+        
+        local pid = (cpu_manager and cpu_manager.player_id) or player_id or 0
+        
+        -- Initialize buffer
+        if not g_LogBuffers[pid] then 
+            g_LogBuffers[pid] = {} 
+            g_LogFiles[pid] = g_sLogPath.."ai_"..tostring(pid).."_"..os.date("%Y%m%d_%H%M%S")..".txt"
+        end
+        if not g_iLastFlush[pid] then 
+            g_iLastFlush[pid] = -10 
+        end
+        
+        local gmt = g_iGMT
+        local mint = math.floor(gmt / 60)
+        local sec = math.mod(gmt, 60)
+        local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
+        
+        -- Safely convert msg to string
+        local safe_msg = tostring(msg or "")
+        
+        table.insert(g_LogBuffers[pid], "AI"..tostring(pid).." "..timestr.." ["..tostring(event_type).."] "..safe_msg.."\n")
+        
+        if table.getn(g_LogBuffers[pid]) > 100 or gmt - g_iLastFlush[pid] >= 10 then
+            flush_logs(pid)
+            g_iLastFlush[pid] = gmt
+        end
+    end)
     
-    -- Initialize player buffer if needed
-    if not g_LogBuffers[player_id] then 
-        g_LogBuffers[player_id] = {} 
-        g_LogFiles[player_id] = g_sLogPath.."ai_"..player_id.."_"..os.date("%Y%m%d_%H%M%S")..".txt"
-    end
-    if not g_iLastFlush[player_id] then 
-        g_iLastFlush[player_id] = -10 
-    end
-    
-    local gmt = g_iGMT
-    local mint = math.floor(gmt / 60)
-    local sec = math.mod(gmt, 60)
-    local timestr = string.format("%02.0f", mint)..":"..string.format("%02.0f", sec)
-    
-    -- Store in buffer instead of writing immediately
-    table.insert(g_LogBuffers[player_id], "AI"..player_id.." "..timestr.." ["..event_type.."] "..msg.."\n")
-    
-    -- Force flush if buffer too large or time elapsed
-    if table.getn(g_LogBuffers[player_id]) > 100 or gmt - g_iLastFlush[player_id] >= 10 then
-        flush_logs(player_id)
-        g_iLastFlush[player_id] = gmt
+    -- If error occurred, write to a fallback log
+    if not success then
+        local log = io.open(g_sLogPath.."eventlog_errors.txt", "a+")
+        if log then
+            log:write(tostring(err).."\n")
+            log:close()
+        end
     end
 end
 

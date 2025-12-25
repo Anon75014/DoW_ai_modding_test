@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 39
+*.user
+Debug
+Release
+*.obj
+Competition
+
+END

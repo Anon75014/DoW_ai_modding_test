@@ -484,6 +484,8 @@ function CpuManager:Initialize()
 	self:IsSPUpdateNeeded()
 
 	-- Return success
+	-- Novawind 12.2025: test logging
+	eventlog("GAME_START", "AI initialized for player "..self.player_id)
 	return true
 end
 
@@ -1448,7 +1450,7 @@ function CpuManager:Update()
 			" | Pow: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ))..
 			" | Pop: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Pop )) )
 
-	-- Add detailed logging #Novawind 12-2025
+	-- Add detailed logging # Novawind 12-2025
 	if g_iGMT - self.m_iLastDetailedLog >= 5 then  -- Log every X seconds
 		self.m_iLastDetailedLog = g_iGMT
 		eventlog("STATUS", "=== STATUS ===")

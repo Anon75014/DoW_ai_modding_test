@@ -13,6 +13,10 @@ function AttackPlan:__init( enemy, attack_pos, start_pos, min_strength, max_perc
 	dbAssert( start_pos ~= nil )
 	dbAssert( enemy ~= nil )
 
+	-- Novawind 12-2025 test line
+	eventlog("TEST", "AttackPlan created successfully")
+	--
+
 	self.attack_pos = Vector3f(attack_pos)
 	self.m_vGatherPos = Vector3f()
 	self.start_pos = Vector3f(start_pos)
@@ -32,8 +36,9 @@ function AttackPlan:__init( enemy, attack_pos, start_pos, min_strength, max_perc
 
 	-- Set minimum number of units before I can start attacking
 	self.m_iRequiredArmyPower = min_strength
-	-- Log attack plan creation #Novawind
-	eventlog("ATTACK_PLAN_CREATED", "Target enemy. Required army:"..required_army_power.." Max%:"..max_army_percentage)
+	-- Log attack plan creation # Novawind 12-2025
+	eventlog("ATTACK_PLAN_CREATED", "Target enemy. Required army:"..min_strength.." Max%:"..max_percentage)
+	--
 	self.m_iAttackPower = 0
 
 	self.attack_units = {}
@@ -755,7 +760,7 @@ end
 function AttackPlan:Retreat( retreat_pos )
 
 	aitrace("AttackPlan: Retreat!!!")
-	-- Log the retreat decision
+	-- Log the retreat decision # Novawind 12-2025
 	local iArmyStrength, vArmyPos = self:GetArmyStrength()
 	local iEnemyStrength, iAlliedStrength = cpu_manager:GetArmyStrengthAtPos(self.attack_pos, 50)
 	eventlog("RETREAT", "Attacking. MyArmy:"..iArmyStrength.." Enemy:"..iEnemyStrength.." Allied:"..iAlliedStrength.." Ratio:"..(iArmyStrength/(iEnemyStrength+1)))
@@ -831,7 +836,9 @@ function AttackPlan:RemoveLosses()
 				-- Send severly hurt squads back to base
 				local vBasePos = cpu_manager:FindClosestFriendlyBaseOrStrategicPoint(self.attack_pos, cpu_manager.start_pos, true, false)
 				if (vBasePos ~= nil) then
+					-- log event # Novawind 12-2025
 					eventlog("SQUAD_RETREAT", oSquad:GetSquadName().." Health:"..math.floor(oSquad:GetHealthPercentage()*100).."% Str:"..oTactic:GetUnitStrength().." InCombat:"..tostring(oSquad:IsInCombat()))
+					--
 					Plan.UnlockResource(self, oSquad)
 					table.remove(self.attack_units, iLoop1)
 					oTactic:SetState(Tactic.States.Retreat)
@@ -875,7 +882,9 @@ function AttackPlan:RemoveLosses()
 end
 
 function AttackPlan:Update()
-	
+	-- Novawind 12-2025 : logging
+	eventlog("ATTACKPLAN_UPDATE", "Plan is updating")
+	--
 	if (self:IsComplete()) then
 		return
 	end
