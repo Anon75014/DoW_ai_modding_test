@@ -635,12 +635,7 @@ function InfantryTactic:Reinforce()
 end
 
 function InfantryTactic:BrokenMorale()
-	-- Log broken morale once #Novawind
-	if not self.m_bLoggedBroken then
-		eventlog("MORALE_BROKEN", self.squad_ai:GetSquadName().." Morale:"..math.floor(self.squad_ai:GetMoralePercentage()*100).."% Health:"..math.floor(self.squad_ai:GetHealthPercentage()*100).."%")
-		self.m_bLoggedBroken = true
-	end
-
+	
 	-- In threat area, or was attacked since we last checked
 	if (cpu_manager.terrain_analyzer:HasThreat(self.safe_point, self.tolerance) and not self:MoveToDisengage()) then
 		self.squad_ai:DoMoveToClosestSafePoint(self.safe_point, self.tolerance)
@@ -654,11 +649,7 @@ function InfantryTactic:BrokenMorale()
 	
 	-- Check if I have enough morale or health if attached
 	if (not self.squad_ai:IsBroken() and self.squad_ai:GetMoralePercentage() > 0.7) then
-		-- Log morale recovery #Novawind
-		eventlog("MORALE_RECOVER", self.squad_ai:GetSquadName().." recovered. Morale:"..math.floor(self.squad_ai:GetMoralePercentage()*100).."%")
-		self.m_bLoggedBroken = false
-		--
-		
+	
 		self.m_eSubStateID = Tactic.StateID.NoState
 		self.stateID = Tactic.StateID.NoState
 		

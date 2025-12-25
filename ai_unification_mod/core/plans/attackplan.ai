@@ -13,10 +13,6 @@ function AttackPlan:__init( enemy, attack_pos, start_pos, min_strength, max_perc
 	dbAssert( start_pos ~= nil )
 	dbAssert( enemy ~= nil )
 
-	-- Novawind 12-2025 test line
-	eventlog("TEST", "AttackPlan created successfully")
-	--
-
 	self.attack_pos = Vector3f(attack_pos)
 	self.m_vGatherPos = Vector3f()
 	self.start_pos = Vector3f(start_pos)
@@ -36,9 +32,6 @@ function AttackPlan:__init( enemy, attack_pos, start_pos, min_strength, max_perc
 
 	-- Set minimum number of units before I can start attacking
 	self.m_iRequiredArmyPower = min_strength
-	-- Log attack plan creation # Novawind 12-2025
-	eventlog("ATTACK_PLAN_CREATED", "Target enemy. Required army:"..min_strength.." Max%:"..max_percentage)
-	--
 	self.m_iAttackPower = 0
 
 	self.attack_units = {}
@@ -481,8 +474,6 @@ function AttackPlan:GatherForces()
 	if (bReadyForAttack or g_iGMT > self.m_iPlanStart + 120) then
 	
 		-- Start attack
-		-- Log attack start decision #Novawind
-		eventlog("ATTACK_START", "Gathered:"..iGatherStrength.."/"..self.m_iAttackPower.." Ready:"..tostring(bReadyForAttack).." TimeForced:"..(g_iGMT > self.m_iPlanStart + 120))
 		aitrace("AttackPlan: Start attack!!!")
 		Plan.SetState( self, "Attack!", AttackPlan.Attack )
 		
@@ -760,10 +751,6 @@ end
 function AttackPlan:Retreat( retreat_pos )
 
 	aitrace("AttackPlan: Retreat!!!")
-	-- Log the retreat decision # Novawind 12-2025
-	local iArmyStrength, vArmyPos = self:GetArmyStrength()
-	local iEnemyStrength, iAlliedStrength = cpu_manager:GetArmyStrengthAtPos(self.attack_pos, 50)
-	eventlog("RETREAT", "Attacking. MyArmy:"..iArmyStrength.." Enemy:"..iEnemyStrength.." Allied:"..iAlliedStrength.." Ratio:"..(iArmyStrength/(iEnemyStrength+1)))
 
 	-- Retreat: move all my dudes to the closest base or start position
 	if (retreat_pos == nil) then
@@ -821,24 +808,11 @@ function AttackPlan:RemoveLosses()
 			local oTactic = oSquad:GetTactic()
 			local bWeak	= (oSquad:CanReinforce(false, 0) and oTactic:GetUnitStrength() < iMinStrength)
 			local bCanRetreat = (oSquad:IsRanged() or not oSquad:IsInCombat())
-
-			-- Log the decision factors for commanders and important units #Novawind 23-12-2025
-			if oTactic:GetUnitStrength() > 70 or oSquad:GetSquadName():find("commander") then
-				eventlog("RETREAT_CHECK", oSquad:GetSquadName().." IsAttacker:"..tostring(oTactic:IsAttacker())..
-						" Weak:"..tostring(bWeak).." CanRetreat:"..tostring(bCanRetreat)..
-						" AlwaysAttack:"..tostring(oTactic:AlwaysAttack())..
-						" InCombat:"..tostring(oSquad:IsInCombat())..
-						" Ranged:"..tostring(oSquad:IsRanged()))
-			end
-
 			if (not oTactic:IsAttacker() or (bWeak and bCanRetreat and not oTactic:AlwaysAttack())) then
 		
 				-- Send severly hurt squads back to base
 				local vBasePos = cpu_manager:FindClosestFriendlyBaseOrStrategicPoint(self.attack_pos, cpu_manager.start_pos, true, false)
 				if (vBasePos ~= nil) then
-					-- log event # Novawind 12-2025
-					eventlog("SQUAD_RETREAT", oSquad:GetSquadName().." Health:"..math.floor(oSquad:GetHealthPercentage()*100).."% Str:"..oTactic:GetUnitStrength().." InCombat:"..tostring(oSquad:IsInCombat()))
-					--
 					Plan.UnlockResource(self, oSquad)
 					table.remove(self.attack_units, iLoop1)
 					oTactic:SetState(Tactic.States.Retreat)
@@ -882,9 +856,7 @@ function AttackPlan:RemoveLosses()
 end
 
 function AttackPlan:Update()
-	-- Novawind 12-2025 : logging
-	eventlog("ATTACKPLAN_UPDATE", "Plan is updating")
-	--
+	
 	if (self:IsComplete()) then
 		return
 	end

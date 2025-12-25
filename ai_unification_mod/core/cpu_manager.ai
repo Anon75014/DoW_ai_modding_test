@@ -137,7 +137,6 @@ CpuManager.RoadMap =
 
 function CpuManager:__init( cpu_player_id )
 
-	self.m_iLastDetailedLog = -10
 	self.player_id =           cpu_player_id
 	self.cpu_player =          AI_GetCpuPlayerFromID( cpu_player_id )
 	self.stats =               self.cpu_player:GetStats()
@@ -484,8 +483,6 @@ function CpuManager:Initialize()
 	self:IsSPUpdateNeeded()
 
 	-- Return success
-	-- Novawind 12.2025: test logging
-	eventlog("GAME_START", "AI initialized for player "..self.player_id)
 	return true
 end
 
@@ -1449,33 +1446,7 @@ function CpuManager:Update()
 	aitrace("Req: "..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition) )..
 			" | Pow: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Power ))..
 			" | Pop: "..tostring(resource_manager:GetResourceAmount():Get( ResourceAmount.RT_Pop )) )
-
-	-- Add detailed logging # Novawind 12-2025
-	if g_iGMT - self.m_iLastDetailedLog >= 5 then  -- Log every X seconds
-		self.m_iLastDetailedLog = g_iGMT
-		eventlog("STATUS", "=== STATUS ===")
-		eventlog("STATUS","Resources - Req:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Requisition))..
-				" Pow:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Power))..
-				" Pop:"..tostring(resource_manager:GetResourceAmount():Get(ResourceAmount.RT_Pop)))
-		eventlog("STATUS","Army Strength: "..tostring(self:GetArmyStrength()))
-		
-		-- Count squads by type
-		local infantry_count = 0
-		local vehicle_count = 0
-		local total_squads = 0
-		for oSquad in military_manager:GetSquads() do
-			if oSquad:IsValid() and not oSquad:IsEngineer() then
-				total_squads = total_squads + 1
-				if oSquad:IsRanged() then
-					infantry_count = infantry_count + 1
-				else
-					vehicle_count = vehicle_count + 1
-				end
-			end
-		end
-		eventlog("STATUS","Squads: Total="..total_squads.." Infantry="..infantry_count.." Vehicles="..vehicle_count)
-	end
-
+	
 	-- Update managers
 	self:UpdateManagers()
 
